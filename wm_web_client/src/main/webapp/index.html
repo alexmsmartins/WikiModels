@@ -1,5 +1,12 @@
-<lift:surround with="default" at="content">
-		<h2>Welcome to your project!</h2>
-		<p><lift:helloWorld.howdy /></p>
+<lift:surround with="index" at="content">
+    <head></head>
+    <div id="login">
+        <lift:Submission.form form="post">
+            Username:<entry:username /> Password:<entry:password /> <entry:submit />
+        </lift:Submission.form>
+        <lift:msgs/>
+        <lift:Menu.builder />
+    </div>
+    <lift:HomePage.summary />
+    
 </lift:surround>
-
