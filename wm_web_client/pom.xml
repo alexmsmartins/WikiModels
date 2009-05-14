@@ -7,9 +7,6 @@
   <packaging>war</packaging>
   <name>wm_web_client</name>
   <inceptionYear>2007</inceptionYear>
-  <properties>
-    <scala.version>2.7.3</scala.version>
-  </properties>
 
   <parent>
     <groupId>pt.cnbc.wikimodels</groupId>

@@ -7,6 +7,10 @@
   <version>1.0-SNAPSHOT</version>
   <artifactId>wikimodels_project</artifactId>
   <name>WikiModels Project</name>
+  <properties>
+    <scala.version>2.7.4</scala.version>
+  </properties>
+
   <packaging>pom</packaging>
   <modules>
     <module>wm_server</module>
