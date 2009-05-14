@@ -1,0 +1,213 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<title>WikiModels Webpage</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="css/style.css" type="text/css" media="screen,projection" />
+<script type="text/javascript" src="classpath/functions.js"></script>
+
+<script type="text/javascript" src="classpath/jquery.js"></script>
+
+
+<style type="text/css">
+.dspcont{display:block;}
+</style>
+
+</head>
+
+
+<!--
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<! xmlns:lift="http://liftweb.net/">-
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<!- <meta name="description" content="" />
+	<meta name="keywords" content="" /> ->
+        <title>WikiModels Webpage</title>
+	
+	<link type="text/css" rel="stylesheet" href="css/style.css" />
+	<script type="text/javascript" src="classpath/functions.js" />
+	<script id="jquery" src="classpath/jquery-1.3.2.js" type="text/javascript" />
+</head>-->
+	<body>
+
+		<lift:msgs/>
+        <div id="header">
+            <h1><a href="#">WikiModels</a></h1>
+            <h2>A fancy sentence about wikimodels</h2>
+
+            <div id="menu">
+                <lift:bind name="menu" />
+                <dl class="dropdown">
+                    <dt class="selected" id="one-ddheader" onmouseover="ddMenu('one',1)" onmouseout="ddMenu('one',-1)">Home</dt>
+    				<dd id="one-ddcontent" onmouseover="cancelHide('one')" onmouseout="ddMenu('one',-1)">
+        				<ul>
+                            <li><a class="selected">Overview</a></li>
+                            <li><a href="#" class="underline">Documentation</a></li>
+                	    <li><a href="#" class="underline">Investigators</a></li>
+                            <li><a href="#" class="underline">Contacts</a></li>
+                            <li><a href="#" class="underline">FAQ</a></li>
+        				</ul>
+                    </dd>
+                </dl>
+                <dl class="dropdown">
+                    <dt id="two-ddheader" onmouseover="ddMenu('two',1)" onmouseout="ddMenu('two',-1)">Models</dt>
+                    <dd id="two-ddcontent" onmouseover="cancelHide('two')" onmouseout="ddMenu('two',-1)">
+                        <ul>
+			    <li><a href="createModel.html" class="underline">Create new model</a></li>
+			    <li><a href="#" class="underline">Browse Models</a></li>
+                            <li><a href="#" class="underline">List<br />of<br />recently<br />viewed<br />models</a></li>
+                            <li><a href="#" class="underline">more...</a></li>
+                        </ul>
+                    </dd>
+                </dl>
+                <dl class="dropdown">
+                    <dt id="three-ddheader" onmouseover="ddMenu('three',1)" onmouseout="ddMenu('three',-1)">Tags</dt>
+                    <dd id="three-ddcontent" onmouseover="cancelHide('three')" onmouseout="ddMenu('three',-1)"></dd>
+                </dl>
+                <div id="search">
+                    <form action="" method="get">
+                        <div>
+                            <input type="text" name="query" id="search-input" />&nbsp;&nbsp;<input type="submit" value="Search" id="search-submit" />
+                            <p><a href="#">Advanced search</a></p>
+                        </div>
+                    </form>
+                </div> <!-- /search -->
+            </div>
+            <div id="login">
+				<div id="recover-data">
+					<!-- <lift:bind name="login" /> -->
+					<h1>Welcome - UserXPTO</h1>
+				
+					<p><a href="#">Edit profile</a></p>
+					<p><a href="index.html">Logout</a></p>
+				</div>
+		</div> <!-- /login -->
+	</div>
+
+	<div id="container">
+
+		<div id="content">
+            <br />
+            <h1>Overview</h1><br />
+            <h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A kinetic model is a mathematical
+            representation of the dynamics of the
+            concentrations in a chemical reaction system. They are used in order
+            to help relating the behaviour of integrated physiological systems to
+            properties of individual molecular components. These models are
+            expressed as systems of ordinary differential equations (or
+            differential-algebraic equations) relating instantaneous rates of
+            change of the metabolite concentrations to the difference between the
+            rates of production and the rates of consumption of the metabolite in
+            point by each considered process in the physiological system.</h2>
+            <h2></h2>
+            <h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In turn, the rate of each process
+            can be described by a function of the
+            concentrations of various metabolites. These functions and the
+            parameters that apply can be determined through experiments <em>in
+            vitro</em> using purified components or inferred from theoretical
+            considerations. Large-scale models may include hundreds of metabolites
+            and processes. Because physiological systems are very complex, significant
+            advances in understanding each single process are obtained through a
+            collective effort towards controlling many confounding factors that may
+            cloud apprehension of the process' properties. Thus, many mechanisms
+            are unclear, several alternative rate laws may have been proposed for
+            each process, and several different parameter sets for each rate law
+            may have been determined. Each decision about what mechanisms, rate laws
+            and processes to adopt in a kinetic model requires substantial
+            specialized expertise, must be thoroughly justified, and is open to
+            scientific discussion.</h2>
+            <h2></h2>
+            <h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Once a model is set up it can be
+            used to make predictions about dynamic
+            behaviour of the variables, how each concentration and rate of reaction
+            responds to environmental changes, etc.. These predictions must be compared
+            to experimental observations of the integrated system that is being modeled.
+            Eventual discrepancies may point to inaccurate or missing knowledge about
+            the processes under consideration and suggest new experiments and/or
+            refinements to the model.</h2>
+            <h2></h2>
+            <h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The discussion above suggests that
+            kinetic models of complex biochemical
+            processes should ideally be developed as a community effort. However
+            there are significant hurdles to an effective community effort.</h2>
+            <h2></h2>
+            <h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;First, model development requires
+            close collaboration between two
+            main sub-communities with complementary skills. Namely, modelers that
+            must have strong computational and mathematical skills but often lack
+            the strong biochemical expertise to correctly interpret the experimental
+            results and select the best data, and wet-lab biochemists that have the
+            latter expertise but lack the skills that are necessary to make good models.</h2>
+            <h2></h2>
+            <h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Second, the timings and editorial
+            constraints of regular scientific
+            publication are utterly inadequate for such an endeavour.</h2>
+            <h2></h2>
+            <h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Third, there are presently no software
+            platforms that are effective
+            for such a community effort. So far, most of the effort of computational
+            biologists was directed towards developing good applications for setting
+            up and analysing kinetic models,creating standards (eg. SBML) to ensure
+            portability of models among modeling platforms, and creating model repositories.</h2>
+            <h2></h2>
+            <h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;These aspects are the great driver
+            for the WikiModels project.</h2>
+            <h2></h2>
+            <h2>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Having cleared the motivation behind
+            the project, the next issue to
+            address is the problem statement itself.</h2>
+            <h2></h2>
+            <ul id="list">
+                <li>
+                    <h2><b>The problem </b>- Not being able to construct kinetic
+                models in a communitarian fashion, both in the sense of sharing
+                information and in the design of the model itself. The fact that
+                there is no effective way to convey information and	build models
+                in real time and in an iterative and peer reviewed fashion. The
+                distance between the people that participate in the	construction
+                of a model. The difference in background between the groups that
+                may contribute to this task.</h2>
+                </li>
+                <li>
+                    <h2><b>Who is affected </b>- Both experimentalists and systems
+                biology theorists when they try to work together in a model or
+                set of models.</h2>
+                </li>
+                <li>
+                    <h2><b>The impact </b>- If the process of designing models
+                    includes more then a reduced number of people, making peer
+                    review and collaborative work becomes very difficult. The limit
+                    is not so much about not being able to do share	information
+                    but more about the time it takes to do it, the resources necessary
+                    and the quality and pertinence of the information that reaches
+                    the receptor(s).</h2>
+                </li>
+                <li>
+                    <h2><b>A successful solution</b> - Should enable the collaboration
+                by putting at the disposal of participants an use interface that
+                allows them to work on the same models and associated information.
+                That solution should be complete enough to enable the users to
+                update the models and check other users updates, simulate the models,
+                comment them and share data in general with one another. It should
+                also make it easy to do so.</h2>
+                </li>
+            </ul>
+        </div>
+
+	</div>
+
+	<div id="sponsors">
+		Apoios:
+		<hr />
+		<p><a title="CNC" href="http://www.cnbc.pt/"><img width="100px" height="55px" src="images/im_logo01.gif" /></a>
+		<a title="FEDER" href="http://europa.eu/"><img width="200px" height="45px" src="images/Logo_FEDER.gif" /></a></p>
+	</div>
+
+	<div id="footer">
+		<p class="validate"><br /><a href="#content">Top</a></p>
+		<p>Webpage developed by <a href="#">WikiModels</a> webmasters.<br /> © Copyright</p>
+	</div>
+	</body>
+</html>
