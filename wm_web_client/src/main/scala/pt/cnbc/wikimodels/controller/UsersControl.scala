@@ -1,4 +1,4 @@
-package com.project.controller
+package pt.cnbc.wikimodels.controller
 
 import scala.collection.mutable.HashSet
 import scala.actors.Actor
@@ -7,7 +7,7 @@ import net.liftweb.http._
 import net.liftweb.sitemap.Loc.If
 
 import net.liftweb.util.Helpers._
-import com.project.snippet._
+import pt.cnbc.wikimodels.snippet._
 
 // Messages
 case class UserLogin(login: String, password: String)

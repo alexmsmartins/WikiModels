@@ -4,7 +4,7 @@ import _root_.net.liftweb.util._
 import _root_.net.liftweb.http._
 import _root_.net.liftweb.sitemap._
 import _root_.net.liftweb.sitemap.Loc._
-import com.project.model._
+import pt.cnbc.wikimodels.model._
 import Helpers._
 
 /**
@@ -26,7 +26,7 @@ object MenuInfo {
 class Boot {
   def boot {
     // where to search snippet
-    LiftRules.addToPackages("com.project")
+    LiftRules.addToPackages("pt.cnbc.wikimodels")
 
     // Build SiteMap
     LiftRules.setSiteMap(SiteMap(MenuInfo.menu:_*))

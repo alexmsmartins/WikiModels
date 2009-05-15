@@ -1,4 +1,4 @@
-package com.project.snippet
+package pt.cnbc.wikimodels.snippet
 
 class HelloWorld {
   def howdy = <div id='content'>

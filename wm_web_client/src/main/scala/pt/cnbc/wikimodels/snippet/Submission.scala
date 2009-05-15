@@ -1,5 +1,5 @@
 
-package com.project.snippet
+package pt.cnbc.wikimodels.snippet
 
 import net.liftweb.http.SHtml
 import net.liftweb.util.Helpers._
@@ -7,7 +7,7 @@ import net.liftweb.http._
 import net.liftweb.sitemap.Loc.If
 import scala.xml._
 
-import com.project.controller._
+import pt.cnbc.wikimodels.controller._
 
 class Submission {
     def form (xhtml : NodeSeq) : NodeSeq = {
