@@ -5,7 +5,7 @@
  * and open the template in the editor.
  */
 
-package com.project.snippet
+package pt.cnbc.wikimodels.snippet
 
 import scala.xml._
 import net.liftweb.http._
@@ -15,7 +15,7 @@ import SHtml._
 import Helpers._
 import scala.xml._
 
-import com.project.model._
+import pt.cnbc.wikimodels.model._
 
 import java.util.Date
 

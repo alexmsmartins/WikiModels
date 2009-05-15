@@ -5,7 +5,7 @@
  * and open the template in the editor.
  */
 
-package com.project.model
+package pt.cnbc.wikimodels.model
 
 import _root_.net.liftweb.mapper._
 import _root_.net.liftweb.util._
