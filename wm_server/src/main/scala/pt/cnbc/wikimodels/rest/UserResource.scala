@@ -16,6 +16,8 @@ import javax.ws.rs.Path
 import javax.ws.rs.PathParam
 import javax.ws.rs.Produces
 import javax.ws.rs.Consumes
+import javax.ws.rs.HeaderParam
+import java.lang.annotation._
 
 
 import scala.collection.mutable.Map
@@ -29,7 +31,11 @@ class UserResource extends RESTResource {
 
     @GET
     @Produces(Array("application/xml", "application/json"))
-    def get(@PathParam("username") userName:String ):String = {
+    def get(@PathParam("username") userName:String,
+            @HeaderParam("string") str:String ):String = {
+
+        //TODO - refactor this method to separate the reading of the header
+        //TODO from the resto
         Console.print("GET verb was used in user " + userName)
 
         //TODO -- code to be deleted
@@ -42,12 +48,12 @@ class UserResource extends RESTResource {
 
 
         hash.get(userName) match {
-            case Some(x) => xmlUser(userName, x )
+            case Some(x) => xmlUser(userName, x,  str)
             case None => <user/>.toString
         }
     }
 
-    def xmlUser(userName: String , passwd :String) =
+    def xmlUser(userName: String , passwd :String, param:String) =
     <users>
         <user>
             <username>
@@ -56,6 +62,9 @@ class UserResource extends RESTResource {
             <password>
                 {passwd}
             </password>
+            <param>
+                {param}
+            </param>
         </user>
     </users>.toString
 
