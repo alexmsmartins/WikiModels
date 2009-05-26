@@ -1,0 +1,204 @@
+/* CSS Document */
+
+body {
+	background:#fff; color:#000; border:3px solid #eee;
+}
+
+html {
+	border:15px solid #fff; border-left:30px solid #fff; border-right:30px solid #fff;
+}
+
+* {
+	margin:0; padding:0; outline:none;
+}
+
+/* HEADER CSS */
+
+#header {
+	width:100%; font-family:Georgia; height:100px;
+}
+
+#header1{
+    background:url(../images/topo_header.png) bottom repeat-x; height:140px;
+}
+
+#header1 h1 {
+	font-size:290%; letter-spacing:2px; position:relative; top:0px;
+}
+
+#header1 a {
+	color:#ccc; text-decoration:none; 
+}
+
+header1 img {
+    border:1px solid #fff;
+}
+
+#header1 a:hover {
+	color:#0D0099;
+}
+
+#header1 h2 {
+	font-size:85%; color:#000; display:inline; margin-left:35px; position:relative; top:0px;
+}
+/* END HEADER CSS */
+
+/* CSS FROM MENU */
+#menu {
+	color:#000; background:url(../images/topo_footer.png) repeat-x top;
+    border:2px solid #2663CC;
+    padding:2px 0 6px 0; margin:0 0 0 0; position:relative; top:-40px;
+}
+
+/* END OF CSS FROM MENU */
+
+/* CSS FOR LOGIN */
+#login {
+    text-align:right;
+    margin:0 0 0 0; position:relative; top:-90px;
+}
+
+#login h3 {
+    font:80% Georgia;
+}
+
+#login li {
+    list-style-type:none; display:inline; padding:1px 15px 1px 15px; border-right-style:solid;
+}
+
+#login a {
+    text-decoration:none; color:#000;
+}
+
+#login a:hover {
+    text-decoration:none; color:#ed0000;
+}
+
+/* CSS FOR SEARCH */
+#search {
+	text-align:right; font:90% Georgia;
+}
+
+#search #search-input {
+	width:170px; height:15px;
+}
+
+#search #search-submit {
+	width:80px; height:22px;
+}
+
+#search a {
+	text-decoration:none; color:#000; display:inline;
+}
+
+#search a:hover {
+	color:#ed0000;
+}
+/* END OF CSS FOR SEARCH */
+
+/* CSS FOR CONTAINER AND CONTENT*/
+#container {
+	position:relative; top:70px;
+}
+
+#content {
+	margin:0 0 8px 20px; width:96.5%; text-align:justify; font:95% Georgia; border:1px solid #A3ACB9;
+}
+
+#content ul#list {
+	 width:97%; margin-left:1.5%; position:relative; left:1.5%;
+}
+
+#content ul#list li {
+	border-bottom:2px solid #eee; color:#444; width:99.4%;
+}
+
+#content img {
+	background:#fff; padding:1px; border:2px solid #eee;
+}
+
+#block {
+	margin-left:15px; width:95%; background:#f6f6f6; padding:0 10px; border:1px solid #eee;
+}
+
+#content p {
+	line-height:0.1px; word-spacing:2px;
+    width:97%; padding-left:0.5%; font:85% Georgia; color:#000; margin:10px;
+}
+
+#content p a {
+	color:#222; text-decoration:none; border-bottom:1px solid #ccc;
+}
+
+#content p a:hover {
+	border-bottom:1px solid #aaa;
+}
+
+#content h1 {
+	background-color:#93ccfa; font-size:150%; border:1px solid #A3ACB9; width:97%;
+	padding-left:0.5%; color:#000; margin:10px;
+}
+
+#content a.dsphead{
+	text-decoration:none; margin-left:1.5em;
+}
+
+#content a.dsphead:hover{
+	text-decoration:underline;
+}
+
+#content a.dsphead span.dspchar{
+	font-family:Georgia; font-weight:normal;
+}
+
+#content .dspcont{
+	display:none; margin-left:1.5em;
+}
+
+#text {
+	margin-left:10px;
+}
+#text h5 {
+	position:relative; left:90%; font-size:90%; letter-spacing:2px;
+}
+#text h5 a {
+	background-color:#eaf0f2; text-decoration:none; color:#000;
+}
+
+#text h5 a:hover {
+	text-decoration:none; color:#0D0099;
+}
+/* END OF CSS FOR CONTAINER */
+
+/* CSS FOR FOOTER */
+#footer {
+	background:url(../images/topo_footer.png) repeat-x bottom; padding:0px 0px 10px 0px;
+    font-size:80%; color:#000; text-align:center; line-height:25px;
+}
+
+#footer a {
+	text-decoration:none; color:#000; display:inline; letter-spacing:0.1px;
+}
+
+#footer a:hover {
+	color:#ed0000;
+}
+
+#footer .validate {
+	float:right;
+}
+/* END OF CSS FOR FOOTER */
+
+/* CSS FOR SPONSORS */
+#sponsors {
+	text-align:left; color:#000; position:relative; top:20px;
+}
+
+#sponsors a {
+	text-decoration:none;
+}
+
+#sponsors img {
+	border:1px solid #fff;
+}
+/* END OF CSS FOR FOOTER */
