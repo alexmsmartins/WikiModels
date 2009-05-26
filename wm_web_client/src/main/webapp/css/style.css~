@@ -1,0 +1,322 @@
+/* CSS Document */
+
+body {
+	background:#fff; font: 16px/1.95em "Lucida Grande","Lucida Sans Unicode",geneva,verdana,sans-serif; margin:0; color:#666;
+	padding-top:20px; border:3px solid #eee;
+}
+
+html {
+	border:15px solid #f6f6f6; border-left:30px solid #f6f6f6; border-right:30px solid #f6f6f6;
+}
+
+* {
+	margin:0; padding:0; outline:none;
+}
+
+table {
+	width:98%; padding:10px; border:1px solid #eee;
+}
+
+th {
+	background-color:#CFDBEC; text-align:center; color:#000; border-bottom:1px solid #eee; padding:5px;
+}
+
+td {
+	padding:5px; text-align:center; background:#eaf0f2;
+}
+
+/* HEADER CSS */
+
+#header {
+	background:url(../images/topo_header.png) top repeat-x; width:100%; margin:0 auto; padding:20px 0;
+}
+
+#header h1 {
+	font:290% Verdana; letter-spacing:-2px;
+}
+
+#header a {
+	color:#ccc; text-decoration:none;
+}
+
+#header a:hover {
+	color:#0D0099;
+}
+
+#header h2 {
+	font:80% Verdana; color:#999; display:inline; margin-left:35px; position:relative; top:-10px;
+}
+/* END HEADER CSS */
+
+/* CSS FROM MENU */
+#menu {
+	color:#999; background:#CFDBEC; position:relative; top:-11px;
+}
+#menu .dropdown {
+	background:#CFDBEC; font:80% Verdana; font-weight:bold; color:#999;
+	float:left; padding:0px 4px 0px; position:relative; top:10px; left:3px;
+}
+
+#menu .dropdown .selected {
+	background-color:#fff; color:#000;
+}
+
+#menu .dropdown a {
+	display:block; padding:5px; color:#999; text-decoration:none; background:#eaf0f2; width:300px;
+}
+
+#menu .dropdown a:hover {
+	background:#fff; color:#000; text-decoration:none;
+}
+
+#menu .dropdown dt {
+	padding:5px 20px 10px; color:#000; text-decoration:none;
+	border:2px solid #A3ACB9;
+}
+
+#menu .dropdown dt:hover {
+	background:#FFF; color:#000;
+}
+
+#menu .dropdown dd {
+	position:absolute; overflow:hidden; display:none; background:#fff; z-index:200;
+}
+
+#menu .dropdown ul {
+	width:304px; border:2px solid #9ac1c9; list-style:none; border-top:none;
+}
+
+#menu .dropdown li {
+	display:inline; list-style:none;
+}
+
+#menu .dropdown .underline {
+	border-bottom:1px solid #b9d6dc;
+}
+/* END OF CSS FROM MENU */
+
+/* CSS FOR LOGIN */
+#login {
+	text-align:right; margin:0 0 0 0; position:relative; top:-170px;
+}
+
+#login #text {
+	width:80px; height:15px;
+}
+
+#login #pword-input {
+	width:80px; height:15px;
+}
+
+#login #login-button {
+	width:80px; height:22px; font:80% Verdana;
+}
+
+#login h1 {
+	font:70% Verdana; color:#999; display:inline; letter-spacing:0.1px;
+}
+
+#login hr {
+	border: 1px inset #777; width: 30%; text-align: right; margin: 0 0 0 auto;
+}
+/* END OF CSS FOR LOGIN */
+
+/* CSS FOR RECOVER DATA */
+#recover-data {
+	text-align:right; margin: 0 0 0 auto;
+}
+
+#recover-data p {
+	line-height:1.1;
+}
+
+#recover-data p a {
+	text-decoration:none; font:70% Verdana; color:#999; display:inline;
+}
+
+#recover-data p a:hover {
+	color:#0D0099;
+}
+/* END OF CSS FOR RECOVER DATA */
+
+/* CSS FOR SEARCH */
+#search {
+	background:#CFDBEC; text-align:right; margin:0 0 0 0;
+	border-top:3px solid #A3ACB9; border-bottom:3px solid #A3ACB9; border-left:3px solid #A3ACB9; border-right:3px solid #A3ACB9;
+}
+
+#search #search-input {
+	width:170px; height:15px;
+}
+
+#search #search-submit {
+	width:80px; height:22px; font:80% Verdana;
+}
+
+#search p {
+	line-height:1.1;
+}
+
+#search a {
+	text-decoration:none; font:70% Verdana; color:#999; display:inline; letter-spacing:0.1px;
+}
+
+#search a:hover {
+	color:#0D0099;
+}
+/* END OF CSS FOR SEARCH */
+
+/* CSS FOR CONTAINER AND CONTENT*/
+#container {
+	width:98.5%; margin:0 0 0 auto; position:relative; top:-100px;
+}
+
+#content {
+	width:98%; text-align:justify; float:left; font-family:Times; border:1px solid #A3ACB9;
+}
+
+#content ul#list {
+	 width:97%; margin-left:1.5%; position:relative; left:1.5%;
+}
+
+#content ul#list li {
+	border-bottom:2px solid #eee; color:#444; width:99.4%;
+}
+
+#content img {
+	background:#fff; padding:1px; border:3px solid #eee; margin:10px;
+}
+
+#block {
+	margin-left:15px; width:95%; background:#f6f6f6; padding:0 10px; border:1px solid #eee; font:100% Verdana;
+}
+
+#content p {
+	line-height:0.1px; margin:20px 0; word-spacing:2px;
+}
+
+#content p a {
+	color:#222; text-decoration:none; border-bottom:1px solid #ccc;
+}
+
+#content p a:hover {
+	border-bottom:1px solid #aaa;
+}
+
+#content h1 {
+	background-color:#CFDBEC; font:150% Verdana; border:1px solid #A3ACB9; width:97%; 
+	padding-left:0.5%; color:#000; margin:10px;
+}
+
+#content h2 {
+	width:97%; padding-left:0.5%; font:80% Verdana; color:#000; margin:10px;
+}
+
+#content a.dsphead{
+	text-decoration:none; margin-left:1.5em;
+}
+
+#content a.dsphead:hover{
+	text-decoration:underline;
+}
+
+#content a.dsphead span.dspchar{
+	font-family:monospace; font-weight:normal;
+}
+
+#content .dspcont{
+	display:none; margin-left:1.5em;
+}
+
+#text {
+	margin-left:10px;
+}
+#text h5 {
+	position:relative; left:90%; font-size:90%; letter-spacing:2px;
+}
+#text h5 a {
+	background-color:#eaf0f2; text-decoration:none; color:#000;
+}
+
+#text h5 a:hover {
+	text-decoration:none; color:#0D0099;
+}
+/* END OF CSS FOR CONTAINER */
+
+/* CSS FOR SUBMENU INSIDE CONTAINER*/
+#subMenu {
+	width:100%; float:left; font-family:Times; margin-top:10px;
+}
+
+#subMenu p {
+	text-decoration:underline; font-size:120%;
+}
+
+#subMenu h1 {
+	background-color:#CFDBEC; font-size:150%; border:1px solid #A3ACB9;
+}
+
+#subMenu h1 a {
+	color:#333; text-decoration:none;
+}
+
+.articleinfo {
+	font:80% Verdana; color:#999; padding:8px 0; width: 30%; text-align:center; margin: 0 0 0 auto; border-bottom:1px solid #999; 
+}
+
+.articleinfo a {
+	text-decoration:none; color:#999;
+}
+
+.articleinfo a:hover {
+	color:#0D0099;
+}
+
+ul#nav {
+	background:#fff; font:80% Verdana; padding-bottom:7px; border-bottom:2px solid #A3ACB9; margin:0 0 30px 0;
+}
+
+ul#nav li {
+	display:inline;
+}
+
+ul#nav li a {
+	padding:10px 14px 7px; color:#000; text-decoration:none; background:#CFDBEC; border:2px solid #A3ACB9;
+}
+
+ul#nav li a:hover {
+	background:#fff; color:#000;
+}
+
+ul#nav li.active {
+	background:#f6f6f6; color:#000; padding:10px 14px 8px;
+	border-top:2px solid #A3ACB9; border-right:2px solid #A3ACB9; border-left:2px solid #A3ACB9;
+}
+/* CSS FOR SUBMENU INSIDE CONTAINER*/
+
+/* CSS FOR FOOTER */
+#footer {
+	background:url(../images/topo_footer.png) repeat-x bottom; padding:20px 50px; clear:both;
+	border-top:2px solid #eee; font:80% Verdana; line-height:25px;
+}
+
+#footer a {
+	text-decoration:none; color:#999; display:inline; letter-spacing:0.1px;
+}
+
+#footer a:hover {
+	color:#0D0099;
+}
+
+#footer .validate {
+	float:right;
+}
+/* END OF CSS FOR FOOTER */
+
+p.about {
+	border-top:3px solid #6CCC26; border-bottom:3px solid #6CCC26; color:#fff; background:#8EDF53; padding:10px;
+}
+
+p.about a {
+	color:#fff;
+}
