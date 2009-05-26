@@ -20,9 +20,12 @@ import pt.cnbc.wikimodels.model._
 import java.util.Date
 
 class HomePage {
-  val formatter = new java.text.SimpleDateFormat("yyyy/MM/dd")
+    val formatter = new java.text.SimpleDateFormat("yyyy/MM/dd")
+    
+    def summary (xhtml : NodeSeq) : NodeSeq = {
+        <lift:embed what="welcome_msg" />
+    }
+    
+    def howdy = Text(User.get +"'s profile")
 
-  def summary (xhtml : NodeSeq) : NodeSeq = {
-    <lift:embed what="welcome_msg" />
-  }
 }

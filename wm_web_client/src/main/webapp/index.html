@@ -1,12 +1,9 @@
-<lift:surround with="index" at="content">
-    <head></head>
-    <div id="login">
-        <lift:Submission.form form="post">
-            Username:<entry:username /> Password:<entry:password /> <entry:submit />
-        </lift:Submission.form>
-        <lift:msgs/>
-        <lift:Menu.builder />
-    </div>
+<lift:surround with="default" at="content">
     <lift:HomePage.summary />
-    
+    <div id="login">
+        <lift:Submission.form form="post" >
+            <h3>Username <entry:username /> Password <entry:password /> <entry:submit /></h3>
+            <h3><a href="createUser.html">Create User</a></h3>
+        </lift:Submission.form>
+    </div>
 </lift:surround>
