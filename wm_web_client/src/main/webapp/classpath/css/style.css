@@ -19,7 +19,7 @@ html {
 }
 
 #header1{
-    background:url(../images/topo_header.png) bottom repeat-x; height:100px;
+    background:url(../images/topo_header_v1.png) bottom repeat-x; height:100px;
 }
 
 #header1 h1 {
@@ -28,10 +28,6 @@ html {
 
 #header1 a {
 	color:#ccc; text-decoration:none; 
-}
-
-header1 img {
-    border:1px solid #fff;
 }
 
 #header1 a:hover {
@@ -45,33 +41,39 @@ header1 img {
 
 /* CSS FROM MENU */
 #menu {
-	color:#000; background:url(../images/topo_footer.png) repeat-x top;
-    border:2px solid #2663CC;
+	color:#000; background:url(../images/topo_head_footer_v1.png) repeat-x top;
+    border-top:2px solid #4a458f;
     padding:2px 0 6px 0; margin:0 0 0 0; position:relative; top:0px;
 }
 
 /* END OF CSS FROM MENU */
 
 /* CSS FOR LOGIN */
-#login {
+#login1 {
     text-align:right;
-    margin:0 0 0 0; position:relative; top:-310px;
+    margin:0 0 0 0; position:relative; top:-170px;
 }
 
-#login h3 {
-    font:80% Georgia;
+#login1 h3 {
+    font:85% Georgia;
 }
 
-#login li {
-    list-style-type:none; display:inline; padding:1px 15px 1px 15px; border-right-style:solid;
-}
-
-#login a {
+#login1 a {
     text-decoration:none; color:#000;
 }
 
-#login a:hover {
-    text-decoration:none; color:#ed0000;
+#login1 a:hover {
+	color:#ed0000;
+}
+
+/* Messages */
+#login1 .errorBox {
+    font:80% Georgia;
+    color: #D8000C;
+}
+
+#login1 .errorBox li {
+    list-style-type:none;
 }
 
 /* CSS FOR SEARCH */
@@ -172,7 +174,7 @@ header1 img {
 
 /* CSS FOR FOOTER */
 #footer {
-	background:url(../images/topo_footer.png) repeat-x bottom; padding:0px 0px 10px 0px;
+	background:url(../images/topo_footer_v1.png) repeat-x bottom; padding:0px 0px 10px 0px;
     font-size:80%; color:#000; text-align:center; line-height:25px;
 }
 

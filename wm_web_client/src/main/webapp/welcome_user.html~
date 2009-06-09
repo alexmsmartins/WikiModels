@@ -1,5 +1,14 @@
 <lift:surround with="default" at="content">
-	<h2>Welcome to your project!</h2>
-	<p><lift:helloUser.howdy /></p>
-	
+	<div id="login1">
+        	<h3><lift:HomePage.howdy /></h3>
+            <h3><lift:Menu.item name="logout" /></h3>
+	</div>
+    <div id='content'>
+        <lift:HomePage.present>
+        <h1>Welcome to WikiModels Webpage</h1>
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Welcome <entry:user /></p>
+        </lift:HomePage.present>
+    </div>
 </lift:surround>
