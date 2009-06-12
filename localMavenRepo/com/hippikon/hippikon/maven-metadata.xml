@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>com.hippikon</groupId>
+  <artifactId>hippikon</artifactId>
+  <version>3.3</version>
+  <versioning>
+    <versions>
+      <version>3.3</version>
+    </versions>
+    <lastUpdated>20090529165406</lastUpdated>
+  </versioning>
+</metadata>

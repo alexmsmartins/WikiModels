@@ -19,6 +19,11 @@ import javax.ws.rs.Produces
 import javax.ws.rs.Consumes
 //import com.sun.security.
 
+
+/**
+ * Taken from
+ * http://weblogs.java.net/blog/mhadley/archive/2008/03/authentication.html
+ */
 @Path("dropbox")
 class DropBoxResource {
 

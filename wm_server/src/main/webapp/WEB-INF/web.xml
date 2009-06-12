@@ -18,6 +18,8 @@
         <url-pattern>/resources/*</url-pattern>
     </servlet-mapping>
 
+    <!-- taken from
+    http://weblogs.java.net/blog/mhadley/archive/2008/03/authentication.html -->
     <security-constraint>
         <display-name>DropBox</display-name>
         <web-resource-collection>
