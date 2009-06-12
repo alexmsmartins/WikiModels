@@ -1,7 +1,0 @@
-(function(){tinymce.create("tinymce.plugins.Print",{init:function(B,A){B.addCommand("mcePrint",function(){B.getWin().print()
-});
-B.addButton("print",{title:"print.print_desc",cmd:"mcePrint"})
-},getInfo:function(){return{longname:"Print",author:"Moxiecode Systems AB",authorurl:"http://tinymce.moxiecode.com",infourl:"http://wiki.moxiecode.com/index.php/TinyMCE:Plugins/print",version:tinymce.majorVersion+"."+tinymce.minorVersion}
-}});
-tinymce.PluginManager.add("print",tinymce.plugins.Print)
-})();
