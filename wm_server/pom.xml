@@ -40,6 +40,15 @@
             <url>http://download.java.net/maven/1</url>
             <layout>legacy</layout>
         </repository>
+        <repository>
+            <id>Jenabean</id>
+            <url>http://jenabean.googlecode.com/svn/trunk/repo</url>
+        </repository>
+        <repository>
+            <id>localMavenRepo</id>
+            <name>localMavenRepo</name>
+            <url>file://../localMavenRepo</url>
+        </repository>
     </repositories>
     <pluginRepositories>
         <pluginRepository>
@@ -69,7 +78,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.5</version>
+            <version>4.6</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -95,25 +104,83 @@
             <artifactId>jersey-server</artifactId>
             <version>1.1.0-ea</version>
         </dependency>
-    <!-- JENA RELATED LIBRARIES -->
-        <dependency>
-            <groupId>com.hp.hpl.jena</groupId>
-            <artifactId>jena</artifactId>
-            <version>2.6.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.hp.hpl.jena</groupId>
-            <artifactId>sdb</artifactId>
-            <version>1.2.0</version>
-        </dependency>
       <!--dependency from local repository-->
         <dependency>
             <groupId>com.hippikon</groupId>
             <artifactId>hippikon</artifactId>
             <version>3.3</version>
         </dependency>
-
-
+        <dependency>
+            <groupId>com.thewebsemantic</groupId>
+            <artifactId>jenabean</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>glassfish</groupId>
+            <artifactId>appserv-cmp.jar</artifactId>
+            <version>2.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>glassfish</groupId>
+            <artifactId>appserv-deployment-client.jar</artifactId>
+            <version>2.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>glassfish</groupId>
+            <artifactId>appserv-ext.jar</artifactId>
+            <version>2.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>glassfish</groupId>
+            <artifactId>appserv-rt.jar</artifactId>
+            <version>2.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>pt.cnbc.wikimodels</groupId>
+            <artifactId>wm_library</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <!-- TODO - delete after transitioning this code to wm_library-->
+        <!--<dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.5.8</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.5.8</version>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.15</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jms</artifactId>
+                    <groupId>javax.jms</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.hp.hpl.jena</groupId>
+            <artifactId>jena</artifactId>
+            <version>2.6.0</version>
+        </dependency>
+        <dependency>
+            <groupId>local.jena</groupId>
+            <artifactId>sdb</artifactId>
+            <version>1.3.0</version>
+        </dependency>-->
+        <dependency>
+            <groupId>org.sbml</groupId>
+            <artifactId>libsbmlj</artifactId>
+            <version>3.4</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -142,26 +209,6 @@
                     <contextPath>/</contextPath>
                     <scanIntervalSeconds>5</scanIntervalSeconds>
                 </configuration>
-        <!--<executions>
-          <execution>
-            <id>start-jetty</id>
-            <phase>test-compile</phase>
-            <goals>
-              <goal>deploy-war</goal>
-            </goals>
-            <configuration>
-              <daemon>true</daemon>
-              <reload>manual</reload>
-            </configuration>
-          </execution>
-          <execution>
-            <id>stop-jetty</id>
-            <phase>test</phase>
-            <goals>
-              <goal>stop</goal>
-            </goals>
-          </execution>
-        </executions>-->
             </plugin>
             <plugin>
                 <groupId>net.sf.alchim</groupId>

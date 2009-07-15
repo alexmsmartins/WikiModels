@@ -6,7 +6,7 @@
  */
 
 package pt.cnbc.wikimodels.security
-
+/*
 //TODO - cleanup imports -> perheaps even in other files
 import com.sun.enterprise.deployment.Group
 import com.sun.enterprise.security.auth.realm.NoSuchRealmException
@@ -58,4 +58,4 @@ class WMDigestLoginModule[_] extends DigestLoginModule{
         }
         return null
     }
-}
+}*/

@@ -8,5 +8,4 @@
 package pt.cnbc.wikimodels.rest
 
 trait RESTResource {
-
 }

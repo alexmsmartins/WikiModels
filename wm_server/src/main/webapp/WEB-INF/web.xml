@@ -5,12 +5,7 @@
     <servlet>
         <servlet-name>jersey</servlet-name>
         <display-name>JAX-RS Servlet</display-name>
-
         <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
-        <!--<init-param>
-            <param-name>com.sun.jersey.config.property.packages </param-name>
-            <param-value>pt.cnc.wikimodels.rest</param-value>
-        </init-param>-->
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
@@ -21,11 +16,11 @@
     <!-- taken from
     http://weblogs.java.net/blog/mhadley/archive/2008/03/authentication.html -->
     <security-constraint>
-        <display-name>DropBox</display-name>
+        <display-name>Constraint1</display-name>
         <web-resource-collection>
-            <web-resource-name>DropBox</web-resource-name>
-            <description></description>
-            <url-pattern>/dropbox</url-pattern>
+            <web-resource-name>PROTECTED</web-resource-name>
+            <description/>
+            <url-pattern>/*</url-pattern>
             <http-method>GET</http-method>
             <http-method>POST</http-method>
             <http-method>HEAD</http-method>
@@ -35,16 +30,20 @@
             <http-method>DELETE</http-method>
         </web-resource-collection>
         <auth-constraint>
-            <description>Have to be a USER</description>
-            <role-name>USERS</role-name>
+            <description/>
+            <role-name>ADMINISTRATORS</role-name>
         </auth-constraint>
     </security-constraint>
     <login-config>
         <auth-method>BASIC</auth-method>
-        <realm-name>userauthn</realm-name>
-    </login-config>
+        <realm-name>userauth</realm-name>
+        </login-config>
     <security-role>
         <description/>
         <role-name>USERS</role-name>
+    </security-role>
+    <security-role>
+        <description/>
+        <role-name>ADMINISTRATORS</role-name>
     </security-role>
 </web-app>
