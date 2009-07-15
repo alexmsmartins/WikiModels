@@ -1,12 +1,12 @@
-/*
+/*f
  * UserResource.scala
  *
  * To change this template, choose Tools | Template Manager
  * and open the template in the editor.
+ * @author Alexandre Martins
  */
 
 package pt.cnbc.wikimodels.rest
-
 
 import javax.ws.rs.GET
 import javax.ws.rs.POST
@@ -18,71 +18,76 @@ import javax.ws.rs.Produces
 import javax.ws.rs.Consumes
 import javax.ws.rs.HeaderParam
 import javax.ws.rs.core.Response
+import javax.ws.rs.core.Response.Status
+import javax.ws.rs.core.Response.Status._
 import java.lang.annotation._
-
+import javax.ws.rs.WebApplicationException
 
 import scala.collection.mutable.Map
 import scala.collection.mutable.HashMap
 
-
 import pt.cnbc.wikimodels.dataModel.User
+import pt.cnbc.wikimodels.dataAccess.UsersDAO
+import pt.cnbc.wikimodels.security.SimpleSecurityContext
+import pt.cnbc.wikimodels.security.SecurityContextFactory
+
+import javax.ws.rs.core.Context
+import javax.ws.rs.core.SecurityContext
 
 
-@Path("/user/{username}")//: [a-zA-Z][a-zA-Z_0-9]}")
-@Consumes(Array("application/xml"))
-@Produces(Array("application/xml"))
+
+@Path("/user/{userresource}")//: [a-zA-Z][a-zA-Z_0-9]}")
 class UserResource extends RESTResource {
 
+    @Context
+    var security:SecurityContext = null
+    val secContext = SecurityContextFactory.createSecurityContext
+
+    @GET    
+    @Produces(Array("application/xml"))
+    @Consumes(Array("application/xml"))
+    def get(@PathParam("userresource") userResource:String
+            ):String = {
+        val username = security.getUserPrincipal().getName()
+
+        var ret = ""
+        Console.print("GET verb was used in user " + userResource)
+        if(secContext.isAuthorizedTo(username,
+                                     "GET", "user/" + userResource ) ){
+            val user = UsersDAO.loadUser(userResource)
+            user match{
+                case User(userResource,_,_,_,_) => user.toXML.toString
+                case null =>
+                    throw new WebApplicationException(Response.Status.NOT_FOUND)
+            }
+        } else {
+         /*<html>
+            <body>
+                <h1>userResource = {userResource}</h1>
+                username = {username}
+            </body>
+        </html>.toString*/
 
 
-    @GET
-    def get(@PathParam("username") userName:String,
-            @HeaderParam("string") str:String ):String = {
-
-
-        //TODO - refactor this method to separate the reading of the header
-        //TODO from the resto
-        Console.print("GET verb was used in user " + userName)
-
-        //TODO -- code to be deleted
-        val alex= User("alex","alexp","alexmsmartins@gmail.com","alexandre Martins")
-        val goncalo = User("goncalo", "goncalop", "gneto@gmail.com", "Gonçalo Neto")
-
-        val hash =
-        Map[String,User]("alex" -> alex,
-            "gonçalo" -> goncalo)
-        //TODO -- end of code to be deleted
-
-        //stub of a returned user
-
-
-        hash.get(userName ) match {
-            case Some(x) => x.toXML.toString
-            case None => <users/>.toString
+            //user is trying to access a resource for which
+            //it does not have permissions
+            throw new WebApplicationException(Response.Status.FORBIDDEN);
         }
-
-                    //val r = Response.created(uri)
-
-        
     }
 
     @POST
-    def create =
-        println("POST verb was used")
+    @Consumes(Array("application/xml"))
+    def post =
+    println("POST verb was used")
 
 
     @PUT
-    @Consumes(Array("application/xml", "application/xml"))
-    def update =
-        println("PUT verb was used")
+    @Consumes(Array("application/xml"))
+    def put =
+    println("PUT verb was used")
 
     @DELETE
     @Consumes(Array("application/xml", "application/xml"))
     def delete =
-        println("DELETE verb was used")
-
-
-
-
+    println("DELETE verb was used")
 }
-

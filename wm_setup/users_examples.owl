@@ -1,0 +1,188 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY foaf "http://xmlns.com/foaf/0.1/" >
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY owl2xml "http://www.w3.org/2006/12/owl2-xml#" >
+    <!ENTITY acetext "http://attempto.ifi.uzh.ch/acetext#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY ace_lexicon "http://attempto.ifi.uzh.ch/ace_lexicon#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+    <!ENTITY con "http://www.w3.org/2000/10/swap/pim/contact#" >
+    <!ENTITY users "http://wikimodels.cnbc.pt/ontologies/users.owl#" >
+]>
+
+
+<rdf:RDF xmlns="http://wikimodels.cnbc.pt/ontologies/users.owl#"
+     xml:base="http://wikimodels.cnbc.pt/ontologies/users.owl"
+     xmlns:con="http://www.w3.org/2000/10/swap/pim/contact#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:owl2xml="http://www.w3.org/2006/12/owl2-xml#"
+     xmlns:foaf="http://xmlns.com/foaf/0.1/"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:acetext="http://attempto.ifi.uzh.ch/acetext#"
+     xmlns:users="http://wikimodels.cnbc.pt/ontologies/users.owl#"
+     xmlns:ace_lexicon="http://attempto.ifi.uzh.ch/ace_lexicon#">
+    <owl:Ontology rdf:about="">
+        <acetext:acetext
+            >/*[DataPropertyDomain(fullName User)]*/</acetext:acetext>
+        <acetext:acetext
+            >/*[DataPropertyDomain(email User)]*/</acetext:acetext>
+        <acetext:acetext
+            >/*[DataPropertyDomain(userName User)]*/</acetext:acetext>
+    </owl:Ontology>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Annotation properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    <owl:AnnotationProperty rdf:about="&ace_lexicon;vbg"/>
+    <owl:AnnotationProperty rdf:about="&ace_lexicon;pl"/>
+    <owl:AnnotationProperty rdf:about="&acetext;acetext"/>
+    <owl:AnnotationProperty rdf:about="&ace_lexicon;sg"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/users.owl#password -->
+
+    <owl:DatatypeProperty rdf:about="#password">
+        <ace_lexicon:pl>password</ace_lexicon:pl>
+        <ace_lexicon:sg>passwords</ace_lexicon:sg>
+        <ace_lexicon:vbg>passworded</ace_lexicon:vbg>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/users.owl#userName -->
+
+    <owl:DatatypeProperty rdf:about="#userName">
+        <rdfs:domain rdf:resource="#User"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/users.owl#User -->
+
+    <owl:Class rdf:about="#User">
+        <rdfs:subClassOf rdf:resource="&owl;Thing"/>
+        <rdfs:subClassOf rdf:resource="&foaf;Person"/>
+        <ace_lexicon:pl>Users</ace_lexicon:pl>
+        <ace_lexicon:sg>User</ace_lexicon:sg>
+    </owl:Class>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext
+            >Every User is something.</acetext:acetext>
+        <owl:subject rdf:resource="#User"/>
+        <owl:predicate rdf:resource="&rdfs;subClassOf"/>
+        <owl:object rdf:resource="&foaf;Person"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://www.w3.org/2002/07/owl#Thing -->
+
+    <owl:Class rdf:about="&owl;Thing"/>
+    
+
+
+    <!-- http://xmlns.com/foaf/0.1/Person -->
+
+    <owl:Class rdf:about="&foaf;Person"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/users.owl#Alexandre -->
+
+    <User rdf:about="#Alexandre">
+        <rdf:type rdf:resource="User"/>
+        <password
+            >06a05b13819f4afad991cc2143732b66</password>
+	<con:emailAddress>alexmsmartins@gmail.com</con:emailAddress>
+    </User>
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/users.owl#Armindo -->
+
+    <User rdf:about="#Armindo">
+        <rdf:type rdf:resource="User"/>
+        <password
+            >06a05b13819f4afad991cc2143732b66aaaa</password>
+    	<con:emailAddress
+	    >armindo.salvador@gmail.com</con:emailAddress>
+    </User>
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/users.owl#Gon&#231;alo -->
+
+    <User rdf:about="#Gon&#231;alo">
+        <rdf:type rdf:resource="User"/>
+        <password
+            >64a620a89229018e90da6bd8bac52708</password>
+	<con:emailAddress
+	    >gonneto@gmail.com</con:emailAddress>
+    </User>
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/users.owl#admin -->
+
+    <User rdf:about="#admin">
+        <rdf:type rdf:resource="User"/>
+        <password
+            >21232f297a57a5a743894a0e4a801fc3</password>
+	<con:emailAddress
+	    >admin@wikimodels.cnbc.pt</con:emailAddress>
+    </User>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 2.2.1.1138) http://owlapi.sourceforge.net -->
+
