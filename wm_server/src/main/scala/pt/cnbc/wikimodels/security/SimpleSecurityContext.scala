@@ -14,7 +14,6 @@ class SimpleSecurityContext extends SecurityContext{
     val allButRead_reg = """(POST|PUT|DELETE)"""
     val model_reg = """models?(/\S*)?"""
     val allRes_reg = """\S+"""
-    val exceptAnonymous = """"""
 
     /**
      * method that ckecks user permissions according to the folowing rules:
@@ -24,8 +23,7 @@ class SimpleSecurityContext extends SecurityContext{
      *  - all other users are atuthrized to do anything to models their personal
      *  information
      */
-
-    def isAuthorizedTo(user:String , method:String, resource:String): boolean = {
+    def isAuthorizedTo(user:String , method:String, resource:String):boolean = {
         //TODO change isAuthorizedTo to use match case if
         //the called resource is checked with regular expressions
         //TODO Incomplete rule -> users can change their own information with the exception of their username
@@ -35,21 +33,21 @@ class SimpleSecurityContext extends SecurityContext{
         } else
         if(user == "anonymous" ) {
             if(  java.util.regex.Pattern.matches( model_reg, resource)
-                 && method == "GET") {
+               && method == "GET") {
                 true
             } else {
                 false
             }
         } else 
-            if(resource.startsWith("user")){
-                if(resource == "user/" + user){
-                    true
-                } else {
-                    false
-                }
-            } else {
+        if(resource.startsWith("user")){
+            if(resource == "user/" + user){
                 true
+            } else {
+                false
             }
+        } else {
+            true
+        }
         
         //TODO - implemnt an RBAC lke permission system.
     }

@@ -19,21 +19,21 @@
      xml:base="http://wikimodels.cnbc.pt/ontologies/users.owl"
      xmlns:con="http://www.w3.org/2000/10/swap/pim/contact#"
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:users="http://wikimodels.cnbc.pt/ontologies/users.owl#"
      xmlns:owl2xml="http://www.w3.org/2006/12/owl2-xml#"
      xmlns:foaf="http://xmlns.com/foaf/0.1/"
      xmlns:owl="http://www.w3.org/2002/07/owl#"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
      xmlns:acetext="http://attempto.ifi.uzh.ch/acetext#"
-     xmlns:users="http://wikimodels.cnbc.pt/ontologies/users.owl#"
      xmlns:ace_lexicon="http://attempto.ifi.uzh.ch/ace_lexicon#">
     <owl:Ontology rdf:about="">
         <acetext:acetext
-            >/*[DataPropertyDomain(fullName User)]*/</acetext:acetext>
+            >/*[DataPropertyDomain(userName User)]*/</acetext:acetext>
         <acetext:acetext
             >/*[DataPropertyDomain(email User)]*/</acetext:acetext>
         <acetext:acetext
-            >/*[DataPropertyDomain(userName User)]*/</acetext:acetext>
+            >/*[DataPropertyDomain(fullName User)]*/</acetext:acetext>
     </owl:Ontology>
     
 
@@ -67,9 +67,11 @@
     <!-- http://wikimodels.cnbc.pt/ontologies/users.owl#password -->
 
     <owl:DatatypeProperty rdf:about="#password">
-        <ace_lexicon:pl>password</ace_lexicon:pl>
-        <ace_lexicon:sg>passwords</ace_lexicon:sg>
         <ace_lexicon:vbg>passworded</ace_lexicon:vbg>
+        <ace_lexicon:sg>passwords</ace_lexicon:sg>
+        <ace_lexicon:pl>password</ace_lexicon:pl>
+        <rdfs:domain rdf:resource="#User"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
     
 

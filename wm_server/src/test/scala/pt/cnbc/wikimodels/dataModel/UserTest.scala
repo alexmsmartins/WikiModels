@@ -36,5 +36,6 @@ class UserTest {
                    users.map( i => {
                     i.toXML == (new User(i.toXML)).toXML
                    } ).reduceLeft(_ && _) )
+        assertTrue(true)
     }
 }

@@ -10,6 +10,7 @@ package pt.cnbc.wikimodels.dataModel
 
 import scala.xml.Node
 import scala.xml.Elem
+import thewebsemantic.binding.RdfBean
 
 
 /**
@@ -17,7 +18,7 @@ import scala.xml.Elem
  * should inherit
  * @author Alexandre Martins
  */
-trait DataModel {
+trait DataModel extends RdfBean[DataModel]{
     /**
      * Converts this data model to xnl form
      */

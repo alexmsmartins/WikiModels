@@ -39,15 +39,15 @@ object Setup {
         try {
             file = new File(System.getProperty("user.dir") );
             file.listFiles()
-                //select non hidden files
-                .filter(i => i.isFile && !i.isHidden)
-                //get the names of files
-                .map(i => i.getName)
-                //filter the ones which end with .rdf and owl
-                .filter(i => i.matches("""\S+(.rdf|.owl)""") )
-                //Merge Ontologies with KnowledgeBase
-                .map(i => modelFromKB.add(
-                        ManipulatorWrapper.loadModelfromfile(i) ) )
+            //select non hidden files
+            .filter(i => i.isFile && !i.isHidden)
+            //get the names of files
+            .map(i => i.getName)
+            //filter the ones which end with .rdf and owl
+            .filter(i => i.matches("""\S+(.rdf|.owl)""") )
+            //Merge Ontologies with KnowledgeBase
+            .map(i => modelFromKB.add(
+                    ManipulatorWrapper.loadModelfromfile(i) ) )
 
         } catch {
             case e:NullPointerException => {
@@ -62,7 +62,9 @@ Unexpected Error.""" + e)
         }
     }
 
-    ///Setup user's passwords
+    /**
+     * Setup user's passwords
+     */
     def savePasswordsOnKB = {
         ""
     }

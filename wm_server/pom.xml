@@ -49,6 +49,7 @@
             <name>localMavenRepo</name>
             <url>file://../localMavenRepo</url>
         </repository>
+
     </repositories>
     <pluginRepositories>
         <pluginRepository>
@@ -76,12 +77,6 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.6</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.mortbay.jetty</groupId>
             <artifactId>jetty</artifactId>
             <version>[6.1.6,)</version>
@@ -105,11 +100,11 @@
             <version>1.1.0-ea</version>
         </dependency>
       <!--dependency from local repository-->
-        <dependency>
+        <!--<dependency>
             <groupId>com.hippikon</groupId>
             <artifactId>hippikon</artifactId>
             <version>3.3</version>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>com.thewebsemantic</groupId>
             <artifactId>jenabean</artifactId>
@@ -139,13 +134,13 @@
             <version>2.1</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>pt.cnbc.wikimodels</groupId>
             <artifactId>wm_library</artifactId>
             <version>1.0-SNAPSHOT</version>
-        </dependency>
+        </dependency>-->
         <!-- TODO - delete after transitioning this code to wm_library-->
-        <!--<dependency>
+        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>1.5.8</version>
@@ -155,7 +150,7 @@
             <artifactId>slf4j-log4j12</artifactId>
             <version>1.5.8</version>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version>1.2.15</version>
@@ -165,7 +160,7 @@
                     <groupId>javax.jms</groupId>
                 </exclusion>
             </exclusions>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>com.hp.hpl.jena</groupId>
             <artifactId>jena</artifactId>
@@ -175,11 +170,16 @@
             <groupId>local.jena</groupId>
             <artifactId>sdb</artifactId>
             <version>1.3.0</version>
-        </dependency>-->
+        </dependency>
         <dependency>
             <groupId>org.sbml</groupId>
             <artifactId>libsbmlj</artifactId>
             <version>3.4</version>
+        </dependency>
+        <dependency>
+            <groupId>postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>8.3-603.jdbc4</version>
         </dependency>
     </dependencies>
 
@@ -379,15 +379,8 @@
       
         </plugins>
     </build>
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.scala-tools</groupId>
-                <artifactId>maven-scala-plugin</artifactId>
-                <configuration>
-                    <scalaVersion>${scala.version}</scalaVersion>
-                </configuration>
-            </plugin>
-        </plugins>
-    </reporting>
+    <properties>
+        <netbeans.hint.deploy.server>J2EE</netbeans.hint.deploy.server>
+    </properties>
 </project>
+

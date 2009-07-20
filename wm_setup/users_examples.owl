@@ -19,21 +19,21 @@
      xml:base="http://wikimodels.cnbc.pt/ontologies/users.owl"
      xmlns:con="http://www.w3.org/2000/10/swap/pim/contact#"
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:users="http://wikimodels.cnbc.pt/ontologies/users.owl#"
      xmlns:owl2xml="http://www.w3.org/2006/12/owl2-xml#"
      xmlns:foaf="http://xmlns.com/foaf/0.1/"
      xmlns:owl="http://www.w3.org/2002/07/owl#"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
      xmlns:acetext="http://attempto.ifi.uzh.ch/acetext#"
-     xmlns:users="http://wikimodels.cnbc.pt/ontologies/users.owl#"
      xmlns:ace_lexicon="http://attempto.ifi.uzh.ch/ace_lexicon#">
     <owl:Ontology rdf:about="">
         <acetext:acetext
-            >/*[DataPropertyDomain(fullName User)]*/</acetext:acetext>
+            >/*[DataPropertyDomain(userName User)]*/</acetext:acetext>
         <acetext:acetext
             >/*[DataPropertyDomain(email User)]*/</acetext:acetext>
         <acetext:acetext
-            >/*[DataPropertyDomain(userName User)]*/</acetext:acetext>
+            >/*[DataPropertyDomain(fullName User)]*/</acetext:acetext>
     </owl:Ontology>
     
 
@@ -67,9 +67,11 @@
     <!-- http://wikimodels.cnbc.pt/ontologies/users.owl#password -->
 
     <owl:DatatypeProperty rdf:about="#password">
-        <ace_lexicon:pl>password</ace_lexicon:pl>
-        <ace_lexicon:sg>passwords</ace_lexicon:sg>
         <ace_lexicon:vbg>passworded</ace_lexicon:vbg>
+        <ace_lexicon:sg>passwords</ace_lexicon:sg>
+        <ace_lexicon:pl>password</ace_lexicon:pl>
+        <rdfs:domain rdf:resource="#User"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
     </owl:DatatypeProperty>
     
 
@@ -138,47 +140,75 @@
 
     <!-- http://wikimodels.cnbc.pt/ontologies/users.owl#Alexandre -->
 
-    <User rdf:about="#Alexandre">
-        <rdf:type rdf:resource="User"/>
+    <User rdf:about="#User/Alexandre">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+	<userName>Alexandre</userName>
+        <con:emailAddress
+            >alexmsmartins@gmail.com</con:emailAddress>
         <password
             >06a05b13819f4afad991cc2143732b66</password>
-	<con:emailAddress>alexmsmartins@gmail.com</con:emailAddress>
+	<foaf:firstName>Alexandre</foaf:firstName>
+	<foaf:surName>Martins</foaf:surName>
+    </User>
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/users.owl#alex -->
+
+    <User rdf:about="#User/alex">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+	<userName>admin</userName>
+        <con:emailAddress
+            >alex.mail@clix.pt</con:emailAddress>
+        <password
+            >06a05b13819f4afad991cc2143732b66</password>
+	<foaf:firstName>Alex</foaf:firstName>
+	<foaf:surName>Martins</foaf:surName>
     </User>
     
 
 
     <!-- http://wikimodels.cnbc.pt/ontologies/users.owl#Armindo -->
 
-    <User rdf:about="#Armindo">
-        <rdf:type rdf:resource="User"/>
+    <User rdf:about="#User/Armindo">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+	<userName>Armindo</userName>
+        <con:emailAddress
+            >armindo.salvador@gmail.com</con:emailAddress>
         <password
             >06a05b13819f4afad991cc2143732b66aaaa</password>
-    	<con:emailAddress
-	    >armindo.salvador@gmail.com</con:emailAddress>
+	<foaf:firstName>Armindo</foaf:firstName>
+	<foaf:surName>Salvador</foaf:surName>
     </User>
     
 
 
     <!-- http://wikimodels.cnbc.pt/ontologies/users.owl#Gon&#231;alo -->
 
-    <User rdf:about="#Gon&#231;alo">
-        <rdf:type rdf:resource="User"/>
+    <User rdf:about="#User/Gon&#231;alo">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+	<userName>Gon&#231;alo</userName>
+        <con:emailAddress
+            >gonneto@gmail.com</con:emailAddress>
         <password
             >64a620a89229018e90da6bd8bac52708</password>
-	<con:emailAddress
-	    >gonneto@gmail.com</con:emailAddress>
+	<foaf:firstName>Gon&#231;alo</foaf:firstName>
+	<foaf:surName>Neto</foaf:surName>
     </User>
     
 
 
     <!-- http://wikimodels.cnbc.pt/ontologies/users.owl#admin -->
 
-    <User rdf:about="#admin">
-        <rdf:type rdf:resource="User"/>
+    <User rdf:about="#User/admin">
+	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+	<userName>admin</userName>
         <password
             >21232f297a57a5a743894a0e4a801fc3</password>
-	<con:emailAddress
-	    >admin@wikimodels.cnbc.pt</con:emailAddress>
+        <con:emailAddress
+            >admin@wikimodels.cnbc.pt</con:emailAddress>
+	<foaf:firstName>root</foaf:firstName>
+	<foaf:surName>root</foaf:surName>
     </User>
 </rdf:RDF>
 

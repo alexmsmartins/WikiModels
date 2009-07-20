@@ -16,75 +16,90 @@ import com.hp.hpl.jena.rdf.model.Model
 
 import thewebsemantic.Bean2RDF
 import thewebsemantic.RDF2Bean
-
-import scala.Collection
-
-
+import com.hp.hpl.jena.rdf.model.ModelFactory
+import scala.collection.mutable.LinkedList
 /**
  * Class responsible for the access to Jena
  */
 object UsersDAO {
 
     implicit def toNiceObject[T <: AnyRef](x : T) = new NiceObject(x)
-    
+
     def saveUser(u:User) = {
         try{
-            val lUsers = loadUsers().filter(i => i.userName == u.userName)
-            if(lUsers.size == 1) {
-                val myModel:Model = ManipulatorWrapper.loadModelfromDB
-                var writer = new Bean2RDF(myModel)
-                writer.save(u)
-            } else if(lUsers.size == 0) null else
-            throw new Exception("More than one user as the same user name " +
-                                "in the KnowledgeBase")
+            val myModel:Model = ManipulatorWrapper.loadModelfromDB
+            var writer = new Bean2RDF(myModel)
+            writer.save(u)
         } catch {
             case ex:thewebsemantic.NotFoundException =>
                 Console.println("Bean of " + User.getClass + "and " +
                                 "id is not found")
                 ex.printStackTrace()
-            null
+                null
             case ex =>
                 Console.println(ex.toString)
                 ex.printStackTrace()
-            null
+                null
         }
     }
 
     def loadUser(userName:String):User = {
+        var ret:User = null
+        saveUser(User("xxxx", "xxxxp", "Alexxx", "Martinxx", "alex@xxx.com"))
         try{
-            val lUsers = loadUsers().filter(i => i.userName == userName)
-            if(lUsers.size == 1) lUsers.first
-            else if(lUsers.size == 0) null else
-            throw new Exception("More than one user as the same user name " +
-                                "in the KnowledgeBase")
+            var myModel:Model = ManipulatorWrapper.loadModelfromDB
+            Console.print("Number of individuals in loaded model is " + myModel.size)
+
+            Console.print("After loading Jena Model")
+            var reader = new RDF2Bean[User](myModel)
+            Console.print("After creating a new RDF2Bean")
+            val l:java.util.Collection[User]
+                = reader.load( new User().getClass)
+                    .asInstanceOf[java.util.Collection[User]]
+            Console.println("Found " + l.size + " users with username " + userName)
+            ManipulatorWrapper.saveModelToFile(myModel, "checkmodel.xml")
+            val iter = l.iterator
+            var next:User=null
+            for(i <- 0 until l.size-1){
+                next = iter.next
+                if(next.userName == userName)
+                    ret = next
+            }
+            return ret
         } catch {
             case ex:thewebsemantic.NotFoundException =>
                 Console.println("Bean of " + User.getClass + "and " +
                                 "id is not found")
                 ex.printStackTrace()
-            null
+                null
             case ex =>
-                Console.println(ex.toString)
                 ex.printStackTrace()
-            null
+                null
         }
     }
-    
-    def loadUsers():List[User] = {
+
+    def loadUsers():java.util.Collection[User] = {
         try{
             val myModel:Model = ManipulatorWrapper.loadModelfromDB
-            var reader = new RDF2Bean(myModel);
-            reader.load(User.getClass)
-                  .asInstanceOf[List[User]]
+            Console.print("After loading Jena Model")
+            var reader = new RDF2Bean(myModel)
+            Console.print("After creating a new RDF2Bean")
+            val l:java.util.List[User] = reader.load(new User().getClass )
+                .asInstanceOf[java.util.List[User]]
+            //Console.print("User XML = " + c.toList(0).toXML.toString)
+
+            l
+            /*var l:List[User] = Nil
+            (for(i <- 0 to lusers.size - 1) yield  lusers(i).asInstanceOf[User])
+                .toList*/
         } catch {
             case ex:thewebsemantic.NotFoundException =>
                 Console.println("Bean of " + User.getClass + "and id is not found")
                 ex.printStackTrace()
-            null
+                null
         }
     }
 }
-
 class NiceObject[T <: AnyRef](x : T) {
   def niceClass : Class[_ <: T] = x.getClass.asInstanceOf[Class[T]]
 }

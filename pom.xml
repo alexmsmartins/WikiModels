@@ -6,7 +6,7 @@
     <artifactId>wikimodels_project</artifactId>
     <name>WikiModels Project</name>
     <properties>
-        <scala.version>2.7.4</scala.version>
+        <scala.version>2.7.5</scala.version>
     </properties>
 
     <packaging>pom</packaging>
@@ -18,17 +18,33 @@
         <module>wm_setup</module>
         <module>wm_library</module>
     </modules>
+
+    <repositories>
+        <repository>
+            <id>log4j</id>
+            <name>Log4j Maven2 Repository</name>
+            <url>http://mirrors.ibiblio.org</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
-            <version>1.2.13</version>
+            <version>1.2.9</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jms</artifactId>
+                    <groupId>javax.jms</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>log4j</groupId>
             <artifactId>apache-log4j-extras</artifactId>
             <version>1.0</version>
-        </dependency>
+        </dependency>-->
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -42,12 +58,5 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-  
-    <repositories>
-        <repository>
-            <id>log4j</id>
-            <name>Log4j Maven2 Repository</name>
-            <url>http://mirrors.ibiblio.org</url>
-        </repository>
-    </repositories>
+
 </project>
