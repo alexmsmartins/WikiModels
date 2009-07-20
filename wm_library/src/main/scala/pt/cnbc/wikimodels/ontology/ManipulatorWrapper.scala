@@ -24,6 +24,7 @@ import com.hp.hpl.jena.graph.GraphEvents
 
 import java.io.File
 import scala.Array
+import java.net.URL
 
 
 object ManipulatorWrapper {
@@ -64,14 +65,15 @@ object ManipulatorWrapper {
 
     def loadModelfromDB:Model = {
         try{
-            val store = SDBFactory.connectStore("sdb.ttl")
+            val myConfigFile:URL = ManipulatorWrapper.getClass.getClassLoader().getResource("sdb.ttl");
+            val store = SDBFactory.connectStore("/home/alex/SDB-1.3.0/sdb.ttl")
             SDBFactory.connectDefaultModel(store)
         } catch {
             case ex:Exception => Console.print(
                     """Strange mistake.
                 It resulted in the followning exception:""" +
                     ex.printStackTrace)
-                null
+                throw ex
         }
     }
 

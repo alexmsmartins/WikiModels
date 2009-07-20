@@ -15,10 +15,6 @@ import com.hp.hpl.jena.rdf.model.Model
 import scala.Collection
 
 object SBMLModelsDAO {
-
-
-    
-
     def loadSBMLModel(sbmlmodelID:String):SBMLModel = {
         new SBMLModel()
     }

@@ -16,6 +16,8 @@ import java.util.Date
 import thewebsemantic.Id
 import thewebsemantic.Namespace
 import thewebsemantic.RdfProperty
+import thewebsemantic.RdfType
+import scala.reflect.BeanProperty
 
 
 /**
@@ -23,23 +25,24 @@ import thewebsemantic.RdfProperty
  */
 @BeanInfo
 @Namespace("http://wikimodels.cnbc.pt/ontologies/users.owl#")
+@RdfType("User")
 case class User(
     @Id
-    @RdfProperty("http://wikimodels.cnbc.pt/ontologies/users.owl#userName")
     var userName:String,
-    @RdfProperty("http://wikimodels.cnbc.pt/ontologies/users.owl#password")
     var password:String,
     @RdfProperty("http://xmlns.com/foaf/0.1/firstName")
     var firstName:String,
     @RdfProperty("http://xmlns.com/foaf/0.1/surname")
     var surName:String,
     @RdfProperty("http://www.w3.org/2000/10/swap/pim/contact#emailAddress")
-    var emailAddress:String) extends DataModel {
-    
-    def this() = {
-        this("","","","","")
-    }
+    var emailAddress:String
+) extends DataModel {
 
+
+
+    def this() = {
+        this(null, null, null, null, null)
+    }
 
     def this(xmlUser:Elem) = {
         this((xmlUser \ "userName").text,

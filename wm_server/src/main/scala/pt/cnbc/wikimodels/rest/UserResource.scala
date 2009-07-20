@@ -47,7 +47,7 @@ class UserResource extends RESTResource {
     @Produces(Array("application/xml"))
     @Consumes(Array("application/xml"))
     def get(@PathParam("userresource") userResource:String
-            ):String = {
+    ):String = {
         val username = security.getUserPrincipal().getName()
 
         var ret = ""
@@ -58,15 +58,24 @@ class UserResource extends RESTResource {
             user match{
                 case User(userResource,_,_,_,_) => user.toXML.toString
                 case null =>
+                    /*<html>
+                        <body>
+                            <h1>userResource = {userResource}</h1>
+                            <h2>With null User</h2>
+                            username = {username}
+                        </body>
+                    </html>.toString*/
+
                     throw new WebApplicationException(Response.Status.NOT_FOUND)
             }
         } else {
-         /*<html>
-            <body>
-                <h1>userResource = {userResource}</h1>
-                username = {username}
-            </body>
-        </html>.toString*/
+            /*<html>
+                <body>
+                    <h1>userResource = {userResource}</h1>
+                    <h2>Without authorization</h2>
+                    username = {username}
+                </body>
+            </html>.toString*/
 
 
             //user is trying to access a resource for which
