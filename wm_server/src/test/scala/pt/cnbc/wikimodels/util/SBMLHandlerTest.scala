@@ -230,6 +230,8 @@ class SBMLHandlerTest {
         assertTrue( new SBMLHandler().validateSBML(example1, 2, 4))
     }
 
+
+    
     @Test
     def spitNotesTest = {
         val inNotes =
@@ -248,6 +250,12 @@ class SBMLHandlerTest {
                 </notes>
 
         val spit = (new SBMLHandler().spitNotes(inNotes))
+
+
+        Console.println("Predicted notes = " + spit )
+        Console.println("Predicted h1 = " + (outNotes \ "html" \ "body" \ "h1").text)
+        Console.println("Obtained h1 = " + (spit \ "html" \ "body" \ "h1").text)
+
         assertEquals( (spit \ "html" \ "body" \ "h1").text,
                       (outNotes \ "html" \ "body" \ "h1").text)
         assertTrue(spit.label == "notes")

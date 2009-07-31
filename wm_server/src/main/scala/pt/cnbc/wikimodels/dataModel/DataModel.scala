@@ -25,8 +25,8 @@ trait DataModel extends RdfBean[DataModel]{
     def toXML:Elem
 
     /**
-     * Extracts the information contained in the XML
-     * and creates a Data model accordingly
+     * Constructor that extracts the information contained in the XML
+     * Should be implemented in every child class
      */
-    //def extractXML(xml:Node):DataModel
+    //def this(xml:Node)
 }
