@@ -17,9 +17,11 @@ import javax.ws.rs.PathParam
 import javax.ws.rs.Produces
 import javax.ws.rs.Consumes
 import javax.ws.rs.HeaderParam
+import javax.ws.rs.core.Context
 import javax.ws.rs.core.Response
 import javax.ws.rs.core.Response.Status
 import javax.ws.rs.core.Response.Status._
+import javax.ws.rs.core.SecurityContext
 import java.lang.annotation._
 import javax.ws.rs.WebApplicationException
 
@@ -28,13 +30,7 @@ import scala.collection.mutable.HashMap
 
 import pt.cnbc.wikimodels.dataModel.User
 import pt.cnbc.wikimodels.dataAccess.UsersDAO
-import pt.cnbc.wikimodels.security.SimpleSecurityContext
 import pt.cnbc.wikimodels.security.SecurityContextFactory
-
-import javax.ws.rs.core.Context
-import javax.ws.rs.core.SecurityContext
-
-
 
 @Path("/user/{userresource}")//: [a-zA-Z][a-zA-Z_0-9]}")
 class UserResource extends RESTResource {
@@ -43,9 +39,12 @@ class UserResource extends RESTResource {
     var security:SecurityContext = null
     val secContext = SecurityContextFactory.createSecurityContext
 
+
+    /**
+     * 
+     */
     @GET    
     @Produces(Array("application/xml"))
-    @Consumes(Array("application/xml"))
     def get(@PathParam("userresource") userResource:String
     ):String = {
         val username = security.getUserPrincipal().getName()
@@ -59,23 +58,23 @@ class UserResource extends RESTResource {
                 case User(userResource,_,_,_,_) => user.toXML.toString
                 case null =>
                     /*<html>
-                        <body>
-                            <h1>userResource = {userResource}</h1>
-                            <h2>With null User</h2>
-                            username = {username}
-                        </body>
-                    </html>.toString*/
+                     <body>
+                     <h1>userResource = {userResource}</h1>
+                     <h2>With null User</h2>
+                     username = {username}
+                     </body>
+                     </html>.toString*/
 
                     throw new WebApplicationException(Response.Status.NOT_FOUND)
             }
         } else {
             /*<html>
-                <body>
-                    <h1>userResource = {userResource}</h1>
-                    <h2>Without authorization</h2>
-                    username = {username}
-                </body>
-            </html>.toString*/
+             <body>
+             <h1>userResource = {userResource}</h1>
+             <h2>Without authorization</h2>
+             username = {username}
+             </body>
+             </html>.toString*/
 
 
             //user is trying to access a resource for which

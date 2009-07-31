@@ -7,5 +7,12 @@
 
 package pt.cnbc.wikimodels.rest
 
+
+import pt.cnbc.wikimodels.security.SecurityContextFactory
+
+import javax.ws.rs.core.Context
+import javax.ws.rs.core.SecurityContext
+
 trait RESTResource {
+
 }

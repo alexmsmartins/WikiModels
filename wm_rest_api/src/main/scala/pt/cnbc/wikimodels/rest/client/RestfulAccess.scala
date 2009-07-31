@@ -46,9 +46,9 @@ class RestfulAccess(host:String,
     def this(host:String, port:Int, contextRoot:String) = {
         this(host, port, contextRoot,"anonymous","anonymous")
     }
-
+    
     def getRequest(url:String) = {
-        val meth =  new HttpGet(url)
+        val meth =  new HttpGet(contextRoot + url)
         val response:HttpResponse  = httpclient.execute(meth)
         println( "======================" )
 
@@ -62,7 +62,7 @@ class RestfulAccess(host:String,
     }
 
     def postRequest(url:String) = {
-        val meth = new HttpPut(url)
+        val meth = new HttpPut(contextRoot + url)
         val response:HttpResponse  = httpclient.execute(meth)
         println( "======================" )
 
@@ -74,51 +74,37 @@ class RestfulAccess(host:String,
         ""
     }
     def putRequest(url:String) = {
-        val meth = new HttpPost(url)
+        val meth = new HttpPost(contextRoot + url)
         val response:HttpResponse  = httpclient.execute(meth)
         println( "======================" )
 
         //Console.println(response.getStatusLine())
         //Console.println(response.toString)
-        val xmldoc = XML.load(response.getEntity.getContent)
-        Console.println( xmldoc )
         println( "======================" )
         ""
 
     }
 
     def deleteRequest(url:String) = {
-        val meth = new HttpDelete(url)
+        val meth = new HttpDelete(contextRoot + url)
         val response:HttpResponse  = httpclient.execute(meth)
         println( "======================" )
 
         //Console.println(response.getStatusLine())
-        //Console.println(response.toString)
-        val xmldoc = XML.load(response.getEntity.getContent)
-        Console.println( xmldoc )
+        //Console.printle RestfulAcces(response.toString)
         println( "======================" )
         ""
     }
 
-    private def sendRequest(method:String ,url:String):String = {
-        
-        val meth = method match {
-            case "GET" => new HttpGet(url)
-            case "PUT" => new HttpPost(url)
-            case "POST" => new HttpPut(url)
-            case "DELETE" => new HttpDelete(url)
-            case _ => throw new Throwable
-        }
-
-        meth.setHeader("string", "strings")
-        val response:HttpResponse  = httpclient.execute(meth)
-        println( "======================" )
-
-        //Console.println(response.getStatusLine())
-        //Console.println(response.toString)
-        val xmldoc = XML.load(response.getEntity.getContent)
-        Console.println( xmldoc )
-        println( "======================" )
-        ""
+    /**
+     * Closes the HttpConnection established by RestfulAccess
+     * This method should be called when the class is no longer needed
+     * since it frees Operating system resurces that the GC cannot free.
+     */
+    def close():Unit = {
+        // When HttpClient instance is no longer needed,
+        // shut down the connection manager to ensure
+        // immediate deallocation of all system resources
+        httpclient.getConnectionManager().shutdown()
     }
 }

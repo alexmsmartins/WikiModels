@@ -45,7 +45,7 @@ object UsersDAO {
 
     def loadUser(userName:String):User = {
         var ret:User = null
-        saveUser(User("xxxx", "xxxxp", "Alexxx", "Martinxx", "alex@xxx.com"))
+        //saveUser(User("xxxx", "xxxxp", "Alexxx", "Martinxx", "alex@xxx.com"))
         try{
             var myModel:Model = ManipulatorWrapper.loadModelfromDB
             Console.print("Number of individuals in loaded model is " + myModel.size)

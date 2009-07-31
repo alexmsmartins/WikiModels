@@ -31,20 +31,27 @@ case class Element(
     @Id
     @RdfProperty("http://wikimodels.cnbc.pt/ontologies/sbml.owl#metaid")
     metaid:String,
-    @RdfProperty("http://wikimodels.cnbc.pt/ontologies/sbml.owl#notes")
+      @RdfProperty("http://wikimodels.cnbc.pt/ontologies/sbml.owl#notes")
     notes:NodeSeq) extends DataModel {
 
 
     //metaid stays mandatory for now
     if(metaid == null){
+        //Note: It might be deleted from here to make the data model
+        //Note: independent frm the data validation -> we 'll see.
         throw new BadFormatException(
-                 "Eelement constructor should not receive a null metaid.")
+            "Element constructor should never receive a null metaid.")
+    }
+
+    def this(xmlModel:Elem) = {
+        this((xmlModel \ "@metaid").text,
+             (xmlModel \ "notes"))
     }
 
 
-
-
-    override def toXML:Elem = {
-        <element metaid={metaid}></element>
-    }
+    override def toXML:Elem =
+    throw new pt.cnbc.wikimodels.exceptions
+    .NotImplementedException("toXML in class " + this.getClass +
+                             "is not implemente")
+    
 }

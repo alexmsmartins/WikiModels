@@ -15,10 +15,13 @@ import scala.xml.NodeSeq
 import scala.xml.UnprefixedAttribute
 import scala.xml.TopScope
 
+
+object SBMLHandler{ var LibSBMLLoaded = false}
 class SBMLHandler {
-    LibSBMLLoader()
-
-
+    if(SBMLHandler.LibSBMLLoaded == false){
+        LibSBMLLoader()
+        SBMLHandler.LibSBMLLoaded = true
+    }
 
     /**
      * This method should be run before any other method in this object
@@ -41,12 +44,12 @@ class SBMLHandler {
         Console.println("checkConsistency errors:" + sbmlDoc.checkConsistency)
         Console.println("checkInternalConsistency errors:" + sbmlDoc.checkInternalConsistency)
         if(sbmlDoc.checkInternalConsistency >0){
-        Console.println("Error: " + sbmlDoc.getError(0).getErrorId + "\n" +
-                        "Category:"+ sbmlDoc.getError(0).getCategoryAsString + "\n" +
-                        "Line:"+ sbmlDoc.getError(0).getLine + "\n" +
-                        "Column:"+ sbmlDoc.getError(0).getColumn + "\n" +
-                        "Message:"+ sbmlDoc.getError(0).getMessage + "\n" +
-                        "Sevegory:"+ sbmlDoc.getError(0).getSeverityAsString + "\n")
+            Console.println("Error: " + sbmlDoc.getError(0).getErrorId + "\n" +
+                            "Category:"+ sbmlDoc.getError(0).getCategoryAsString + "\n" +
+                            "Line:"+ sbmlDoc.getError(0).getLine + "\n" +
+                            "Column:"+ sbmlDoc.getError(0).getColumn + "\n" +
+                            "Message:"+ sbmlDoc.getError(0).getMessage + "\n" +
+                            "Sevegory:"+ sbmlDoc.getError(0).getSeverityAsString + "\n")
         }
 
         val checkCompat = (sbmlLevel, sbmlVersion) match {
@@ -58,9 +61,9 @@ class SBMLHandler {
         }
         //TODO INCLUDE checkInternalConsistency when bug in BIOMD0000000141 is pinpionted
         (checkCompat &&
-        (sbmlDoc.checkL2v4Compatibility == 0) &&
-        (sbmlDoc.checkConsistency == 0)) /* &&
-        (sbmlDoc.checkInternalConsistency == 0)*/
+         (sbmlDoc.checkL2v4Compatibility == 0) &&
+         (sbmlDoc.checkConsistency == 0)) /* &&
+                                           (sbmlDoc.checkInternalConsistency == 0)*/
     }
 
 
@@ -70,54 +73,69 @@ class SBMLHandler {
      * embebed inside or null if there is no content to embeb
      */
     def spitNotes(notesContent:Node):Elem =
-        if(notesContent != null){
-            <notes>
-                {addNamespaceToXML(notesContent,
-                                   "http://www.w3c.org/1999/xhtml")}
-            </notes> } else null
+    if(notesContent != null){
+        <notes>
+            {addNamespaceToXML(notesContent,
+                               "http://www.w3c.org/1999/xhtml")}
+        </notes>
+    } else {
+        {null}
+    }
 
     def addNamespaceToXML(ns:NodeSeq, namespace:String):NodeSeq = {
         ns.map(i => {
-                   new Elem(null,
-                            i.label,
-                            new  UnprefixedAttribute("xmlns",
-                                         namespace,
-                                         null),
-                            TopScope,
-                            i.descendant:_*)
+                new Elem(null,
+                         i.label,
+                         new  UnprefixedAttribute("xmlns",
+                                                  namespace,
+                                                  scala.xml.Null),
+                         TopScope,
+                         i.child:_*)
             }
         )
     }
 }
 
-object LibSBMLLoader {
-    def apply() = {
-        try {
-            //            System.setProperty("java.library.path", "/usr/local/lib:/usr/local:" + System.getProperty("java.library.path"));
-            //System.out.println(System.getProperty("java.library.path"));
 
-            //            System.loadLibrary("libsbml");
-            System.load("/usr/local/lib/libsbmlj.so");
-            /* Extra check to be sure we have access to libSBML: */
-            Class.forName("org.sbml.libsbml.libsbml");
-        } catch {
-            case e:SecurityException  =>{
-                    System.err.println("A security manager exists and its"+
-                                       "<code>checkLink</code> method doesn't"+
-                                       "allow loading of the specified dynamic "+
-                                       "library: ")
-                    e.printStackTrace
-                }
-            case e:UnsatisfiedLinkError => {
-                    Console.println("UnsatisfiedLinkError  if the file "+
-                                    "does not exist: ")
-                    e.printStackTrace
-                }
-            case e:NullPointerException=>{
-                    Console.println("<code>filename</code> is "+
-                                    "<code>null</code>")
-                    e.printStackTrace
-                }
+/**
+ * Responsible for the loading of libsbml to the java classloader
+ * It avoids the <code>java.lang.UnsatisfiedLinkError: Native Library
+ * xxx  already loaded in another classloader</code> described in
+ * http://java.sun.com/docs/books/jni/html/design.html#8628 by ensuring
+ * that library is loaded only once in the apply method
+ */
+object LibSBMLLoader {
+    var alreadyLoaded = false
+
+    def apply() = {
+        if(alreadyLoaded == false){ //is this really necessary
+            try {
+                //            System.setProperty("java.library.path", "/usr/local/lib:/usr/local:" + System.getProperty("java.library.path"));
+                //System.out.println(System.getProperty("java.library.path"));
+
+                //            System.loadLibrary("libsbml");
+                System.load("/usr/local/lib/libsbmlj.so")
+                /* Extra check to be sure we have access to libSBML: */
+                Class.forName("org.sbml.libsbml.libsbml")
+            } catch {
+                case e:SecurityException  =>{
+                        System.err.println("A security manager exists and its"+
+                                           "<code>checkLink</code> method doesn't"+
+                                           "allow loading of the specified dynamic "+
+                                           "library: ")
+                        e.printStackTrace
+                    }
+                case e:UnsatisfiedLinkError => {
+                        Console.println("UnsatisfiedLinkError  if the file "+
+                                        "does not exist: ")
+                        e.printStackTrace
+                    }
+                case e:NullPointerException=>{
+                        Console.println("<code>filename</code> is "+
+                                        "<code>null</code>")
+                        e.printStackTrace
+                    }
+            }
         }
     }
 }
