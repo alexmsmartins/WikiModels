@@ -233,7 +233,7 @@ class SBMLHandlerTest {
 
     
     @Test
-    def spitNotesTest = {
+    def genNotesFromHTMLTest = {
         val inNotes =
         <html>
             <body>
@@ -249,7 +249,7 @@ class SBMLHandlerTest {
             </html>
                 </notes>
 
-        val spit = (new SBMLHandler().spitNotes(inNotes))
+        val spit = (new SBMLHandler().genNotesFromHTML(inNotes.toString))
 
 
         Console.println("Predicted notes = " + spit )
@@ -263,6 +263,11 @@ class SBMLHandlerTest {
 
     @Test
     def spitNullNotesTest =
-        assertEquals(new SBMLHandler().spitNotes(null), null)
+        assertEquals(new SBMLHandler().genNotesFromHTML(null), null)
+
+    @Test
+    def spitEmptyStringNotesTest =
+        assertEquals(new SBMLHandler().genNotesFromHTML("  "), null)
+
 }
 

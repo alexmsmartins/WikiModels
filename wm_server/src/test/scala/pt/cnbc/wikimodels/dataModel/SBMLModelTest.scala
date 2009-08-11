@@ -213,7 +213,68 @@ class SBMLModelTest {
     }
 
     @Test
-    def example = {
+    def xmlInModelWithoutComponents = {
+        val sbml = new SBMLModel("any_metaid", <p>dasdfs</p>,
+                                 "any_id", "any_name")
+        /*Console.println("XML representation of the model is "
+         + sbml.toXML.toString)*/
+        val sbml2 = new SBMLModel(sbml.toXML)
+        /*Console.println("XML representation of the reound tripped model is "
+         + sbml2.toXML.toString)*/
+
+        assertTrue(sbml == sbml2 )
     }
 
+
+    @Test
+    def xmlInModelWithoutNotes = {
+        val sbml = new SBMLModel("any_metaid", Nil,
+                                 "any_id", "any_name")
+        Console.println("XML representation of the model is "
+                        + sbml.toXML.toString)
+        val sbml2 = new SBMLModel(sbml.toXML)
+        Console.println("XML representation of the reound tripped model is "
+                        + sbml2.toXML.toString)
+        assertTrue(sbml == sbml2 )
+    }
+
+    
+    @Test
+    def xmlInModelWithoutMetaId = {
+        try{
+            val sbml = new SBMLModel(null, <p>dasdfs</p>,
+                                     "any_id", "any_name")
+            Console.println("XML representation of the model is "
+                            + sbml.toXML.toString)
+            assertTrue(false)
+        } catch {
+            case ex:pt.cnbc.wikimodels.exceptions.BadFormatException =>
+                assertTrue(true) //Test passes
+            case _ => assertTrue(false)
+        }
+    }
+
+    @Test
+    def createModelWithoutId = {
+        val sbml = new SBMLModel("any_metaid", <p>dasdfs</p>,
+                                 null, "any_name")
+        Console.println("XML representation of the model is "
+                        + sbml.toXML.toString)
+        val sbml2 = new SBMLModel(sbml.toXML)
+        Console.println("XML representation of the reound tripped model is "
+                        + sbml2.toXML.toString)
+        assertTrue(sbml == sbml2 )
+    }
+
+    @Test
+    def createModelWithoutName = {
+        val sbml = new SBMLModel("any_metaid", <p>dasdfs</p>,
+                                 "any_id", null)
+        Console.println("XML representation of the model is "
+                        + sbml.toXML.toString)
+        val sbml2 = new SBMLModel(sbml.toXML)
+        Console.println("XML representation of the reound tripped model is "
+                        + sbml2.toXML.toString)
+        assertTrue(sbml == sbml2 )
+    }
 }

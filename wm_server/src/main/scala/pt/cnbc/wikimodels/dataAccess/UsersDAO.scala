@@ -8,16 +8,17 @@
 
 package pt.cnbc.wikimodels.dataAccess
 
+import com.hp.hpl.jena.rdf.model.Model
+import com.hp.hpl.jena.rdf.model.ModelFactory
 
 import pt.cnbc.wikimodels.dataModel.User
 import pt.cnbc.wikimodels.ontology.ManipulatorWrapper
 
-import com.hp.hpl.jena.rdf.model.Model
+import scala.collection.mutable.LinkedList
 
 import thewebsemantic.Bean2RDF
 import thewebsemantic.RDF2Bean
-import com.hp.hpl.jena.rdf.model.ModelFactory
-import scala.collection.mutable.LinkedList
+
 /**
  * Class responsible for the access to Jena
  */
@@ -57,7 +58,6 @@ object UsersDAO {
                 = reader.load( new User().getClass)
                     .asInstanceOf[java.util.Collection[User]]
             Console.println("Found " + l.size + " users with username " + userName)
-            ManipulatorWrapper.saveModelToFile(myModel, "checkmodel.xml")
             val iter = l.iterator
             var next:User=null
             for(i <- 0 until l.size-1){

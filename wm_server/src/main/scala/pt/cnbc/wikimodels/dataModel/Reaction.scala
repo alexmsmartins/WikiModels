@@ -7,7 +7,9 @@
  */
 
 package pt.cnbc.wikimodels.dataModel
-import pt.cnbc.wikimodels.util.SBMLHandler
+
+import org.scala_tools.javautils.Imports._
+
 import scala.xml.Group
 import scala.xml.Node
 import scala.xml.NodeSeq
@@ -18,45 +20,72 @@ import thewebsemantic.RdfProperty
 import scala.reflect.BeanInfo
 import scala.xml.Elem
 
+import pt.cnbc.wikimodels.util.SBMLHandler
 
 @BeanInfo
 @Namespace("http://wikimodels.cnbc.pt/ontologies/sbml.owl#")
 case class Reaction(
-    @Id
-    override val metaid:String,
-      override val notes:NodeSeq,
-      id:String,
-      name:String,
-      reversible:Boolean,
-      fast:boolean
+    @Id override val metaid:String) extends Element(metaid){
 
-) extends Element(metaid, notes){
+    var id:String = null
+    var name:String = null
+    var reversible:Boolean = true
+    var fast:boolean = false
 
-    var lisOfReactants:Seq[Species] = Nil
-    var listOfProducts:Seq[Species] = Nil
+    //TODO - MATH wiil be done in the DAO since it is very complicated to do it
+    //all here
+    var listOfReactants:java.util.Collection[SpeciesReference] = null
+    var listOfProducts:java.util.Collection[SpeciesReference] = null
+    var listOfModifiers:java.util.Collection[ModifierSpeciesReference] = null
+
+    var kineticLaw:KineticLaw = null //optional
+
+    def this(metaid:String,
+             notes:NodeSeq,
+             id:String,
+             name:String,
+             reversible:Boolean,
+             fast:boolean) = {
+        this(metaid)
+        this.setNotesFromXML(notes)
+        this.id = id
+        this.name = name
+        this.reversible = reversible
+        this.fast = fast
+     }
+
+    def this() = {
+        this(null, Nil, null, null, true, false)
+    }
+
+    def this(xmlReaction:Elem) = {
+        this((new SBMLHandler).toStringOrNull((xmlReaction \ "@metaid").text),
+             (new SBMLHandler).checkCurrentLabelForNotes(xmlReaction),
+             (new SBMLHandler).toStringOrNull((xmlReaction \ "@id").text),
+             (new SBMLHandler).toStringOrNull((xmlReaction \ "@name").text),
+             (xmlReaction \ "@reversible").text.toBoolean ,
+             (xmlReaction \ "@fast").text.toBoolean)
+    }
 
     override def toXML:Elem = {
-        <reaction id="J1">
-            {new SBMLHandler().spitNotes(Group(notes))}
+        <reaction metaid={metaid} id={id} name={name} >
+            {new SBMLHandler().genNotesFromHTML(notes)}
+            {if(listOfReactants != null)
             <listOfReactants>
-                <speciesReference species="X0"/>
-            </listOfReactants>
+                    {listOfReactants.asScala.map(i => i.toXML)}
+             </listOfReactants> else scala.xml.Null
+            }
+            {if(listOfProducts != null)
             <listOfProducts>
-                <speciesReference species="S1"/>
-            </listOfProducts>
+                    {listOfProducts.asScala.map(i => i.toXML)}
+             </listOfProducts> else scala.xml.Null
+            }
+            {if(listOfModifiers != null)
             <listOfModifiers>
-                <modifierSpeciesReference species="S2"/>
-            </listOfModifiers>
-            <kineticLaw>
-                <math xmlns="http://www.w3.org/1998/Math/MathML">
-                    <apply>
-                        <times/> <ci> k </ci> <ci> S2 </ci> <ci> X0 </ci> <ci> c1 </ci>
-                    </apply>
-                </math>
-                <listOfParameters>
-                    <parameter id="k" value="0.1" units="per_concent_per_time"/>
-                </listOfParameters>
-            </kineticLaw>
+                    {listOfModifiers.asScala.map(i => i.toXML)}
+             </listOfModifiers> else scala.xml.Null
+            }
+            {if(this.kineticLaw != null) this.kineticLaw.toXML else null.asInstanceOf[Elem]}
         </reaction>
     }
 }

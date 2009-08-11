@@ -7,17 +7,22 @@
  */
 
 package pt.cnbc.wikimodels.util
-import scala.xml.Node
+
 import org.sbml.libsbml.SBMLDocument
 import org.sbml.libsbml.SBMLReader
+
 import scala.xml.Elem
+import scala.xml.Node
 import scala.xml.NodeSeq
-import scala.xml.UnprefixedAttribute
 import scala.xml.TopScope
+import scala.xml.UnprefixedAttribute
+import scala.xml.XML
 
 
 object SBMLHandler{ var LibSBMLLoaded = false}
+
 class SBMLHandler {
+
     if(SBMLHandler.LibSBMLLoaded == false){
         LibSBMLLoader()
         SBMLHandler.LibSBMLLoaded = true
@@ -72,15 +77,30 @@ class SBMLHandler {
      * @returns a <notes> sections with the content of notesContent
      * embebed inside or null if there is no content to embeb
      */
-    def spitNotes(notesContent:Node):Elem =
-    if(notesContent != null){
-        <notes>
-            {addNamespaceToXML(notesContent,
-                               "http://www.w3c.org/1999/xhtml")}
-        </notes>
-    } else {
-        {null}
+    def genNotesFromHTML(notesContent:String):Elem = {
+        Console.println("HTML to generate notes = "+ notesContent)
+        wrapHTML(notesContent, "notes")
     }
+
+    /**
+     * Produces the XML of the <message section of a Constraint
+     * @returns a <message> sections with the content of messageContent
+     * embebed inside or null if there is no content to embeb
+     */
+    def genMessageFromHTML(messageContent:String):Elem = {
+        Console.println("HTML to generate message = " + messageContent)
+        wrapHTML(messageContent, "message")
+    }
+
+
+    def wrapHTML(content:String, labelWrapper:String) =
+        if(content != null && content.trim != "" ){
+            XML.loadString("<" + labelWrapper + ">" +
+                           content +
+                           "</" + labelWrapper + ">")
+        } else {
+            null.asInstanceOf[Elem]
+        }
 
     def addNamespaceToXML(ns:NodeSeq, namespace:String):NodeSeq = {
         ns.map(i => {
@@ -92,8 +112,58 @@ class SBMLHandler {
                          TopScope,
                          i.child:_*)
             }
-        )
+        ).filter(_.label != "#PCDATA")
+        //the filter is an hack to make <#PCDATA go away
     }
+
+    def addNamespaceToXHTML(nodeseq:NodeSeq):NodeSeq =
+        this.addNamespaceToXML(nodeseq, "http://www.w3c.org/1999/xhtml")
+    def addNamespaceToNathML(math:NodeSeq):NodeSeq =
+        this.addNamespaceToXML(math, "http://www.w3.org/1998/Math/MathML")
+
+
+    /**
+     * Checks the current XML labe for the presence of a Notes labe.
+     * The input must be in the form:
+     * <currentlabel metaid="123" id="456" name"name789">
+     *  <notes>
+     *  </notes>
+     * </currentlabel>
+     * @return NodeSeq of the xhtml contained inside the notes or null
+     * if there are not notes
+     */
+    def checkCurrentLabelForNotes(xmlLabel:Elem):NodeSeq = {
+        val notes:NodeSeq = (xmlLabel \ "notes")
+        if(notes.size == 0){
+            Nil
+        } else notes.elements.next.child
+    }
+
+
+    /**
+     * Checks the current XML labe for the presence of a message label.
+     * The input must be in the form:
+     * <currentlabel metaid="123" id="456" name"name789">
+     *  <message>
+     *  </message>
+     * </currentlabel>
+     * @return NodeSeq of the xhtml contained inside the notes or null
+     * if there are not notes
+     */
+    def checkCurrentLabelForMessage(xmlLabel:Elem):NodeSeq = {
+        val message:NodeSeq = (xmlLabel \ "message")
+        if(message.size == 0){
+            Nil
+        } else message.elements.next.child
+    }
+
+    /**
+     * Gives back the supplied string or null if that string if empty
+     * or composed of spaces.
+     * This function is used to insure that XPath searches that turn out nothing
+     * actually return nothing and not an empty string
+     */
+    def toStringOrNull(str:String) = if(str.trim == "") null else str.trim
 }
 
 

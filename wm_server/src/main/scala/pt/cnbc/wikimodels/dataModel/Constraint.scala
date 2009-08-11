@@ -7,42 +7,67 @@
  */
 
 package pt.cnbc.wikimodels.dataModel
+
+import scala.reflect.BeanInfo
+import scala.xml.Elem
+import scala.xml.Group
 import scala.xml.Node
 import scala.xml.NodeSeq
+import scala.xml.XML
 
 import thewebsemantic.Id
 import thewebsemantic.Namespace
 import thewebsemantic.RdfProperty
-import scala.reflect.BeanInfo
-import scala.xml.Elem
+
+import pt.cnbc.wikimodels.util.SBMLHandler
 
 
 @BeanInfo
 @Namespace("http://wikimodels.cnbc.pt/ontologies/sbml.owl#")
 case class Constraint(
-    @Id
-    override val metaid:String,
-    override val notes:NodeSeq,
-    id:String,
-    name:String,
-    math:Elem,
-    message:Elem) extends Element(metaid, notes){
+    @Id override val metaid:String) extends Element(metaid){
+    var id:String = null
+    var name:String = null
+    var math:String = null
+    var message:String = null
+
+    def this(metaid:String,
+             notes:NodeSeq,
+             id:String,
+             name:String,
+             math:NodeSeq,
+             message:NodeSeq) = {
+        this(metaid)
+        this.setNotesFromXML(notes)
+        this.id = id
+        this.name= name
+        this.math = math.toString
+        this.message = message.toString
+    }
+
+    def this() = {
+        this(null, Nil, null, null, Nil, null)
+    }
+
+    /**
+     * math element is mandatory
+     */
+    def this(xmlConstraint:Elem) = {
+        this((new SBMLHandler).toStringOrNull((xmlConstraint \ "@metaid").text),
+             (new SBMLHandler).checkCurrentLabelForNotes(xmlConstraint),
+             (new SBMLHandler).toStringOrNull((xmlConstraint \ "@id").text),
+             (new SBMLHandler).toStringOrNull((xmlConstraint \ "@name").text),
+             (xmlConstraint \ "math"),
+             (new SBMLHandler).checkCurrentLabelForMessage(xmlConstraint))
+        
+    }
 
     override def toXML:Elem = {
-        <constraint metaid={metaid} id={id}>
-            <notes>
-                <p xmlns="http://www.w3.org/1999/xhtml"> Notes about this Constraint. </p>
-            </notes>
-            <math xmlns="http://www.w3.org/1998/Math/MathML">
-                <apply>
-                    <and/>
-                    <apply> <lt/> <cn> 1 </cn> <ci> S1 </ci> </apply>
-                    <apply> <lt/> <ci> S1 </ci> <cn> 100 </cn> </apply>
-                </apply>
-            </math>
-            <message>
-                <p xmlns="http://www.w3.org/1999/xhtml"> Species S1 is out of range. </p>
-            </message>
+        <constraint metaid={metaid} id={id} name={name}>
+            <!--order is important according to SBML Specifications-->
+            {new SBMLHandler().genNotesFromHTML(notes)}
+            {XML.loadString(this.math)}
+            {new SBMLHandler().genMessageFromHTML(message)}
         </constraint>
     }
 }

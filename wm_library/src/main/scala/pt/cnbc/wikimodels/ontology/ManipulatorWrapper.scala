@@ -9,7 +9,7 @@ package pt.cnbc.wikimodels.ontology
 
 import org.apache.log4j.Logger
 import com.hp.hpl.jena.rdf.model.ModelFactory
-import com.hp.hpl.jena.rdf.model.Model
+import com.hp.hpl.jena.ontology.OntModel
 import com.hp.hpl.jena.sdb.StoreDesc
 import com.hp.hpl.jena.rdf.model.Resource
 import com.hp.hpl.jena.vocabulary.VCARD
@@ -23,8 +23,10 @@ import com.hp.hpl.jena.shared.NotFoundException
 import com.hp.hpl.jena.graph.GraphEvents
 
 import java.io.File
+import java.lang.Thread
 import scala.Array
 import java.net.URL
+import com.hp.hpl.jena.rdf.model.Model
 
 
 object ManipulatorWrapper {
@@ -65,7 +67,13 @@ object ManipulatorWrapper {
 
     def loadModelfromDB:Model = {
         try{
-            val myConfigFile:URL = ManipulatorWrapper.getClass.getClassLoader().getResource("sdb.ttl");
+            val url = Thread.currentThread
+            .getContextClassLoader
+            .getResource("sdb.ttl")
+            Console.println("url.toExternalForm - " + url.toExternalForm)
+            Console.println("url.toString - " + url.toString)
+            url.toString
+
             val store = SDBFactory.connectStore("/home/alex/SDB-1.3.0/sdb.ttl")
             SDBFactory.connectDefaultModel(store)
         } catch {
