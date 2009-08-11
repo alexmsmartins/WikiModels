@@ -17,8 +17,11 @@ import java.util.Date
 import thewebsemantic.Id
 import thewebsemantic.Namespace
 import thewebsemantic.RdfProperty
-import scala.reflect.BeanInfo
 
+import scala.reflect.BeanInfo
+import scala.xml.Group
+
+import pt.cnbc.wikimodels.util.SBMLHandler
 import pt.cnbc.wikimodels.exceptions.BadFormatException
 
 /**
@@ -30,9 +33,17 @@ import pt.cnbc.wikimodels.exceptions.BadFormatException
 case class Element(
     @Id
     @RdfProperty("http://wikimodels.cnbc.pt/ontologies/sbml.owl#metaid")
-    metaid:String,
-      @RdfProperty("http://wikimodels.cnbc.pt/ontologies/sbml.owl#notes")
-    notes:NodeSeq) extends DataModel {
+    metaid:String) extends DataModel {
+
+
+    //these two lines have to be repeated in any descendant of this class
+    //since annotations are not inherited
+    @RdfProperty("http://wikimodels.cnbc.pt/ontologies/sbml.owl#notes")
+    var notes:String = null
+
+    def setNotesFromXML(notes:NodeSeq) = {
+        this.notes = Group((new SBMLHandler).addNamespaceToXHTML(notes)).toString()
+    }
 
 
     //metaid stays mandatory for now
@@ -44,8 +55,8 @@ case class Element(
     }
 
     def this(xmlModel:Elem) = {
-        this((xmlModel \ "@metaid").text,
-             (xmlModel \ "notes"))
+        this((xmlModel \ "@metaid").text)
+        this.setNotesFromXML(xmlModel \ "notes")
     }
 
 
@@ -53,5 +64,4 @@ case class Element(
     throw new pt.cnbc.wikimodels.exceptions
     .NotImplementedException("toXML in class " + this.getClass +
                              "is not implemente")
-    
 }

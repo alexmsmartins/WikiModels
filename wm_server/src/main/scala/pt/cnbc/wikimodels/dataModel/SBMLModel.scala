@@ -7,9 +7,11 @@
  */
 
 package pt.cnbc.wikimodels.dataModel
-import pt.cnbc.wikimodels.util.SBMLHandler
 
 import java.util.Date
+import java.util.Collection
+
+import org.scala_tools.javautils.Imports._
 
 import scala.reflect.BeanInfo
 import scala.xml.Elem
@@ -18,12 +20,17 @@ import scala.xml.MetaData
 import scala.xml.Node
 import scala.xml.NodeSeq
 import scala.xml.UnprefixedAttribute
+import scala.xml.XML
 
 
 import thewebsemantic.Id
 import thewebsemantic.Namespace
 import thewebsemantic.RdfProperty
 import thewebsemantic.RdfType
+
+import pt.cnbc.wikimodels.util.SBMLHandler
+import pt.cnbc.wikimodels.exceptions.BadFormatException
+
 
 /**
  * Represents a user of WikiModels
@@ -33,48 +40,44 @@ import thewebsemantic.RdfType
 @Namespace("http://wikimodels.cnbc.pt/ontologies/sbml.owl#")
 @RdfType("Model")
 case class SBMLModel(
-    @Id override val metaid:String,
-      override val notes:NodeSeq,
-      id:String,
-      name:String) extends Element(metaid, notes){
+    @Id override val metaid:String) extends Element(metaid){
+
+    var id:String = null
+    var name:String = null
 
     //listOf definitions
-    var listOfFunctionDefinitions:List[FunctionDefinition] = Nil
-    //var listOfUnitDefinitions:List[ÛnitDefinition] = Nil
-    //var listOfCompartmentTypes:List[CompartmentType] = Nil
-    //var listOfSpeciesTypes:List[SpeciesType] = Nil
-    var listOfCompartments:List[Compartment] = Nil
-    var listOfSpecies:List[Species] = Nil
-    var listOfParameters:List[Parameter] = Nil
-    //var listOfInitialAssignments:List[InitialAssignment] = Nil
-    //var listOfRules:List[Rule] = Nil
-    var listOfConstraints:List[Constraint] = Nil
-    var listOfReactions:List[Reaction] = Nil
-    //var listOfEvents:List[Event] = Nil
+    var listOfFunctionDefinitions:Collection[FunctionDefinition] = null
+    //var listOfUnitDefinitions:List[ÛnitDefinition] = List()
+    //var listOfCompartmentTypes:List[CompartmentType] = List()
+    //var listOfSpeciesTypes:List[SpeciesType] = List()
+    var listOfCompartments:Collection[Compartment] = null
+    var listOfSpecies:Collection[Species] = null
+    var listOfParameters:Collection[Parameter] = null
+    //var listOfInitialAssignments:List[InitialAssignment] = List()
+    //var listOfRules:List[Rule] = List()
+    var listOfConstraints:Collection[Constraint] = null
+    var listOfReactions:Collection[Reaction] = null
+    //var listOfEvents:List[Event] = List()
 
-
+    def this(metaid:String,
+             notes:NodeSeq,
+             id:String,
+             name:String) = {
+        this(metaid)
+        this.setNotesFromXML(notes)
+        this.id = id
+        this.name = name
+    }
 
     def this() = {
-        this(null, null, null, null)
+        this(null, Nil, null, null)
     }
 
     def this(xmlModel:Elem) = {
-        this((xmlModel \ "metaid").text,
-             (xmlModel \ "notes"),
-             (xmlModel \ "id").text,
-             (xmlModel \ "name").text)
-        this.listOfFunctionDefinitions = Nil
-        //this.listOfUnitDefinitions = Nil
-        //this.listOfCompartmentTypes = Nil
-        //this.listOfSpeciesTypes = Nil
-        this.listOfCompartments = Nil
-        this.listOfSpecies = Nil
-        this.listOfParameters = Nil
-        //this.listOfInitialAssignments = Nil
-        //this.listOfRules = Nil
-        this.listOfConstraints = Nil
-        this.listOfReactions = Nil
-        //this.listOfEvents = Nil
+        this((new SBMLHandler).toStringOrNull((xmlModel \ "@metaid").text),
+             (new SBMLHandler).checkCurrentLabelForNotes(xmlModel),
+             (new SBMLHandler).toStringOrNull((xmlModel \ "@id").text),
+             (new SBMLHandler).toStringOrNull((xmlModel \ "@name").text) )
     }
 
     /**
@@ -84,12 +87,13 @@ case class SBMLModel(
      * @return the XML representing the user
      */
     override def toXML():Elem = {
+        Console.println("HTML to generate SBML notes in toXML = "+ notes)
         <model metaid={metaid} id={id} name={name}>
-            {new SBMLHandler().spitNotes(Group(notes))}
             <!--order is important according to SBML Specifications-->
-            {if(listOfFunctionDefinitions != Nil)
+            {new SBMLHandler().genNotesFromHTML(notes)}
+            {if(listOfFunctionDefinitions != null)
              <listOfFunctionDefinitions>
-                    {listOfFunctionDefinitions.map(i => i.toXML)}
+                    {listOfFunctionDefinitions.asScala.map(i => i.toXML)}
              </listOfFunctionDefinitions> else scala.xml.Null
             }
             {if(false)
@@ -104,40 +108,40 @@ case class SBMLModel(
              <listOfSpeciesTypes>
              </listOfSpeciesTypes> else scala.xml.Null
             }
-            {if(listOfCompartments != Nil)
+            {if(listOfCompartments != null)
              <listOfCompartments>
-                    {listOfCompartments.map(i => i.toXML)}
+                    {listOfCompartments.asScala.map(i => i.toXML)}
              </listOfCompartments> else scala.xml.Null
             }
-            {   if(listOfSpecies != Nil)
+            {if(listOfSpecies != null)
              <listOfSpecies>
-                    {listOfSpecies.map(i => i.toXML)}
+                    {listOfSpecies.asScala.map(i => i.toXML)}
              </listOfSpecies> else scala.xml.Null
             }
-            {      if(listOfParameters != Nil)
+            {if(listOfParameters != null)
              <listOfParameters>
-                    {listOfParameters.map(i => i.toXML)}
+                    {listOfParameters.asScala.map(i => i.toXML)}
              </listOfParameters> else scala.xml.Null
             }
-            {     if(false)
+            {if(false)
              <listOfInitialAssignments>
              </listOfInitialAssignments> else scala.xml.Null
             }
-            {   if(false)
+            {if(false)
              <listOfRules>
              </listOfRules> else scala.xml.Null
             }
-            {   if(listOfConstraints != Nil)
+            {if(listOfConstraints != null)
              <listOfConstraints>
-                    {listOfConstraints.map(i => i.toXML)}
+                    {listOfConstraints.asScala.map(i => i.toXML)}
              </listOfConstraints> else scala.xml.Null
             }
-            {   if(listOfReactions != Nil)
+            {if(listOfReactions != null)
              <listOfReactions>
-                    {listOfReactions.map(i => i.toXML)}
+                    {listOfReactions.asScala.map(i => i.toXML)}
              </listOfReactions> else scala.xml.Null
             }
-            {   if(false)
+            {if(false)
              <listOfEvents>
              </listOfEvents> else scala.xml.Null
             }

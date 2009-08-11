@@ -88,7 +88,7 @@ object ManipulatorWrapper {
     }
 
 
-    def saveModelToFile(model:Model, fileName:String) ={
+    def saveModelToFile(model:OntModel, fileName:String) ={
         try{
             val out = new java.io.FileOutputStream(fileName)
             model.write(out, "RDF/XML-ABBREV")
@@ -103,10 +103,11 @@ It resulted in the followning exception:""" + ex.printStackTrace)
 
     }
 
-    def loadModelfromfile(fileName:String):Model = {
+    def loadModelfromfile(fileName:String):OntModel = {
         try{
             val in = new java.io.FileInputStream(fileName)
-            ModelFactory.createDefaultModel.read(in, null, null)
+            ModelFactory.createOntologyModel.read(in, null, null)
+            .asInstanceOf[OntModel]
         } catch {
             case ex:java.io.IOException =>
                 Console.print(
@@ -123,7 +124,7 @@ It resulted in the followning exception:""" + ex.printStackTrace)
     }
 
 
-    def executeSPARQLQuery(queryString:String, model:Model):ResultSet = {
+    def executeSPARQLQuery(queryString:String, model:OntModel):ResultSet = {
         val query:Query = QueryFactory.create(queryString);
 
         // Execute the query and obtain results
