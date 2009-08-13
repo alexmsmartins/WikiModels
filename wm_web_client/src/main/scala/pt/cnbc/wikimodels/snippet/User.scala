@@ -9,6 +9,7 @@ package pt.cnbc.wikimodels.snippet
 
 import net.liftweb.mapper._
 import net.liftweb.http._
+import net.liftweb.http.provider.HTTPRequest
 import _root_.scala.xml.{NodeSeq, Node, Elem}
 import _root_.scala.xml.transform._
 import net.liftweb.sitemap.Loc._
@@ -39,7 +40,7 @@ object User {
     def logoutUser() {
         onLogOut.foreach(_(currentUserName))
         UserName.remove()
-        S.request.foreach(_.request.getSession.invalidate)
+        //S.request.foreach(_.request.getSession.invalidate)
     }
 
     def currentUserName: Box[String] = UserName.is
