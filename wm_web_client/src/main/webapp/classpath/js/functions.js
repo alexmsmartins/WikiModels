@@ -1,80 +1,192 @@
-var DDSPEED = 10;
-var DDTIMER = 15;
+FCKConfig.AutoDetectLanguage = false ;
+FCKConfig.DefaultLanguage = "en-uk" ;
+FCKConfig.ToolbarSets["Default"] = [
+['Cut','Copy','Paste','PasteText','PasteWord'],['Undo','Redo','-','Find','Replace'],
+['Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'],
+['OrderedList','UnorderedList','-','Outdent','Indent','Blockquote'],
+['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],['Link','Unlink'],
+['Image','Table','Rule','SpecialChar'],['FontSize','TextColor','BGColor'],['Source','FitWindow']
+] ;
 
-// Function to handle the tree //
-function dsp(loc){
-	if(document.getElementById){
-		var foc=loc.firstChild;
-		foc=loc.firstChild.innerHTML?
-				loc.firstChild:
-				loc.firstChild.nextSibling;
-		foc.innerHTML=foc.innerHTML=='+'?'-':'+';
-		foc=loc.parentNode.nextSibling.style?loc.parentNode.nextSibling:
-				loc.parentNode.nextSibling.nextSibling;
-		foc.style.display=foc.style.display=='block'?'none':'block';
-	}
+
+
+/*var idFD =1, idC=1, idS=1, idP=1, idIA=1, idCt=1, idR = 1;
+
+function AddFunctionDefinition() {
+    // THis is the <ul id="function_def"> element that will contains the new elements
+	var container = document.getElementById('function_def');
+
+	// Create a new <li> element for to insert inside <ul id="function_def">
+	var new_FD = document.createElement('li');
+    var new_FDNote = document.createElement('li');
+    
+	new_FD.innerHTML = "<createDescription:function_definition />"
+    //new_FD.innerHTML = "<span class='file'><h3>Function Definition #"+idFD+":</h3><br />\n\
+//<textarea id='functionDefinition"+idFD+"' type='textarea' rows ='3' cols='100' maxlength='10000' /></span>";
+	new_FDNote.innerHTML = "<span class='file'><h3>Function Definition #"+idFD+" Note:</h3><br />\n\
+<textarea id='functionDefinitionNote"+idFD+"' type='textarea' rows ='10' cols='120' maxlength='50000' /></span>";
+	container.insertBefore(new_FDNote, container.firstChild);
+    container.insertBefore(new_FD, container.firstChild);
+    idFD++;
 }
 
-if(!document.getElementById)
-   document.write('<style type="text/css"><!--\n'+
-      '.dspcont{display:block;}\n'+
-      '//--></style>');
-// ends here //
+function AddCompartment() {
+    // THis is the <ul id="compart"> element that will contains the new elements
+	var container = document.getElementById('compart');
 
-// main function to handle the mouse events //
-function ddMenu(id,d){
-	var h = document.getElementById(id + '-ddheader');
-	var c = document.getElementById(id + '-ddcontent');
-	clearInterval(c.timer);
-	if(d == 1){
-		clearTimeout(h.timer);
-		if(c.maxh && c.maxh <= c.offsetHeight){
-			return
-		}
-		else if(!c.maxh){
-			c.style.display = 'block';
-			c.style.height = 'auto';
-			c.maxh = c.offsetHeight;
-			c.style.height = '0px';
-		}
-		c.timer = setInterval(function(){ddSlide(c,1)},DDTIMER);
-	}else{
-		h.timer = setTimeout(function(){ddCollapse(c)},50);
-	}
+	// Create a new <li> element for to insert inside <ul id="compart">
+	var new_FD = document.createElement('li');
+    var new_FDNote = document.createElement('li');
+
+	new_FD.innerHTML = "<span class='file'><h3>Compartment #"+idC+":</h3><br />\n\
+<textarea id='compartment"+idC+"' type='textarea' rows ='3' cols='100' maxlength='10000' /></span>";
+	new_FDNote.innerHTML = "<span class='file'><h3>Compartment #"+idC+" Note:</h3><br />\n\
+<textarea id='compartment"+idC+"' type='textarea' rows ='10' cols='120' maxlength='50000' /></span>";
+	container.insertBefore(new_FDNote, container.firstChild);
+    container.insertBefore(new_FD, container.firstChild);
+    idC++;
 }
 
-// collapse the menu //
-function ddCollapse(c){
-	c.timer = setInterval(function(){ddSlide(c,-1)},DDTIMER);
+function AddSpecies() {
+    // THis is the <ul id="specie"> element that will contains the new elements
+	var container = document.getElementById('specie');
+
+	// Create a new <li> element for to insert inside <ul id="specie">
+	var new_FD = document.createElement('li');
+    var new_FDNote = document.createElement('li');
+
+	new_FD.innerHTML = "<span class='file'><h3>Specie #"+idS+":</h3><br />\n\
+<textarea id='specie"+idS+"' type='textarea' rows ='3' cols='100' maxlength='10000' /></span>";
+	new_FDNote.innerHTML = "<span class='file'><h3>Specie #"+idS+" Note:</h3><br />\n\
+<textarea id='specie"+idS+"' type='textarea' rows ='10' cols='120' maxlength='50000' /></span>";
+	container.insertBefore(new_FDNote, container.firstChild);
+    container.insertBefore(new_FD, container.firstChild);
+    idS++;
 }
 
-// cancel the collapse if a user rolls over the dropdown //
-function cancelHide(id){
-	var h = document.getElementById(id + '-ddheader');
-	var c = document.getElementById(id + '-ddcontent');
-	clearTimeout(h.timer);
-	clearInterval(c.timer);
-	if(c.offsetHeight < c.maxh){
-		c.timer = setInterval(function(){ddSlide(c,1)},DDTIMER);
-	}
+function AddParameter() {
+    // THis is the <ul id="paramet"> element that will contains the new elements
+	var container = document.getElementById('paramet');
+
+	// Create a new <li> element for to insert inside <ul id="paramet">
+	var new_FD = document.createElement('li');
+    var new_FDNote = document.createElement('li');
+
+	new_FD.innerHTML = "<span class='file'><h3>Parameter #"+idP+":</h3><br />\n\
+<textarea id='parameter"+idP+"' type='textarea' rows ='3' cols='100' maxlength='10000' /></span>";
+	new_FDNote.innerHTML = "<span class='file'><h3>Parameter #"+idP+" Note:</h3><br />\n\
+<textarea id='parameter"+idP+"' type='textarea' rows ='10' cols='120' maxlength='50000' /></span>";
+	container.insertBefore(new_FDNote, container.firstChild);
+    container.insertBefore(new_FD, container.firstChild);
+    idP++;
 }
 
-// incrementally expand/contract the dropdown and change the opacity //
-function ddSlide(c,d){
-	var currh = c.offsetHeight;
-	var dist;
-	if(d == 1){
-		dist = (Math.round((c.maxh - currh) / DDSPEED));
-	}else{
-		dist = (Math.round(currh / DDSPEED));
-	}
-	if(dist <= 1 && d == 1){
-		dist = 1;
-	}
-	c.style.height = currh + (dist * d) + 'px';
-	c.style.opacity = currh / c.maxh;
-	c.style.filter = 'alpha(opacity=' + (currh * 100 / c.maxh) + ')';
-	if((currh < 2 && d != 1) || (currh > (c.maxh - 2) && d == 1)){
-		clearInterval(c.timer);
-	}
+function AddInitialAssignment() {
+    // THis is the <ul id="initialAssig"> element that will contains the new elements
+	var container = document.getElementById('initialAssig');
+
+	// Create a new <li> element for to insert inside <ul id="initialAssig">
+	var new_FD = document.createElement('li');
+    var new_FDNote = document.createElement('li');
+
+	new_FD.innerHTML = "<span class='file'><h3>Initial Assignment #"+idIA+":</h3><br />\n\
+<textarea id='initialAssignment"+idIA+"' type='textarea' rows ='3' cols='100' maxlength='10000' /></span>";
+	new_FDNote.innerHTML = "<span class='file'><h3>Initial Assignment #"+idIA+" Note:</h3><br />\n\
+<textarea id='initialAssignment"+idIA+"' type='textarea' rows ='10' cols='120' maxlength='50000' /></span>";
+	container.insertBefore(new_FDNote, container.firstChild);
+    container.insertBefore(new_FD, container.firstChild);
+    idIA++;
 }
+
+function AddConstraint() {
+    // THis is the <ul id="const"> element that will contains the new elements
+	var container = document.getElementById('const');
+
+	// Create a new <li> element for to insert inside <ul id="const">
+	var new_FD = document.createElement('li');
+    var new_FDNote = document.createElement('li');
+
+	new_FD.innerHTML = "<span class='file'><h3>Constraint #"+idCt+":</h3><br />\n\
+<textarea id='constraint"+idCt+"' type='textarea' rows ='3' cols='100' maxlength='10000' /></span>";
+	new_FDNote.innerHTML = "<span class='file'><h3>Constraint #"+idCt+" Note:</h3><br />\n\
+<textarea id='constraint"+idCt+"' type='textarea' rows ='10' cols='120' maxlength='50000' /></span>";
+	container.insertBefore(new_FDNote, container.firstChild);
+    container.insertBefore(new_FD, container.firstChild);
+    idCt++;
+}
+
+function AddReaction() {
+    // THis is the <ul id="react"> element that will contains the new elements
+	var container = document.getElementById('react');
+
+	// Create a new <li> element for to insert inside <ul id="react">
+	var new_FD = document.createElement('li');
+    var new_FDNote = document.createElement('li');
+
+	new_FD.innerHTML = "<span class='file'><h3>Reaction #"+idR+":</h3><br />\n\
+<textarea id='reaction"+idR+"' type='textarea' rows ='3' cols='100' maxlength='10000' /></span>";
+	new_FDNote.innerHTML = "<span class='file'><h3>Reaction #"+idR+" Note:</h3><br />\n\
+<textarea id='reaction"+idR+"' type='textarea' rows ='10' cols='120' maxlength='50000' /></span>";
+	container.insertBefore(new_FDNote, container.firstChild);
+    container.insertBefore(new_FD, container.firstChild);
+    idR++;
+}
+
+    /*
+     $(document).ready(function(){
+	$("#model_tree").treeview();
+	$("#add").click(function() {
+		var branches = $("<li><span class='folder'>New Sublist</span><ul>" +
+			"<li><span class='file'>Item1</span></li>" +
+			"<li><span class='file'>Item2</span></li></ul></li>").appendTo("#model_tree");
+		$("#modeltree").treeview({
+			add: branches
+		});
+		branches = $("<li class='closed'><span class='folder'>New Sublist</span><ul><li><span class='file'>Item1</span></li><li><span class='file'>Item2</span></li></ul></li>").prependTo("#function_def");
+		$("#model_tree").treeview({
+			add: branches
+		});
+	});
+});
+     *
+     *
+     *
+     *
+     *$("#model_tree").treeview();
+    $("#add").click(function() {
+        /*var branches = $("<script type='text/javascript'>var oFCKeditor02 = new FCKeditor('functionDefinitionArea');\n\
+            oFCKeditor02.BasePath = '../classpath/js/fckeditor/'; oFCKeditor02.Create();</script>" +
+			"<li><span class='file'><createDescription:function_definition /></span></li>" +
+			"<li><span class='file'><createDescription:function_definition_note /></span></li>").appendTo("#model_tree");
+		$("#model_tree").treeview({
+			add: branches
+		});
+        var script = $("<script type='text/javascript'>var oFCKeditor02 = new FCKeditor('functionDefinitionArea');\n\
+            oFCKeditor02.BasePath = '../classpath/js/fckeditor/'; oFCKeditor02.Create();</script>")
+		branches = $(script + "<li><span class='file'><createDescription:function_definition /></span></li>\n\
+<li><span class='file'><createDescription:function_definition_note /></span></li>").prependTo("#function_def");
+		$("#model_tree").treeview({
+			add: branches
+		});
+        var branches = $("<li><span class='folder'>New Sublist</span><ul>" +
+			"<li><span class='file'>Item1</span></li>" +
+			"<li><span class='file'>Item2</span></li></ul></li>").appendTo("#model_tree");
+		$("#model_tree").treeview({
+			add: branches
+		});
+		branches = $("<li class='closed'><span class='folder'>New Sublist</span><ul><li><span class='file'>Item1</span></li><li><span class='file'>Item2</span></li></ul></li>").prependTo("#function_def");
+		$("#model_tree").treeview({
+			add: branches
+		});
+	});
+    $(document).write("entrei aqui");
+
+	$("#model_tree").treeview({
+        animated: "slow",
+		control: "#treecontrol",
+		persist: "cookie",
+		cookieId: "filetree"
+	});
+
+    $(document).write("entrei aqui");
+});*/

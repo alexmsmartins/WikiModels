@@ -1,18 +1,24 @@
 /*
- * Menu.scala
+ * MenuSnippet.scala
  *
- * To change this template, choose Tools | Template Manager
- * and open the template in the editor.
+ * 
  */
 
 package pt.cnbc.wikimodels.snippet
 
-import _root_.scala.xml.NodeSeq
-import _root_.net.liftweb.widgets.menu._
+import scala.xml.NodeSeq
+import net.liftweb.widgets.menu._
+
+import net.liftweb.http.SHtml
+import net.liftweb.http.js._
+import net.liftweb.http.js.JsCmds._
+import net.liftweb.http.js.JE._
+import net.liftweb.util.Helpers._
 
 class MenuSnippet {
 
   def render(xhtml: NodeSeq) :NodeSeq = {
       MenuWidget()
   }
+
 }

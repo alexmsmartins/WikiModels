@@ -1,20 +1,19 @@
 <lift:surround with="default" at="content">
-    <div id="login1">
+    <lift:HomePage.logInfo>
+        <div id="login">
+        	<h1><lift:HomePage.profile /></h1>
+            <h1><lift:Menu.item name="Logout" /></h1>
+        </div>
+    </lift:HomePage.logInfo>
+    <div id="error_msg">
         <lift:snippet type="msgs">
             <lift:error_msg></lift:error_msg>
             <lift:error_class>errorBox</lift:error_class>
         </lift:snippet>
     </div>
-    <lift:HomePage.logInfo>
-        <div id="login1">
-        	<h3><lift:HomePage.profile /></h3>
-            <h3><lift:Menu.item name="Logout" /></h3>
-        </div>
-    </lift:HomePage.logInfo>
     <div id='content'>
-    <p>&nbsp;</p>
     <h1>People</h1>
-    <p>&nbsp;</p>
+    <hr />
     <p>&nbsp;&nbsp;&nbsp;People involved the WikiModels project.</p>
 </div>
 </lift:surround>

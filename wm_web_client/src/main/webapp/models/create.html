@@ -1,56 +1,115 @@
 <lift:surround with="default" at="content">
     <head>
-        <script type="text/javascript" src="../classpath/js/tiny_mce/tiny_mce.js"></script>
+        <!--<script src="../classpath/js/wymeditor/wymeditor/jquery.wymeditor.pack.js" type="text/javascript" />-->
         <script type="text/javascript">
-            tinyMCE.init({
-                mode : "textareas",
-                theme : "advanced",
-                skin : "o2k7",
-                plugins : "table",
-                width: "1100",
-                height: "500",
-                // Theme options
-                theme_advanced_buttons1 : "newdocument,|,bold,italic,\n\
-underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,\n\
-|,formatselect,fontselect,fontsizeselect,cut,copy,paste,pastetext,pasteword,\n\
-|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,\n\
-link,unlink,anchor,image,cleanup,help,code,|,forecolor,backcolor",
-                theme_advanced_buttons2 : "tablecontrols,|,hr,removeformat,\n\
-visualaid,|,sub,sup,|,charmap",
-                theme_advanced_buttons3 : "",
-                // Theme location
-                theme_advanced_toolbar_location : "top",
-                theme_advanced_toolbar_align : "left",
-                theme_advanced_statusbar_location : "bottom"
-            });
+      
+            window.onload = function() {
+                var oFCKeditor01 = new FCKeditor( 'descriptionArea' );
+                oFCKeditor01.BasePath = '../classpath/js/fckeditor/' ;
+                oFCKeditor01.Config["CustomConfigurationsPath"] = "/classpath/js/functions.js";
+                oFCKeditor01.ReplaceTextarea();
+            };
+                
+                /*var oFCKeditor02 = new FCKeditor( 'functionDefinitionArea' );
+                oFCKeditor02.BasePath = '../classpath/js/fckeditor/' ;
+                oFCKeditor02.ReplaceTextarea() ;
+                var oFCKeditor03 = new FCKeditor( 'compartmentArea' );
+                oFCKeditor03.BasePath = '../classpath/js/fckeditor/' ;
+                oFCKeditor03.ReplaceTextarea() ;
+                var oFCKeditor04 = new FCKeditor( 'speciesArea' );
+                oFCKeditor04.BasePath = '../classpath/js/fckeditor/' ;
+                oFCKeditor04.ReplaceTextarea() ;
+                var oFCKeditor05 = new FCKeditor( 'parameterArea' );
+                oFCKeditor05.BasePath = '../classpath/js/fckeditor/' ;
+                oFCKeditor05.ReplaceTextarea() ;
+                var oFCKeditor06 = new FCKeditor( 'initialAssignmentArea' );
+                oFCKeditor06.BasePath = '../classpath/js/fckeditor/' ;
+                oFCKeditor06.ReplaceTextarea() ;
+                var oFCKeditor07 = new FCKeditor( 'constraintArea' );
+                oFCKeditor07.BasePath = '../classpath/js/fckeditor/' ;
+                oFCKeditor07.ReplaceTextarea() ;
+                var oFCKeditor08 = new FCKeditor( 'reactionArea' );
+                oFCKeditor08.BasePath = '../classpath/js/fckeditor/' ;
+                oFCKeditor08.ReplaceTextarea() ;*/
+
         </script>
     </head>
-    <div id="login1">
+    <lift:HomePage.logInfo>
+        <div id="login">
+        	<h1><lift:HomePage.profile /></h1>
+            <h1><lift:Menu.item name="Logout" /></h1>
+        </div>
+    </lift:HomePage.logInfo>
+    <div id="error_msg">
         <lift:snippet type="msgs">
             <lift:error_msg></lift:error_msg>
             <lift:error_class>errorBox</lift:error_class>
         </lift:snippet>
     </div>
-    <lift:HomePage.logInfo>
-        <div id="login1">
-        	<h3><lift:HomePage.profile /></h3>
-            <h3><lift:Menu.item name="Logout" /></h3>
-        </div>
-    </lift:HomePage.logInfo>
     <div id="content">
-        <p>&nbsp;</p>
         <h1>Create Model</h1>
-        <p>&nbsp;</p>
-        <lift:Submission.create form="post" >
-            <h3>Name of the model:</h3>
+        <hr />
+        <lift:Submission.createDescription form="post" >
+            <h4><span id="required_field">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* required fields</span></h4><br />
+            <lift:ModelTree.render />
+            <ul id="model_tree" class="treeview-gray">
+                <li><h3>ID of the model: <span id="required_field">*</span>
+                <createDescription:id /></h3>
+                <br /></li>
+                <li><h3>Name of the model: <createDescription:name /></h3>
+                <br /></li>
+                <li><span><h3>Description of the model:</h3></span>
+                    <br />
+                    <ul>
+                        <li><span><createDescription:description /></span><br /></li>
+                    </ul>
+                </li>
+                <li class="closed"><span><h3>List of function definitions:</h3></span>
+                    <br />
+                    <ul id="function_def"></ul>
+                    <ul>
+                        <li><createDescription:buttonFunDef /></li>
+        			</ul>
+                </li>
+                <li class="closed"><span><h3>List of compartments:</h3></span>
+                    <br />
+                    <ul id="compart"></ul>
+                    <ul>
+                        <li><createDescription:buttonCompartment /></li>
+                    </ul>
+                </li>
+                <li class="closed"><span><h3>Insert species of the model:</h3></span>
+                    <br />
+                    <ul id="specie"></ul>
+                    <ul>
+                        <li><createDescription:buttonSpecies /></li>
+        			</ul>
+                </li>
+                <li class="closed"><span><h3>Insert parameters of the model:</h3></span>
+                    <br />
+                    <ul id="paramet"></ul>
+                    <ul>
+                        <li><createDescription:buttonParam /></li>
+                	</ul>
+                </li>
+                <li class="closed"><span><h3>Insert constraints of the model:</h3></span>
+                    <br />
+                    <ul id="const"></ul>
+                    <ul>
+                        <li><createDescription:buttonConstraint /></li>
+                	</ul>
+                </li>
+                <li class="closed"><span><h3>Insert reactions of the model:</h3></span>
+                    <br />
+                    <ul id="react"></ul>
+                    <ul>
+                        <li><createDescription:buttonReactions /></li>
+                	</ul>
+                </li>
+            </ul>
             <br />
-            <h3><createEntry:name /></h3>
-            <br />
-            <h3>Description of the model:</h3>
-            <br />
-            <h3><createEntry:description /></h3>
-            <h3><createEntry:save /></h3>
-        </lift:Submission.create>
+            <hr />
+            <h3><createDescription:save /></h3>
+        </lift:Submission.createDescription>
     </div>
-    
 </lift:surround>
