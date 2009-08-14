@@ -202,8 +202,9 @@ class Submission {
                 // build up an ajax text box
     def doText(msg: NodeSeq) =
     SHtml.ajaxText("", v => DisplayMessage(msgName,
-                                     bind("text", msg, "value" -> Text(v)),
-                                     null, null))
+        bind("text", msg, "value" ->
+             <input type="text" disabled="disabled" onclick="this.disabled = true;" value={Text(v.replace(" ", ""))} />),
+                                     300000 seconds, 1 second))
             
             bind("createDescription", xhtml,
     "id" -> SHtml.text("", model_id = _, ("id", "model_id"), ("size", "40"), ("maxlength", "120")),
