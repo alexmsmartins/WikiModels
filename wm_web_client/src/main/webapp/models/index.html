@@ -1,0 +1,21 @@
+<lift:surround with="default" at="content">
+    <lift:HomePage.logInfo>
+        <div id="login1">
+        	<h3><lift:HomePage.profile /></h3>
+            <h3><lift:Menu.item name="Logout" /></h3>
+            <h5><lift:HomePage.formatter /></h5>
+            <lift:snippet type="msgs">
+                <lift:error_msg></lift:error_msg>
+                <lift:error_class>errorBox</lift:error_class>
+            </lift:snippet>
+        </div>
+    </lift:HomePage.logInfo>
+    <div id="content">
+        <h1>Models</h1>
+        <p>&nbsp;</p>
+        <lift:ModelRead.listOfModels>
+        <lift:ModelShowTable />
+        <listModels:list />
+        </lift:ModelRead.listOfModels>
+    </div>
+</lift:surround>

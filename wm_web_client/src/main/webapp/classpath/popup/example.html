@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>jQuery popup/alert plugin</title>
+  <link type="text/css" rel="stylesheet" media="all" href="jquery.popup.css" />
+  <script src="http://www.google.com/jsapi"></script>
+  <script>google.load("jquery", "1.2.6")</script>
+  <script src="jquery.popup.js"></script>
+  <script>
+    $(document).ready( function(){
+      $('#demo_btn').click( function(){
+          $.popup.show("The title", "A nice message, with linebreaks converted to &lt;br&gt and some <b><i>html tags</i></b> in it.\n\nClose by clicking x button, or by clicking outside popup window.\n\nTested with Firefox, IE7, Chrome and Safari.\nStyles can be modified with provided CSS stylesheet.");
+        } );
+    });
+  </script>
+</head>
+<body>
+  <h2>jQuery popup alert plugin</h2>
+  
+  <ul style="line-height: 40px;">
+    <li>Super simple to use popup/alert plugin for jQuery.</li>
+    <li>Click this button to open a popup : <input type="button" value="click me" id="demo_btn"></li>
+    <li>Usage example: <b>$.popup.show("The title", "A message.");</b></li>
+    <li>See .js file for available options.</li>
+    <li>Styles can be easily modified using provided stylsheet, or by adding your own classes to the popup.</li>
+  </ul>
+  
+  <br/><br/>
+  <hr>
+  
+  <div style="width: 100%; text-align: right; font-size: 10pt;">
+    &copy; 2008 Yves Bresson - contact@ybresson.com - <a href="http://www.ybresson.com">http://www.ybresson.com</a>
+  </div>
+  
+</body>

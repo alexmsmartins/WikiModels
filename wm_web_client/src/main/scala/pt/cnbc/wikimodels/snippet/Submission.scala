@@ -13,6 +13,8 @@ import js.JsCmds._
 import js.Jx
 import js.JE
 import js.JE._
+import js.jquery._
+import JqJsCmds._
 
 class Submission {
     var prev = ""
@@ -81,6 +83,7 @@ class Submission {
             var reaction_kinetic_param = List[String]()
             //var reaction_kinetic_param_group = List[List[String]]()
             var reaction_note = List[String]()
+            val msgName: String = S.attr("id_msgs") openOr "messages"
 
             def createModel () = {
                 if (model_id.length == 0 && name.length == 0) {
@@ -195,6 +198,12 @@ class Submission {
             def setReactionF(va :String){
                 reaction_fast = va :: reaction_fast
             }
+
+                // build up an ajax text box
+    def doText(msg: NodeSeq) =
+    SHtml.ajaxText("", v => DisplayMessage(msgName,
+                                     bind("text", msg, "value" -> Text(v)),
+                                     null, null))
             
             bind("createDescription", xhtml,
     "id" -> SHtml.text("", model_id = _, ("id", "model_id"), ("size", "40"), ("maxlength", "120")),
@@ -202,6 +211,7 @@ class Submission {
         JsCrVar("verifyID","") &
         (ElemById("") ~> JsFunc("appendChild", Call("verifyID", "")))
       }),
+   "text" -> doText _,
     "name" -> SHtml.text("", name = _, ("id","model_name"), ("size", "40"), ("maxlength", "120")),
     "description" -> SHtml.textarea("", description = _, ("id", "descriptionArea"), ("maxlength", "20000")),
     

@@ -1,0 +1,7 @@
+$(document).ready(function(){
+	$("#model_tags").treeview({
+		control: "#treecontrol",
+		persist: "cookie"
+	});
+
+});

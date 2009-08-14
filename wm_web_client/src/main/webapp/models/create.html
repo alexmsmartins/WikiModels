@@ -49,10 +49,14 @@
     <div id="content">
         <h1>Create Model</h1>
         <hr />
-        <lift:Submission.createDescription form="post" >
+        <lift:Submission.createDescription form="post" id_msgs="messages" >
             <h4><span id="required_field">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* required fields</span></h4><br />
             <lift:ModelTree.render />
             <ul id="model_tree" class="treeview-gray">
+                <li><div id="messages"></div></li>
+                <li><createDescription:text>
+                    You entered <text:value/> in the text box.
+                </createDescription:text></li>
                 <li><h3>ID of the model: <span id="required_field">*</span>
                 <createDescription:id /></h3>
                 <br /></li>

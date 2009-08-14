@@ -1,0 +1,273 @@
+<lift:surround with="default" at="content">
+    <head>
+        <script type="text/javascript">
+             window.onload = function() {
+                var oFCKeditor01 = new FCKeditor( 'commentArea' );
+                oFCKeditor01.BasePath = '/classpath/js/fckeditor/' ;
+                oFCKeditor01.ReplaceTextarea() ;
+            }
+            /*<![CDATA[
+        function showMathML(target, source) {
+            // srcout = '<?xml version="1.0"?>'
+            //     + '<html xmlns="http://www.w3.org/1999/xhtml">'
+            //      + '<body>'
+            //      + source
+            //      + '</body></html>'
+            //      + '';
+            tgt = document.getElementById(target);
+            // tgt.setAttribute("data","data:application/xhtml+xml;charset=utf-8," + escape(srcout));
+            tgt.innerHTML = source;
+        }
+        function renderMathML(target, source) {
+            srcout = '<?xml version="1.0"?>'
+         +  '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0 plus SVG 1.1//EN"'
+         +  '  "http://www.w3.org/2002/04/xhtml-math-svg/xhtml-math-svg.dtd">'
+         + '<?xml-stylesheet type="text/xsl" href="../classpath/css/mathml.xsl"?>'
+         + '<html xmlns="http://www.w3.org/1999/xhtml">'
+         + '<body><div style="float:left;">'
+         + source
+         + '</div></body></html>'
+         + '';
+            var req = new XMLHttpRequest();
+            req.open("GET", "../classpath/css/mathml.xsl", false);
+            req.send(null);
+            processor = new XSLTProcessor();
+            processor.importStylesheet(req.responseXML);
+            var frag = processor.transformToFragment((new DOMParser()).parseFromString(srcout, 'application/xml'),document);
+            tgt = document.getElementById(target);
+            while (tgt.lastChild) tgt.removeChild(tgt.lastChild);
+            tgt.appendChild(frag);
+        }
+        function sourceIn(source) {
+            document.getElementById('myinputarea').value = source;
+        }
+        ]]>*/</script>
+    </head>
+    <lift:HomePage.logInfo>
+        <div id="login">
+        	<h1><lift:HomePage.profile /></h1>
+            <h1><lift:Menu.item name="Logout" /></h1>
+        </div>
+    </lift:HomePage.logInfo>
+    <div id="error_msg">
+        <lift:snippet type="msgs">
+            <lift:error_msg></lift:error_msg>
+            <lift:error_class>errorBox</lift:error_class>
+        </lift:snippet>
+    </div>
+    <div id="content">
+        <lift:ModelRead.browseModel>
+        <h1>Model name: <modelInformation:model_name /></h1>
+        <hr />
+        <!--<p><a id="applettop"/>
+<object id="myinputapplet" classid="java:MathTransApplet.class" type="application/x-java-applet"
+	archive="../classpath/css/mathtrans.jar" height="1" width="1"/></p>
+<table><tr><td valign="top">
+<strong>Enter source mark-up here:</strong><form action="">
+
+<fieldset style="border:none;">
+<textarea id="myinputarea" rows="15" cols="50">Type input source here</textarea><br/>
+<input type="button" id="here" value="Render" onclick="document.getElementById('myinputapplet').setBlockDisplay('false');
+	     showMathML('myoutputlayer',document.getElementById('myinputapplet').preOut(document.getElementById('myinputarea').value));
+             document.getElementById('myinputapplet').setBlockDisplay('true');
+             renderMathML('myrenderlayer',document.getElementById('myinputapplet').mmlOut(document.getElementById('myinputarea').value));"/><br/>
+</fieldset></form><br/>
+</td><td valign="top">
+Copy and Paste Content MathML from here (after rendering):
+<br/>
+<div style="width:450px;height:200px;border:solid;border-width:1px;overflow:auto" id="myoutputlayer">MathML output here</div>
+<br/>
+Rendered:<br/>
+<div id="myrenderlayer" style="height:100px;width:450px;"></div>
+</td></tr></table>-->
+        <br />
+        <input type="submit" class="buttonExportModel" title="Export this model in SBML" value="Export SBML Model" />
+        <br />
+        <br />
+        <lift:ModelTab.render />
+        <div id="model_tab">
+			<ul>
+				<li><a href="#tabs-1">Model</a></li>
+				<li><a href="#tabs-2">Overview</a></li>
+				<li><a href="#tabs-3">Math</a></li>
+                <li><a href="#tabs-4">Physical entities</a></li>
+                <li><a href="#tabs-5">Parameters</a></li>
+			</ul>
+			<div id="tabs-1">
+                <lift:ModelTree.render2 />
+                <ul id="model_tree_model" class="treeview-gray">
+                <li><span><h2>&nbsp;&nbsp;&nbsp;Model </h2></span>
+                <ul>
+                        <li class="browseModelLI">
+                <table class="" id="modelTable_Model">
+                <thead></thead>
+                <tbody>
+                <tr>
+                    <td class="main" title="Model Name">Model Name: </td>
+                    <td class="sub_main" id=""><modelInformation:model_name /></td>
+                </tr>
+                <tr>
+                    <td class="main" title="Name of the submitter/author">Submitter/author: </td>
+                    <td class="sub_main" id="">: </td>
+                </tr>
+                <tr id="testone">
+                    <td class="main" title="Date of submission">Submission date: </td>
+                    <td class="sub_main" id="">: </td>
+                </tr>
+                <tr>
+                    <td class="main" title="Date of the last modification in the model">Last modification: </td>
+                    <td class="sub_main" id="">: </td>
+                </tr>
+                </tbody>
+                </table>
+                <br /></li>
+                </ul>
+                </li>
+                <li><span><h2>&nbsp;&nbsp;&nbsp;Notes</h2></span>
+                <h7><a href="#" >Edit</a></h7>
+                <h7><a onclick="window.open('/models/new_comment.html?commentid=comment001','Comment','width=400,height=200');">Make Comment</a></h7>
+                <h7><a onclick="window.open('/models/new_comment.html?commentid=comment001','Comment','width=400,height=200');">View Comments</a></h7>
+                <ul>
+                        <li class="browseModelLI"><modelInformation:model_notes />
+                </li>
+                <!--<lift:ModelRead.newCommentForm form="post">
+                <li class="closed"><span><h7>&nbsp;&nbsp;Make Comment&nbsp;&nbsp;</h7></span>
+                    <ul>
+                        <li><makeComment:newComment /></li>
+                        <li style="text-align:right;"><makeComment:submitComment /></li>
+                    </ul>
+                </li>
+                </lift:ModelRead.newCommentForm>-->
+                </ul></li>
+                <!--<li class="closed"><span><h7>View Model Comments (0)</h7><br /></span>
+                    <ul>
+                        <li class="browseModelLI"><a href="#" onclick="return false">View Comments</a></li>
+                    </ul>
+                </li>-->
+                </ul>
+            </div>
+            <div id="tabs-2">
+                <lift:ModelTree.render3 />
+                <ul id="model_tree_overview" class="treeview-gray">
+                <li><span><h2>&nbsp;&nbsp;&nbsp;Mathematical expressions</h2></span>
+                <ul>
+                    <li class="browseModelLI">
+                        <table class="" id="modelTable_Overview">
+                            <thead><h6>Reactions</h6></thead>
+                        </table>
+                        <modelInformation:listOfReactions />
+                    </li>
+                </ul>
+                </li>
+                <li><span><h2>&nbsp;&nbsp;&nbsp;Physical entities</h2></span>
+                <ul>
+                        <li class="browseModelLI">
+                <table class="" id="modelTable_Overview">
+                <thead><tr><td><h6>Compartments</h6></td>
+                <td><h6>Species</h6></td></tr></thead>
+                <tbody>
+                    <tr>
+                        <td style="width:300px; vertical-align:top;"><modelInformation:listOfCompartments /></td>
+                        <td style="width:100%; vertical-align:top;"><modelInformation:listOfSpecies /></td>
+                    </tr>
+                </tbody>
+                        </table>
+                </li>
+                </ul>
+                </li>
+                <li><span><h2>&nbsp;&nbsp;&nbsp;Global Parameters</h2></span>
+                <ul>
+                        <li class="browseModelLI">
+                <table class="" id="modelTable_Overview">
+                    <thead><h6>Parameters</h6></thead>
+                <tbody>
+                    <modelInformation:listOfParameters />
+                </tbody>
+                        </table>
+                </li>
+                </ul>
+                </li>
+                </ul>
+            </div>
+			<div id="tabs-3">
+                <lift:ModelTree.render4 />
+                <ul id="model_tree_math" class="treeview-gray">
+                <li><span><h2>&nbsp;&nbsp;&nbsp;Reactions</h2></span>
+                <ul>
+                    <li class="closed"><span>
+                        <table class="browseModelTable" id="modelTable_Overview">
+                            <thead><h6>Total number of reactions - <modelInformation:numberReactions /></h6></thead>
+                        </table>
+                        <table class="browseModelTable" id="modelTable_Overview">
+                            <tbody><modelInformation:listReactionsMath />
+                            </tbody>
+                        </table>
+                    </span></li>
+                </ul>
+                </li>
+                <li><span><h2>&nbsp;&nbsp;&nbsp;Functions</h2></span>
+                <ul>
+                        <li class="closed">
+                <table class="browseModelTable" id="modelTable_Overview">
+                    <thead><h6>Total number of functions - <modelInformation:numberFunctions /></h6></thead>
+                    <tbody></tbody>
+                </table>
+                <table class="browseModelTable" id="modelTable_Overview">
+                    <tbody>
+                        <modelInformation:listFunctionsMath />
+                    </tbody>
+                </table>
+                </li>
+                </ul>
+                </li>
+                </ul>
+            </div>
+            <div id="tabs-4">
+                <lift:ModelTree.render5 />
+                <ul id="model_tree_physical" class="treeview-gray">
+                <li><span><h2>&nbsp;&nbsp;&nbsp;Compartment</h2></span>
+                <ul>
+                    <li class="closed"><span>
+                        <table class="browseModelTable" id="modelTable_Overview">
+                            <tbody>
+                                <modelInformation:compartmentData />
+                            </tbody>
+                        </table>
+                    </span></li>
+                </ul>
+                </li>
+                <li><span><h2>&nbsp;&nbsp;&nbsp;Species</h2></span>
+                <ul>
+                    <li class="closed">
+                        <table class="browseModelTable" id="modelTable_Overview">
+                            <tbody>
+                                <modelInformation:speciesData />
+                            </tbody>
+                        </table>
+                    </li>
+                </ul>
+                </li>
+                </ul>
+            </div>
+            <div id="tabs-5">
+                <lift:ModelTree.render6 />
+                <ul id="model_tree_parameter" class="treeview-gray">
+                <li><span><h2>&nbsp;&nbsp;&nbsp;Global Parameters</h2></span>
+                <ul>
+                    <li class="closed"><span>
+                        <table class="browseModelTable" id="modelTable_Overview">
+                            <tbody>
+                                <modelInformation:parametersData />
+                            </tbody>
+                        </table>
+                    </span></li>
+                </ul>
+                </li>
+                <modelInformation:extraParametersData />
+                </ul>
+            </div>
+		</div>
+
+        </lift:ModelRead.browseModel>
+    </div>
+</lift:surround>

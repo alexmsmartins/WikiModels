@@ -1,0 +1,51 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:lift="http://liftweb.net/" xml:lang="en">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta name="description" content="" />
+		<meta name="keywords" content="" />
+        <title>WikiModels Webpage</title>
+        <link rel="shortcut icon" href="../classpath/images/Logotipo.ico" />
+        <link type="text/css" rel="stylesheet" href="../classpath/css/style.css" />
+        <link rel="stylesheet" href="../classpath/tabs/css/ui-lightness/jquery-ui-1.7.2.custom.css" type="text/css"/>
+        <script type="text/javascript" src="../classpath/tabs/js/jquery-ui-1.7.2.custom.min.js"/>
+        <script src="../classpath/js/ASCIIMathML.js" type="text/javascript"></script>
+        <script src="../classpath/js/jquery.cookie.js" type="text/javascript"></script>
+        <script src="../classpath/tree/jquery.treeview.js" type="text/javascript"></script>
+        <script src="../classpath/js/functions.js" type="text/javascript" />
+        <script src="../classpath/js/fckeditor/fckeditor.js" type="text/javascript"></script>
+        <script src="../classpath/js/popup.js" type="text/javascript"></script>
+        <script id="jquery" src="../classpath/js/jquery.js" type="text/javascript" />
+        <script type="text/javascript">
+            window.onload = function() {
+                document.getElementById("username").focus();
+            }
+        </script>
+	</head>
+	<body>
+        <div id="header">
+            <div id="logo">
+            <a href="/index">
+                <img title="WikiModels Logo" src="../classpath/images/Logo_v0.07.png"></img>
+            </a><h2>Live models</h2>
+            </div>
+            <div id="search">
+                <form action="" method="get">
+                    <a title="!Under Construction!" onclick="return false" href="#">Advanced search</a>
+                    <input type="text" value="Search..." title="Search WikiModels" name="search-query" />
+                </form>
+            </div>
+        </div>
+        <div id="menu">
+            <lift:MenuSnippet.render />
+            <div id="container">
+                <lift:bind name="content" />
+            </div>
+        </div>
+    <div id="footer">
+            <div id="sponsors">
+                Support:&nbsp;<a title="CNC" href="http://www.cnbc.pt/"><img width="50px" height="27.5px" src="../classpath/images/im_logo01.gif" /></a>
+            </div>
+            <p>Webpage developed by <a href="index">WikiModels</a> webmasters.<br /> © Copyright 2009</p>
+    </div>
+	</body>
+</html>

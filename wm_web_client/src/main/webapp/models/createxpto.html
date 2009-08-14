@@ -1,0 +1,76 @@
+<lift:surround with="default" at="content">
+    <!DOCTYPE math PUBLIC "-//W3C//DTD MathML 2.0//EN" "http://www.w3.org/Math/DTD/mathml2/mathml2.dtd">
+    <xml version="1.0" encoding="UTF-8" standalone="no" />
+    <xml-stylesheet type="text/xsl" href="../classpath/css/mathml.xsl" />
+    <head>
+        
+        <script type="text/javascript" src="../classpath/js/fckeditor/fckeditor.js"></script>
+        <script type="text/javascript" src="../classpath/js/ASCIIMathML.js"></script>
+		<script type="text/javascript">
+	window.onload = function()
+	{
+		var oFCKeditor = new FCKeditor( 'MyTextarea' ) ;
+		oFCKeditor.BasePath = '/classpath/js/fckeditor/' ;
+		oFCKeditor.ReplaceTextarea() ;
+
+	}
+	</script>
+    
+
+    </head>
+    
+    <div id="login1">
+        <lift:snippet type="msgs">
+            <lift:error_msg></lift:error_msg>
+            <lift:error_class>errorBox</lift:error_class>
+        </lift:snippet>
+    </div>
+    <lift:HomePage.logInfo>
+        <div id="login1">
+        	<h3><lift:HomePage.profile /></h3>
+            <h3><lift:Menu.item name="Logout" /></h3>
+        </div>
+    </lift:HomePage.logInfo>
+    <div id="content">
+        <p>&nbsp;</p>
+        <h1>Create Model</h1>
+        <p>&nbsp;</p>
+        <p>amath here x^2 and text is
+        mixed endamath</p>
+        <p><math xmlns="http://www.w3.org/1998/Math/MathML">
+      <apply>
+        <plus/>
+        <cn type="real"> 4.56 </cn>
+        <cn type="integer"> 4.56 </cn>
+        <cn type="rational"> 4
+          <sep/> 5
+        </cn>
+        <cn type="complex-cartesian"> 4
+          <sep/> 5
+        </cn>
+        <cn type="complex-polar"> 4.56
+          <sep/> 4.56
+        </cn>
+        <cn type="constant"> &#x003C0; </cn>
+        <cn> &#x02147; </cn>
+        <cn> &#x02147; </cn>
+        <cn> &#x02148; </cn>
+        <cn> &#x02148; </cn>
+        <cn> &#x003B3; </cn>
+        <cn> &#x0221E; </cn>
+      </apply>
+    </math></p>
+        <lift:Submission.create form="post" >
+            <h3>Name of the model:</h3>
+            <br />
+            <h3><createEntry:name /></h3>
+            <br />
+            <h3>Description of the model:</h3>
+            <br />
+            <h3><createEntry:description /></h3>
+            <h3><createEntry:save /></h3>
+        </lift:Submission.create>
+        <lift:Submission.preview />
+    </div>
+    
+</lift:surround>
