@@ -47,7 +47,7 @@
         <repository>
             <id>localMavenRepo</id>
             <name>localMavenRepo</name>
-            <url>file://../localMavenRepo</url>
+            <url>file:../localMavenRepo</url>
         </repository>
 
     </repositories>
