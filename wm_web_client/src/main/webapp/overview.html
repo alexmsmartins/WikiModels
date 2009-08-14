@@ -1,9 +1,21 @@
 <lift:surround with="default" at="content">
-<div id="content">
+    <div id="login1">
+        <lift:snippet type="msgs">
+            <lift:error_msg></lift:error_msg>
+            <lift:error_class>errorBox</lift:error_class>
+        </lift:snippet>
+    </div>
+    <lift:HomePage.logInfo>
+        <div id="login1">
+        	<h3><lift:HomePage.profile /></h3>
+            <h3><lift:Menu.item name="Logout" /></h3>
+        </div>
+    </lift:HomePage.logInfo>
+    <div id='content'>
+    <p>&nbsp;</p>
     <h1>Overview</h1>
     <p>&nbsp;</p>
-    <p>&nbsp;</p>
-    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A kinetic model is a mathematical representation of the dynamics of the concentrations in a chemical reaction system. They are used in order to help relating the behaviour of integrated
+    <p>&nbsp;&nbsp;&nbsp;A kinetic model is a mathematical representation of the dynamics of the concentrations in a chemical reaction system. They are used in order to help relating the behaviour of integrated
 physiological systems to properties of individual molecular components. These models are expressed as systems of ordinary differential equations (or differential-algebraic equations) relating instantaneous rates of change of the
 metabolite concentrations to the difference between the rates of production and the rates of consumption of the metabolite
 in point by each considered process in the physiological system.</p>
