@@ -70,7 +70,6 @@ class SBMLModelsDAO {
         }
     }
 
-
     /**
      * Creates a new SBML model individual in the Knowledgebase
      * @return true if creating the new model was possible and false otherwise
