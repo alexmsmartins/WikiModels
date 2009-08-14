@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?><metadata>
+  <groupId>local.jena</groupId>
+  <artifactId>sdb</artifactId>
+  <version>1.3.0</version>
+  <versioning>
+    <versions>
+      <version>1.3.0</version>
+    </versions>
+    <lastUpdated>20090814002612</lastUpdated>
+  </versioning>
+</metadata>

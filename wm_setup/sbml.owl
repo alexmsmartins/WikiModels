@@ -1,0 +1,1407 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY swrl "http://www.w3.org/2003/11/swrl#" >
+    <!ENTITY swrlb "http://www.w3.org/2003/11/swrlb#" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY mml "http://www.w3.org/1998/Math/MathML#" >
+    <!ENTITY owl2xml "http://www.w3.org/2006/12/owl2-xml#" >
+    <!ENTITY acetext "http://attempto.ifi.uzh.ch/acetext#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY ace_lexicon "http://attempto.ifi.uzh.ch/ace_lexicon#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+    <!ENTITY sbml "http://wikimodels.cnbc.pt/ontologies/sbml.owl#" >
+    <!ENTITY protege "http://protege.stanford.edu/plugins/owl/protege#" >
+    <!ENTITY xsp "http://www.owl-ontologies.com/2005/08/07/xsp.owl#" >
+]>
+
+
+<rdf:RDF xmlns="http://wikimodels.cnbc.pt/ontologies/sbml.owl#"
+     xml:base="http://wikimodels.cnbc.pt/ontologies/sbml.owl"
+     xmlns:protege="http://protege.stanford.edu/plugins/owl/protege#"
+     xmlns:xsp="http://www.owl-ontologies.com/2005/08/07/xsp.owl#"
+     xmlns:sbml="http://wikimodels.cnbc.pt/ontologies/sbml.owl#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:swrl="http://www.w3.org/2003/11/swrl#"
+     xmlns:owl2xml="http://www.w3.org/2006/12/owl2-xml#"
+     xmlns:mml="http://www.w3.org/1998/Math/MathML#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:swrlb="http://www.w3.org/2003/11/swrlb#"
+     xmlns:acetext="http://attempto.ifi.uzh.ch/acetext#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:ace_lexicon="http://attempto.ifi.uzh.ch/ace_lexicon#">
+    <owl:Ontology rdf:about=""/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Annotation properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    <owl:AnnotationProperty rdf:about="&ace_lexicon;vbg"/>
+    <owl:AnnotationProperty rdf:about="&ace_lexicon;pl"/>
+    <owl:AnnotationProperty rdf:about="&acetext;acetext"/>
+    <owl:AnnotationProperty rdf:about="&ace_lexicon;sg"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#compartment -->
+
+    <owl:ObjectProperty rdf:about="#compartment">
+        <ace_lexicon:pl rdf:datatype="&xsd;string">compartment</ace_lexicon:pl>
+        <ace_lexicon:vbg rdf:datatype="&xsd;string">compartmented</ace_lexicon:vbg>
+        <ace_lexicon:sg rdf:datatype="&xsd;string">compartments</ace_lexicon:sg>
+        <rdfs:range rdf:resource="#Compartment"/>
+        <rdfs:domain rdf:resource="#Species"/>
+    </owl:ObjectProperty>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >Everything that compartments something is a Species.</acetext:acetext>
+        <owl:object rdf:resource="#Species"/>
+        <owl:subject rdf:resource="#compartment"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >Everything that is compartmented by something is a Compartment.</acetext:acetext>
+        <owl:object rdf:resource="#Compartment"/>
+        <owl:subject rdf:resource="#compartment"/>
+        <owl:predicate rdf:resource="&rdfs;range"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#hasModifier -->
+
+    <owl:ObjectProperty rdf:about="#hasModifier">
+        <rdfs:range rdf:resource="#ModifierSpeciesReference"/>
+        <rdfs:domain rdf:resource="#Reaction"/>
+        <rdfs:subPropertyOf rdf:resource="#hasPart"/>
+        <owl:inverseOf rdf:resource="#modifierOf"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#hasParameter -->
+
+    <owl:ObjectProperty rdf:about="#hasParameter">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >Parameters de&#64257;ned at the top level are global to the whole model; parameters that are de&#64257;ned within a reaction are local to the particular reaction and (within that reaction) override any global parameters having the same identi&#64257;ers (taken from SBML Level 2 version 4 Specification)</rdfs:comment>
+        <ace_lexicon:pl rdf:datatype="&xsd;string">hasParameter</ace_lexicon:pl>
+        <ace_lexicon:vbg rdf:datatype="&xsd;string">hasParametered</ace_lexicon:vbg>
+        <ace_lexicon:sg rdf:datatype="&xsd;string">hasParameters</ace_lexicon:sg>
+        <rdfs:domain rdf:resource="#KineticLaw"/>
+        <rdfs:domain rdf:resource="#Model"/>
+        <rdfs:range rdf:resource="#Parameter"/>
+        <rdfs:subPropertyOf rdf:resource="#hasPart"/>
+    </owl:ObjectProperty>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >Everything that hasParameters something is a Model.</acetext:acetext>
+        <owl:object rdf:resource="#Model"/>
+        <owl:subject rdf:resource="#hasParameter"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >Everything that hasParameters something is a KineticLaw.</acetext:acetext>
+        <owl:object rdf:resource="#KineticLaw"/>
+        <owl:subject rdf:resource="#hasParameter"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >Everything that is hasParametered by something is a Parameter.</acetext:acetext>
+        <owl:object rdf:resource="#Parameter"/>
+        <owl:subject rdf:resource="#hasParameter"/>
+        <owl:predicate rdf:resource="&rdfs;range"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >If X hasParameters Y then X hasParts Y.</acetext:acetext>
+        <owl:subject rdf:resource="#hasParameter"/>
+        <owl:object rdf:resource="#hasPart"/>
+        <owl:predicate rdf:resource="&rdfs;subPropertyOf"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#hasPart -->
+
+    <owl:ObjectProperty rdf:about="#hasPart">
+        <rdf:type rdf:resource="&owl;TransitiveProperty"/>
+        <ace_lexicon:pl rdf:datatype="&xsd;string">hasPart</ace_lexicon:pl>
+        <ace_lexicon:vbg rdf:datatype="&xsd;string">hasParted</ace_lexicon:vbg>
+        <ace_lexicon:sg rdf:datatype="&xsd;string">hasParts</ace_lexicon:sg>
+        <rdfs:range rdf:resource="#Element"/>
+        <rdfs:domain rdf:resource="#Element"/>
+        <owl:inverseOf rdf:resource="#partOf"/>
+    </owl:ObjectProperty>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >Everything that is hasParted by something is an Element.</acetext:acetext>
+        <owl:object rdf:resource="#Element"/>
+        <owl:subject rdf:resource="#hasPart"/>
+        <owl:predicate rdf:resource="&rdfs;range"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >Everything that hasParts something is an Element.</acetext:acetext>
+        <owl:object rdf:resource="#Element"/>
+        <owl:subject rdf:resource="#hasPart"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >If X hasParts Y then Y partOfs X. If X partOfs Y then Y hasParts X.</acetext:acetext>
+        <owl:subject rdf:resource="#hasPart"/>
+        <owl:object rdf:resource="#partOf"/>
+        <owl:predicate rdf:resource="&owl;inverseOf"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >If X hasParts something that hasParts Y then X hasParts Y.</acetext:acetext>
+        <owl:subject rdf:resource="#hasPart"/>
+        <owl:predicate rdf:resource="&rdf;type"/>
+        <owl:object rdf:resource="&owl;TransitiveProperty"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#hasProduct -->
+
+    <owl:ObjectProperty rdf:about="#hasProduct">
+        <rdfs:domain rdf:resource="#Reaction"/>
+        <rdfs:range rdf:resource="#SpeciesReference"/>
+        <rdfs:subPropertyOf rdf:resource="#hasPart"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#hasReactant -->
+
+    <owl:ObjectProperty rdf:about="#hasReactant">
+        <rdfs:subPropertyOf rdf:resource="#hasPart"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#modifierOf -->
+
+    <owl:ObjectProperty rdf:about="#modifierOf">
+        <rdfs:subPropertyOf rdf:resource="#partOf"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#outside -->
+
+    <owl:ObjectProperty rdf:about="#outside">
+        <rdf:type rdf:resource="&owl;TransitiveProperty"/>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >There are two restrictions on the inside/outside relationships in SBML. First, because a compartment with spatialDimensions of &#8220;0&#8221; has no size, such a compartment cannot act as the &#8220;outside&#8221; of any other compartment except compartments that also have spatialDimensions values of &#8220;0&#8221;. Second, the directed graph formed by representing Compartment objects as vertexes and the outside attribute values as edges must be acyclic. The latter condition is imposed to prevent a compartment from being located inside itself.</rdfs:comment>
+        <ace_lexicon:pl rdf:datatype="&xsd;string">outside</ace_lexicon:pl>
+        <ace_lexicon:vbg rdf:datatype="&xsd;string">outsided</ace_lexicon:vbg>
+        <ace_lexicon:sg rdf:datatype="&xsd;string">outsides</ace_lexicon:sg>
+        <rdfs:range rdf:resource="#Compartment"/>
+        <rdfs:domain rdf:resource="#Compartment"/>
+    </owl:ObjectProperty>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >Everything that outsides something is a Compartment.</acetext:acetext>
+        <owl:object rdf:resource="#Compartment"/>
+        <owl:subject rdf:resource="#outside"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >If X outsides something that outsides Y then X outsides Y.</acetext:acetext>
+        <owl:subject rdf:resource="#outside"/>
+        <owl:predicate rdf:resource="&rdf;type"/>
+        <owl:object rdf:resource="&owl;TransitiveProperty"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >Everything that is outsided by something is a Compartment.</acetext:acetext>
+        <owl:object rdf:resource="#Compartment"/>
+        <owl:subject rdf:resource="#outside"/>
+        <owl:predicate rdf:resource="&rdfs;range"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#partOf -->
+
+    <owl:ObjectProperty rdf:about="#partOf">
+        <rdf:type rdf:resource="&owl;TransitiveProperty"/>
+        <ace_lexicon:pl rdf:datatype="&xsd;string">partOf</ace_lexicon:pl>
+        <ace_lexicon:vbg rdf:datatype="&xsd;string">partOfed</ace_lexicon:vbg>
+        <ace_lexicon:sg rdf:datatype="&xsd;string">partOfs</ace_lexicon:sg>
+        <rdfs:range rdf:resource="#Element"/>
+        <rdfs:domain rdf:resource="#Element"/>
+    </owl:ObjectProperty>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >If X hasParts Y then Y partOfs X. If X partOfs Y then Y hasParts X.</acetext:acetext>
+        <owl:subject rdf:resource="#hasPart"/>
+        <owl:object rdf:resource="#partOf"/>
+        <owl:predicate rdf:resource="&owl;inverseOf"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >Everything that is partOfed by something is an Element.</acetext:acetext>
+        <owl:object rdf:resource="#Element"/>
+        <owl:subject rdf:resource="#partOf"/>
+        <owl:predicate rdf:resource="&rdfs;range"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >Everything that partOfs something is an Element.</acetext:acetext>
+        <owl:object rdf:resource="#Element"/>
+        <owl:subject rdf:resource="#partOf"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#productOf -->
+
+    <owl:ObjectProperty rdf:about="#productOf">
+        <ace_lexicon:pl rdf:datatype="&xsd;string">productOf</ace_lexicon:pl>
+        <ace_lexicon:vbg rdf:datatype="&xsd;string">productOfed</ace_lexicon:vbg>
+        <ace_lexicon:sg rdf:datatype="&xsd;string">productOfs</ace_lexicon:sg>
+        <rdfs:range rdf:resource="#Reaction"/>
+        <rdfs:domain rdf:resource="#Species"/>
+        <owl:inverseOf rdf:resource="#hasProduct"/>
+        <rdfs:subPropertyOf rdf:resource="#partOf"/>
+    </owl:ObjectProperty>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >If X productOfs Y then X partOfs Y.</acetext:acetext>
+        <owl:object rdf:resource="#partOf"/>
+        <owl:subject rdf:resource="#productOf"/>
+        <owl:predicate rdf:resource="&rdfs;subPropertyOf"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >Everything that productOfs something is a Species.</acetext:acetext>
+        <owl:object rdf:resource="#Species"/>
+        <owl:subject rdf:resource="#productOf"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >Everything that is productOfed by something is a Reaction.</acetext:acetext>
+        <owl:object rdf:resource="#Reaction"/>
+        <owl:subject rdf:resource="#productOf"/>
+        <owl:predicate rdf:resource="&rdfs;range"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#reactantOf -->
+
+    <owl:ObjectProperty rdf:about="#reactantOf">
+        <ace_lexicon:pl rdf:datatype="&xsd;string">reactantOf</ace_lexicon:pl>
+        <ace_lexicon:vbg rdf:datatype="&xsd;string">reactantOfed</ace_lexicon:vbg>
+        <ace_lexicon:sg rdf:datatype="&xsd;string">reactantOfs</ace_lexicon:sg>
+        <rdfs:range rdf:resource="#Reaction"/>
+        <rdfs:domain rdf:resource="#SpeciesReference"/>
+        <owl:inverseOf rdf:resource="#hasReactant"/>
+        <rdfs:subPropertyOf rdf:resource="#partOf"/>
+    </owl:ObjectProperty>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >If X reactantOfs Y then X partOfs Y.</acetext:acetext>
+        <owl:object rdf:resource="#partOf"/>
+        <owl:subject rdf:resource="#reactantOf"/>
+        <owl:predicate rdf:resource="&rdfs;subPropertyOf"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >Everything that is reactantOfed by something is a Reaction.</acetext:acetext>
+        <owl:object rdf:resource="#Reaction"/>
+        <owl:subject rdf:resource="#reactantOf"/>
+        <owl:predicate rdf:resource="&rdfs;range"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#species -->
+
+    <owl:ObjectProperty rdf:about="#species">
+        <ace_lexicon:pl rdf:datatype="&xsd;string">species</ace_lexicon:pl>
+        <ace_lexicon:vbg rdf:datatype="&xsd;string">speciesed</ace_lexicon:vbg>
+        <ace_lexicon:sg rdf:datatype="&xsd;string">specieses</ace_lexicon:sg>
+        <rdfs:domain rdf:resource="#SimpleSpeciesReference"/>
+        <rdfs:range rdf:resource="#Species"/>
+    </owl:ObjectProperty>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >Everything that specieses something is a SimpleSpeciesReference.</acetext:acetext>
+        <owl:object rdf:resource="#SimpleSpeciesReference"/>
+        <owl:subject rdf:resource="#species"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >Everything that is speciesed by something is a Species.</acetext:acetext>
+        <owl:object rdf:resource="#Species"/>
+        <owl:subject rdf:resource="#species"/>
+        <owl:predicate rdf:resource="&rdfs;range"/>
+    </rdf:Description>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#boundarycondition -->
+
+    <owl:DatatypeProperty rdf:about="#boundarycondition">
+        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
+        <ace_lexicon:pl rdf:datatype="&xsd;string"
+            >boundarycondition</ace_lexicon:pl>
+        <ace_lexicon:vbg rdf:datatype="&xsd;string"
+            >boundaryconditioned</ace_lexicon:vbg>
+        <ace_lexicon:sg rdf:datatype="&xsd;string"
+            >boundaryconditions</ace_lexicon:sg>
+        <rdfs:domain rdf:resource="#Species"/>
+        <rdfs:range rdf:resource="&xsd;boolean"/>
+    </owl:DatatypeProperty>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyDomain(boundarycondition Species)]*/</acetext:acetext>
+        <owl:object rdf:resource="#Species"/>
+        <owl:subject rdf:resource="#boundarycondition"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[FunctionalDataProperty(boundarycondition)]*/</acetext:acetext>
+        <owl:subject rdf:resource="#boundarycondition"/>
+        <owl:predicate rdf:resource="&rdf;type"/>
+        <owl:object rdf:resource="&owl;FunctionalProperty"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyRange(boundarycondition boolean)]*/</acetext:acetext>
+        <owl:subject rdf:resource="#boundarycondition"/>
+        <owl:predicate rdf:resource="&rdfs;range"/>
+        <owl:object rdf:resource="&xsd;boolean"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#constant -->
+
+    <owl:DatatypeProperty rdf:about="#constant">
+        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
+        <ace_lexicon:pl rdf:datatype="&xsd;string">constant</ace_lexicon:pl>
+        <ace_lexicon:vbg rdf:datatype="&xsd;string">constanted</ace_lexicon:vbg>
+        <ace_lexicon:sg rdf:datatype="&xsd;string">constants</ace_lexicon:sg>
+        <rdfs:domain rdf:resource="#Compartment"/>
+        <rdfs:domain rdf:resource="#Parameter"/>
+        <rdfs:domain rdf:resource="#Species"/>
+        <rdfs:range rdf:resource="&xsd;boolean"/>
+    </owl:DatatypeProperty>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyRange(constant boolean)]*/</acetext:acetext>
+        <owl:subject rdf:resource="#constant"/>
+        <owl:predicate rdf:resource="&rdfs;range"/>
+        <owl:object rdf:resource="&xsd;boolean"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyDomain(constant Species)]*/</acetext:acetext>
+        <owl:object rdf:resource="#Species"/>
+        <owl:subject rdf:resource="#constant"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyDomain(constant Compartment)]*/</acetext:acetext>
+        <owl:object rdf:resource="#Compartment"/>
+        <owl:subject rdf:resource="#constant"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[FunctionalDataProperty(constant)]*/</acetext:acetext>
+        <owl:subject rdf:resource="#constant"/>
+        <owl:predicate rdf:resource="&rdf;type"/>
+        <owl:object rdf:resource="&owl;FunctionalProperty"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyDomain(constant Parameter)]*/</acetext:acetext>
+        <owl:object rdf:resource="#Parameter"/>
+        <owl:subject rdf:resource="#constant"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#fast -->
+
+    <owl:DatatypeProperty rdf:about="#fast">
+        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
+        <ace_lexicon:pl rdf:datatype="&xsd;string">fast</ace_lexicon:pl>
+        <ace_lexicon:vbg rdf:datatype="&xsd;string">fasted</ace_lexicon:vbg>
+        <ace_lexicon:sg rdf:datatype="&xsd;string">fasts</ace_lexicon:sg>
+        <rdfs:domain rdf:resource="#Reaction"/>
+        <rdfs:range rdf:resource="&xsd;boolean"/>
+    </owl:DatatypeProperty>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyRange(fast boolean)]*/</acetext:acetext>
+        <owl:subject rdf:resource="#fast"/>
+        <owl:predicate rdf:resource="&rdfs;range"/>
+        <owl:object rdf:resource="&xsd;boolean"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[FunctionalDataProperty(fast)]*/</acetext:acetext>
+        <owl:subject rdf:resource="#fast"/>
+        <owl:predicate rdf:resource="&rdf;type"/>
+        <owl:object rdf:resource="&owl;FunctionalProperty"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyDomain(fast Reaction)]*/</acetext:acetext>
+        <owl:object rdf:resource="#Reaction"/>
+        <owl:subject rdf:resource="#fast"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#id -->
+
+    <owl:DatatypeProperty rdf:about="#id">
+        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
+        <ace_lexicon:pl rdf:datatype="&xsd;string">id</ace_lexicon:pl>
+        <ace_lexicon:vbg rdf:datatype="&xsd;string">ided</ace_lexicon:vbg>
+        <ace_lexicon:sg rdf:datatype="&xsd;string">ids</ace_lexicon:sg>
+        <rdfs:domain rdf:resource="#Compartment"/>
+        <rdfs:domain rdf:resource="#FunctionDefinition"/>
+        <rdfs:domain rdf:resource="#Model"/>
+        <rdfs:domain rdf:resource="#Parameter"/>
+        <rdfs:domain rdf:resource="#Reaction"/>
+        <rdfs:domain rdf:resource="#SimpleSpeciesReference"/>
+        <rdfs:domain rdf:resource="#Species"/>
+        <rdfs:range rdf:resource="&xsd;ID"/>
+    </owl:DatatypeProperty>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyDomain(id Species)]*/</acetext:acetext>
+        <owl:object rdf:resource="#Species"/>
+        <owl:subject rdf:resource="#id"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyRange(id ID)]*/</acetext:acetext>
+        <owl:subject rdf:resource="#id"/>
+        <owl:predicate rdf:resource="&rdfs;range"/>
+        <owl:object rdf:resource="&xsd;ID"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyDomain(id SimpleSpeciesReference)]*/</acetext:acetext>
+        <owl:object rdf:resource="#SimpleSpeciesReference"/>
+        <owl:subject rdf:resource="#id"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyDomain(id Parameter)]*/</acetext:acetext>
+        <owl:object rdf:resource="#Parameter"/>
+        <owl:subject rdf:resource="#id"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyDomain(id Reaction)]*/</acetext:acetext>
+        <owl:object rdf:resource="#Reaction"/>
+        <owl:subject rdf:resource="#id"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[FunctionalDataProperty(id)]*/</acetext:acetext>
+        <owl:subject rdf:resource="#id"/>
+        <owl:predicate rdf:resource="&rdf;type"/>
+        <owl:object rdf:resource="&owl;FunctionalProperty"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyDomain(id Compartment)]*/</acetext:acetext>
+        <owl:object rdf:resource="#Compartment"/>
+        <owl:subject rdf:resource="#id"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyDomain(id Model)]*/</acetext:acetext>
+        <owl:object rdf:resource="#Model"/>
+        <owl:subject rdf:resource="#id"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyDomain(id FunctionDefinition)]*/</acetext:acetext>
+        <owl:object rdf:resource="#FunctionDefinition"/>
+        <owl:subject rdf:resource="#id"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#initialAmount -->
+
+    <owl:DatatypeProperty rdf:about="#initialAmount">
+        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
+        <ace_lexicon:pl rdf:datatype="&xsd;string">initialAmount</ace_lexicon:pl>
+        <ace_lexicon:vbg rdf:datatype="&xsd;string">initialAmounted</ace_lexicon:vbg>
+        <ace_lexicon:sg rdf:datatype="&xsd;string">initialAmounts</ace_lexicon:sg>
+        <rdfs:domain rdf:resource="#Species"/>
+        <rdfs:range rdf:resource="&xsd;double"/>
+    </owl:DatatypeProperty>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyRange(initialAmount double)]*/</acetext:acetext>
+        <owl:subject rdf:resource="#initialAmount"/>
+        <owl:predicate rdf:resource="&rdfs;range"/>
+        <owl:object rdf:resource="&xsd;double"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyDomain(initialAmount Species)]*/</acetext:acetext>
+        <owl:object rdf:resource="#Species"/>
+        <owl:subject rdf:resource="#initialAmount"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[FunctionalDataProperty(initialAmount)]*/</acetext:acetext>
+        <owl:subject rdf:resource="#initialAmount"/>
+        <owl:predicate rdf:resource="&rdf;type"/>
+        <owl:object rdf:resource="&owl;FunctionalProperty"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#initialConcentration -->
+
+    <owl:DatatypeProperty rdf:about="#initialConcentration">
+        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
+        <ace_lexicon:pl rdf:datatype="&xsd;string"
+            >initialConcentration</ace_lexicon:pl>
+        <ace_lexicon:vbg rdf:datatype="&xsd;string"
+            >initialConcentrationed</ace_lexicon:vbg>
+        <ace_lexicon:sg rdf:datatype="&xsd;string"
+            >initialConcentrations</ace_lexicon:sg>
+        <rdfs:domain rdf:resource="#Species"/>
+        <rdfs:range rdf:resource="&xsd;double"/>
+    </owl:DatatypeProperty>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyDomain(initialConcentration Species)]*/</acetext:acetext>
+        <owl:object rdf:resource="#Species"/>
+        <owl:subject rdf:resource="#initialConcentration"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[FunctionalDataProperty(initialConcentration)]*/</acetext:acetext>
+        <owl:subject rdf:resource="#initialConcentration"/>
+        <owl:predicate rdf:resource="&rdf;type"/>
+        <owl:object rdf:resource="&owl;FunctionalProperty"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyRange(initialConcentration double)]*/</acetext:acetext>
+        <owl:subject rdf:resource="#initialConcentration"/>
+        <owl:predicate rdf:resource="&rdfs;range"/>
+        <owl:object rdf:resource="&xsd;double"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#math -->
+
+    <owl:DatatypeProperty rdf:about="#math">
+        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
+        <ace_lexicon:pl rdf:datatype="&xsd;string">math</ace_lexicon:pl>
+        <ace_lexicon:vbg rdf:datatype="&xsd;string">mathed</ace_lexicon:vbg>
+        <ace_lexicon:sg rdf:datatype="&xsd;string">maths</ace_lexicon:sg>
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >this property might be subdivided in several ones in the future if the need to distinguish mathematical formulas with boolean or numeric return arrises</rdfs:comment>
+        <rdfs:domain rdf:resource="#Constraint"/>
+        <rdfs:domain rdf:resource="#FunctionDefinition"/>
+        <rdfs:range rdf:resource="&mml;Math"/>
+    </owl:DatatypeProperty>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyDomain(math Constraint)]*/</acetext:acetext>
+        <owl:object rdf:resource="#Constraint"/>
+        <owl:subject rdf:resource="#math"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyDomain(math FunctionDefinition)]*/</acetext:acetext>
+        <owl:object rdf:resource="#FunctionDefinition"/>
+        <owl:subject rdf:resource="#math"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyRange(math Math)]*/</acetext:acetext>
+        <owl:subject rdf:resource="#math"/>
+        <owl:object rdf:resource="&mml;Math"/>
+        <owl:predicate rdf:resource="&rdfs;range"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[FunctionalDataProperty(math)]*/</acetext:acetext>
+        <owl:subject rdf:resource="#math"/>
+        <owl:predicate rdf:resource="&rdf;type"/>
+        <owl:object rdf:resource="&owl;FunctionalProperty"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#message -->
+
+    <owl:DatatypeProperty rdf:about="#message">
+        <ace_lexicon:pl rdf:datatype="&xsd;string">message</ace_lexicon:pl>
+        <ace_lexicon:vbg rdf:datatype="&xsd;string">messaged</ace_lexicon:vbg>
+        <ace_lexicon:sg rdf:datatype="&xsd;string">messages</ace_lexicon:sg>
+        <rdfs:domain rdf:resource="#Constraint"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyDomain(message Constraint)]*/</acetext:acetext>
+        <owl:object rdf:resource="#Constraint"/>
+        <owl:subject rdf:resource="#message"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyRange(message string)]*/</acetext:acetext>
+        <owl:subject rdf:resource="#message"/>
+        <owl:predicate rdf:resource="&rdfs;range"/>
+        <owl:object rdf:resource="&xsd;string"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#metaid -->
+
+    <owl:DatatypeProperty rdf:about="#metaid">
+        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
+        <ace_lexicon:pl rdf:datatype="&xsd;string">metaid</ace_lexicon:pl>
+        <ace_lexicon:vbg rdf:datatype="&xsd;string">metaided</ace_lexicon:vbg>
+        <ace_lexicon:sg rdf:datatype="&xsd;string">metaids</ace_lexicon:sg>
+        <rdfs:domain rdf:resource="#Element"/>
+        <rdfs:range rdf:resource="&xsd;ID"/>
+    </owl:DatatypeProperty>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[FunctionalDataProperty(metaid)]*/</acetext:acetext>
+        <owl:subject rdf:resource="#metaid"/>
+        <owl:predicate rdf:resource="&rdf;type"/>
+        <owl:object rdf:resource="&owl;FunctionalProperty"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyRange(metaid ID)]*/</acetext:acetext>
+        <owl:subject rdf:resource="#metaid"/>
+        <owl:predicate rdf:resource="&rdfs;range"/>
+        <owl:object rdf:resource="&xsd;ID"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyDomain(metaid Element)]*/</acetext:acetext>
+        <owl:object rdf:resource="#Element"/>
+        <owl:subject rdf:resource="#metaid"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#name -->
+
+    <owl:DatatypeProperty rdf:about="#name">
+        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
+        <ace_lexicon:pl rdf:datatype="&xsd;string">name</ace_lexicon:pl>
+        <ace_lexicon:vbg rdf:datatype="&xsd;string">named</ace_lexicon:vbg>
+        <ace_lexicon:sg rdf:datatype="&xsd;string">names</ace_lexicon:sg>
+        <rdfs:domain rdf:resource="#Compartment"/>
+        <rdfs:domain rdf:resource="#FunctionDefinition"/>
+        <rdfs:domain rdf:resource="#Model"/>
+        <rdfs:domain rdf:resource="#Parameter"/>
+        <rdfs:domain rdf:resource="#Reaction"/>
+        <rdfs:domain rdf:resource="#SimpleSpeciesReference"/>
+        <rdfs:domain rdf:resource="#Species"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyDomain(name SimpleSpeciesReference)]*/</acetext:acetext>
+        <owl:object rdf:resource="#SimpleSpeciesReference"/>
+        <owl:subject rdf:resource="#name"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyDomain(name Reaction)]*/</acetext:acetext>
+        <owl:object rdf:resource="#Reaction"/>
+        <owl:subject rdf:resource="#name"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyDomain(name Species)]*/</acetext:acetext>
+        <owl:object rdf:resource="#Species"/>
+        <owl:subject rdf:resource="#name"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[FunctionalDataProperty(name)]*/</acetext:acetext>
+        <owl:subject rdf:resource="#name"/>
+        <owl:predicate rdf:resource="&rdf;type"/>
+        <owl:object rdf:resource="&owl;FunctionalProperty"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyRange(name string)]*/</acetext:acetext>
+        <owl:subject rdf:resource="#name"/>
+        <owl:predicate rdf:resource="&rdfs;range"/>
+        <owl:object rdf:resource="&xsd;string"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyDomain(name Compartment)]*/</acetext:acetext>
+        <owl:object rdf:resource="#Compartment"/>
+        <owl:subject rdf:resource="#name"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyDomain(name FunctionDefinition)]*/</acetext:acetext>
+        <owl:object rdf:resource="#FunctionDefinition"/>
+        <owl:subject rdf:resource="#name"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyDomain(name Parameter)]*/</acetext:acetext>
+        <owl:object rdf:resource="#Parameter"/>
+        <owl:subject rdf:resource="#name"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#notes -->
+
+    <owl:DatatypeProperty rdf:about="#notes">
+        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
+        <ace_lexicon:pl rdf:datatype="&xsd;string">notes</ace_lexicon:pl>
+        <ace_lexicon:vbg rdf:datatype="&xsd;string">notesed</ace_lexicon:vbg>
+        <ace_lexicon:sg rdf:datatype="&xsd;string">noteses</ace_lexicon:sg>
+        <rdfs:domain rdf:resource="#Element"/>
+        <rdfs:range rdf:resource="&xsd;string"/>
+    </owl:DatatypeProperty>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[FunctionalDataProperty(notes)]*/</acetext:acetext>
+        <owl:subject rdf:resource="#notes"/>
+        <owl:predicate rdf:resource="&rdf;type"/>
+        <owl:object rdf:resource="&owl;FunctionalProperty"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyRange(notes string)]*/</acetext:acetext>
+        <owl:subject rdf:resource="#notes"/>
+        <owl:predicate rdf:resource="&rdfs;range"/>
+        <owl:object rdf:resource="&xsd;string"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyDomain(notes Element)]*/</acetext:acetext>
+        <owl:object rdf:resource="#Element"/>
+        <owl:subject rdf:resource="#notes"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#reversible -->
+
+    <owl:DatatypeProperty rdf:about="#reversible">
+        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
+        <ace_lexicon:pl rdf:datatype="&xsd;string">reversible</ace_lexicon:pl>
+        <ace_lexicon:vbg rdf:datatype="&xsd;string">reversibled</ace_lexicon:vbg>
+        <ace_lexicon:sg rdf:datatype="&xsd;string">reversibles</ace_lexicon:sg>
+        <rdfs:domain rdf:resource="#Reaction"/>
+        <rdfs:range rdf:resource="&xsd;boolean"/>
+    </owl:DatatypeProperty>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyRange(reversible boolean)]*/</acetext:acetext>
+        <owl:subject rdf:resource="#reversible"/>
+        <owl:predicate rdf:resource="&rdfs;range"/>
+        <owl:object rdf:resource="&xsd;boolean"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyDomain(reversible Reaction)]*/</acetext:acetext>
+        <owl:object rdf:resource="#Reaction"/>
+        <owl:subject rdf:resource="#reversible"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[FunctionalDataProperty(reversible)]*/</acetext:acetext>
+        <owl:subject rdf:resource="#reversible"/>
+        <owl:predicate rdf:resource="&rdf;type"/>
+        <owl:object rdf:resource="&owl;FunctionalProperty"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#size -->
+
+    <owl:DatatypeProperty rdf:about="#size">
+        <ace_lexicon:pl rdf:datatype="&xsd;string">size</ace_lexicon:pl>
+        <ace_lexicon:vbg rdf:datatype="&xsd;string">sized</ace_lexicon:vbg>
+        <ace_lexicon:sg rdf:datatype="&xsd;string">sizes</ace_lexicon:sg>
+        <rdfs:domain rdf:resource="#Compartment"/>
+        <rdfs:range rdf:resource="&xsd;double"/>
+    </owl:DatatypeProperty>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyRange(size double)]*/</acetext:acetext>
+        <owl:subject rdf:resource="#size"/>
+        <owl:predicate rdf:resource="&rdfs;range"/>
+        <owl:object rdf:resource="&xsd;double"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyDomain(size Compartment)]*/</acetext:acetext>
+        <owl:object rdf:resource="#Compartment"/>
+        <owl:subject rdf:resource="#size"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#spatialDimensions -->
+
+    <owl:DatatypeProperty rdf:about="#spatialDimensions">
+        <rdfs:comment rdf:datatype="&xsd;string"
+            >The maximum value is &#8220;3&#8221;, meaning a three-dimensional structure (a volume). Other permissible values are &#8220;2&#8221; (for a two-dimensional
+area), &#8220;1&#8221; (for a one-dimensional curve), and &#8220;0&#8221; (for a point). The def ult value is &#8220;3&#8221;. Note that the
+number of spatial dimensions possessed by a compartment a&#64256;ects certain aspects of the compartment&#8217;s size
+and units-of-size;</rdfs:comment>
+        <ace_lexicon:pl rdf:datatype="&xsd;string"
+            >spatialDimensions</ace_lexicon:pl>
+        <ace_lexicon:vbg rdf:datatype="&xsd;string"
+            >spatialDimensionsed</ace_lexicon:vbg>
+        <ace_lexicon:sg rdf:datatype="&xsd;string"
+            >spatialDimensionses</ace_lexicon:sg>
+        <rdfs:domain rdf:resource="#Compartment"/>
+        <rdfs:range rdf:resource="&xsd;short"/>
+    </owl:DatatypeProperty>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyRange(spatialDimensions short)]*/</acetext:acetext>
+        <owl:subject rdf:resource="#spatialDimensions"/>
+        <owl:predicate rdf:resource="&rdfs;range"/>
+        <owl:object rdf:resource="&xsd;short"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyDomain(spatialDimensions Compartment)]*/</acetext:acetext>
+        <owl:object rdf:resource="#Compartment"/>
+        <owl:subject rdf:resource="#spatialDimensions"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#stoichiometry -->
+
+    <owl:DatatypeProperty rdf:about="#stoichiometry">
+        <ace_lexicon:vbg rdf:datatype="&xsd;string">stoichiometried</ace_lexicon:vbg>
+        <ace_lexicon:sg rdf:datatype="&xsd;string">stoichiometries</ace_lexicon:sg>
+        <ace_lexicon:pl rdf:datatype="&xsd;string">stoichiometry</ace_lexicon:pl>
+        <rdfs:comment
+            >Product and reactant stoichiometries can be specified using either stoichiometry or stoichiometryMath in a SpeciesReference object. The stoichiometry attribute is of type double and should contain values greater than zero (0). The stoichiometryMath element is implemented as an element containing a MathML expression. These two are mutually exclusive; only one of stoichiometry or stoichiometryMath should be defined in a given SpeciesReference instance. When neither the attribute nor the element is present, the value of stoichiometry in the SpeciesReference instance defaults to &#8220;1&#8221;.</rdfs:comment>
+        <rdfs:domain rdf:resource="#SpeciesReference"/>
+        <owl:propertyDisjointWith rdf:resource="#stoichiometryMath"/>
+        <rdfs:range rdf:resource="&xsd;double"/>
+    </owl:DatatypeProperty>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyDomain(stoichiometry SpeciesReference)]*/</acetext:acetext>
+        <owl:object rdf:resource="#SpeciesReference"/>
+        <owl:subject rdf:resource="#stoichiometry"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyRange(stoichiometry double)]*/</acetext:acetext>
+        <owl:subject rdf:resource="#stoichiometry"/>
+        <owl:predicate rdf:resource="&rdfs;range"/>
+        <owl:object rdf:resource="&xsd;double"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#stoichiometryMath -->
+
+    <owl:DatatypeProperty rdf:about="#stoichiometryMath">
+        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
+        <ace_lexicon:pl rdf:datatype="&xsd;string"
+            >stoichiometryMath</ace_lexicon:pl>
+        <ace_lexicon:vbg rdf:datatype="&xsd;string"
+            >stoichiometryMathed</ace_lexicon:vbg>
+        <ace_lexicon:sg rdf:datatype="&xsd;string"
+            >stoichiometryMaths</ace_lexicon:sg>
+        <rdfs:comment
+            >Product and reactant stoichiometries can be specified using either stoichiometry or stoichiometryMath in a SpeciesReference object. The stoichiometry attribute is of type double and should contain values greater than zero (0). The stoichiometryMath element is implemented as an element containing a MathML expression. These two are mutually exclusive; only one of stoichiometry or stoichiometryMath should be defined in a given SpeciesReference instance. When neither the attribute nor the element is present, the value of stoichiometry in the SpeciesReference instance defaults to &#8220;1&#8221;.</rdfs:comment>
+        <rdfs:domain rdf:resource="#SpeciesReference"/>
+        <rdfs:range rdf:resource="&mml;Math"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#value -->
+
+    <owl:DatatypeProperty rdf:about="#value">
+        <ace_lexicon:pl rdf:datatype="&xsd;string">value</ace_lexicon:pl>
+        <ace_lexicon:vbg rdf:datatype="&xsd;string">valued</ace_lexicon:vbg>
+        <ace_lexicon:sg rdf:datatype="&xsd;string">values</ace_lexicon:sg>
+        <rdfs:domain rdf:resource="#Parameter"/>
+        <rdfs:range rdf:resource="&xsd;double"/>
+    </owl:DatatypeProperty>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyRange(value double)]*/</acetext:acetext>
+        <owl:subject rdf:resource="#value"/>
+        <owl:predicate rdf:resource="&rdfs;range"/>
+        <owl:object rdf:resource="&xsd;double"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyDomain(value Parameter)]*/</acetext:acetext>
+        <owl:object rdf:resource="#Parameter"/>
+        <owl:subject rdf:resource="#value"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
+    </rdf:Description>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#Compartment -->
+
+    <owl:Class rdf:about="#Compartment">
+        <rdfs:subClassOf rdf:resource="#Element"/>
+        <owl:disjointWith rdf:resource="#Constraint"/>
+        <ace_lexicon:sg rdf:datatype="&xsd;string">Compartment</ace_lexicon:sg>
+        <ace_lexicon:pl rdf:datatype="&xsd;string">Compartments</ace_lexicon:pl>
+    </owl:Class>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >Every Compartment is a Element.</acetext:acetext>
+        <owl:subject rdf:resource="#Compartment"/>
+        <owl:object rdf:resource="#Element"/>
+        <owl:predicate rdf:resource="&rdfs;subClassOf"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DisjointClasses(Compartment Constraint FunctionDefinition InitialAssignment Parameter Reaction Species)]*/</acetext:acetext>
+        <owl:subject rdf:resource="#Compartment"/>
+        <owl:object rdf:resource="#Constraint"/>
+        <owl:predicate rdf:resource="&owl;disjointWith"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#Constraint -->
+
+    <owl:Class rdf:about="#Constraint">
+        <rdfs:subClassOf rdf:resource="#Element"/>
+        <ace_lexicon:sg rdf:datatype="&xsd;string">Constraint</ace_lexicon:sg>
+        <ace_lexicon:pl rdf:datatype="&xsd;string">Constraints</ace_lexicon:pl>
+    </owl:Class>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DisjointClasses(Compartment Constraint FunctionDefinition InitialAssignment Parameter Reaction Species)]*/</acetext:acetext>
+        <owl:subject rdf:resource="#Compartment"/>
+        <owl:object rdf:resource="#Constraint"/>
+        <owl:predicate rdf:resource="&owl;disjointWith"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >Every Constraint is a Element.</acetext:acetext>
+        <owl:subject rdf:resource="#Constraint"/>
+        <owl:object rdf:resource="#Element"/>
+        <owl:predicate rdf:resource="&rdfs;subClassOf"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#Element -->
+
+    <owl:Class rdf:about="#Element">
+        <rdfs:subClassOf rdf:resource="&owl;Thing"/>
+        <ace_lexicon:sg rdf:datatype="&xsd;string">Element</ace_lexicon:sg>
+        <ace_lexicon:pl rdf:datatype="&xsd;string">Elements</ace_lexicon:pl>
+    </owl:Class>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >Every Element is something.</acetext:acetext>
+        <owl:subject rdf:resource="#Element"/>
+        <owl:predicate rdf:resource="&rdfs;subClassOf"/>
+        <owl:object rdf:resource="&owl;Thing"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#FunctionDefinition -->
+
+    <owl:Class rdf:about="#FunctionDefinition">
+        <rdfs:subClassOf rdf:resource="#Element"/>
+        <ace_lexicon:sg rdf:datatype="&xsd;string"
+            >FunctionDefinition</ace_lexicon:sg>
+        <ace_lexicon:pl rdf:datatype="&xsd;string"
+            >FunctionDefinitions</ace_lexicon:pl>
+    </owl:Class>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >Every FunctionDefinition is a Element.</acetext:acetext>
+        <owl:object rdf:resource="#Element"/>
+        <owl:subject rdf:resource="#FunctionDefinition"/>
+        <owl:predicate rdf:resource="&rdfs;subClassOf"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#InitialAssignment -->
+
+    <owl:Class rdf:about="#InitialAssignment">
+        <rdfs:subClassOf rdf:resource="#Element"/>
+        <ace_lexicon:sg rdf:datatype="&xsd;string"
+            >InitialAssignment_</ace_lexicon:sg>
+        <ace_lexicon:pl rdf:datatype="&xsd;string"
+            >InitialAssignment_s</ace_lexicon:pl>
+    </owl:Class>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >Every InitialAssignment_ is a Element.</acetext:acetext>
+        <owl:object rdf:resource="#Element"/>
+        <owl:subject rdf:resource="#InitialAssignment"/>
+        <owl:predicate rdf:resource="&rdfs;subClassOf"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#KineticLaw -->
+
+    <owl:Class rdf:about="#KineticLaw">
+        <rdfs:subClassOf rdf:resource="#Element"/>
+        <ace_lexicon:sg rdf:datatype="&xsd;string">KineticLaw</ace_lexicon:sg>
+        <ace_lexicon:pl rdf:datatype="&xsd;string">KineticLaws</ace_lexicon:pl>
+    </owl:Class>
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#Model -->
+
+    <owl:Class rdf:about="#Model">
+        <rdfs:subClassOf rdf:resource="#Element"/>
+        <ace_lexicon:sg rdf:datatype="&xsd;string">Model</ace_lexicon:sg>
+        <ace_lexicon:pl rdf:datatype="&xsd;string">Models</ace_lexicon:pl>
+    </owl:Class>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >Every Model is a Element.</acetext:acetext>
+        <owl:object rdf:resource="#Element"/>
+        <owl:subject rdf:resource="#Model"/>
+        <owl:predicate rdf:resource="&rdfs;subClassOf"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#ModifierSpeciesReference -->
+
+    <owl:Class rdf:about="#ModifierSpeciesReference">
+        <rdfs:subClassOf rdf:resource="#SimpleSpeciesReference"/>
+        <ace_lexicon:sg rdf:datatype="&xsd;string"
+            >ModifierSpeciesReference</ace_lexicon:sg>
+        <ace_lexicon:pl rdf:datatype="&xsd;string"
+            >ModifierSpeciesReferences</ace_lexicon:pl>
+    </owl:Class>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >Every ModifierSpeciesReference is a SimpleSpeciesReference.</acetext:acetext>
+        <owl:subject rdf:resource="#ModifierSpeciesReference"/>
+        <owl:object rdf:resource="#SimpleSpeciesReference"/>
+        <owl:predicate rdf:resource="&rdfs;subClassOf"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#Parameter -->
+
+    <owl:Class rdf:about="#Parameter">
+        <rdfs:subClassOf rdf:resource="#Element"/>
+        <ace_lexicon:sg rdf:datatype="&xsd;string">Parameter</ace_lexicon:sg>
+        <ace_lexicon:pl rdf:datatype="&xsd;string">Parameters</ace_lexicon:pl>
+    </owl:Class>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >Every Parameter is a Element.</acetext:acetext>
+        <owl:object rdf:resource="#Element"/>
+        <owl:subject rdf:resource="#Parameter"/>
+        <owl:predicate rdf:resource="&rdfs;subClassOf"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#Reaction -->
+
+    <owl:Class rdf:about="#Reaction">
+        <rdfs:subClassOf rdf:resource="#Element"/>
+        <ace_lexicon:sg rdf:datatype="&xsd;string">Reaction</ace_lexicon:sg>
+        <ace_lexicon:pl rdf:datatype="&xsd;string">Reactions</ace_lexicon:pl>
+    </owl:Class>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >Every Reaction is a Element.</acetext:acetext>
+        <owl:object rdf:resource="#Element"/>
+        <owl:subject rdf:resource="#Reaction"/>
+        <owl:predicate rdf:resource="&rdfs;subClassOf"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#SimpleSpeciesReference -->
+
+    <owl:Class rdf:about="#SimpleSpeciesReference">
+        <rdfs:subClassOf rdf:resource="#Element"/>
+        <ace_lexicon:sg rdf:datatype="&xsd;string"
+            >SimpleSpeciesReference</ace_lexicon:sg>
+        <ace_lexicon:pl rdf:datatype="&xsd;string"
+            >SimpleSpeciesReferences</ace_lexicon:pl>
+    </owl:Class>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >Every SimpleSpeciesReference is an Element.</acetext:acetext>
+        <owl:object rdf:resource="#Element"/>
+        <owl:subject rdf:resource="#SimpleSpeciesReference"/>
+        <owl:predicate rdf:resource="&rdfs;subClassOf"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#Species -->
+
+    <owl:Class rdf:about="#Species">
+        <rdfs:subClassOf rdf:resource="#Element"/>
+        <ace_lexicon:pl rdf:datatype="&xsd;string">Species</ace_lexicon:pl>
+        <ace_lexicon:sg rdf:datatype="&xsd;string">Species</ace_lexicon:sg>
+    </owl:Class>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >Every Species is a Element.</acetext:acetext>
+        <owl:object rdf:resource="#Element"/>
+        <owl:subject rdf:resource="#Species"/>
+        <owl:predicate rdf:resource="&rdfs;subClassOf"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#SpeciesReference -->
+
+    <owl:Class rdf:about="#SpeciesReference">
+        <rdfs:subClassOf rdf:resource="#SimpleSpeciesReference"/>
+        <ace_lexicon:sg rdf:datatype="&xsd;string"
+            >SpeciesReference</ace_lexicon:sg>
+        <ace_lexicon:pl rdf:datatype="&xsd;string"
+            >SpeciesReferences</ace_lexicon:pl>
+    </owl:Class>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >Every SpeciesReference is a SimpleSpeciesReference.</acetext:acetext>
+        <owl:object rdf:resource="#SimpleSpeciesReference"/>
+        <owl:subject rdf:resource="#SpeciesReference"/>
+        <owl:predicate rdf:resource="&rdfs;subClassOf"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#zaw -->
+
+    <owl:Class rdf:about="#zaw">
+        <rdfs:subClassOf rdf:resource="#Element"/>
+    </owl:Class>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >Every KineticLaw is an Element.</acetext:acetext>
+        <owl:object rdf:resource="#Element"/>
+        <owl:subject rdf:resource="#zaw"/>
+        <owl:predicate rdf:resource="&rdfs;subClassOf"/>
+    </rdf:Description>
+    
+
+
+    <!-- http://www.w3.org/2002/07/owl#Thing -->
+
+    <owl:Class rdf:about="&owl;Thing"/>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 2.2.1.1138) http://owlapi.sourceforge.net -->
+

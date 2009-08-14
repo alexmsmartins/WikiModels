@@ -1,41 +1,59 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                      http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>pt.cnbc.wikimodels</groupId>
-  <version>1.0-SNAPSHOT</version>
-  <artifactId>wikimodels_project</artifactId>
-  <name>WikiModels Project</name>
-  <properties>
-    <scala.version>2.7.4</scala.version>
-  </properties>
+<?xml version="1.0" encoding="UTF-8"?>
+<project    xmlns="http://maven.apache.org/POM/4.0.0"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>pt.cnbc.wikimodels</groupId>
+    <version>1.0-SNAPSHOT</version>
+    <artifactId>wikimodels_project</artifactId>
+    <name>WikiModels Project</name>
+    <properties>
+        <scala.version>2.7.5</scala.version>
+    </properties>
 
-  <packaging>pom</packaging>
-  <modules>
-    <module>wm_server</module>
-    <module>wm_web_client</module>
-    <module>wm_rest_api</module>
-  </modules>
-  <dependencies>
-    <dependency>
-      <groupId>log4j</groupId>
-      <artifactId>log4j</artifactId>
-      <version>1.2.13</version>
-    </dependency>
-    <dependency>
-      <groupId>log4j</groupId>
-      <artifactId>apache-log4j-extras</artifactId>
-      <version>1.0</version>
-    </dependency>
-  </dependencies>
-  
-  <repositories>
-    <repository>
-      <id>log4j</id>
-      <name>Log4j Maven2 Repository</name>
-      <url>http://mirrors.ibiblio.org</url>
-    </repository>
-  </repositories>
+    <packaging>pom</packaging>
+    <modules>
+	<module>jorgeortiz85-scala-javautils</module>
+        <module>wm_library</module>
+        <module>wm_server</module>
+        <module>wm_web_client</module>
+        <module>wm_rest_api</module>
+        <module>wm_auth_realm</module>
+        <module>wm_setup</module>
+    </modules>
+
+    <repositories>
+        <repository>
+            <id>log4j</id>
+            <name>Log4j Maven2 Repository</name>
+            <url>http://mirrors.ibiblio.org</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.12</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jms</artifactId>
+                    <groupId>javax.jms</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.6</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.specs</groupId>
+            <artifactId>specs</artifactId>
+            <version>1.2.5</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
 </project>
-

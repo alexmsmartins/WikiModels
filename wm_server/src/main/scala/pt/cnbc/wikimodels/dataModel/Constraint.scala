@@ -1,0 +1,73 @@
+/*
+ * Constraint.scala
+ *
+ * To change this template, choose Tools | Template Manager
+ * and open the template in the editor.
+ * @author Alexandre Martins
+ */
+
+package pt.cnbc.wikimodels.dataModel
+
+import scala.reflect.BeanInfo
+import scala.xml.Elem
+import scala.xml.Group
+import scala.xml.Node
+import scala.xml.NodeSeq
+import scala.xml.XML
+
+import thewebsemantic.Id
+import thewebsemantic.Namespace
+import thewebsemantic.RdfProperty
+
+import pt.cnbc.wikimodels.util.SBMLHandler
+
+
+@BeanInfo
+@Namespace("http://wikimodels.cnbc.pt/ontologies/sbml.owl#")
+case class Constraint(
+    @Id override val metaid:String) extends Element(metaid){
+    var id:String = null
+    var name:String = null
+    var math:String = null
+    var message:String = null
+
+    def this(metaid:String,
+             notes:NodeSeq,
+             id:String,
+             name:String,
+             math:NodeSeq,
+             message:NodeSeq) = {
+        this(metaid)
+        this.setNotesFromXML(notes)
+        this.id = id
+        this.name= name
+        this.math = math.toString
+        this.message = message.toString
+    }
+
+    def this() = {
+        this(null, Nil, null, null, Nil, null)
+    }
+
+    /**
+     * math element is mandatory
+     */
+    def this(xmlConstraint:Elem) = {
+        this((new SBMLHandler).toStringOrNull((xmlConstraint \ "@metaid").text),
+             (new SBMLHandler).checkCurrentLabelForNotes(xmlConstraint),
+             (new SBMLHandler).toStringOrNull((xmlConstraint \ "@id").text),
+             (new SBMLHandler).toStringOrNull((xmlConstraint \ "@name").text),
+             (xmlConstraint \ "math"),
+             (new SBMLHandler).checkCurrentLabelForMessage(xmlConstraint))
+        
+    }
+
+    override def toXML:Elem = {
+        <constraint metaid={metaid} id={id} name={name}>
+            <!--order is important according to SBML Specifications-->
+            {new SBMLHandler().genNotesFromHTML(notes)}
+            {XML.loadString(this.math)}
+            {new SBMLHandler().genMessageFromHTML(message)}
+        </constraint>
+    }
+}

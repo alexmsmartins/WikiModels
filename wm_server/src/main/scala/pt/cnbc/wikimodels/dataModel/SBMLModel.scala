@@ -1,0 +1,150 @@
+/*
+ * Model.scala
+ *
+ * To change this template, choose Tools | Template Manager
+ * and open the template in the editor.
+ * @author Alexandre Martins
+ */
+
+package pt.cnbc.wikimodels.dataModel
+
+import java.util.Date
+import java.util.Collection
+
+import org.scala_tools.javautils.Imports._
+
+import scala.reflect.BeanInfo
+import scala.xml.Elem
+import scala.xml.Group
+import scala.xml.MetaData
+import scala.xml.Node
+import scala.xml.NodeSeq
+import scala.xml.UnprefixedAttribute
+import scala.xml.XML
+
+
+import thewebsemantic.Id
+import thewebsemantic.Namespace
+import thewebsemantic.RdfProperty
+import thewebsemantic.RdfType
+
+import pt.cnbc.wikimodels.util.SBMLHandler
+import pt.cnbc.wikimodels.exceptions.BadFormatException
+
+
+/**
+ * Represents a user of WikiModels
+ */
+
+@BeanInfo
+@Namespace("http://wikimodels.cnbc.pt/ontologies/sbml.owl#")
+@RdfType("Model")
+case class SBMLModel(
+    @Id override val metaid:String) extends Element(metaid){
+
+    var id:String = null
+    var name:String = null
+
+    //listOf definitions
+    var listOfFunctionDefinitions:Collection[FunctionDefinition] = null
+    //var listOfUnitDefinitions:List[ÛnitDefinition] = List()
+    //var listOfCompartmentTypes:List[CompartmentType] = List()
+    //var listOfSpeciesTypes:List[SpeciesType] = List()
+    var listOfCompartments:Collection[Compartment] = null
+    var listOfSpecies:Collection[Species] = null
+    var listOfParameters:Collection[Parameter] = null
+    //var listOfInitialAssignments:List[InitialAssignment] = List()
+    //var listOfRules:List[Rule] = List()
+    var listOfConstraints:Collection[Constraint] = null
+    var listOfReactions:Collection[Reaction] = null
+    //var listOfEvents:List[Event] = List()
+
+    def this(metaid:String,
+             notes:NodeSeq,
+             id:String,
+             name:String) = {
+        this(metaid)
+        this.setNotesFromXML(notes)
+        this.id = id
+        this.name = name
+    }
+
+    def this() = {
+        this(null, Nil, null, null)
+    }
+
+    def this(xmlModel:Elem) = {
+        this((new SBMLHandler).toStringOrNull((xmlModel \ "@metaid").text),
+             (new SBMLHandler).checkCurrentLabelForNotes(xmlModel),
+             (new SBMLHandler).toStringOrNull((xmlModel \ "@id").text),
+             (new SBMLHandler).toStringOrNull((xmlModel \ "@name").text) )
+    }
+
+    /**
+     * generates a XML representation of the SBML Model
+     * it does not include the DOCTYPE declaration or the sbml top tag
+     * Those should be added by a proper export funtion when it is created
+     * @return the XML representing the user
+     */
+    override def toXML():Elem = {
+        Console.println("HTML to generate SBML notes in toXML = "+ notes)
+        <model metaid={metaid} id={id} name={name}>
+            <!--order is important according to SBML Specifications-->
+            {new SBMLHandler().genNotesFromHTML(notes)}
+            {if(listOfFunctionDefinitions != null)
+             <listOfFunctionDefinitions>
+                    {listOfFunctionDefinitions.asScala.map(i => i.toXML)}
+             </listOfFunctionDefinitions> else scala.xml.Null
+            }
+            {if(false)
+             <listOfUnitDefinitions>
+             </listOfUnitDefinitions> else scala.xml.Null
+            }
+            {if(false)
+             <listOfCompartmentTypes>
+             </listOfCompartmentTypes> else scala.xml.Null
+            }
+            {if(false)
+             <listOfSpeciesTypes>
+             </listOfSpeciesTypes> else scala.xml.Null
+            }
+            {if(listOfCompartments != null)
+             <listOfCompartments>
+                    {listOfCompartments.asScala.map(i => i.toXML)}
+             </listOfCompartments> else scala.xml.Null
+            }
+            {if(listOfSpecies != null)
+             <listOfSpecies>
+                    {listOfSpecies.asScala.map(i => i.toXML)}
+             </listOfSpecies> else scala.xml.Null
+            }
+            {if(listOfParameters != null)
+             <listOfParameters>
+                    {listOfParameters.asScala.map(i => i.toXML)}
+             </listOfParameters> else scala.xml.Null
+            }
+            {if(false)
+             <listOfInitialAssignments>
+             </listOfInitialAssignments> else scala.xml.Null
+            }
+            {if(false)
+             <listOfRules>
+             </listOfRules> else scala.xml.Null
+            }
+            {if(listOfConstraints != null)
+             <listOfConstraints>
+                    {listOfConstraints.asScala.map(i => i.toXML)}
+             </listOfConstraints> else scala.xml.Null
+            }
+            {if(listOfReactions != null)
+             <listOfReactions>
+                    {listOfReactions.asScala.map(i => i.toXML)}
+             </listOfReactions> else scala.xml.Null
+            }
+            {if(false)
+             <listOfEvents>
+             </listOfEvents> else scala.xml.Null
+            }
+        </model>
+    }
+}
