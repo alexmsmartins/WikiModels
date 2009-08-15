@@ -39,10 +39,10 @@ object App {
         var testNumber = 1
         try {
             setUp
-            /*log.info("======================" )
+            log.info("======================" )
             log.info("TEST 1 - Login" )
             loginTest
-            log.info("SUCCESS" )
+            log.info("SUCCESS" )/*
             log.info("======================" )
             log.info("TEST 1 - CreateModel" )
             createModelTest

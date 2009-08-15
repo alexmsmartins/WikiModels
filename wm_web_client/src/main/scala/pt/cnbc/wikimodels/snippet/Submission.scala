@@ -16,24 +16,37 @@ import js.JE._
 import js.jquery._
 import JqJsCmds._
 
+import pt.cnbc.wikimodels.rest.client.BasicAuth
 import pt.cnbc.wikimodels.rest.client.RestfulAccess
 
 class Submission {
     var prev = ""
     def form (xhtml : NodeSeq) : NodeSeq = {
-        var ra:RestfulAccess = null
+        
         var username = ""
         var password = ""
 
         def authenticate () = {
-            
+            var ra:RestfulAccess = null
             if (username.length == 0) {
-                S.error("Invalid username")
-            } else if (username.equals("admin") && password.equals("admin")) {
-                User.UserName(Full(username))
-                println("I am logged "+User.UserName.is+" ok "+User.currentUserName)
+                S.error("Username missing")
+            } else if (password.length == 0) {
+                S.error("Password missing")
             } else {
-                println("Username= "+User.UserName+" Password= "+password)
+                ra = new RestfulAccess("localhost",
+                                    8080,
+                                    "/wm_server-1.0-SNAPSHOT/resources",
+                                    username,
+                                    password,
+                                    BasicAuth.startWithBasicAuth)
+                val userXML = ra.getRequest("/user/"+username).asInstanceOf[scala.xml.Elem]
+                if(ra.getStatusCode == 403 || ra.getStatusCode == 403 || ra.getStatusCode == 503){
+                    S.error("Error in username or password")
+                } else if(ra.getStatusCode == 200){
+                    User.UserName(Full(username))
+                    println("Status msg "+ra.getStatusCode)
+                }
+
             }
         }
         bind("entry", xhtml,
