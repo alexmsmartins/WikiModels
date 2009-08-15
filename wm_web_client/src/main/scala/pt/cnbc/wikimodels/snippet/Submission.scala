@@ -16,13 +16,17 @@ import js.JE._
 import js.jquery._
 import JqJsCmds._
 
+import pt.cnbc.wikimodels.rest.client.RestfulAccess
+
 class Submission {
     var prev = ""
     def form (xhtml : NodeSeq) : NodeSeq = {
+        var ra:RestfulAccess = null
         var username = ""
         var password = ""
 
         def authenticate () = {
+            
             if (username.length == 0) {
                 S.error("Invalid username")
             } else if (username.equals("admin") && password.equals("admin")) {
@@ -202,8 +206,9 @@ class Submission {
                 // build up an ajax text box
     def doText(msg: NodeSeq) =
     SHtml.ajaxText("", v => DisplayMessage(msgName,
-                                     bind("text", msg, "value" -> Text(v)),
-                                     null, null))
+        bind("text", msg, "value" ->
+             <input type="text" disabled="disabled" onclick="this.disabled = true;" value={Text(v.replace(" ", ""))} />),
+                                     300000 seconds, 1 second))
             
             bind("createDescription", xhtml,
     "id" -> SHtml.text("", model_id = _, ("id", "model_id"), ("size", "40"), ("maxlength", "120")),

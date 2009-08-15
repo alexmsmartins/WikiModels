@@ -74,7 +74,7 @@ object ManipulatorWrapper {
             Console.println("url.toString - " + url.toString)
             url.toString
 
-            val store = SDBFactory.connectStore("/home/alex/SDB-1.3.0/sdb.ttl")
+            val store = SDBFactory.connectStore("/home/alex/develop/estagio/workspace/wikimodels/wm_server/src/main/sdb.ttl")
             SDBFactory.connectDefaultModel(store)
         } catch {
             case ex:Exception => Console.print(
