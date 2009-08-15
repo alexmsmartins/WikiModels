@@ -31,8 +31,10 @@ import scala.Collection
 
 import pt.cnbc.wikimodels.dataModel.SBMLModel
 import pt.cnbc.wikimodels.dataModel.Comment
+import pt.cnbc.wikimodels.dataModel.Element
 import pt.cnbc.wikimodels.exceptions.NotImplementedException
 import pt.cnbc.wikimodels.ontology.ManipulatorWrapper
+import pt.cnbc.wikimodels.util.ImplicitConversions
 
 class SBMLModelsDAO {
 
@@ -120,11 +122,27 @@ class SBMLModelsDAO {
 
     def trytoCreateSBMLModel(sbmlModel:SBMLModel, model:Model):Boolean = {
 
-        if( metaidExists(sbmlModel.metaid )  ){
+        if( !modelMetaidExists(sbmlModel.metaid )  ){
             createSBMLModel(sbmlModel, model)
         } else {
-            false
+            createSBMLModel(generateNewMetaIdfor(sbmlModel, model),
+                            model)
         }
+    }
+
+    def generateNewMetaIdfor(sbmlentity:Element):Element = {
+        var xx = sbmlentity.asInstanceOf[ImplicitConversions.IdAndName].id
+        """if(xx == null || xx.trim == ""){
+            if(!metaidExists( xx ))
+                sbmlentity.metaid
+                else
+
+        }"""
+        null
+    }
+
+    def generateNewMetaIdfor(sbmlModel:SBMLModel, model:Model):SBMLModel = {
+        sbmlModel
     }
 
 

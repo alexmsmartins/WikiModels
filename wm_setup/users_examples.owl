@@ -156,8 +156,8 @@
     <!-- http://wikimodels.cnbc.pt/ontologies/users.owl#alex -->
 
     <User rdf:about="#User/alex">
-	<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
-	<userName>admin</userName>
+	z<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+	<userName>alex</userName>
         <con:emailAddress
             >alex.mail@clix.pt</con:emailAddress>
         <password
