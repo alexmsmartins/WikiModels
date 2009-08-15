@@ -16,13 +16,17 @@ import js.JE._
 import js.jquery._
 import JqJsCmds._
 
+import pt.cnbc.wikimodels.rest.client.RestfulAccess
+
 class Submission {
     var prev = ""
     def form (xhtml : NodeSeq) : NodeSeq = {
+        var ra:RestfulAccess = null
         var username = ""
         var password = ""
 
         def authenticate () = {
+            
             if (username.length == 0) {
                 S.error("Invalid username")
             } else if (username.equals("admin") && password.equals("admin")) {
