@@ -24,14 +24,13 @@ import pt.cnbc.wikimodels.util.SBMLHandler
 
 @BeanInfo
 @Namespace("http://wikimodels.cnbc.pt/ontologies/sbml.owl#")
-case class Compartment(@Id
-                       override val metaid:String) extends Element(metaid){
+case class Compartment extends Element{
 
     var id:String = null
     var name:String = null
     var compartmentType:String = null //not implemented yet
-    var spacialDimensions:Int = -1
-    var size:Double = -1
+    var spacialDimensions:Int = 0
+    var size:Double = 0
     var units:String = null  //not implemented yet
     var outside:String = null
     var constant:Boolean = false
@@ -48,7 +47,8 @@ case class Compartment(@Id
              units:String,  //not implemented yet
              outside:String,
              constant:Boolean) = {
-        this(metaid)
+        this()
+        this.metaid = metaid
         this.setNotesFromXML(notes)
         this.name = name
         this.compartmentType = compartmentType
@@ -58,8 +58,6 @@ case class Compartment(@Id
         this.outside = outside
         this.constant = constant
     }
-
-    def this() = this(null,Nil,null,null,null,0,0,null,null,false)
 
     def this(xmlCompartment:Elem) = {
         this((new SBMLHandler).toStringOrNull((xmlCompartment \ "@metaid").text),
@@ -83,4 +81,7 @@ case class Compartment(@Id
             {new SBMLHandler().genNotesFromHTML(notes)}
         </compartment>
     }
+    override def theId = this.id
+    override def theName = this.name
+
 }

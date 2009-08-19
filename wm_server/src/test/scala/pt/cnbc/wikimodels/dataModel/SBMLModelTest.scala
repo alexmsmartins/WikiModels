@@ -213,7 +213,7 @@ class SBMLModelTest {
     }
 
     @Test
-    def xmlInModelWithoutComponents = {
+    def createModelWithoutComponents = {
         val sbml = new SBMLModel("any_metaid", <p>dasdfs</p>,
                                  "any_id", "any_name")
         /*Console.println("XML representation of the model is "
@@ -227,7 +227,7 @@ class SBMLModelTest {
 
 
     @Test
-    def xmlInModelWithoutNotes = {
+    def createModelWithoutNotes = {
         val sbml = new SBMLModel("any_metaid", Nil,
                                  "any_id", "any_name")
         Console.println("XML representation of the model is "
@@ -239,7 +239,7 @@ class SBMLModelTest {
     }
 
     
-    @Test
+    /*@Test
     def xmlInModelWithoutMetaId = {
         try{
             val sbml = new SBMLModel(null, <p>dasdfs</p>,
@@ -252,7 +252,7 @@ class SBMLModelTest {
                 assertTrue(true) //Test passes
             case _ => assertTrue(false)
         }
-    }
+    }*/
 
     @Test
     def createModelWithoutId = {

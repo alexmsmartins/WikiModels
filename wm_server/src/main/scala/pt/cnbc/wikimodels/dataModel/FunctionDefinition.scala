@@ -22,8 +22,7 @@ import scala.xml.Elem
 
 @BeanInfo
 @Namespace("http://wikimodels.cnbc.pt/ontologies/sbml.owl#")
-case class FunctionDefinition(
-    @Id override val metaid:String) extends Element(metaid){
+case class FunctionDefinition extends Element{
 
     var id:String = null
     var name:String = null
@@ -35,15 +34,12 @@ case class FunctionDefinition(
              id:String,
              name:String,
              math:NodeSeq) = {
-        this(metaid)
+        this()
+        this.metaid = metaid
         this.setNotesFromXML(notes)
         this.id = id
         this.name = name
         this.math = math.toString
-    }
-
-    def this() = {
-        this(null, Nil, null, null, Nil)
     }
 
     def this(xmlFunctionDefinition:Elem) = {
@@ -60,4 +56,6 @@ case class FunctionDefinition(
             {XML.loadString(this.math)}
         </functionDefinition>
     }
+    override def theId = this.id
+    override def theName = this.name
 }

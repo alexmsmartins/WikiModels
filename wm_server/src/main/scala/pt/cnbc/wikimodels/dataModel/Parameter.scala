@@ -21,8 +21,7 @@ import scala.xml.Elem
 
 @BeanInfo
 @Namespace("http://wikimodels.cnbc.pt/ontologies/sbml.owl#")
-case class Parameter(
-    @Id override val metaid:String) extends Element(metaid){
+case class Parameter extends Element{
 
     var id:String = null
     var name:String = null
@@ -53,7 +52,8 @@ case class Parameter(
              value:java.lang.Double,
              units:String,
              constant:Boolean) = {
-        this(metaid)
+        this()
+        this.metaid = metaid
         this.setNotesFromXML(notes)
         this.id = id
         this.name = name
@@ -61,10 +61,6 @@ case class Parameter(
         this.units = units
         this.constant = constant
     }
-
-    def this() =
-        this(null,Nil, null, null, null, null, true)
-
 
     def this(xmlParameter:Elem) = {
         this((new SBMLHandler).toStringOrNull((xmlParameter \ "@metaid").text),
@@ -90,4 +86,6 @@ case class Parameter(
             {new SBMLHandler().genNotesFromHTML(notes)}
         </parameter>
     }
+    override def theId = this.id
+    override def theName = this.name
 }

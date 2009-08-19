@@ -24,8 +24,7 @@ import pt.cnbc.wikimodels.util.SBMLHandler
 
 @BeanInfo
 @Namespace("http://wikimodels.cnbc.pt/ontologies/sbml.owl#")
-case class Constraint(
-    @Id override val metaid:String) extends Element(metaid){
+case class Constraint extends Element{
     var id:String = null
     var name:String = null
     var math:String = null
@@ -37,16 +36,13 @@ case class Constraint(
              name:String,
              math:NodeSeq,
              message:NodeSeq) = {
-        this(metaid)
+        this()
+        this.metaid = metaid
         this.setNotesFromXML(notes)
         this.id = id
         this.name= name
         this.math = math.toString
         this.message = message.toString
-    }
-
-    def this() = {
-        this(null, Nil, null, null, Nil, null)
     }
 
     /**
@@ -70,4 +66,7 @@ case class Constraint(
             {new SBMLHandler().genMessageFromHTML(message)}
         </constraint>
     }
+
+    override def theId = this.id
+    override def theName = this.name
 }

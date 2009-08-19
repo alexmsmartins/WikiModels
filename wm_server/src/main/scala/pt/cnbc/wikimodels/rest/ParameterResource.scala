@@ -34,8 +34,8 @@ import pt.cnbc.wikimodels.dataAccess.SBMLModelsDAO
 import pt.cnbc.wikimodels.exceptions.BadFormatException
 import pt.cnbc.wikimodels.security.SecurityContextFactory
 
-@Path("/model/")
-class SBMLModelResource extends RESTResource {
+
+class ParameterResource extends RESTResource {
 
     @Context
     var security:SecurityContext = null
@@ -44,21 +44,21 @@ class SBMLModelResource extends RESTResource {
     val secContext = SecurityContextFactory.createSecurityContext
 
     @GET
-    @Path("{modelid}")//: [a-zA-Z][a-zA-Z_0-9]}")
+    @Path("{parameterid}")//: [a-zA-Z][a-zA-Z_0-9]}")
     @Produces(Array("application/xml"))
-    def get(@PathParam("modelid") sbmlModelResource:String
+    def get(@PathParam("parameterid") parameterResource:String
     ):String = {
         val username:String = security.getUserPrincipal().getName()
 
-        Console.print("GET verb was used in model " + sbmlModelResource)
+        Console.print("GET verb was used in parameter " + parameterResource)
         if(secContext.isAuthorizedTo(username,
-                                     "GET", "model/" + sbmlModelResource ) ){
+                                     "GET", "parameter/" + parameterResource ) ){
             try{
                 val dao = new SBMLModelsDAO
-                val sbmlModel = dao.loadSBMLModel(sbmlModelResource)
-                if(sbmlModel != null &&
-                   sbmlModel.metaid == sbmlModelResource){
-                    sbmlModel.toXML.toString
+                val parameter = dao.loadSBMLModel(parameterResource)
+                if(parameter != null &&
+                   parameter.metaid == parameterResource){
+                    parameter.toXML.toString
                 } else {
                     throw new WebApplicationException(Response.Status.NOT_FOUND)
                 }
@@ -76,10 +76,10 @@ class SBMLModelResource extends RESTResource {
     }
     
     /**
-     * Creates a new resource (model in this case) with its metaid generated
+     * Creates a new resource (parameter in this case) with its metaid generated
      * automatically by wikiModels server.
      * the metaid can be suggested and, for that to happen, the XML that
-     * represents the model should come with the metaid attribute filled
+     * represents the parameter should come with the metaid attribute filled
      */
     @POST
     @Consumes(Array("application/xml"))
@@ -90,8 +90,8 @@ class SBMLModelResource extends RESTResource {
         var ret = ""
         //TODO TURN THE POST scheleton in SBMLModelResource into
         if(secContext.isAuthorizedTo(username,
-                                     "POST", "model/") ){
-            val modelMetaId =
+                                     "POST", "parameter/") ){
+            val parameterMetaId =
             try{
                 val dao = new SBMLModelsDAO
                 dao.trytoCreateSBMLModel(
@@ -104,11 +104,11 @@ class SBMLModelResource extends RESTResource {
                             Response.Status.BAD_REQUEST)
                     }
             }
-            if(modelMetaId == null){
-                throw new BadFormatException("Creating model did not went according to plan.");
+            if(parameterMetaId == null){
+                throw new BadFormatException("Creating parameter did not went according to plan.");
             }else {
                 val uri:URI = uriInfo.getAbsolutePathBuilder()
-                .path(modelMetaId)
+                .path(parameterMetaId)
                 .build();
                 Response.created( uri ).build()
             }
@@ -125,23 +125,23 @@ class SBMLModelResource extends RESTResource {
      * According to the REST style architecture the PUT request can be used
      * to create new reesources. Yet this is only allowed as long as the request
      * remains  idempotent.
-     * Yet, creating a new model is not an idempotent request since it is
+     * Yet, creating a new parameter is not an idempotent request since it is
      * sbuject to verifications and may not result in exactly the sent entity
      * being created. Ids and other infromation may be modified.
      */
     @PUT
-    @Path("{modelid}")//: [a-zA-Z][a-zA-Z_0-9]}")
+    @Path("{parameterid}")//: [a-zA-Z][a-zA-Z_0-9]}")
     @Consumes(Array("application/xml"))
-    def put(@PathParam("modelid") sbmlModelResource:String,
+    def put(@PathParam("parameterid") parameterResource:String,
             requestContent:String):Response = {
         val username = security.getUserPrincipal().getName()
         Console.print("PUT verb was used in user " + username)
-        Console.print("modelid = " + sbmlModelResource)
+        Console.print("parameterid = " + parameterResource)
         Console.print("Content of request = " + requestContent)
         Console.print("--------------------------------------")
         var ret = ""
         if(secContext.isAuthorizedTo(username,
-                                     "PUT", "model/") ){
+                                     "PUT", "parameter/") ){
             try{
                 val dao = new SBMLModelsDAO
                 //XXX if there are performance problems in this part replace:
@@ -171,20 +171,20 @@ class SBMLModelResource extends RESTResource {
     }
 
     @DELETE
-    @Path("{modelid}")//: [a-zA-Z][a-zA-Z_0-9]}")
-    def delete(@PathParam("modelid") sbmlModelResource:String
+    @Path("{parameterid}")//: [a-zA-Z][a-zA-Z_0-9]}")
+    def delete(@PathParam("parameterid") parameterResource:String
     ) = {
         val username = security.getUserPrincipal().getName()
         Console.print("DELETE verb was used in user " + username)
 
         var ret = ""
         if(secContext.isAuthorizedTo(username,
-                                     "DELETE", "model/") ){
+                                     "DELETE", "parameter/") ){
             try{
                 val dao = new SBMLModelsDAO
                 
                 if(dao.deleteSBMLModel(
-                        new SBMLModel(sbmlModelResource, Nil, null , null))){
+                        new SBMLModel(parameterResource, Nil, null , null))){
                 } else {
                     throw new WebApplicationException(
                         Response.Status.NOT_FOUND)
@@ -204,49 +204,4 @@ class SBMLModelResource extends RESTResource {
             throw new WebApplicationException(Response.Status.FORBIDDEN);
         }
     }
-
-
-    /*@Path("{modelid}/compartment/")
-     def compartmentResource() = {
-     val username = security.getUserPrincipal().getName()
-     Console.print("compartment resource was used in user " + username)
-     }
-
-     @Path("{modelid}/constraint/")
-     def constraintResource() = {
-     val username = security.getUserPrincipal().getName()
-     Console.print("constraint resource was used in user " + username)
-     }
-
-     @Path("{modelid}/functionDefinition/")
-     def functionDefinitionResource() = {
-     val username = security.getUserPrincipal().getName()
-     Console.print("functionDefinition resource was used in user " + username)
-     }*/
-
-     @Path("{modelid}/parameter/")
-     def parameterResource() = {
-        val username = security.getUserPrincipal().getName()
-        Console.print("parameter resource was used in user " + username)
-        new ParameterResource()
-     }
-
-     /*@Path("{modelid}/reaction/")
-     def reactionResource() = {
-     val username = security.getUserPrincipal().getName()
-     Console.print("reaction resource was used in user " + username)
-     }
-
-     @Path("{modelid}/species/")
-     def speciesResource() = {
-     val username = security.getUserPrincipal().getName()
-     Console.print("species resource was used in user " + username)
-     }
-
-     @Path("{modelid}/comments/")
-     def commentsResource() = {
-     val username = security.getUserPrincipal().getName()
-     Console.print("comments resource was used in user " + username)
-     new CommentsResource()
-     }*/
 }

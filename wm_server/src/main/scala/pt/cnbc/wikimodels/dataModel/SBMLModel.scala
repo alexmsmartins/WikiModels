@@ -39,8 +39,7 @@ import pt.cnbc.wikimodels.exceptions.BadFormatException
 @BeanInfo
 @Namespace("http://wikimodels.cnbc.pt/ontologies/sbml.owl#")
 @RdfType("Model")
-case class SBMLModel(
-    @Id override val metaid:String) extends Element(metaid){
+case class SBMLModel extends Element{
 
     var id:String = null
     var name:String = null
@@ -63,16 +62,16 @@ case class SBMLModel(
              notes:NodeSeq,
              id:String,
              name:String) = {
-        this(metaid)
+        this()
+        this.metaid = metaid
         this.setNotesFromXML(notes)
         this.id = id
         this.name = name
     }
 
-    def this() = {
-        this(null, Nil, null, null)
-    }
-
+    /**
+     * Constructor that extracts the information contained in the XML
+     */
     def this(xmlModel:Elem) = {
         this((new SBMLHandler).toStringOrNull((xmlModel \ "@metaid").text),
              (new SBMLHandler).checkCurrentLabelForNotes(xmlModel),
@@ -147,4 +146,7 @@ case class SBMLModel(
             }
         </model>
     }
+
+    override def theId = this.id
+    override def theName = this.name
 }

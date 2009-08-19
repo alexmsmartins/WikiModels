@@ -35,6 +35,7 @@ import pt.cnbc.wikimodels.dataModel.Element
 import pt.cnbc.wikimodels.exceptions.NotImplementedException
 import pt.cnbc.wikimodels.ontology.ManipulatorWrapper
 import pt.cnbc.wikimodels.util.ImplicitConversions
+import com.hp.hpl.jena.rdf.model.InfModel
 
 class SBMLModelsDAO {
 
@@ -51,6 +52,57 @@ class SBMLModelsDAO {
         val myModel:Model = ManipulatorWrapper.loadModelfromDB
         loadSBMLModel(sbmlmodelID, myModel)
     }
+
+    def loadUser(modelMetaid:String):SBMLModel = {
+        var ret:SBMLModel = null
+        try{
+            var myModel:Model = ManipulatorWrapper.loadModelfromDB
+            Console.print("Number of individuals in loaded model is " + myModel.size)
+
+            Console.print("After loading Jena Model")
+            var reader = new RDF2Bean[SBMLModel](myModel)
+            Console.print("After creating a new RDF2Bean")
+            val l:SBMLModel
+            = reader.load( new SBMLModel().getClass, modelMetaid  )
+                    .asInstanceOf[SBMLModel]
+            //Console.println("Found " + l.size + " SBMLModels with metaid " + modelMetaid)
+            ret = l
+            return ret
+        } catch {
+            case ex:thewebsemantic.NotFoundException =>
+                Console.println("Bean of " + SBMLModel.getClass + "and " +
+                                "id is not found")
+                ex.printStackTrace()
+                null
+            case ex =>
+                ex.printStackTrace()
+                null
+        }
+    }
+
+    def loadSBMLModel():java.util.Collection[SBMLModel] = {
+        try{
+            val myModel:Model = ManipulatorWrapper.loadModelfromDB
+            Console.print("After loading Jena Model")
+            var reader = new RDF2Bean(myModel)
+            Console.print("After creating a new RDF2Bean")
+            val l:java.util.List[SBMLModel] = reader.load(new SBMLModel().getClass )
+                .asInstanceOf[java.util.List[SBMLModel]]
+            //Console.print("User XML = " + c.toList(0).toXML.toString)
+
+            l
+            /*var l:List[User] = Nil
+            (for(i <- 0 to lusers.size - 1) yield  lusers(i).asInstanceOf[User])
+                .toList*/
+        } catch {
+            case ex:thewebsemantic.NotFoundException =>
+                Console.println("Bean of " + SBMLModel.getClass + "and id is not found")
+                ex.printStackTrace()
+                null
+        }
+    }
+
+
 
     /**
      * Saves an SBMLModel into the KnowledgeBase
@@ -102,7 +154,7 @@ class SBMLModelsDAO {
      * This method also issues an available metaid
      *
      */
-    def trytoCreateSBMLModel(sbmlModel:SBMLModel):Boolean = {
+    def trytoCreateSBMLModel(sbmlModel:SBMLModel):String = {
         try{
             val myModel:Model = ManipulatorWrapper.loadModelfromDB
             trytoCreateSBMLModel(sbmlModel, myModel)
@@ -111,40 +163,68 @@ class SBMLModelsDAO {
                     Console.println("Bean of " + SBMLModel.getClass + "and " +
                                     "id is not found")
                     ex.printStackTrace()
-                    false
+                    null
                 }
             case ex => {
                     ex.printStackTrace()
-                    false
+                    null
                 }
         }
     }
 
-    def trytoCreateSBMLModel(sbmlModel:SBMLModel, model:Model):Boolean = {
+    def trytoCreateSBMLModel(sbmlModel:SBMLModel, model:Model):String = {
+        if( if( metaidExists(sbmlModel.metaid ) == false ){
+                createSBMLModel(sbmlModel, model)
+            } else {
+                sbmlModel.metaid = generateNewMetaIdFrom(sbmlModel,
+                                                         model)
+                createSBMLModel(sbmlModel,
+                                model)
+            } == true)
+        {
+            sbmlModel.metaid
+        } else null
+        
+    }
 
-        if( !modelMetaidExists(sbmlModel.metaid )  ){
-            createSBMLModel(sbmlModel, model)
+    def generateNewMetaIdFrom(sbmlentity:Element):String = {
+        val myModel:Model = ManipulatorWrapper.loadModelfromDB
+        generateNewMetaIdFrom(sbmlentity, myModel)
+    }
+
+    /**
+     * Generates a new metaid.
+     * It uses the metaid, id or name depending on which is not empty
+     * and using this exact order
+     */
+    def generateNewMetaIdFrom(sbmlentity:Element, model:Model):String = {
+        if(sbmlentity.metaid == null || sbmlentity.metaid.trim == ""){
+            if(sbmlentity.theId == null || sbmlentity.theId.trim == ""){
+                if(sbmlentity.theName == null || sbmlentity.theName.trim == ""){
+                    generateNewMetaIdFromString("", model)
+                } else {
+                    generateNewMetaIdFromString(sbmlentity.theName, model)
+                }
+            } else {
+                generateNewMetaIdFromString(sbmlentity.theId, model)
+            }
         } else {
-            createSBMLModel(generateNewMetaIdfor(sbmlModel, model),
-                            model)
+            generateNewMetaIdFromString(sbmlentity.metaid, model)
         }
     }
 
-    def generateNewMetaIdfor(sbmlentity:Element):Element = {
-        var xx = sbmlentity.asInstanceOf[ImplicitConversions.IdAndName].id
-        """if(xx == null || xx.trim == ""){
-            if(!metaidExists( xx ))
-                sbmlentity.metaid
-                else
-
-        }"""
-        null
+    def generateNewMetaIdFromString(string:String):String ={
+        val myModel:Model = ManipulatorWrapper.loadModelfromDB
+        generateNewMetaIdFromString(string, myModel)
     }
-
-    def generateNewMetaIdfor(sbmlModel:SBMLModel, model:Model):SBMLModel = {
-        sbmlModel
+    
+    def generateNewMetaIdFromString(string:String, model:Model):String ={
+        var i = 0
+        while( metaidExists(""+ string + i ) == true ){
+            i=i+1
+        }
+        "" + string + i
     }
-
 
     /**
      * checks if metaid exists in WikiModels KnowledgeBase
@@ -170,24 +250,25 @@ class SBMLModelsDAO {
     }
 
     def metaidExists(metaid:String, model:Model):Boolean = {
-        val reasoner:Reasoner = ReasonerRegistry.getOWLReasoner
-        val ontModelSpec:OntModelSpec = null
-        val ont:OntModel = ModelFactory.createOntologyModel(ontModelSpec, model)
+        /*val reasoner:Reasoner = ReasonerRegistry.getOWLReasoner
+        //val ontModelSpec:OntModelSpec = null
+        //val ont:OntModel = ModelFactory.createOntologyModel(ontModelSpec, model)
+        val ont:InfModel = ModelFactory.createInfModel(reasoner, model)*/
 
         val queryString =
-                """
+        """
         PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
-        PREFIX rdf: <<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
         ASK
-        { ?s sbml:metaid sbml:""" + metaid + " }"
+        """ + "{ ?s sbml:metaid \"" + metaid + "\"^^<http://www.w3.org/2001/XMLSchema#string> }"
 
         val query:Query = QueryFactory.create(queryString);
-        val qe:QueryExecution = QueryExecutionFactory.create(query, ont);
-        val results:Boolean = qe.execAsk;
+        val qe:QueryExecution = QueryExecutionFactory.create(query, model);
+        val result:Boolean = qe.execAsk;
 
-        Console.println("SPARQL query \n" + queryString + "\nIs " + results)
+        Console.println("SPARQL query \n" + queryString + "\nIs " + result)
 
-        results
+        result
     }
 
     def modelMetaidExists(metaid:String):Boolean = {
@@ -206,21 +287,20 @@ class SBMLModelsDAO {
                     false
                 }
         }
-
     }
 
     def modelMetaidExists(metaid:String, model:Model):Boolean = {
         val reasoner:Reasoner = ReasonerRegistry.getOWLReasoner
-        val ontModelSpec:OntModelSpec = null
-        val ont:OntModel = ModelFactory.createOntologyModel(ontModelSpec, model)
-
+        //val ontModelSpec:OntModelSpec = null
+        //val ont:OntModel = ModelFactory.createOntologyModel(ontModelSpec, model)
+        val ont:InfModel = ModelFactory.createInfModel(reasoner, model)
         val queryString =
-                """
+        """
         PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
-        PREFIX rdf: <<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
         ASK
         { ?s rdf:type sbml:Model .
-          ?s sbml:metaid sbml:""" + metaid + " }"
+        """ +  "?s sbml:metaid \"" + metaid + "\"^^<http://www.w3.org/2001/XMLSchema#string> } "
 
         val query:Query = QueryFactory.create(queryString);
         val qe:QueryExecution = QueryExecutionFactory.create(query, ont);
@@ -247,8 +327,100 @@ class SBMLModelsDAO {
     }
 
 
-    /*def loadModel():SBMLModel
-     def updateModel(model:SBMLModel):Boolean
-     def makeComment(comment:Comment)
+    /**
+     * Saves an SBMLModel into the KnowledgeBase
+     * @param  true if
+     * @return true if
+     */
+    def updateSBMLModel(sbmlmodel:SBMLModel):Boolean = {
+        try{
+            val myModel:Model = ManipulatorWrapper.loadModelfromDB
+            updateSBMLModel(sbmlmodel, myModel)
+        } catch {
+            case ex:Exception => {
+                    Console.println("Saving model " + sbmlmodel +
+                                    "was not possible")
+                    ex.printStackTrace
+
+                    false
+                }
+        }
+    }
+
+    /**
+     * Creates a new SBML model individual in the Knowledgebase
+     * @return true if creating the new model was possible and false otherwise
+     */
+    def updateSBMLModel(sbmlmodel:SBMLModel, model:Model):Boolean = {
+        try{
+            if(  metaidExists(sbmlmodel.metaid ) ){
+                val writer = new Bean2RDF(model)
+                writer.save(sbmlmodel)
+                true
+            } else false
+        } catch {
+            case ex:thewebsemantic.NotFoundException => {
+                    Console.println("Bean of " + SBMLModel.getClass + "and " +
+                                    "id is not found")
+                    ex.printStackTrace()
+                    false
+                }
+            case ex => {
+                    Console.println(ex.toString)
+                    ex.printStackTrace()
+                    false
+                }
+        }
+    }
+
+
+    /**
+     * Deletes an SBMLModel in the KnowledgeBase
+     * @param  true if
+     * @return true if
+     */
+    def deleteSBMLModel(sbmlmodel:SBMLModel):Boolean = {
+        try{
+            val myModel:Model = ManipulatorWrapper.loadModelfromDB
+            deleteSBMLModel(sbmlmodel, myModel)
+        } catch {
+            case ex:Exception => {
+                    Console.println("Deleting model " + sbmlmodel +
+                                    "was not possible")
+                    ex.printStackTrace
+
+                    false
+                }
+        }
+    }
+
+    /**
+     * Deletes an SBMLModel in the KnowledgeBase
+     * @return true if creating the new model was possible and false otherwise
+     */
+    def deleteSBMLModel(sbmlmodel:SBMLModel, model:Model):Boolean = {
+        try{
+            if( modelMetaidExists(sbmlmodel.metaid ) ){
+                val writer = new Bean2RDF(model)
+                writer.delete(sbmlmodel)
+                //TODO delete subelements
+                true
+            } else false
+        } catch {
+            case ex:thewebsemantic.NotFoundException => {
+                    Console.println("Bean of " + SBMLModel.getClass + "and " +
+                                    "id is not found")
+                    ex.printStackTrace()
+                    false
+                }
+            case ex => {
+                    Console.println(ex.toString)
+                    ex.printStackTrace()
+                    false
+                }
+        }
+    }
+
+    /*def makeComment(comment:Comment)
      def getComments(metaid:String)*/
 }

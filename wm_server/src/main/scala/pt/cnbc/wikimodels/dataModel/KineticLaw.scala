@@ -25,8 +25,7 @@ import pt.cnbc.wikimodels.util.SBMLHandler
 
 @BeanInfo
 @Namespace("http://wikimodels.cnbc.pt/ontologies/sbml.owl#")
-class KineticLaw (
-    @Id override val metaid:String) extends Element(metaid){
+case class KineticLaw extends Element{
 
     var math:String = null
 
@@ -36,15 +35,11 @@ class KineticLaw (
     def this(metaid:String,
              notes:NodeSeq,
              math:NodeSeq) = {
-        this(metaid)
+        this()
+        this.metaid = metaid
         this.setNotesFromXML(notes)
         this.math = math.toString
     }
-
-    def this() = {
-        this(null, Nil, null)
-    }
-
 
     def this(xmlKineticLaw:Elem) = {
         this((new SBMLHandler).toStringOrNull((xmlKineticLaw \ "@metaid").text),

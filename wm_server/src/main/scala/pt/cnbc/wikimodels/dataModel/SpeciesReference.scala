@@ -22,8 +22,7 @@ import pt.cnbc.wikimodels.util.SBMLHandler
 
 @BeanInfo
 @Namespace("http://wikimodels.cnbc.pt/ontologies/sbml.owl#")
-class SpeciesReference(
-    @Id override val metaid:String) extends Element(metaid) {
+case class SpeciesReference extends Element{
     var id:String = null
     var name:String = null
 
@@ -47,17 +46,14 @@ class SpeciesReference(
              species:Species,
              stoichiometry:Double,
              stoichiometryMath:NodeSeq) = {
-        this(metaid)
+        this()
+        this.metaid = metaid
         this.setNotesFromXML(notes)
         this.id = id
         this.name = name
         this.species = species
         this.stoichiometry = stoichiometry
         this.stoichiometryMath = stoichiometryMath.toString
-    }
-
-    def this() = {
-        this(null, Nil, null, null, null,1,Nil)
     }
 
     def this(xmlSpeciesRef:Elem) = {
@@ -94,4 +90,6 @@ class SpeciesReference(
             }
         </speciesReference>
     }
+    override def theId = this.id
+    override def theName = this.name
 }

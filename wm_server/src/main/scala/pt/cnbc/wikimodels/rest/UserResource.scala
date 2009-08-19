@@ -43,7 +43,7 @@ class UserResource extends RESTResource {
     /**
      * 
      */
-    @GET    
+    @GET
     @Produces(Array("application/xml"))
     def get(@PathParam("userresource") userResource:String
     ):String = {

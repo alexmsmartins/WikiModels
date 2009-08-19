@@ -30,11 +30,11 @@ import pt.cnbc.wikimodels.exceptions.BadFormatException
  */
 @BeanInfo
 @Namespace("http://wikimodels.cnbc.pt/ontologies/sbml.owl#")
-case class Element(
+case class Element extends DataModel {
+
     @Id
     @RdfProperty("http://wikimodels.cnbc.pt/ontologies/sbml.owl#metaid")
-    metaid:String) extends DataModel {
-
+    var metaid:String = null
 
     //these two lines have to be repeated in any descendant of this class
     //since annotations are not inherited
@@ -46,22 +46,25 @@ case class Element(
     }
 
 
-    //metaid stays mandatory for now
-    if(metaid == null){
-        //Note: It might be deleted from here to make the data model
-        //Note: independent frm the data validation -> we 'll see.
-        throw new BadFormatException(
-            "Element constructor should never receive a null metaid.")
-    }
+
 
     def this(xmlModel:Elem) = {
-        this((xmlModel \ "@metaid").text)
+        this()
+        this.metaid = (xmlModel \ "@metaid").text
         this.setNotesFromXML(xmlModel \ "notes")
+        //metaid stays mandatory for now
+        if(metaid == null){
+            //Note: It might be deleted from here to make the data model
+            //Note: independent frm the data validation -> we 'll see.
+            throw new BadFormatException(
+                "Element constructor should never receive a null metaid.")
+        }
     }
-
 
     override def toXML:Elem =
     throw new pt.cnbc.wikimodels.exceptions
     .NotImplementedException("toXML in class " + this.getClass +
                              "is not implemente")
+    def theId:String = null
+    def theName:String = null
 }

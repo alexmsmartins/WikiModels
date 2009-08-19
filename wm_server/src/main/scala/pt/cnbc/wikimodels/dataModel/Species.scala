@@ -22,8 +22,7 @@ import pt.cnbc.wikimodels.util.SBMLHandler
 
 @BeanInfo
 @Namespace("http://wikimodels.cnbc.pt/ontologies/sbml.owl#")
-case class Species(
-    @Id override val metaid:String) extends Element(metaid){
+case class Species extends Element{
 
     var id:String = null
     var name:String = null
@@ -51,7 +50,8 @@ case class Species(
              hasOnlySubstanceUnits:Boolean,   //it is not included yet.
              boundaryCondition:Boolean,
              constant:Boolean) = {
-        this(metaid)
+        this()
+        this.metaid = metaid
         this.setNotesFromXML(notes)
         this.id = id
         this.name = name
@@ -64,12 +64,6 @@ case class Species(
         this.boundaryCondition = boundaryCondition
         this.constant = constant
     }
-
-    def this() = {
-        this(null, Nil, null, null, null, null, null, null, null,
-             false, false, false)
-    }
-
 
     def this(xmlSpecies:Elem) = {
         this((new SBMLHandler).toStringOrNull((xmlSpecies \ "@metaid").text),
@@ -111,4 +105,6 @@ case class Species(
             {new SBMLHandler().genNotesFromHTML(notes)}
         </species>
     }
+    override def theId = this.id
+    override def theName = this.name
 }

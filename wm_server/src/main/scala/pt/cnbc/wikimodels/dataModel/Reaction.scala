@@ -24,8 +24,7 @@ import pt.cnbc.wikimodels.util.SBMLHandler
 
 @BeanInfo
 @Namespace("http://wikimodels.cnbc.pt/ontologies/sbml.owl#")
-case class Reaction(
-    @Id override val metaid:String) extends Element(metaid){
+case class Reaction extends Element{
 
     var id:String = null
     var name:String = null
@@ -46,17 +45,14 @@ case class Reaction(
              name:String,
              reversible:Boolean,
              fast:boolean) = {
-        this(metaid)
+        this()
+        this.metaid = metaid
         this.setNotesFromXML(notes)
         this.id = id
         this.name = name
         this.reversible = reversible
         this.fast = fast
      }
-
-    def this() = {
-        this(null, Nil, null, null, true, false)
-    }
 
     def this(xmlReaction:Elem) = {
         this((new SBMLHandler).toStringOrNull((xmlReaction \ "@metaid").text),
@@ -88,4 +84,6 @@ case class Reaction(
             {if(this.kineticLaw != null) this.kineticLaw.toXML else null.asInstanceOf[Elem]}
         </reaction>
     }
+    override def theId = this.id
+    override def theName = this.name
 }

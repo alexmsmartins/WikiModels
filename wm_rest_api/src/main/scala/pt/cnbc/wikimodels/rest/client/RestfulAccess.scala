@@ -72,7 +72,7 @@ class RestfulAccess(val host:String,
         this(host, port, contextRoot,"anonymous","anonymous", startFunc)
     }
     
-    def getRequest(url:String) = {
+    def getRequest(url:String):Elem = {
         log.debug("Starting GET request to " + url)
         val uri = new URI("http://" + host + ":" + port +
                           contextRoot + url)
@@ -83,29 +83,35 @@ class RestfulAccess(val host:String,
         log.debug( response.getStatusLine())
         log.debug( response.toString)
         log.debug( "======================" )
-        val xmldoc = XML.load(response.getEntity.getContent)
-
-        log.debug( xmldoc )
-        log.debug( "======================" )
+        var xmldoc:Elem = null
+        if( lastStatusLine.getStatusCode == 200  ){
+            log.debug( xmldoc )
+            log.debug( "======================" )
+            xmldoc = XML.load(response.getEntity.getContent)
+        }
         xmldoc
+
     }
 
-    def postRequest(url:String, content:Elem) = {
+    def postRequest(url:String, content:Elem):URI = {
         log.debug("Starting POST request to " + url)
         val uri = new URI("http://" + host + ":" + port +
                           contextRoot + url)
-        val meth = new HttpPut(uri)
+        val meth = new HttpPost(uri)
         this.setRequestEntity(content, meth)
         val response:HttpResponse  = httpclient.execute(meth)
         log.debug( "==========After response============" )
         lastStatusLine = response.getStatusLine
         log.debug( response.getStatusLine())
         log.debug( response.toString)
-        val xmldoc = XML.load(response.getEntity.getContent)
-        Console.println( xmldoc )
+        val is = response.getEntity.getContent
+
+        val uriFinal = new URI( response.getFirstHeader("Location").getValue )
         log.debug( "======================" )
-        ""
+        uriFinal
     }
+
+
     def putRequest(url:String, content:Elem) = {
         log.debug("Starting PUT request to " + url)
         val uri = new URI("http://" + host + ":" + port +

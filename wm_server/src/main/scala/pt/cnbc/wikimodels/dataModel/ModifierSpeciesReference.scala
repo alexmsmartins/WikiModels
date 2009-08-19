@@ -22,8 +22,7 @@ import pt.cnbc.wikimodels.util.SBMLHandler
 
 @BeanInfo
 @Namespace("http://wikimodels.cnbc.pt/ontologies/sbml.owl#")
-class ModifierSpeciesReference(
-        @Id override val metaid:String) extends Element(metaid) {
+case class ModifierSpeciesReference extends Element{
         var id:String = null
         var name:String = null
         
@@ -34,16 +33,13 @@ class ModifierSpeciesReference(
              id:String,
              name:String,
              species:Species) = {
-        this(metaid)
+        this()
+        this.metaid = metaid
         this.setNotesFromXML(notes)
         this.id = id
         this.name = name
         this.species = species
      }
-
-    def this() = {
-        this(null, Nil, null, null, null)
-    }
 
     def this(xmlReaction:Elem) = {
         this((new SBMLHandler).toStringOrNull((xmlReaction \ "@metaid").text),
@@ -60,4 +56,6 @@ class ModifierSpeciesReference(
             {new SBMLHandler().genNotesFromHTML(notes)}
         </modifierSpeciesReference>
     }
+    override def theId = this.id
+    override def theName = this.name
 }
