@@ -42,7 +42,7 @@ object App {
         var testNumber = 0
         try {
             setUp
-            log.info("======================" )
+            /*log.info("======================" )
             testNumber+=1
             log.info("TEST " + testNumber + " - Login" )
             loginTest
@@ -71,8 +71,18 @@ object App {
             testNumber+=1
             log.info("TEST " + testNumber + " - CreateAnotherModel" )
             createAnotherModelTest
+            log.info("SUCCESS" )*/
+            log.info("======================" )
+            testNumber+=1
+            log.info("TEST " + testNumber + " - BrowseModel" )
+            browseModelTest
             log.info("SUCCESS" )
             log.info("======================" )
+            testNumber+=1
+            log.info("TEST " + testNumber + " - BrowseNonExistantModel" )
+            browseNonExistantModelTest
+            log.info("SUCCESS" )
+            /*log.info("======================" )
             testNumber+=1
             log.info("TEST " + testNumber + " - EditModel" )
             editModelTest
@@ -81,7 +91,7 @@ object App {
             testNumber+=1
             log.info("TEST " + testNumber + " - DeleteModel2" )
             deleteModelTest
-            log.info("SUCCESS" )
+            log.info("SUCCESS" )*/
             log.info("======================" )
             log.info("INTEGRATION TESTING SUCCEDED")
             //basicAuthentication
@@ -170,8 +180,8 @@ object App {
     @Test
     def deleteModelTest = {
         ra.deleteRequest("/model/metaid_0000002")
-        if(ra.getStatusCode == 200) {
-        } else throw new Exception("Wrong StatusCode. Should be 200 Ok")
+        if(ra.getStatusCode == 204) {
+        } else throw new Exception("Wrong StatusCode. Should be 200 No Content")
     }
 
     @Test
@@ -186,7 +196,6 @@ object App {
         ra.putRequest("/model/metaid_0000002", model)
         if(ra.getStatusCode == 200) {
         } else throw new Exception("Wrong StatusCode. Should be 200 Not Found")
-
     }
 
     @Test
@@ -206,7 +215,7 @@ object App {
 
     @Test
     def browseModelTest = {
-        val xml = ra.getRequest("/model/metaid_0000002")
+        val xml = ra.getRequest("/model/metaid_00000020")
         if(ra.getStatusCode == 200) {
             assertTrue( (xml \ "notes").size > 0 )
         } else throw new Exception("Wrong StatusCode. Should be 200 Not Found")

@@ -66,17 +66,17 @@ case class Reaction extends Element{
     override def toXML:Elem = {
         <reaction metaid={metaid} id={id} name={name} >
             {new SBMLHandler().genNotesFromHTML(notes)}
-            {if(listOfReactants != null)
+            {if(listOfReactants != null && listOfReactants.size != 0)
             <listOfReactants>
                     {listOfReactants.asScala.map(i => i.toXML)}
              </listOfReactants> else scala.xml.Null
             }
-            {if(listOfProducts != null)
+            {if(listOfProducts != null && listOfProducts.size != 0)
             <listOfProducts>
                     {listOfProducts.asScala.map(i => i.toXML)}
              </listOfProducts> else scala.xml.Null
             }
-            {if(listOfModifiers != null)
+            {if(listOfModifiers != null && listOfModifiers != 0)
             <listOfModifiers>
                     {listOfModifiers.asScala.map(i => i.toXML)}
              </listOfModifiers> else scala.xml.Null

@@ -58,7 +58,7 @@ class SBMLModelResource extends RESTResource {
                 val sbmlModel = dao.loadSBMLModel(sbmlModelResource)
                 if(sbmlModel != null &&
                    sbmlModel.metaid == sbmlModelResource){
-                    sbmlModel.toXML.toString
+                   sbmlModel.toXML.toString
                 } else {
                     throw new WebApplicationException(Response.Status.NOT_FOUND)
                 }

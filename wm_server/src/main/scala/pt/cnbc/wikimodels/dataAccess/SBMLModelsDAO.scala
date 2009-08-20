@@ -44,30 +44,11 @@ class SBMLModelsDAO {
      */
     var  kb:Model = null
 
-    protected def loadSBMLModel(sbmlmodelID:String, model:Model):SBMLModel = {
-        new SBMLModel()
-    }
 
-    def loadSBMLModel(sbmlmodelID:String):SBMLModel = {
-        val myModel:Model = ManipulatorWrapper.loadModelfromDB
-        loadSBMLModel(sbmlmodelID, myModel)
-    }
-
-    def loadUser(modelMetaid:String):SBMLModel = {
-        var ret:SBMLModel = null
+    def loadSBMLModel(modelMetaid:String):SBMLModel = {
         try{
-            var myModel:Model = ManipulatorWrapper.loadModelfromDB
-            Console.print("Number of individuals in loaded model is " + myModel.size)
-
-            Console.print("After loading Jena Model")
-            var reader = new RDF2Bean[SBMLModel](myModel)
-            Console.print("After creating a new RDF2Bean")
-            val l:SBMLModel
-            = reader.load( new SBMLModel().getClass, modelMetaid  )
-                    .asInstanceOf[SBMLModel]
-            //Console.println("Found " + l.size + " SBMLModels with metaid " + modelMetaid)
-            ret = l
-            return ret
+            val myModel:Model = ManipulatorWrapper.loadModelfromDB
+            loadSBMLModel(modelMetaid, myModel)
         } catch {
             case ex:thewebsemantic.NotFoundException =>
                 Console.println("Bean of " + SBMLModel.getClass + "and " +
@@ -78,6 +59,21 @@ class SBMLModelsDAO {
                 ex.printStackTrace()
                 null
         }
+    }
+
+    def loadSBMLModel(modelMetaid:String, model:Model):SBMLModel = {
+        var ret:SBMLModel = null
+
+        Console.print("After loading Jena Model")
+        var reader = new RDF2Bean[SBMLModel](model)
+        Console.print("After creating a new RDF2Bean")
+        val l
+        = reader.load( new SBMLModel().getClass, modelMetaid  )
+                .asInstanceOf[java.util.Collection[SBMLModel]]
+        Console.println("Found " + l.size + " SBMLModels with metaid " + modelMetaid)
+        if(l.size > 0)
+            l.iterator.next
+        else null
     }
 
     def loadSBMLModel():java.util.Collection[SBMLModel] = {

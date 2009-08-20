@@ -52,7 +52,7 @@ case class KineticLaw extends Element{
             <!--order is important according to SBML Specifications-->
             {new SBMLHandler().genNotesFromHTML(notes)}
             {XML.loadString(this.math)}
-            {if(listOfParameters != null)
+            {if(listOfParameters != null && listOfParameters.size != 0)
             <listOfParameters>
                     {listOfParameters.asScala.map(i => i.toXML)}
              </listOfParameters> else scala.xml.Null
