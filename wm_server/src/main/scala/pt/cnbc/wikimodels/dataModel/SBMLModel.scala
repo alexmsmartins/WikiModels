@@ -49,12 +49,17 @@ case class SBMLModel extends Element{
     //var listOfUnitDefinitions:List[ÛnitDefinition] = List()
     //var listOfCompartmentTypes:List[CompartmentType] = List()
     //var listOfSpeciesTypes:List[SpeciesType] = List()
+    @RdfProperty("http://wikimodels.cnbc.pt/ontologies/sbml.owl#hasPart")
     var listOfCompartments:JCollection[Compartment] = null
+    @RdfProperty("http://wikimodels.cnbc.pt/ontologies/sbml.owl#hasPart")
     var listOfSpecies:JCollection[Species] = null
-    var listOfParameters:JCollection[Parameter] = null
+    @RdfProperty("http://wikimodels.cnbc.pt/ontologies/sbml.owl#hasParameter")
+    var listOfParameters:JCollection[SBMLParameter] = null
     //var listOfInitialAssignments:List[InitialAssignment] = List()
     //var listOfRules:List[Rule] = List()
+    @RdfProperty("http://wikimodels.cnbc.pt/ontologies/sbml.owl#hasPart")
     var listOfConstraints:JCollection[Constraint] = null
+    @RdfProperty("http://wikimodels.cnbc.pt/ontologies/sbml.owl#hasPart")
     var listOfReactions:JCollection[Reaction] = null
     //var listOfEvents:List[Event] = List()
 

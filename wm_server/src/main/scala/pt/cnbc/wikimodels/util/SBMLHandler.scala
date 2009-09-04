@@ -103,6 +103,7 @@ class SBMLHandler {
         }
 
     def addNamespaceToXML(ns:NodeSeq, namespace:String):NodeSeq = {
+        if(ns != Nil)
         ns.map(i => {
                 new Elem(null,
                          i.label,
@@ -114,6 +115,7 @@ class SBMLHandler {
             }
         ).filter(_.label != "#PCDATA")
         //the filter is an hack to make <#PCDATA go away
+        else Nil
     }
 
     def addNamespaceToXHTML(nodeseq:NodeSeq):NodeSeq =

@@ -29,14 +29,15 @@ import javax.ws.rs.core.UriInfo
 import scala.collection.mutable.Map
 import scala.collection.mutable.HashMap
 
-import pt.cnbc.wikimodels.dataModel.SBMLModel
-import pt.cnbc.wikimodels.dataAccess.SBMLModelsDAO
+import pt.cnbc.wikimodels.dataModel.SBMLParameter
+import pt.cnbc.wikimodels.dataModel.Reaction
+import pt.cnbc.wikimodels.dataAccess.ParametersDAO
 import pt.cnbc.wikimodels.exceptions.BadFormatException
 import pt.cnbc.wikimodels.security.SecurityContextFactory
 
 
-class ParameterResource extends RESTResource {
-
+class ParameterResource(sbmlModelResource:String) extends RESTResource {
+    
     @Context
     var security:SecurityContext = null
     @Context
@@ -44,18 +45,19 @@ class ParameterResource extends RESTResource {
     val secContext = SecurityContextFactory.createSecurityContext
 
     @GET
-    @Path("{parameterid}")//: [a-zA-Z][a-zA-Z_0-9]}")
     @Produces(Array("application/xml"))
+    @Path("{parameterid}")//: [a-zA-Z][a-zA-Z_0-9]}")
     def get(@PathParam("parameterid") parameterResource:String
     ):String = {
         val username:String = security.getUserPrincipal().getName()
 
         Console.print("GET verb was used in parameter " + parameterResource)
         if(secContext.isAuthorizedTo(username,
-                                     "GET", "parameter/" + parameterResource ) ){
+                                     "GET", "model/" + sbmlModelResource +
+                                     "/parameter/" + parameterResource ) ){
             try{
-                val dao = new SBMLModelsDAO
-                val parameter = dao.loadSBMLModel(parameterResource)
+                val dao = new ParametersDAO
+                val parameter = dao.loadParameter(parameterResource)
                 if(parameter != null &&
                    parameter.metaid == parameterResource){
                     parameter.toXML.toString
@@ -88,14 +90,14 @@ class ParameterResource extends RESTResource {
         Console.print("POST verb was used in user " + username)
 
         var ret = ""
-        //TODO TURN THE POST scheleton in SBMLModelResource into
         if(secContext.isAuthorizedTo(username,
-                                     "POST", "parameter/") ){
+                                     "POST", "model/" + sbmlModelResource +
+                                     "/parameter/" ) ){
             val parameterMetaId =
             try{
-                val dao = new SBMLModelsDAO
-                dao.trytoCreateSBMLModel(
-                    new SBMLModel(
+                val dao = new ParametersDAO
+                dao.trytoCreateParameterInModel(sbmlModelResource,
+                    new SBMLParameter(
                         scala.xml.XML.load(requestContent)))
             } catch {
                 case e:Exception => {
@@ -141,14 +143,15 @@ class ParameterResource extends RESTResource {
         Console.print("--------------------------------------")
         var ret = ""
         if(secContext.isAuthorizedTo(username,
-                                     "PUT", "parameter/") ){
+                                     "PUT", "model/" + sbmlModelResource +
+                                     "/parameter/" + parameterResource ) ){
             try{
-                val dao = new SBMLModelsDAO
+                val dao = new ParametersDAO
                 //XXX if there are performance problems in this part replace:
                 // - requstcontent:String -> requastcontont:InputStream
                 // - scala.xml.XML.loadString -> scala.xml.XML.load
-                if( dao.updateSBMLModel(
-                        new SBMLModel(
+                if( dao.updateParameter(
+                        new SBMLParameter(
                             scala.xml.XML.loadString(requestContent))) ){
                     Response.ok.build
                 } else {
@@ -173,23 +176,25 @@ class ParameterResource extends RESTResource {
     @DELETE
     @Path("{parameterid}")//: [a-zA-Z][a-zA-Z_0-9]}")
     def delete(@PathParam("parameterid") parameterResource:String
-    ) = {
+    ):Unit = {
         val username = security.getUserPrincipal().getName()
-        Console.print("DELETE verb was used in user " + username)
+        Console.print("DELETE verb was used with user " + username)
+        Console.print("DELETE verb was used with parameterid " + parameterResource)
 
         var ret = ""
         if(secContext.isAuthorizedTo(username,
-                                     "DELETE", "parameter/") ){
+                                     "DELETE", "model/" + sbmlModelResource +
+                                     "/parameter/" + parameterResource ) ){
             try{
-                val dao = new SBMLModelsDAO
-                
-                if(dao.deleteSBMLModel(
-                        new SBMLModel(parameterResource, Nil, null , null))){
+                val dao = new ParametersDAO()
+
+                if(dao.deleteParameter(
+                        new SBMLParameter(
+                            parameterResource, Nil, null, null, 0.0, null, true)) ){
                 } else {
                     throw new WebApplicationException(
                         Response.Status.NOT_FOUND)
-                }
-                
+                }                
             } catch {
                 case e:WebApplicationException => throw e
                 case e:Exception => {

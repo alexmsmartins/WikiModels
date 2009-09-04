@@ -88,7 +88,6 @@ class SBMLModelResource extends RESTResource {
         Console.print("POST verb was used in user " + username)
 
         var ret = ""
-        //TODO TURN THE POST scheleton in SBMLModelResource into
         if(secContext.isAuthorizedTo(username,
                                      "POST", "model/") ){
             val modelMetaId =
@@ -173,7 +172,7 @@ class SBMLModelResource extends RESTResource {
     @DELETE
     @Path("{modelid}")//: [a-zA-Z][a-zA-Z_0-9]}")
     def delete(@PathParam("modelid") sbmlModelResource:String
-    ) = {
+    ):Unit = {
         val username = security.getUserPrincipal().getName()
         Console.print("DELETE verb was used in user " + username)
 
@@ -182,7 +181,6 @@ class SBMLModelResource extends RESTResource {
                                      "DELETE", "model/") ){
             try{
                 val dao = new SBMLModelsDAO
-                
                 if(dao.deleteSBMLModel(
                         new SBMLModel(sbmlModelResource, Nil, null , null))){
                 } else {
@@ -207,44 +205,46 @@ class SBMLModelResource extends RESTResource {
 
 
     /*@Path("{modelid}/compartment/")
-     def compartmentResource() = {
+     def compartmentResource(@PathParam("modelid") sbmlModelResource:String) = {
      val username = security.getUserPrincipal().getName()
      Console.print("compartment resource was used in user " + username)
      }
 
      @Path("{modelid}/constraint/")
-     def constraintResource() = {
+     def constraintResource(@PathParam("modelid") sbmlModelResource:String) = {
      val username = security.getUserPrincipal().getName()
      Console.print("constraint resource was used in user " + username)
      }
 
      @Path("{modelid}/functionDefinition/")
-     def functionDefinitionResource() = {
+     def functionDefinitionResource(@PathParam("modelid") sbmlModelResource:String) = {
      val username = security.getUserPrincipal().getName()
      Console.print("functionDefinition resource was used in user " + username)
      }*/
 
      @Path("{modelid}/parameter/")
-     def parameterResource() = {
+     def parameterResource(@PathParam("modelid") sbmlModelResource:String):ParameterResource = {
         val username = security.getUserPrincipal().getName()
         Console.print("parameter resource was used in user " + username)
-        new ParameterResource()
+        val resource:ParameterResource = new ParameterResource(sbmlModelResource)
+        resource.security = this.security
+        resource
      }
 
      /*@Path("{modelid}/reaction/")
-     def reactionResource() = {
+     def reactionResource(@PathParam("modelid") sbmlModelResource:String) = {
      val username = security.getUserPrincipal().getName()
      Console.print("reaction resource was used in user " + username)
      }
 
      @Path("{modelid}/species/")
-     def speciesResource() = {
+     def speciesResource(@PathParam("modelid") sbmlModelResource:String) = {
      val username = security.getUserPrincipal().getName()
      Console.print("species resource was used in user " + username)
      }
 
      @Path("{modelid}/comments/")
-     def commentsResource() = {
+     def commentsResource(@PathParam("modelid") sbmlModelResource:String) = {
      val username = security.getUserPrincipal().getName()
      Console.print("comments resource was used in user " + username)
      new CommentsResource()

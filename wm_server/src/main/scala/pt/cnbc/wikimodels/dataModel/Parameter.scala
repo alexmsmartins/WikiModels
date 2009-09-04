@@ -8,24 +8,28 @@
 
 package pt.cnbc.wikimodels.dataModel
 
-import pt.cnbc.wikimodels.util.SBMLHandler
+import scala.reflect.BeanInfo
+import scala.xml.Elem
+import scala.xml.Group
 import scala.xml.Node
 import scala.xml.NodeSeq
 
 import thewebsemantic.Id
 import thewebsemantic.Namespace
 import thewebsemantic.RdfProperty
-import scala.reflect.BeanInfo
-import scala.xml.Group
-import scala.xml.Elem
+import thewebsemantic.RdfType
+
+import pt.cnbc.wikimodels.util.SBMLHandler
 
 @BeanInfo
 @Namespace("http://wikimodels.cnbc.pt/ontologies/sbml.owl#")
-case class Parameter extends Element{
-
+//@RdfType("http://wikimodels.cnbc.pt/ontologies/sbml.owl#Parameter")
+case class SBMLParameter extends Element{
+    //this s called SBMMLPArameter because, somehow, Jersey s
     var id:String = null
     var name:String = null
-
+    this.notes = null
+    
     /**
      * The optional attribute value determines the value (of type double)
      * assigned to the identifier. A missing value implies that the value either
@@ -53,13 +57,13 @@ case class Parameter extends Element{
              units:String,
              constant:Boolean) = {
         this()
-        this.metaid = metaid
+        /*this.metaid = metaid
         this.setNotesFromXML(notes)
         this.id = id
         this.name = name
         this.value = value
         this.units = units
-        this.constant = constant
+        this.constant = constant*/
     }
 
     def this(xmlParameter:Elem) = {
