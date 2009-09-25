@@ -32,10 +32,10 @@ class HomePage {
         }
         case _ => {
             <div id="login">
-                <lift:Submission.form form="post" >
+                <lift:LogUser.form form="post" >
                     <h1>Username <entry:username /> Password <entry:password /> <entry:submit /></h1>
                     <h1><a title="!Under Construction!" onclick="return false" href="createUser.html">Create User</a></h1>
-                </lift:Submission.form>
+                </lift:LogUser.form>
             </div>
         }
     }
@@ -45,20 +45,30 @@ class HomePage {
             <div id='content'>
                 <h1>Welcome to WikiModels Webpage</h1>
                 <hr />
-                <p>&nbsp;&nbsp;&nbsp;Welcome <b>{user}</b> to the WikiModels
-            Webpage. Please, feel free to navigate through kinetic models and join
-            this great biology community to create your own models or participate in
-            a development team.</p>
+                <p>&nbsp;&nbsp;&nbsp;Welcome <b>{user}</b> to WikiModels, a web-based platform
+                    for collaborative development of kinetic models of biochemical processes.
+Please feel free to browse and comment the available models.</p>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
             </div>
         }
         case _ => {
             <div id='content'>
                 <h1>Welcome to WikiModels Webpage</h1>
                 <hr />
-                <p>&nbsp;&nbsp;&nbsp;Welcome <b>visitor</b> to the WikiModels
-            Webpage. Please, feel free to navigate through kinetic models and join
-            this great biology community to create your own models or participate in
-            a development team.</p>
+                <p>&nbsp;&nbsp;&nbsp;Welcome <b>visitor</b> to WikiModels, a web-based platform
+                    for collaborative development of kinetic models of biochemical processes.
+Please feel free to browse and comment the available models.</p>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
             </div>
         }
     }

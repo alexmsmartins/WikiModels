@@ -2,36 +2,20 @@
     <head>
         <!--<script src="../classpath/js/wymeditor/wymeditor/jquery.wymeditor.pack.js" type="text/javascript" />-->
         <script type="text/javascript">
-      
             window.onload = function() {
                 var oFCKeditor01 = new FCKeditor( 'descriptionArea' );
                 oFCKeditor01.BasePath = '../classpath/js/fckeditor/' ;
-                oFCKeditor01.Config["CustomConfigurationsPath"] = "/classpath/js/functions.js";
+                oFCKeditor01.AutoDetectLanguage = false ;
+                oFCKeditor01.DefaultLanguage = "en-uk" ;
+                /*oFCKeditor01.ToolbarSets["Default"] = [
+                ['Cut','Copy','Paste','PasteText','PasteWord'],['Undo','Redo','-','Find','Replace'],
+                ['Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'],
+                ['OrderedList','UnorderedList','-','Outdent','Indent','Blockquote'],
+                ['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],['Link','Unlink'],
+                ['Image','Table','Rule','SpecialChar'],['FontSize','TextColor','BGColor'],['Source','FitWindow']
+                ] ;*/
                 oFCKeditor01.ReplaceTextarea();
             };
-                
-                /*var oFCKeditor02 = new FCKeditor( 'functionDefinitionArea' );
-                oFCKeditor02.BasePath = '../classpath/js/fckeditor/' ;
-                oFCKeditor02.ReplaceTextarea() ;
-                var oFCKeditor03 = new FCKeditor( 'compartmentArea' );
-                oFCKeditor03.BasePath = '../classpath/js/fckeditor/' ;
-                oFCKeditor03.ReplaceTextarea() ;
-                var oFCKeditor04 = new FCKeditor( 'speciesArea' );
-                oFCKeditor04.BasePath = '../classpath/js/fckeditor/' ;
-                oFCKeditor04.ReplaceTextarea() ;
-                var oFCKeditor05 = new FCKeditor( 'parameterArea' );
-                oFCKeditor05.BasePath = '../classpath/js/fckeditor/' ;
-                oFCKeditor05.ReplaceTextarea() ;
-                var oFCKeditor06 = new FCKeditor( 'initialAssignmentArea' );
-                oFCKeditor06.BasePath = '../classpath/js/fckeditor/' ;
-                oFCKeditor06.ReplaceTextarea() ;
-                var oFCKeditor07 = new FCKeditor( 'constraintArea' );
-                oFCKeditor07.BasePath = '../classpath/js/fckeditor/' ;
-                oFCKeditor07.ReplaceTextarea() ;
-                var oFCKeditor08 = new FCKeditor( 'reactionArea' );
-                oFCKeditor08.BasePath = '../classpath/js/fckeditor/' ;
-                oFCKeditor08.ReplaceTextarea() ;*/
-
         </script>
     </head>
     <lift:HomePage.logInfo>
@@ -49,19 +33,15 @@
     <div id="content">
         <h1>Create Model</h1>
         <hr />
-        <lift:Submission.createDescription form="post" id_msgs="messages" >
+        <lift:CreateModel.createDescription form="post" name="createForm" id_msgs="messages" >
             <h4><span id="required_field">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* required fields</span></h4><br />
             <lift:ModelTree.render />
             <ul id="model_tree" class="treeview-gray">
-                <li><div id="messages"></div></li>
-                <li><createDescription:text>
-                    <text:value/>
-                </createDescription:text></li>
-                <li><h3>ID of the model: <span id="required_field">*</span>
-                <createDescription:id /></h3>
-                <br /></li>
-                <li><h3>Name of the model: <createDescription:name /></h3>
-                <br /></li>
+                <li><h3>Model ID: <span id="required_field">*</span><div id="messages"></div></h3><br /></li>
+                <li><h3>Name of the model:
+                <createDescription:name>
+                    <text:model_id/>
+                </createDescription:name></h3><br /></li>
                 <li><span><h3>Description of the model:</h3></span>
                     <br />
                     <ul>
@@ -114,6 +94,6 @@
             <br />
             <hr />
             <h3><createDescription:save /></h3>
-        </lift:Submission.createDescription>
+        </lift:CreateModel.createDescription>
     </div>
 </lift:surround>
