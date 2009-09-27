@@ -1,0 +1,19 @@
+<lift:surround with="default" at="content">
+    <lift:HomePage.logInfo>
+        <div id="login">
+        	<h1><lift:HomePage.profile /></h1>
+            <h1><lift:Menu.item name="Logout" /></h1>
+        </div>
+    </lift:HomePage.logInfo>
+    <div id="error_msg">
+        <lift:snippet type="msgs">
+            <lift:error_msg></lift:error_msg>
+            <lift:error_class>errorBox</lift:error_class>
+        </lift:snippet>
+    </div>
+    <div id='content'>
+        <h1>Tags</h1>
+        <hr />
+        <p align="center"><img src="/classpath/images/under-construction.jpg" width="300px" height="225px" /></p>
+    </div>
+</lift:surround>
