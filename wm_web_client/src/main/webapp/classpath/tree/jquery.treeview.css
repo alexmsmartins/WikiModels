@@ -77,7 +77,7 @@
 .treeview-gray li { background: transparent; }
 .treeview-gray li.collapsable, .treeview-gray li.expandable { background: url(../tree/images/treeview-gray-line.gif) 0 0 no-repeat; background-position:0 -176px; }
 
-.treeview-gray .hover { color:teal; cursor: pointer; }
+.treeview-gray .hover { color:white; cursor: pointer; }
 
 .treeview-gray .expandable-hitarea { background-position: -80px -3px; }
 

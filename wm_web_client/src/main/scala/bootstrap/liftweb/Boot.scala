@@ -49,7 +49,7 @@ class Boot {
         Menu(Loc("comments", List("models","new_comment"), "Comment", Hidden)) ::
         Menu(Loc("help", List("help","index"), "Help"),
             Menu(Loc("helpMath", List("help","helpMath"), "Help Math", Hidden))) ::
-        Menu(Loc("administrator", List("administrator","index"), "Administrator", loggedIn)) ::
+        Menu(Loc("administrator", List("administrator","index"), "Administrator", Hidden, loggedIn)) ::
         User.sitemap
         
         // Build SiteMap

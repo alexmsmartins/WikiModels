@@ -57,7 +57,7 @@
     </div>
     <div id="content">
         <lift:ModelRead.browseModel>
-        <h1>Model name: <modelInformation:model_name /></h1>
+        <h1><b>Model name: </b><modelInformation:model_name /></h1>
         <hr />
         <!--<p><a id="applettop"/>
 <object id="myinputapplet" classid="java:MathTransApplet.class" type="application/x-java-applet"
@@ -194,7 +194,7 @@ Rendered:<br/>
                 <ul id="model_tree_math" class="treeview-gray">
                 <li><span><h2>&nbsp;&nbsp;&nbsp;Reactions</h2></span>
                 <ul>
-                    <li class="closed"><span>
+                    <li class="open"><span>
                         <table class="browseModelTable" id="modelTable_Overview">
                             <thead><h6>Total number of reactions - <modelInformation:numberReactions /></h6></thead>
                         </table>
@@ -207,10 +207,9 @@ Rendered:<br/>
                 </li>
                 <li><span><h2>&nbsp;&nbsp;&nbsp;Functions</h2></span>
                 <ul>
-                        <li class="closed">
+                        <li class="open">
                 <table class="browseModelTable" id="modelTable_Overview">
                     <thead><h6>Total number of functions - <modelInformation:numberFunctions /></h6></thead>
-                    <tbody></tbody>
                 </table>
                 <table class="browseModelTable" id="modelTable_Overview">
                     <tbody>
@@ -227,7 +226,7 @@ Rendered:<br/>
                 <ul id="model_tree_physical" class="treeview-gray">
                 <li><span><h2>&nbsp;&nbsp;&nbsp;Compartment</h2></span>
                 <ul>
-                    <li class="closed"><span>
+                    <li class="open"><span>
                         <table class="browseModelTable" id="modelTable_Overview">
                             <tbody>
                                 <modelInformation:compartmentData />
@@ -238,7 +237,7 @@ Rendered:<br/>
                 </li>
                 <li><span><h2>&nbsp;&nbsp;&nbsp;Species</h2></span>
                 <ul>
-                    <li class="closed">
+                    <li class="open">
                         <table class="browseModelTable" id="modelTable_Overview">
                             <tbody>
                                 <modelInformation:speciesData />
@@ -254,7 +253,7 @@ Rendered:<br/>
                 <ul id="model_tree_parameter" class="treeview-gray">
                 <li><span><h2>&nbsp;&nbsp;&nbsp;Global Parameters</h2></span>
                 <ul>
-                    <li class="closed"><span>
+                    <li class="open"><span>
                         <table class="browseModelTable" id="modelTable_Overview">
                             <tbody>
                                 <modelInformation:parametersData />

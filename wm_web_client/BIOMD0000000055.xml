@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<sbml xmlns="http://www.sbml.org/sbml/level2/version4" metaid="metaid_0000001" level="2" version="4">
+<sbml xmlns="http://www.sbml.org/sbml/level2/version3" metaid="metaid_0000001" level="2" version="3">
   <model metaid="metaid_0000002" id="Locke2005_CircadianClock" name="Locke2005_CircClock">
     <notes>
-      <body>
-        <p>This model is automatically generated from the Model BIOMD0000000055 by using <a href="http://sbml.org/Software/libSBML" target="_blank">libsbml</a>. According to the <a href="http://www.ebi.ac.uk/biomodels/legal.html">terms of use</a>, this generated model is not related with Model BIOMD0000000055 any more. <br/>To retrieve the curated model, please visit <a href="http://www.ebi.ac.uk/biomodels/">BioModels Database</a>.</p>
-      </body>
+      
+        <p>This model is automatically generated from the Model BIOMD0000000055 by using <a href="http://sbml.org/Software/libSBML" target="_blank">libsbml</a>. According to the <a href="http://www.ebi.ac.uk/biomodels//legal.html">terms of use</a>, this generated model is not related with Model BIOMD0000000055 any more. <br/>To retrieve the curated model, please visit <a href="http://www.ebi.ac.uk/biomodels/">BioModels Database</a>.</p>
+      
     </notes>
     <annotation>
       <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:vCard="http://www.w3.org/2001/vcard-rdf/3.0#" xmlns:bqbiol="http://biomodels.net/biology-qualifiers/" xmlns:bqmodel="http://biomodels.net/model-qualifiers/">
         <rdf:Description rdf:about="#metaid_0000002">
-          <dc:creator>
+          <dc:creator rdf:parseType="Resource">
             <rdf:Bag>
               <rdf:li rdf:parseType="Resource">
                 <vCard:N rdf:parseType="Resource">
@@ -17,7 +17,7 @@
                   <vCard:Given>Harish</vCard:Given>
                 </vCard:N>
                 <vCard:EMAIL>hdharuri@cds.caltech.edu</vCard:EMAIL>
-                <vCard:ORG rdf:parseType="Resource">
+                <vCard:ORG>
                   <vCard:Orgname>California Institute of Technology</vCard:Orgname>
                 </vCard:ORG>
               </rdf:li>
@@ -27,7 +27,7 @@
                   <vCard:Given>Andrew J</vCard:Given>
                 </vCard:N>
                 <vCard:EMAIL>andrew.millar@ed.ac.uk</vCard:EMAIL>
-                <vCard:ORG rdf:parseType="Resource">
+                <vCard:ORG>
                   <vCard:Orgname>nstitute of Molecular Plant Sciences, University of Edinburgh</vCard:Orgname>
                 </vCard:ORG>
               </rdf:li>
@@ -66,18 +66,18 @@
     <listOfFunctionDefinitions>
       <functionDefinition metaid="metaid_0000003" id="LD">
         <notes>
-          <body>
-            <p>
+          
+            <p xmlns="http://www.w3.org/1999/xhtml">
 				Defines light value depending on time of day
 			</p>
-            <p>  LD is a function of time of the day, LD=1 at time t=0 (dawn) and changes to LD=1 at time t=12(dusk) and remains at that value until dawn when it resumes it cycle.
+            <p xmlns="http://www.w3.org/1999/xhtml">  LD is a function of time of the day, LD=1 at time t=0 (dawn) and changes to LD=1 at time t=12(dusk) and remains at that value until dawn when it resumes it cycle.
 				The original publication made use of a combination of Function definition, rate rules and events to accomplish this while the 
 				the model here does the same thing without the use of Events. This makes it portable across simulators without compromising the published model 
 				in any way. 
 			</p>
-          </body>
+
         </notes>
-        <math>
+        <math xmlns="http://www.w3.org/1998/Math/MathML">
           <lambda>
             <bvar>
               <ci> tod </ci>
@@ -366,7 +366,7 @@
           <modifierSpeciesReference species="cPn"/>
         </listOfModifiers>
         <kineticLaw>
-          <math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
               <ci> compartment </ci>
@@ -400,7 +400,7 @@
           <modifierSpeciesReference species="cXn"/>
         </listOfModifiers>
         <kineticLaw>
-          <math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
               <ci> compartment </ci>
@@ -452,7 +452,7 @@
           <speciesReference species="cLm"/>
         </listOfReactants>
         <kineticLaw>
-          <math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
               <ci> compartment </ci>
@@ -492,7 +492,7 @@
           <modifierSpeciesReference species="cLm"/>
         </listOfModifiers>
         <kineticLaw>
-          <math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
               <ci> compartment </ci>
@@ -521,7 +521,7 @@
           <speciesReference species="cLc"/>
         </listOfProducts>
         <kineticLaw>
-          <math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
               <ci> compartment </ci>
@@ -547,7 +547,7 @@
           <speciesReference species="cLc"/>
         </listOfReactants>
         <kineticLaw>
-          <math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
               <ci> compartment </ci>
@@ -590,7 +590,7 @@
           <speciesReference species="cLn"/>
         </listOfProducts>
         <kineticLaw>
-          <math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
               <ci> compartment </ci>
@@ -616,7 +616,7 @@
           <speciesReference species="cLn"/>
         </listOfReactants>
         <kineticLaw>
-          <math >
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
               <ci> compartment </ci>
@@ -657,7 +657,7 @@
           <modifierSpeciesReference species="cLn"/>
         </listOfModifiers>
         <kineticLaw>
-          <math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
               <ci> compartment </ci>
@@ -727,7 +727,7 @@
           <speciesReference species="cTm"/>
         </listOfReactants>
         <kineticLaw>
-          <math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
               <ci> compartment </ci>
@@ -767,7 +767,7 @@
           <modifierSpeciesReference species="cTm"/>
         </listOfModifiers>
         <kineticLaw>
-          <math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
               <ci> compartment </ci>
@@ -796,7 +796,7 @@
           <speciesReference species="cTc"/>
         </listOfProducts>
         <kineticLaw>
-          <math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
               <ci> compartment </ci>
@@ -822,7 +822,7 @@
           <speciesReference species="cTc"/>
         </listOfReactants>
         <kineticLaw>
-          <math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
               <ci> compartment </ci>
@@ -875,7 +875,7 @@
           <speciesReference species="cTn"/>
         </listOfProducts>
         <kineticLaw>
-          <math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
               <ci> compartment </ci>
@@ -901,7 +901,7 @@
           <speciesReference species="cTn"/>
         </listOfReactants>
         <kineticLaw>
-          <math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
               <ci> compartment </ci>
@@ -954,7 +954,7 @@
           <modifierSpeciesReference species="cTn"/>
         </listOfModifiers>
         <kineticLaw>
-          <math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
               <ci> compartment </ci>
@@ -1003,7 +1003,7 @@
           <speciesReference species="cXm"/>
         </listOfReactants>
         <kineticLaw>
-          <math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
               <ci> compartment </ci>
@@ -1043,7 +1043,7 @@
           <modifierSpeciesReference species="cXm"/>
         </listOfModifiers>
         <kineticLaw>
-          <math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
               <ci> compartment </ci>
@@ -1072,7 +1072,7 @@
           <speciesReference species="cXc"/>
         </listOfProducts>
         <kineticLaw>
-          <math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
               <ci> compartment </ci>
@@ -1098,7 +1098,7 @@
           <speciesReference species="cXc"/>
         </listOfReactants>
         <kineticLaw>
-          <math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
               <ci> compartment </ci>
@@ -1138,7 +1138,7 @@
           <speciesReference species="cXn"/>
         </listOfProducts>
         <kineticLaw>
-          <math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
               <ci> compartment </ci>
@@ -1164,7 +1164,7 @@
           <speciesReference species="cXn"/>
         </listOfReactants>
         <kineticLaw>
-          <math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
               <ci> compartment </ci>
@@ -1206,7 +1206,7 @@
           <modifierSpeciesReference species="cLn"/>
         </listOfModifiers>
         <kineticLaw>
-          <math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
               <ci> compartment </ci>
@@ -1301,7 +1301,7 @@
           <speciesReference species="cYm"/>
         </listOfReactants>
         <kineticLaw>
-          <math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
               <ci> compartment </ci>
@@ -1341,7 +1341,7 @@
           <modifierSpeciesReference species="cYm"/>
         </listOfModifiers>
         <kineticLaw>
-          <math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
               <ci> compartment </ci>
@@ -1370,7 +1370,7 @@
           <speciesReference species="cYc"/>
         </listOfProducts>
         <kineticLaw>
-          <math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
               <ci> compartment </ci>
@@ -1396,7 +1396,7 @@
           <speciesReference species="cYc"/>
         </listOfReactants>
         <kineticLaw>
-          <math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
               <ci> compartment </ci>
@@ -1436,7 +1436,7 @@
           <speciesReference species="cYn"/>
         </listOfProducts>
         <kineticLaw>
-          <math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
               <ci> compartment </ci>
@@ -1462,7 +1462,7 @@
           <speciesReference species="cYn"/>
         </listOfReactants>
         <kineticLaw>
-          <math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
               <ci> compartment </ci>
@@ -1500,7 +1500,7 @@
           <speciesReference species="cPn"/>
         </listOfProducts>
         <kineticLaw>
-          <math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
               <ci> compartment </ci>
@@ -1534,7 +1534,7 @@
           <speciesReference species="cPn"/>
         </listOfReactants>
         <kineticLaw>
-          <math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
               <ci> compartment </ci>
@@ -1572,7 +1572,7 @@
           <speciesReference species="cPn"/>
         </listOfReactants>
         <kineticLaw>
-          <math>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
             <apply>
               <times/>
               <ci> compartment </ci>
