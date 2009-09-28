@@ -43,13 +43,15 @@ class Boot {
                            Menu(Loc("faq", List("faq"), "FAQ"))) ::
         Menu(Loc("models", List("models","index"), "Models"),
             Menu(Loc("createM", List("models","create"), "Create Model", loggedIn)),
-            Menu(Loc("browseM", List("models","browse"), "Browse Model", loggedIn))) ::
+            Menu(Loc("browseM", List("models","browse"), "Browse Model", loggedIn)),
+            Menu(Loc("editM", List("models","editModel"), "Edit Model", Hidden, loggedIn))) ::
             //Menu(Loc("listM", List("models","list"), "List of Models"))) ::
         Menu(Loc("tags", List("tags"), "Tags")) ::
-        Menu(Loc("comments", List("models","new_comment"), "Comment", Hidden)) ::
+        Menu(Loc("new_comment", List("models","new_comment"), "New Comment", Hidden)) ::
+        Menu(Loc("view_comments", List("models","view_comments"), "View Comment", Hidden)) ::
         Menu(Loc("help", List("help","index"), "Help"),
             Menu(Loc("helpMath", List("help","helpMath"), "Help Math", Hidden))) ::
-        Menu(Loc("administrator", List("administrator","index"), "Administrator", loggedIn)) ::
+        Menu(Loc("administrator", List("administrator","index"), "Administrator", Hidden, loggedIn)) ::
         User.sitemap
         
         // Build SiteMap

@@ -2180,9 +2180,9 @@ var notifyIfNoSVG = true;
 var alertIfNoSVG = false;
 
 // global defaults used if not specified by graph (you can change these)
-var defaultwidth = 300; defaultheight = 200;   // in pixels
-var defaultxmin = -5.5; defaultxmax = 5.5;     // in usercoords
-var defaultborder = 0; border = defaultborder; // in pixel
+var defaultwidth = 300, defaultheight = 200;   // in pixels
+var defaultxmin = -5.5, defaultxmax = 5.5;     // in usercoords
+var defaultborder = 0, border = defaultborder; // in pixel
 var defaultstrokewidth = "1"; // default line width in pixel
 var defaultstroke = "blue";   // default line color
 var defaultstrokeopacity = 1; // transparent = 0, solid =1

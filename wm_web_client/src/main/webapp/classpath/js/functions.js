@@ -1,12 +1,4 @@
-FCKConfig.AutoDetectLanguage = false ;
-FCKConfig.DefaultLanguage = "en-uk" ;
-FCKConfig.ToolbarSets["Default"] = [
-['Cut','Copy','Paste','PasteText','PasteWord'],['Undo','Redo','-','Find','Replace'],
-['Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'],
-['OrderedList','UnorderedList','-','Outdent','Indent','Blockquote'],
-['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],['Link','Unlink'],
-['Image','Table','Rule','SpecialChar'],['FontSize','TextColor','BGColor'],['Source','FitWindow']
-] ;
+
 
 
 

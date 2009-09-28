@@ -25,9 +25,75 @@ import js.JE._
 
 class Comments {
     
-    def newComment () = {
-        val list = List[(String,String)]()
-        val novo = S.getHeaders(list)
-        Console.println("Valor ="+novo.map(s => s))
+    def newComment (xhtml : NodeSeq) : NodeSeq = User.currentUserName match {
+        case Full(user) => {
+                var comment:String = null
+                var count:int = 0
+                var existingComments:NodeSeq = null
+                var commentCreated:NodeSeq = null
+                var finalComment:NodeSeq = null
+                //val novo = S.getHeaders(list)
+                val readListComments = XML.load("comment.xml")
+                //Console.println("Valor ="+novo.map(s => s))
+                def createNewComment () = {
+                    existingComments = (readListComments \ "comment")
+                    if (comment.length == 0) {
+                        S.error("Invalid Data")
+                    } else {
+                        count = count+1
+                        println("CODE "+comment)
+                        commentCreated = {
+                            <comment metaId={count} userName={user} aboutMetaId={count}>
+                                <notes>{XML.loadString(comment)}
+                                </notes>
+                            </comment>
+                        }
+                        finalComment = {
+                            <comments>{commentCreated.theSeq}
+                                {existingComments.theSeq}</comments>
+                        }
+                        XML.save("comment.xml", finalComment.elements.next)
+                    }
+                }
+                bind("createComment", xhtml,
+                     "commentBox" -> SHtml.textarea("", comment = _, ("id", "commentArea"), ("maxlength", "20000")),
+                     "close" -> <input type="button" id="buttonCancelComment" value="Cancel Comment" onclick="window.close();" />,
+                     "save" -> SHtml.submit("Save Comment", createNewComment,("id","buttonSaveComment"), ("onclick","window.close()")))
+            }
+        case _ => Text("")
     }
+    
+    def viewComments (xhtml : NodeSeq) : NodeSeq = User.currentUserName match {
+        case Full(user) => {
+                val readComment:NodeSeq = XML.load("comment.xml")
+                var var1:String = ""
+                var var2:String = ""
+                var var3:String = ""
+
+                bind("view", xhtml,
+                     "data" -> {
+                        for(val fun <- readComment \ "comment";
+                            val fun2 <- (fun \\ "@userName");
+                            val addFun = (fun \\ "notes")) yield{
+                            var com = addFun.toString
+                            if(com.contains("notes")){
+                                var1 = com.replaceAll("notes", "div")
+                            }
+                            val com_notes = XML.loadString(var1)
+                            <div>
+                                <tr>
+                                    <td id="userTable">&nbsp;<b>User - </b>{fun2}</td>
+                                </tr>
+                                <tr>
+                                    <td id="cTable">&nbsp;{com_notes}<br /></td>
+                                </tr>
+                                <tr>
+                                    <td id="cReply"><a onclick="window.open('../models/new_comment.html','New Comment','width=600,height=300');">Reply</a></td>
+                                </tr><br /><br />
+                            </div>}
+                    })
+            }
+        case _ => Text("")
+    }
+
 }
