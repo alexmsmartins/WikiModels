@@ -54,7 +54,7 @@ case class SBMLModel extends Element{
     @RdfProperty("http://wikimodels.cnbc.pt/ontologies/sbml.owl#hasPart")
     var listOfSpecies:JCollection[Species] = null
     @RdfProperty("http://wikimodels.cnbc.pt/ontologies/sbml.owl#hasParameter")
-    var listOfParameters:JCollection[SBMLParameter] = null
+    var listOfParameters:JCollection[Parameter] = null
     //var listOfInitialAssignments:List[InitialAssignment] = List()
     //var listOfRules:List[Rule] = List()
     @RdfProperty("http://wikimodels.cnbc.pt/ontologies/sbml.owl#hasPart")

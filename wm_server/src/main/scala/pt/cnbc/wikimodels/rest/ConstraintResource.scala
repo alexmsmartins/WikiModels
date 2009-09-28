@@ -29,14 +29,13 @@ import javax.ws.rs.core.UriInfo
 import scala.collection.mutable.Map
 import scala.collection.mutable.HashMap
 
-import pt.cnbc.wikimodels.dataModel.Parameter
-import pt.cnbc.wikimodels.dataModel.Reaction
-import pt.cnbc.wikimodels.dataAccess.ParametersDAO
+import pt.cnbc.wikimodels.dataModel.Constraint
+import pt.cnbc.wikimodels.dataAccess.ConstraintsDAO
 import pt.cnbc.wikimodels.exceptions.BadFormatException
 import pt.cnbc.wikimodels.security.SecurityContextFactory
 
 
-class ParameterResource(sbmlModelResource:String) extends RESTResource {
+class ConstraintResource(sbmlModelResource:String) extends RESTResource {
     
     @Context
     var security:SecurityContext = null
@@ -45,21 +44,21 @@ class ParameterResource(sbmlModelResource:String) extends RESTResource {
 
     @GET
     @Produces(Array("application/xml"))
-    @Path("{parameterid}")//: [a-zA-Z][a-zA-Z_0-9]}")
-    def get(@PathParam("parameterid") parameterResource:String
+    @Path("{constraintid}")//: [a-zA-Z][a-zA-Z_0-9]}")
+    def get(@PathParam("constraintid") constraintResource:String
     ):String = {
         val username:String = security.getUserPrincipal().getName()
 
-        Console.print("GET verb was used in parameter " + parameterResource)
+        Console.print("GET verb was used in constraint " + constraintResource)
         if(secContext.isAuthorizedTo(username,
                                      "GET", "model/" + sbmlModelResource +
-                                     "/parameter/" + parameterResource ) ){
+                                     "/constraint/" + constraintResource ) ){
             try{
-                val dao = new ParametersDAO
-                val parameter = dao.loadParameter(parameterResource)
-                if(parameter != null &&
-                   parameter.metaid == parameterResource){
-                    parameter.toXML.toString
+                val dao = new ConstraintsDAO
+                val constraint = dao.loadConstraint(constraintResource)
+                if(constraint != null &&
+                   constraint.metaid == constraintResource){
+                    constraint.toXML.toString
                 } else {
                     throw new WebApplicationException(Response.Status.NOT_FOUND)
                 }
@@ -77,10 +76,10 @@ class ParameterResource(sbmlModelResource:String) extends RESTResource {
     }
     
     /**
-     * Creates a new resource (parameter in this case) with its metaid generated
+     * Creates a new resource (constraint in this case) with its metaid generated
      * automatically by wikiModels server.
      * the metaid can be suggested and, for that to happen, the XML that
-     * represents the parameter should come with the metaid attribute filled
+     * represents the constraint should come with the metaid attribute filled
      */
     @POST
     @Consumes(Array("application/xml"))
@@ -91,12 +90,12 @@ class ParameterResource(sbmlModelResource:String) extends RESTResource {
         var ret = ""
         if(secContext.isAuthorizedTo(username,
                                      "POST", "model/" + sbmlModelResource +
-                                     "/parameter/" ) ){
-            val parameterMetaId =
+                                     "/constraint/" ) ){
+            val constraintMetaId =
             try{
-                val dao = new ParametersDAO
-                dao.trytoCreateParameterInModel(sbmlModelResource,
-                    new Parameter(
+                val dao = new ConstraintsDAO
+                dao.trytoCreateConstraintInModel(sbmlModelResource,
+                    new Constraint(
                         scala.xml.XML.load(requestContent)))
             } catch {
                 case e:Exception => {
@@ -105,11 +104,11 @@ class ParameterResource(sbmlModelResource:String) extends RESTResource {
                             Response.Status.BAD_REQUEST)
                     }
             }
-            if(parameterMetaId == null){
-                throw new BadFormatException("Creating parameter did not went according to plan.");
+            if(constraintMetaId == null){
+                throw new BadFormatException("Creating constraint did not went according to plan.");
             }else {
                 val uri:URI = uriInfo.getAbsolutePathBuilder()
-                .path(parameterMetaId)
+                .path(constraintMetaId)
                 .build();
                 Response.created( uri ).build()
             }
@@ -126,31 +125,31 @@ class ParameterResource(sbmlModelResource:String) extends RESTResource {
      * According to the REST style architecture the PUT request can be used
      * to create new reesources. Yet this is only allowed as long as the request
      * remains  idempotent.
-     * Yet, creating a new parameter is not an idempotent request since it is
+     * Yet, creating a new constraint is not an idempotent request since it is
      * sbuject to verifications and may not result in exactly the sent entity
      * being created. Ids and other infromation may be modified.
      */
     @PUT
-    @Path("{parameterid}")//: [a-zA-Z][a-zA-Z_0-9]}")
+    @Path("{constraintid}")//: [a-zA-Z][a-zA-Z_0-9]}")
     @Consumes(Array("application/xml"))
-    def put(@PathParam("parameterid") parameterResource:String,
+    def put(@PathParam("constraintid") constraintResource:String,
             requestContent:String):Response = {
         val username = security.getUserPrincipal().getName()
         Console.print("PUT verb was used in user " + username)
-        Console.print("parameterid = " + parameterResource)
+        Console.print("constraintid = " + constraintResource)
         Console.print("Content of request = " + requestContent)
         Console.print("--------------------------------------")
         var ret = ""
         if(secContext.isAuthorizedTo(username,
                                      "PUT", "model/" + sbmlModelResource +
-                                     "/parameter/" + parameterResource ) ){
+                                     "/constraint/" + constraintResource ) ){
             try{
-                val dao = new ParametersDAO
+                val dao = new ConstraintsDAO
                 //XXX if there are performance problems in this part replace:
                 // - requstcontent:String -> requastcontont:InputStream
                 // - scala.xml.XML.loadString -> scala.xml.XML.load
-                if( dao.updateParameter(
-                        new Parameter(
+                if( dao.updateConstraint(
+                        new Constraint(
                             scala.xml.XML.loadString(requestContent))) ){
                     Response.ok.build
                 } else {
@@ -173,23 +172,23 @@ class ParameterResource(sbmlModelResource:String) extends RESTResource {
     }
 
     @DELETE
-    @Path("{parameterid}")//: [a-zA-Z][a-zA-Z_0-9]}")
-    def delete(@PathParam("parameterid") parameterResource:String
+    @Path("{constraintid}")//: [a-zA-Z][a-zA-Z_0-9]}")
+    def delete(@PathParam("constraintid") constraintResource:String
     ):Unit = {
         val username = security.getUserPrincipal().getName()
         Console.print("DELETE verb was used with user " + username)
-        Console.print("DELETE verb was used with parameterid " + parameterResource)
+        Console.print("DELETE verb was used with constraintid " + constraintResource)
 
         var ret = ""
         if(secContext.isAuthorizedTo(username,
                                      "DELETE", "model/" + sbmlModelResource +
-                                     "/parameter/" + parameterResource ) ){
+                                     "/constraint/" + constraintResource ) ){
             try{
-                val dao = new ParametersDAO()
+                val dao = new ConstraintsDAO()
 
-                if(dao.deleteParameter(
-                        new Parameter(
-                            parameterResource, Nil, null, null, 0.0, null, true)) ){
+                if(dao.deleteConstraint(
+                        new Constraint(
+                            constraintResource, Nil, null, null, Nil, null)) ){
                 } else {
                     throw new WebApplicationException(
                         Response.Status.NOT_FOUND)

@@ -14,5 +14,5 @@ import javax.ws.rs.core.Context
 import javax.ws.rs.core.SecurityContext
 
 trait RESTResource {
-
+    val secContext = SecurityContextFactory.createSecurityContext
 }

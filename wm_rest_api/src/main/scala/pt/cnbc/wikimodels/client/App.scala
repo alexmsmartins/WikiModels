@@ -42,7 +42,7 @@ object App {
         var testNumber = 0
         try {
             setUp
-            /*log.info("======================" )
+            log.info("======================" )
             testNumber+=1
             log.info("TEST " + testNumber + " - Login" )
             loginTest
@@ -71,7 +71,7 @@ object App {
             testNumber+=1
             log.info("TEST " + testNumber + " - CreateAnotherModel" )
             createAnotherModelTest
-            log.info("SUCCESS" )*/
+            log.info("SUCCESS" )
             log.info("======================" )
             testNumber+=1
             log.info("TEST " + testNumber + " - BrowseModel" )
@@ -82,7 +82,7 @@ object App {
             log.info("TEST " + testNumber + " - BrowseNonExistantModel" )
             browseNonExistantModelTest
             log.info("SUCCESS" )
-            /*log.info("======================" )
+            log.info("======================" )
             testNumber+=1
             log.info("TEST " + testNumber + " - EditModel" )
             editModelTest
@@ -91,7 +91,7 @@ object App {
             testNumber+=1
             log.info("TEST " + testNumber + " - DeleteModel2" )
             deleteModelTest
-            log.info("SUCCESS" )*/
+            log.info("SUCCESS" )
             log.info("======================" )
             log.info("INTEGRATION TESTING SUCCEDED")
             //basicAuthentication

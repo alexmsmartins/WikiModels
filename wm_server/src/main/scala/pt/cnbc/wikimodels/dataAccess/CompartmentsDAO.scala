@@ -1,5 +1,5 @@
 /*
- * ParametersDAO.scala
+ * CompartmentsDAO.scala
  *
  * To change this template, choose Tools | Template Manager
  * and open the template in the editor.
@@ -30,28 +30,27 @@ import thewebsemantic.RDF2Bean
 
 import scala.Collection
 
-import pt.cnbc.wikimodels.dataModel.Parameter
-import pt.cnbc.wikimodels.dataModel.Comment
+import pt.cnbc.wikimodels.dataModel.Compartment
 import pt.cnbc.wikimodels.dataModel.Element
 import pt.cnbc.wikimodels.dataModel.SBMLModel
 import pt.cnbc.wikimodels.exceptions.NotImplementedException
 import pt.cnbc.wikimodels.ontology.ManipulatorWrapper
 import pt.cnbc.wikimodels.ontology.{Namespaces => NS}
 
-class ParametersDAO {
+class CompartmentsDAO {
     /**
      * Allows testing procedures. This is not to be used from outside this class
      */
     var  kb:Model = null
     val sbmlModelsDAO = new SBMLModelsDAO()
 
-    def loadParameter(parameterMetaid:String):Parameter = {
+    def loadCompartment(compartmentMetaid:String):Compartment = {
         try{
             val myModel:Model = ManipulatorWrapper.loadModelfromDB
-            loadParameter(parameterMetaid, myModel)
+            loadCompartment(compartmentMetaid, myModel)
         } catch {
             case ex:thewebsemantic.NotFoundException =>
-                Console.println("Bean of " + Parameter.getClass + "and " +
+                Console.println("Bean of " + Compartment.getClass + "and " +
                                 "id is not found")
                 ex.printStackTrace()
                 null
@@ -61,29 +60,29 @@ class ParametersDAO {
         }
     }
 
-    def loadParameter(parameterMetaid:String, model:Model):Parameter = {
-        var ret:Parameter = null
+    def loadCompartment(compartmentMetaid:String, model:Model):Compartment = {
+        var ret:Compartment = null
 
         Console.print("After loading Jena Model")
-        var reader = new RDF2Bean[Parameter](model)
+        var reader = new RDF2Bean[Compartment](model)
         Console.print("After creating a new RDF2Bean")
         val l
-        = reader.load( new Parameter().getClass, parameterMetaid  )
-                .asInstanceOf[java.util.Collection[Parameter]]
-        Console.println("Found " + l.size + " Parameters with metaid " + parameterMetaid)
+        = reader.load( new Compartment().getClass, compartmentMetaid  )
+                .asInstanceOf[java.util.Collection[Compartment]]
+        Console.println("Found " + l.size + " Compartments with metaid " + compartmentMetaid)
         if(l.size > 0)
             l.iterator.next
         else null
     }
 
-    def loadParameter():java.util.Collection[Parameter] = {
+    def loadCompartment():java.util.Collection[Compartment] = {
         try{
             val myModel:Model = ManipulatorWrapper.loadModelfromDB
             Console.print("After loading Jena Model")
             var reader = new RDF2Bean(myModel)
             Console.print("After creating a new RDF2Bean")
-            val l:java.util.List[Parameter] = reader.load(new Parameter().getClass )
-                .asInstanceOf[java.util.List[Parameter]]
+            val l:java.util.List[Compartment] = reader.load(new Compartment().getClass )
+                .asInstanceOf[java.util.List[Compartment]]
             //Console.print("User XML = " + c.toList(0).toXML.toString)
 
             l
@@ -92,7 +91,7 @@ class ParametersDAO {
                 .toList*/
         } catch {
             case ex:thewebsemantic.NotFoundException =>
-                Console.println("Bean of " + Parameter.getClass + "and id is not found")
+                Console.println("Bean of " + Compartment.getClass + "and id is not found")
                 ex.printStackTrace()
                 null
         }
@@ -101,37 +100,42 @@ class ParametersDAO {
 
 
     /**
-     * Saves an Parameter into the KnowledgeBase
+     * Saves an Compartment into the KnowledgeBase
      * @param  true if
      * @return true if
      */
-    def createParameter(parameter:Parameter):Boolean = {
+    def createCompartment(compartment:Compartment):Boolean = {
+        var ret = false
+        var myModel:Model = null
         try{
-            val myModel:Model = ManipulatorWrapper.loadModelfromDB
-            createParameter(parameter, myModel)
+            myModel = ManipulatorWrapper.loadModelfromDB
+            myModel.begin
+            ret = createCompartment(compartment, myModel)
+            myModel.commit
         } catch {
             case ex:Exception => {
-                    Console.println("Saving model " + parameter +
+                    Console.println("Saving model " + compartment +
                                     "was not possible")
                     ex.printStackTrace
 
                     false
                 }
         }
+        ret
     }
 
     /**
      * Creates a new SBML model individual in the Knowledgebase
      * @return true if creating the new model was possible and false otherwise
      */
-    def createParameter(parameter:Parameter, model:Model):Boolean = {
+    def createCompartment(compartment:Compartment, model:Model):Boolean = {
         try{
             val writer = new Bean2RDF(model)
-            writer.save(parameter)
+            writer.save(compartment)
             true
         } catch {
             case ex:thewebsemantic.NotFoundException => {
-                    Console.println("Bean of " + Parameter.getClass + "and " +
+                    Console.println("Bean of " + Compartment.getClass + "and " +
                                     "id is not found")
                     ex.printStackTrace()
                     false
@@ -144,14 +148,14 @@ class ParametersDAO {
         }
     }
 
-    def trytoCreateParameterInModel(modelMetaid:String,
-                                    parameter:Parameter):String = {
+    def trytoCreateCompartmentInModel(modelMetaid:String,
+                                    compartment:Compartment):String = {
         try{
             val myModel:Model = ManipulatorWrapper.loadModelfromDB
-            trytoCreateParameterInModel(modelMetaid, parameter, myModel)
+            trytoCreateCompartmentInModel(modelMetaid, compartment, myModel)
         } catch {
             case ex:thewebsemantic.NotFoundException => {
-                    Console.println("Bean of " + Parameter.getClass + "and " +
+                    Console.println("Bean of " + Compartment.getClass + "and " +
                                     "id is not found")
                     ex.printStackTrace()
                     null
@@ -163,22 +167,22 @@ class ParametersDAO {
         }
     }
 
-    def trytoCreateParameterInModel(modelMetaid:String,
-                                    parameter:Parameter,
+    def trytoCreateCompartmentInModel(modelMetaid:String,
+                                    compartment:Compartment,
                                     model:Model):String = {
         if(sbmlModelsDAO.modelMetaidExists(modelMetaid)){
-            val parameterMetaid = trytoCreateParameter(parameter, model)
+            val compartmentMetaid = trytoCreateCompartment(compartment, model)
 
             //Jena API used directly
             val sbmlModelRes = model.createResource(
                          NS.sbml + "Model/" + modelMetaid)
-            val parameterRes = model.createResource(
-                        NS.sbml + "Model/" + parameterMetaid)
+            val compartmentRes = model.createResource(
+                        NS.sbml + "Model/" + compartmentMetaid)
 
             sbmlModelRes.addProperty(model
                          .getProperty(NS.sbml + "hasPArameter"),
-                                     parameterRes)
-            parameterMetaid
+                                     compartmentRes)
+            compartmentMetaid
         } else null
     }
 
@@ -188,13 +192,13 @@ class ParametersDAO {
      * This method also issues an available metaid
      *
      */
-    def trytoCreateParameter(parameter:Parameter):String = {
+    def trytoCreateCompartment(compartment:Compartment):String = {
         try{
             val myModel:Model = ManipulatorWrapper.loadModelfromDB
-            trytoCreateParameter(parameter, myModel)
+            trytoCreateCompartment(compartment, myModel)
         } catch {
             case ex:thewebsemantic.NotFoundException => {
-                    Console.println("Bean of " + Parameter.getClass + "and " +
+                    Console.println("Bean of " + Compartment.getClass + "and " +
                                     "id is not found")
                     ex.printStackTrace()
                     null
@@ -206,28 +210,28 @@ class ParametersDAO {
         }
     }
 
-    def trytoCreateParameter(parameter:Parameter, model:Model):String = {
-        if( if( sbmlModelsDAO.metaidExists(parameter.metaid ) == false ){
-                createParameter(parameter, model)
+    def trytoCreateCompartment(compartment:Compartment, model:Model):String = {
+        if( if( sbmlModelsDAO.metaidExists(compartment.metaid ) == false ){
+                createCompartment(compartment, model)
             } else {
-                parameter.metaid = sbmlModelsDAO.generateNewMetaIdFrom(parameter,
+                compartment.metaid = sbmlModelsDAO.generateNewMetaIdFrom(compartment,
                                                          model)
-                createParameter(parameter,
+                createCompartment(compartment,
                                 model)
             } == true)
         {
-            parameter.metaid
+            compartment.metaid
         } else null
 
     }
 
-    def parameterMetaidExists(metaid:String):Boolean = {
+    def compartmentMetaidExists(metaid:String):Boolean = {
         try{
             val myModel:Model = ManipulatorWrapper.loadModelfromDB
-            parameterMetaidExists(metaid, myModel)
+            compartmentMetaidExists(metaid, myModel)
         } catch {
             case ex:thewebsemantic.NotFoundException => {
-                    Console.println("Bean of " + Parameter.getClass + "and " +
+                    Console.println("Bean of " + Compartment.getClass + "and " +
                                     "id is not found")
                     ex.printStackTrace()
                     false
@@ -239,7 +243,7 @@ class ParametersDAO {
         }
     }
 
-    def parameterMetaidExists(metaid:String, model:Model):Boolean = {
+    def compartmentMetaidExists(metaid:String, model:Model):Boolean = {
         val reasoner:Reasoner = ReasonerRegistry.getOWLReasoner
         //val ontModelSpec:OntModelSpec = null
         //val ont:OntModel = ModelFactory.createOntologyModel(ontModelSpec, model)
@@ -249,7 +253,7 @@ class ParametersDAO {
         PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
         PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
         ASK
-        { ?s rdf:type sbml:Parameter .
+        { ?s rdf:type sbml:Compartment .
         """ +  "?s sbml:metaid \"" + metaid + "\"^^<http://www.w3.org/2001/XMLSchema#string> } "
 
         val query:Query = QueryFactory.create(queryString);
@@ -262,17 +266,17 @@ class ParametersDAO {
     }
     
     /**
-     * Updates a Parameter into the KnowledgeBase
+     * Updates a Compartment into the KnowledgeBase
      * @param  true if
      * @return true if
      */
-    def updateParameter(parameter:Parameter):Boolean = {
+    def updateCompartment(compartment:Compartment):Boolean = {
         try{
             val myModel:Model = ManipulatorWrapper.loadModelfromDB
-            updateParameter(parameter, myModel)
+            updateCompartment(compartment, myModel)
         } catch {
             case ex:thewebsemantic.NotFoundException => {
-                    Console.println("Bean of " + Parameter.getClass + "and " +
+                    Console.println("Bean of " + Compartment.getClass + "and " +
                                     "id is not found")
                     ex.printStackTrace()
                     false
@@ -286,30 +290,30 @@ class ParametersDAO {
     }
 
     /**
-     * Updates a Parameter individual in the Knowledgebase
+     * Updates a Compartment individual in the Knowledgebase
      * @return true if creating the new model was possible and false otherwise
      */
-    def updateParameter(parameter:Parameter, model:Model):Boolean = {
-        if( sbmlModelsDAO.metaidExists(parameter.metaid ) ){
+    def updateCompartment(compartment:Compartment, model:Model):Boolean = {
+        if( sbmlModelsDAO.metaidExists(compartment.metaid ) ){
             val writer = new Bean2RDF(model)
-            writer.save(parameter)
+            writer.save(compartment)
             true
         } else false
     }
 
 
     /**
-     * Deletes an Parameter in the KnowledgeBase
+     * Deletes an Compartment in the KnowledgeBase
      * @param  true if
      * @return true if
      */
-    def deleteParameter(parameter:Parameter):Boolean = {
+    def deleteCompartment(compartment:Compartment):Boolean = {
         try{
             val myModel:Model = ManipulatorWrapper.loadModelfromDB
-            deleteParameter(parameter, myModel)
+            deleteCompartment(compartment, myModel)
         } catch {
             case ex:Exception => {
-                    Console.println("Deleting model " + parameter +
+                    Console.println("Deleting model " + compartment +
                                     "was not possible")
                     ex.printStackTrace
 
@@ -319,20 +323,20 @@ class ParametersDAO {
     }
 
     /**
-     * Deletes an Parameter in the KnowledgeBase
+     * Deletes an Compartment in the KnowledgeBase
      * @return true if creating the new model was possible and false otherwise
      */
-    def deleteParameter(parameter:Parameter, model:Model):Boolean = {
+    def deleteCompartment(compartment:Compartment, model:Model):Boolean = {
         try{
-            if( parameterMetaidExists(parameter.metaid ) ){
+            if( compartmentMetaidExists(compartment.metaid ) ){
                 val writer = new Bean2RDF(model)
-                writer.delete(parameter)
+                writer.delete(compartment)
                 //TODO delete subelements
                 true
             } else false
         } catch {
             case ex:thewebsemantic.NotFoundException => {
-                    Console.println("Bean of " + Parameter.getClass + "and " +
+                    Console.println("Bean of " + Compartment.getClass + "and " +
                                     "id is not found")
                     ex.printStackTrace()
                     false

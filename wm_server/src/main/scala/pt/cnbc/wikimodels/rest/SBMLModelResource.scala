@@ -41,7 +41,6 @@ class SBMLModelResource extends RESTResource {
     var security:SecurityContext = null
     @Context
     var uriInfo:UriInfo =null;
-    val secContext = SecurityContextFactory.createSecurityContext
 
     @GET
     @Path("{modelid}")//: [a-zA-Z][a-zA-Z_0-9]}")

@@ -29,14 +29,14 @@ import javax.ws.rs.core.UriInfo
 import scala.collection.mutable.Map
 import scala.collection.mutable.HashMap
 
-import pt.cnbc.wikimodels.dataModel.Parameter
+import pt.cnbc.wikimodels.dataModel.Compartment
 import pt.cnbc.wikimodels.dataModel.Reaction
-import pt.cnbc.wikimodels.dataAccess.ParametersDAO
+import pt.cnbc.wikimodels.dataAccess.CompartmentsDAO
 import pt.cnbc.wikimodels.exceptions.BadFormatException
 import pt.cnbc.wikimodels.security.SecurityContextFactory
 
 
-class ParameterResource(sbmlModelResource:String) extends RESTResource {
+class CompartmentResource(sbmlModelResource:String) extends RESTResource {
     
     @Context
     var security:SecurityContext = null
@@ -45,21 +45,21 @@ class ParameterResource(sbmlModelResource:String) extends RESTResource {
 
     @GET
     @Produces(Array("application/xml"))
-    @Path("{parameterid}")//: [a-zA-Z][a-zA-Z_0-9]}")
-    def get(@PathParam("parameterid") parameterResource:String
+    @Path("{compartmentid}")//: [a-zA-Z][a-zA-Z_0-9]}")
+    def get(@PathParam("compartmentid") compartmentResource:String
     ):String = {
         val username:String = security.getUserPrincipal().getName()
 
-        Console.print("GET verb was used in parameter " + parameterResource)
+        Console.print("GET verb was used in compartment " + compartmentResource)
         if(secContext.isAuthorizedTo(username,
                                      "GET", "model/" + sbmlModelResource +
-                                     "/parameter/" + parameterResource ) ){
+                                     "/compartment/" + compartmentResource ) ){
             try{
-                val dao = new ParametersDAO
-                val parameter = dao.loadParameter(parameterResource)
-                if(parameter != null &&
-                   parameter.metaid == parameterResource){
-                    parameter.toXML.toString
+                val dao = new CompartmentsDAO
+                val compartment = dao.loadCompartment(compartmentResource)
+                if(compartment != null &&
+                   compartment.metaid == compartmentResource){
+                    compartment.toXML.toString
                 } else {
                     throw new WebApplicationException(Response.Status.NOT_FOUND)
                 }
@@ -77,10 +77,10 @@ class ParameterResource(sbmlModelResource:String) extends RESTResource {
     }
     
     /**
-     * Creates a new resource (parameter in this case) with its metaid generated
+     * Creates a new resource (compartment in this case) with its metaid generated
      * automatically by wikiModels server.
      * the metaid can be suggested and, for that to happen, the XML that
-     * represents the parameter should come with the metaid attribute filled
+     * represents the compartment should come with the metaid attribute filled
      */
     @POST
     @Consumes(Array("application/xml"))
@@ -91,12 +91,12 @@ class ParameterResource(sbmlModelResource:String) extends RESTResource {
         var ret = ""
         if(secContext.isAuthorizedTo(username,
                                      "POST", "model/" + sbmlModelResource +
-                                     "/parameter/" ) ){
-            val parameterMetaId =
+                                     "/compartment/" ) ){
+            val compartmentMetaId =
             try{
-                val dao = new ParametersDAO
-                dao.trytoCreateParameterInModel(sbmlModelResource,
-                    new Parameter(
+                val dao = new CompartmentsDAO
+                dao.trytoCreateCompartmentInModel(sbmlModelResource,
+                    new Compartment(
                         scala.xml.XML.load(requestContent)))
             } catch {
                 case e:Exception => {
@@ -105,11 +105,11 @@ class ParameterResource(sbmlModelResource:String) extends RESTResource {
                             Response.Status.BAD_REQUEST)
                     }
             }
-            if(parameterMetaId == null){
-                throw new BadFormatException("Creating parameter did not went according to plan.");
+            if(compartmentMetaId == null){
+                throw new BadFormatException("Creating compartment did not went according to plan.");
             }else {
                 val uri:URI = uriInfo.getAbsolutePathBuilder()
-                .path(parameterMetaId)
+                .path(compartmentMetaId)
                 .build();
                 Response.created( uri ).build()
             }
@@ -126,31 +126,31 @@ class ParameterResource(sbmlModelResource:String) extends RESTResource {
      * According to the REST style architecture the PUT request can be used
      * to create new reesources. Yet this is only allowed as long as the request
      * remains  idempotent.
-     * Yet, creating a new parameter is not an idempotent request since it is
+     * Yet, creating a new compartment is not an idempotent request since it is
      * sbuject to verifications and may not result in exactly the sent entity
      * being created. Ids and other infromation may be modified.
      */
     @PUT
-    @Path("{parameterid}")//: [a-zA-Z][a-zA-Z_0-9]}")
+    @Path("{compartmentid}")//: [a-zA-Z][a-zA-Z_0-9]}")
     @Consumes(Array("application/xml"))
-    def put(@PathParam("parameterid") parameterResource:String,
+    def put(@PathParam("compartmentid") compartmentResource:String,
             requestContent:String):Response = {
         val username = security.getUserPrincipal().getName()
         Console.print("PUT verb was used in user " + username)
-        Console.print("parameterid = " + parameterResource)
+        Console.print("compartmentid = " + compartmentResource)
         Console.print("Content of request = " + requestContent)
         Console.print("--------------------------------------")
         var ret = ""
         if(secContext.isAuthorizedTo(username,
                                      "PUT", "model/" + sbmlModelResource +
-                                     "/parameter/" + parameterResource ) ){
+                                     "/compartment/" + compartmentResource ) ){
             try{
-                val dao = new ParametersDAO
+                val dao = new CompartmentsDAO
                 //XXX if there are performance problems in this part replace:
                 // - requstcontent:String -> requastcontont:InputStream
                 // - scala.xml.XML.loadString -> scala.xml.XML.load
-                if( dao.updateParameter(
-                        new Parameter(
+                if( dao.updateCompartment(
+                        new Compartment(
                             scala.xml.XML.loadString(requestContent))) ){
                     Response.ok.build
                 } else {
@@ -173,23 +173,23 @@ class ParameterResource(sbmlModelResource:String) extends RESTResource {
     }
 
     @DELETE
-    @Path("{parameterid}")//: [a-zA-Z][a-zA-Z_0-9]}")
-    def delete(@PathParam("parameterid") parameterResource:String
+    @Path("{compartmentid}")//: [a-zA-Z][a-zA-Z_0-9]}")
+    def delete(@PathParam("compartmentid") compartmentResource:String
     ):Unit = {
         val username = security.getUserPrincipal().getName()
         Console.print("DELETE verb was used with user " + username)
-        Console.print("DELETE verb was used with parameterid " + parameterResource)
+        Console.print("DELETE verb was used with compartmentid " + compartmentResource)
 
         var ret = ""
         if(secContext.isAuthorizedTo(username,
                                      "DELETE", "model/" + sbmlModelResource +
-                                     "/parameter/" + parameterResource ) ){
+                                     "/compartment/" + compartmentResource ) ){
             try{
-                val dao = new ParametersDAO()
+                val dao = new CompartmentsDAO()
 
-                if(dao.deleteParameter(
-                        new Parameter(
-                            parameterResource, Nil, null, null, 0.0, null, true)) ){
+                if(dao.deleteCompartment(
+                        new Compartment(
+                            compartmentResource, Nil, null, null, null, 0, 0.0, null, null, false)) ){
                 } else {
                     throw new WebApplicationException(
                         Response.Status.NOT_FOUND)

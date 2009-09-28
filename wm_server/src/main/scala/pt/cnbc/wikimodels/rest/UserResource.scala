@@ -37,7 +37,6 @@ class UserResource extends RESTResource {
 
     @Context
     var security:SecurityContext = null
-    val secContext = SecurityContextFactory.createSecurityContext
 
 
     /**

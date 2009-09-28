@@ -1,5 +1,5 @@
 /*
- * ParametersDAO.scala
+ * FunctionDefinitionsDAO.scala
  *
  * To change this template, choose Tools | Template Manager
  * and open the template in the editor.
@@ -30,28 +30,27 @@ import thewebsemantic.RDF2Bean
 
 import scala.Collection
 
-import pt.cnbc.wikimodels.dataModel.Parameter
-import pt.cnbc.wikimodels.dataModel.Comment
+import pt.cnbc.wikimodels.dataModel.FunctionDefinition
 import pt.cnbc.wikimodels.dataModel.Element
 import pt.cnbc.wikimodels.dataModel.SBMLModel
 import pt.cnbc.wikimodels.exceptions.NotImplementedException
 import pt.cnbc.wikimodels.ontology.ManipulatorWrapper
 import pt.cnbc.wikimodels.ontology.{Namespaces => NS}
 
-class ParametersDAO {
+class FunctionDefinitionsDAO {
     /**
      * Allows testing procedures. This is not to be used from outside this class
      */
     var  kb:Model = null
     val sbmlModelsDAO = new SBMLModelsDAO()
 
-    def loadParameter(parameterMetaid:String):Parameter = {
+    def loadFunctionDefinition(functionDefinitionMetaid:String):FunctionDefinition = {
         try{
             val myModel:Model = ManipulatorWrapper.loadModelfromDB
-            loadParameter(parameterMetaid, myModel)
+            loadFunctionDefinition(functionDefinitionMetaid, myModel)
         } catch {
             case ex:thewebsemantic.NotFoundException =>
-                Console.println("Bean of " + Parameter.getClass + "and " +
+                Console.println("Bean of " + FunctionDefinition.getClass + "and " +
                                 "id is not found")
                 ex.printStackTrace()
                 null
@@ -61,38 +60,33 @@ class ParametersDAO {
         }
     }
 
-    def loadParameter(parameterMetaid:String, model:Model):Parameter = {
-        var ret:Parameter = null
+    def loadFunctionDefinition(functionDefinitionMetaid:String, model:Model):FunctionDefinition = {
+        var ret:FunctionDefinition = null
 
         Console.print("After loading Jena Model")
-        var reader = new RDF2Bean[Parameter](model)
+        var reader = new RDF2Bean[FunctionDefinition](model)
         Console.print("After creating a new RDF2Bean")
         val l
-        = reader.load( new Parameter().getClass, parameterMetaid  )
-                .asInstanceOf[java.util.Collection[Parameter]]
-        Console.println("Found " + l.size + " Parameters with metaid " + parameterMetaid)
+        = reader.load( new FunctionDefinition().getClass, functionDefinitionMetaid  )
+                .asInstanceOf[java.util.Collection[FunctionDefinition]]
+        Console.println("Found " + l.size + " FunctionDefinitions with metaid " + functionDefinitionMetaid)
         if(l.size > 0)
             l.iterator.next
         else null
     }
 
-    def loadParameter():java.util.Collection[Parameter] = {
+    def loadFunctionDefinition():java.util.Collection[FunctionDefinition] = {
         try{
             val myModel:Model = ManipulatorWrapper.loadModelfromDB
             Console.print("After loading Jena Model")
             var reader = new RDF2Bean(myModel)
             Console.print("After creating a new RDF2Bean")
-            val l:java.util.List[Parameter] = reader.load(new Parameter().getClass )
-                .asInstanceOf[java.util.List[Parameter]]
-            //Console.print("User XML = " + c.toList(0).toXML.toString)
-
+            val l:java.util.List[FunctionDefinition] = reader.load(new FunctionDefinition().getClass )
+                .asInstanceOf[java.util.List[FunctionDefinition]]
             l
-            /*var l:List[User] = Nil
-            (for(i <- 0 to lusers.size - 1) yield  lusers(i).asInstanceOf[User])
-                .toList*/
         } catch {
             case ex:thewebsemantic.NotFoundException =>
-                Console.println("Bean of " + Parameter.getClass + "and id is not found")
+                Console.println("Bean of " + FunctionDefinition.getClass + "and id is not found")
                 ex.printStackTrace()
                 null
         }
@@ -101,37 +95,42 @@ class ParametersDAO {
 
 
     /**
-     * Saves an Parameter into the KnowledgeBase
+     * Saves an FunctionDefinition into the KnowledgeBase
      * @param  true if
      * @return true if
      */
-    def createParameter(parameter:Parameter):Boolean = {
+    def createFunctionDefinition(functionDefinition:FunctionDefinition):Boolean = {
+        var ret = false
+        var myModel:Model = null
         try{
-            val myModel:Model = ManipulatorWrapper.loadModelfromDB
-            createParameter(parameter, myModel)
+            myModel = ManipulatorWrapper.loadModelfromDB
+            myModel.begin
+            ret = createFunctionDefinition(functionDefinition, myModel)
+            myModel.commit
         } catch {
             case ex:Exception => {
-                    Console.println("Saving model " + parameter +
+                    Console.println("Saving model " + functionDefinition +
                                     "was not possible")
                     ex.printStackTrace
 
                     false
                 }
         }
+        ret
     }
 
     /**
      * Creates a new SBML model individual in the Knowledgebase
      * @return true if creating the new model was possible and false otherwise
      */
-    def createParameter(parameter:Parameter, model:Model):Boolean = {
+    def createFunctionDefinition(functionDefinition:FunctionDefinition, model:Model):Boolean = {
         try{
             val writer = new Bean2RDF(model)
-            writer.save(parameter)
+            writer.save(functionDefinition)
             true
         } catch {
             case ex:thewebsemantic.NotFoundException => {
-                    Console.println("Bean of " + Parameter.getClass + "and " +
+                    Console.println("Bean of " + FunctionDefinition.getClass + "and " +
                                     "id is not found")
                     ex.printStackTrace()
                     false
@@ -144,14 +143,14 @@ class ParametersDAO {
         }
     }
 
-    def trytoCreateParameterInModel(modelMetaid:String,
-                                    parameter:Parameter):String = {
+    def trytoCreateFunctionDefinitionInModel(modelMetaid:String,
+                                    functionDefinition:FunctionDefinition):String = {
         try{
             val myModel:Model = ManipulatorWrapper.loadModelfromDB
-            trytoCreateParameterInModel(modelMetaid, parameter, myModel)
+            trytoCreateFunctionDefinitionInModel(modelMetaid, functionDefinition, myModel)
         } catch {
             case ex:thewebsemantic.NotFoundException => {
-                    Console.println("Bean of " + Parameter.getClass + "and " +
+                    Console.println("Bean of " + FunctionDefinition.getClass + "and " +
                                     "id is not found")
                     ex.printStackTrace()
                     null
@@ -163,22 +162,22 @@ class ParametersDAO {
         }
     }
 
-    def trytoCreateParameterInModel(modelMetaid:String,
-                                    parameter:Parameter,
+    def trytoCreateFunctionDefinitionInModel(modelMetaid:String,
+                                    functionDefinition:FunctionDefinition,
                                     model:Model):String = {
         if(sbmlModelsDAO.modelMetaidExists(modelMetaid)){
-            val parameterMetaid = trytoCreateParameter(parameter, model)
+            val functionDefinitionMetaid = trytoCreateFunctionDefinition(functionDefinition, model)
 
             //Jena API used directly
             val sbmlModelRes = model.createResource(
                          NS.sbml + "Model/" + modelMetaid)
-            val parameterRes = model.createResource(
-                        NS.sbml + "Model/" + parameterMetaid)
+            val functionDefinitionRes = model.createResource(
+                        NS.sbml + "Model/" + functionDefinitionMetaid)
 
             sbmlModelRes.addProperty(model
                          .getProperty(NS.sbml + "hasPArameter"),
-                                     parameterRes)
-            parameterMetaid
+                                     functionDefinitionRes)
+            functionDefinitionMetaid
         } else null
     }
 
@@ -188,13 +187,13 @@ class ParametersDAO {
      * This method also issues an available metaid
      *
      */
-    def trytoCreateParameter(parameter:Parameter):String = {
+    def trytoCreateFunctionDefinition(functionDefinition:FunctionDefinition):String = {
         try{
             val myModel:Model = ManipulatorWrapper.loadModelfromDB
-            trytoCreateParameter(parameter, myModel)
+            trytoCreateFunctionDefinition(functionDefinition, myModel)
         } catch {
             case ex:thewebsemantic.NotFoundException => {
-                    Console.println("Bean of " + Parameter.getClass + "and " +
+                    Console.println("Bean of " + FunctionDefinition.getClass + "and " +
                                     "id is not found")
                     ex.printStackTrace()
                     null
@@ -206,28 +205,28 @@ class ParametersDAO {
         }
     }
 
-    def trytoCreateParameter(parameter:Parameter, model:Model):String = {
-        if( if( sbmlModelsDAO.metaidExists(parameter.metaid ) == false ){
-                createParameter(parameter, model)
+    def trytoCreateFunctionDefinition(functionDefinition:FunctionDefinition, model:Model):String = {
+        if( if( sbmlModelsDAO.metaidExists(functionDefinition.metaid ) == false ){
+                createFunctionDefinition(functionDefinition, model)
             } else {
-                parameter.metaid = sbmlModelsDAO.generateNewMetaIdFrom(parameter,
+                functionDefinition.metaid = sbmlModelsDAO.generateNewMetaIdFrom(functionDefinition,
                                                          model)
-                createParameter(parameter,
+                createFunctionDefinition(functionDefinition,
                                 model)
             } == true)
         {
-            parameter.metaid
+            functionDefinition.metaid
         } else null
 
     }
 
-    def parameterMetaidExists(metaid:String):Boolean = {
+    def functionDefinitionMetaidExists(metaid:String):Boolean = {
         try{
             val myModel:Model = ManipulatorWrapper.loadModelfromDB
-            parameterMetaidExists(metaid, myModel)
+            functionDefinitionMetaidExists(metaid, myModel)
         } catch {
             case ex:thewebsemantic.NotFoundException => {
-                    Console.println("Bean of " + Parameter.getClass + "and " +
+                    Console.println("Bean of " + FunctionDefinition.getClass + "and " +
                                     "id is not found")
                     ex.printStackTrace()
                     false
@@ -239,17 +238,15 @@ class ParametersDAO {
         }
     }
 
-    def parameterMetaidExists(metaid:String, model:Model):Boolean = {
+    def functionDefinitionMetaidExists(metaid:String, model:Model):Boolean = {
         val reasoner:Reasoner = ReasonerRegistry.getOWLReasoner
-        //val ontModelSpec:OntModelSpec = null
-        //val ont:OntModel = ModelFactory.createOntologyModel(ontModelSpec, model)
         val ont:InfModel = ModelFactory.createInfModel(reasoner, model)
         val queryString =
         """
         PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
         PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
         ASK
-        { ?s rdf:type sbml:Parameter .
+        { ?s rdf:type sbml:FunctionDefinition .
         """ +  "?s sbml:metaid \"" + metaid + "\"^^<http://www.w3.org/2001/XMLSchema#string> } "
 
         val query:Query = QueryFactory.create(queryString);
@@ -262,17 +259,17 @@ class ParametersDAO {
     }
     
     /**
-     * Updates a Parameter into the KnowledgeBase
+     * Updates a FunctionDefinition into the KnowledgeBase
      * @param  true if
      * @return true if
      */
-    def updateParameter(parameter:Parameter):Boolean = {
+    def updateFunctionDefinition(functionDefinition:FunctionDefinition):Boolean = {
         try{
             val myModel:Model = ManipulatorWrapper.loadModelfromDB
-            updateParameter(parameter, myModel)
+            updateFunctionDefinition(functionDefinition, myModel)
         } catch {
             case ex:thewebsemantic.NotFoundException => {
-                    Console.println("Bean of " + Parameter.getClass + "and " +
+                    Console.println("Bean of " + FunctionDefinition.getClass + "and " +
                                     "id is not found")
                     ex.printStackTrace()
                     false
@@ -286,30 +283,30 @@ class ParametersDAO {
     }
 
     /**
-     * Updates a Parameter individual in the Knowledgebase
+     * Updates a FunctionDefinition individual in the Knowledgebase
      * @return true if creating the new model was possible and false otherwise
      */
-    def updateParameter(parameter:Parameter, model:Model):Boolean = {
-        if( sbmlModelsDAO.metaidExists(parameter.metaid ) ){
+    def updateFunctionDefinition(functionDefinition:FunctionDefinition, model:Model):Boolean = {
+        if( sbmlModelsDAO.metaidExists(functionDefinition.metaid ) ){
             val writer = new Bean2RDF(model)
-            writer.save(parameter)
+            writer.save(functionDefinition)
             true
         } else false
     }
 
 
     /**
-     * Deletes an Parameter in the KnowledgeBase
+     * Deletes an FunctionDefinition in the KnowledgeBase
      * @param  true if
      * @return true if
      */
-    def deleteParameter(parameter:Parameter):Boolean = {
+    def deleteFunctionDefinition(functionDefinition:FunctionDefinition):Boolean = {
         try{
             val myModel:Model = ManipulatorWrapper.loadModelfromDB
-            deleteParameter(parameter, myModel)
+            deleteFunctionDefinition(functionDefinition, myModel)
         } catch {
             case ex:Exception => {
-                    Console.println("Deleting model " + parameter +
+                    Console.println("Deleting model " + functionDefinition +
                                     "was not possible")
                     ex.printStackTrace
 
@@ -319,20 +316,20 @@ class ParametersDAO {
     }
 
     /**
-     * Deletes an Parameter in the KnowledgeBase
+     * Deletes an FunctionDefinition in the KnowledgeBase
      * @return true if creating the new model was possible and false otherwise
      */
-    def deleteParameter(parameter:Parameter, model:Model):Boolean = {
+    def deleteFunctionDefinition(functionDefinition:FunctionDefinition, model:Model):Boolean = {
         try{
-            if( parameterMetaidExists(parameter.metaid ) ){
+            if( functionDefinitionMetaidExists(functionDefinition.metaid ) ){
                 val writer = new Bean2RDF(model)
-                writer.delete(parameter)
+                writer.delete(functionDefinition)
                 //TODO delete subelements
                 true
             } else false
         } catch {
             case ex:thewebsemantic.NotFoundException => {
-                    Console.println("Bean of " + Parameter.getClass + "and " +
+                    Console.println("Bean of " + FunctionDefinition.getClass + "and " +
                                     "id is not found")
                     ex.printStackTrace()
                     false

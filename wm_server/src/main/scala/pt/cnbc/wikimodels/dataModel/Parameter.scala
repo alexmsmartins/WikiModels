@@ -24,7 +24,7 @@ import pt.cnbc.wikimodels.util.SBMLHandler
 @BeanInfo
 @Namespace("http://wikimodels.cnbc.pt/ontologies/sbml.owl#")
 //@RdfType("http://wikimodels.cnbc.pt/ontologies/sbml.owl#Parameter")
-case class SBMLParameter extends Element{
+case class Parameter extends Element{
     //this s called SBMMLPArameter because, somehow, Jersey s
     var id:String = null
     var name:String = null
