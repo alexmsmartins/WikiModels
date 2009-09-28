@@ -189,6 +189,7 @@ class ModelRead {
                             generateTableFromXML(spec \\ "@name",spec \\ "@metaid",4)
                         }
                     },
+                     "downloadSBML" -> {<a href={"../"+modelRef} target="_blank"><input type="submit" class="buttonExportModel" title="Export this model in SBML" value="Export SBML Model" /></a>},
                      "listOfParameters" -> {
                         val param = modelSBML \ "model" \ "listOfParameters" \\ "parameter"
                         if((param \\ "@name").isEmpty){
@@ -200,9 +201,9 @@ class ModelRead {
                      "listFunctionsMath" -> {
                         for(val fun <- modelSBML \ "model" \ "listOfFunctionDefinitions" \\ "functionDefinition";
                             val addFun <- fun \\ "@id" ) yield{
-                            <ul><h8><a onclick="window.open('../models/editModel.html','Edit Model','location=no, resizable=no, scrollbars=no,width=800,height=500');">Edit</a>
-                                    <a onclick="window.open('../models/new_comment.html','New Comment','location=no, resizable=no, scrollbars=no,width=600,height=300');">Make Comment</a>
-                                    <a onclick="window.open('../models/view_comments.html','View Comments','location=no, resizable=no, scrollbars=yes, width=500,height=600');">View Comments</a></h8>
+                            <ul><h8><a onclick="window.open('../models/editModel.html','Edit Model','location=no,resizable=no,scrollbars=no,width=800,height=500');">Edit</a>
+                                    <a onclick="window.open('../models/new_comment.html','New Comment','location=no,resizable=no,scrollbars=no,width=600,height=300');">Make Comment</a>
+                                    <a onclick="window.open('../models/view_comments.html','View Comments','location=no, resizable=no,scrollbars=yes,width=500,height=600');">View Comments</a></h8>
                                 <li class="closed"><span><tr id={fun \\ "@metaid"}>
                                             {if((fun \\ "@name").isEmpty){
                                                     <td class="main">{addFun}</td>} else{
