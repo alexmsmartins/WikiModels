@@ -117,7 +117,7 @@ class CreateModel {
                         val modelSBML = {
                             <model id={model_id} name={name}>
                             <notes>
-                                <body>{description}
+                                <body>{XML.loadString(description)}
                                 </body>
                             </notes>
                             {if(function_def_id != null) {
@@ -448,7 +448,7 @@ class CreateModel {
                                                 )}</ul><hr /></form>).toJs) &
                             (ElemById("react") ~> JsFunc("appendChild", Call("reactionFunc", "")))
                         }),
-                     "save" -> SHtml.submit("Save Model", createNewModel,("id","buttonSave"), ("style","position:fixed;top:170px;right:100px;width:150px;text-align:center;border:3px solid #000;")))
+                     "save" -> SHtml.submit("Save Model", createNewModel,("id","buttonSave")))
             }
         case _ => Text("")
     }

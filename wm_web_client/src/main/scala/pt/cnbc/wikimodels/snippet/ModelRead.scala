@@ -200,14 +200,14 @@ class ModelRead {
                      "listFunctionsMath" -> {
                         for(val fun <- modelSBML \ "model" \ "listOfFunctionDefinitions" \\ "functionDefinition";
                             val addFun <- fun \\ "@id" ) yield{
-                            <ul><h8><a href="#" >Edit</a>
-                                    <a onclick="window.open('../models/new_comment.html?commentid=comment001','Comment','width=400,height=200');">Make Comment</a>
-                                    <a onclick="window.open('../models/new_comment.html?commentid=comment001','Comment','width=400,height=200');">View Comments</a></h8>
+                            <ul><h8><a onclick="window.open('../models/editModel.html','Edit Model','location=no, resizable=no, scrollbars=no,width=800,height=500');">Edit</a>
+                                    <a onclick="window.open('../models/new_comment.html','New Comment','location=no, resizable=no, scrollbars=no,width=600,height=300');">Make Comment</a>
+                                    <a onclick="window.open('../models/view_comments.html','View Comments','location=no, resizable=no, scrollbars=yes, width=500,height=600');">View Comments</a></h8>
                                 <li class="closed"><span><tr id={fun \\ "@metaid"}>
                                             {if((fun \\ "@name").isEmpty){
                                                     <td class="main">{addFun}</td>} else{
                                                     <td class="main">{fun \\ "@name"}</td>}
-                                            }<td class="main_sub">&nbsp;</td>
+                                            }<td class="sub_main">&nbsp;</td>
                                                          </tr></span>
                                     <ul><li><tr><td class="main_under">Math:</td>
                                                 <td class="sub_main_under">
@@ -240,14 +240,14 @@ class ModelRead {
                      "listReactionsMath" -> {
                         for(val react <- modelSBML \ "model" \ "listOfReactions" \\ "reaction";
                             val addRe <- react \\ "@id" ) yield{
-                            <ul><h8><a href="#" >Edit</a>
-                                    <a onclick="window.open('../models/new_comment.html?commentid=comment001','Comment','width=400,height=200');">Make Comment</a>
-                                    <a onclick="window.open('../models/new_comment.html?commentid=comment001','Comment','width=400,height=200');">View Comments</a></h8>
+                            <ul><h8><a onclick="window.open('../models/editModel.html','Edit Model','location=no, resizable=no, scrollbars=no,width=800,height=500');">Edit</a>
+                                    <a onclick="window.open('../models/new_comment.html','New Comment','location=no, resizable=no, scrollbars=no,width=600,height=300');">Make Comment</a>
+                                    <a onclick="window.open('../models/view_comments.html','View Comments','location=no, resizable=no, scrollbars=yes, width=500,height=600');">View Comments</a></h8>
                                 <li class="closed"><span><tr id={react \\ "@metaid"}>{
                                                 if((react \\ "@name").isEmpty){
                                                     <td class="main">{addRe}</td>} else{
                                                     <td class="main">{react \\ "@name"}</td>}}
-                                            <td class="sub_main"><b>[{for(val x <- react\\"listOfReactants"\\"speciesReference"\\"@species") yield x}]</b>
+                                            <td class="sub_main"><br /><b>[{for(val x <- react\\"listOfReactants"\\"speciesReference"\\"@species") yield x}]</b>
                                                 {if(react \\"@reversible" != "false"){<b>&harr;</b>} else {<b>&rarr;</b>}}
                                                 <b>[{for(val y <- react\\"listOfProducts"\\"speciesReference"\\"@species") yield y}];&nbsp;&nbsp;</b>
                                                 {for(val z <- react\\"listOfModifiers"\\"modifierSpeciesReference"\\"@species") yield {
@@ -283,14 +283,14 @@ class ModelRead {
                      "compartmentData" ->{
                         for(val compartData <- modelSBML \ "model" \ "listOfCompartments" \\ "compartment";
                             val compartDataId <- compartData \\ "@id") yield {
-                            <ul><h8><a href="#" >Edit</a>
-                                    <a onclick="window.open('../models/new_comment.html?commentid=comment001','Comment','width=400,height=200');">Make Comment</a>
-                                    <a onclick="window.open('../models/new_comment.html?commentid=comment001','Comment','width=400,height=200');">View Comments</a></h8>
+                            <ul><h8><a onclick="window.open('../models/editModel.html','Edit Model','location=no, resizable=no, scrollbars=no,width=800,height=500');">Edit</a>
+                                    <a onclick="window.open('../models/new_comment.html','New Comment','location=no, resizable=no, scrollbars=no,width=600,height=300');">Make Comment</a>
+                                    <a onclick="window.open('../models/view_comments.html','View Comments','location=no, resizable=no, scrollbars=yes, width=500,height=600');">View Comments</a></h8>
                                 <li class="closed"><span><tr id={compartData \\ "@metaid"}>{
                                                 if((compartData \\ "@name").isEmpty){
                                                     <td class="main">{compartDataId}</td>} else{
                                                     <td class="main">{compartData \\ "@name"}</td>}}
-                                            <td class="sub_main" style="width:100%;">{
+                                            <td class="sub_main" style="width:100%;"><br />{
                                                     if((compartData \\ "@spatialDimensions").isEmpty){
                                                         <b>Spatial dimensions: </b><i>3;  </i>
                                                     } else {
@@ -329,14 +329,14 @@ class ModelRead {
                      "speciesData" ->{
                         for(val specData <- modelSBML \ "model" \ "listOfSpecies" \\ "species";
                             val specDataId <- specData \\ "@id") yield {
-                            <ul><h8><a href="#" >Edit</a>
-                                    <a onclick="window.open('../models/new_comment.html?commentid=comment001','Comment','width=400,height=200');">Make Comment</a>
-                                    <a onclick="window.open('../models/new_comment.html?commentid=comment001','Comment','width=400,height=200');">View Comments</a></h8>
+                            <ul><h8><a onclick="window.open('../models/editModel.html','Edit Model','location=no, resizable=no, scrollbars=no,width=800,height=500');">Edit</a>
+                                    <a onclick="window.open('../models/new_comment.html','New Comment','location=no, resizable=no, scrollbars=no,width=600,height=300');">Make Comment</a>
+                                    <a onclick="window.open('../models/view_comments.html','View Comments','location=no, resizable=no, scrollbars=yes, width=500,height=600');">View Comments</a></h8>
                                 <li class="closed"><span><tr>{
                                                 if((specData \\ "@name").isEmpty){
                                                     <td class="main">{specDataId}<br /><hr />Compartment: <i>{specData \\ "@compartment"}</i></td>} else{
                                                     <td class="main">{specData \\ "@name"}<br /><hr />Compartment: <i>{specData \\ "@compartment"}</i></td>}}
-                                            <td class="sub_main" style="width:100%;">{
+                                            <td class="sub_main" style="width:100%;"><br />{
                                                     if((specData \\ "@initialAmount").isEmpty){
                                                     } else {
                                                         <b>Initial amount: </b><i>{specData \\ "@initialAmount"};  </i>
@@ -375,14 +375,14 @@ class ModelRead {
                      "parametersData" ->{
                         for(val paramData <- modelSBML \ "model" \ "listOfParameters" \\ "parameter";
                             val paramDataId <- paramData \\ "@id") yield {
-                            <ul><h8><a href="#" >Edit</a>
-                                    <a onclick="window.open('../models/new_comment.html?commentid=comment001','Comment','width=400,height=200');">Make Comment</a>
-                                    <a onclick="window.open('../models/new_comment.html?commentid=comment001','Comment','width=400,height=200');">View Comments</a></h8>
+                            <ul><h8><a onclick="window.open('../models/editModel.html','Edit Model','location=no, resizable=no, scrollbars=no,width=800,height=500');">Edit</a>
+                                    <a onclick="window.open('../models/new_comment.html','New Comment','location=no, resizable=no, scrollbars=no,width=600,height=300');">Make Comment</a>
+                                    <a onclick="window.open('../models/view_comments.html','View Comments','location=no, resizable=no, scrollbars=yes, width=500,height=600');">View Comments</a></h8>
                                 <li class="closed"><span><tr>{
                                                 if((paramData \\ "@name").isEmpty){
                                                     <td class="main">{paramDataId}</td>} else{
                                                     <td class="main">{paramData \\ "@name"}</td>}}
-                                            <td class="sub_main" style="width:100%;">{
+                                            <td class="sub_main" style="width:100%;"><br />{
                                                     if((paramData \\ "@value").isEmpty){
                                                     } else {
                                                         <b>Value: </b><i>{paramData \\ "@value"};  </i>
@@ -419,14 +419,14 @@ class ModelRead {
                                         <ul><li class="closed">
                                                 <table class="browseModelTable" id="modelTable_Overview">
                                                     <tbody>
-                                                        <ul><h8><a href="#" >Edit</a>
-                                                                <a onclick="window.open('../models/new_comment.html?commentid=comment001','Comment','width=400,height=200');">Make Comment</a>
-                                                                <a onclick="window.open('../models/new_comment.html?commentid=comment001','Comment','width=400,height=200');">View Comments</a></h8>
+                                                        <ul><h8><a onclick="window.open('../models/editModel.html','Edit Model','location=no, resizable=no, scrollbars=no,width=800,height=500');">Edit</a>
+                                                                <a onclick="window.open('../models/new_comment.html','New Comment','location=no, resizable=no, scrollbars=no,width=600,height=300');">Make Comment</a>
+                                                                <a onclick="window.open('../models/view_comments.html','View Comments','location=no, resizable=no, scrollbars=yes, width=500,height=600');">View Comments</a></h8>
                                                             <li class="closed"><span><tr>{
                                                                             if((extra \\ "@name").isEmpty){
                                                                                 <td class="main">{extra \\ "@id"}</td>} else{
                                                                                 <td class="main">{extra \\ "@name"}</td>}}
-                                                                        <td class="sub_main" style="width:100%;">{
+                                                                        <td class="sub_main" style="width:100%;"><br />{
                                                                                 if((extra \\ "@value").isEmpty){
                                                                                 } else {
                                                                                     <b>Value: </b><i>{extra \\ "@value"};  </i>
