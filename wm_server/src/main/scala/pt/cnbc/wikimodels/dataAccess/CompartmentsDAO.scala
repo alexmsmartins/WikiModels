@@ -64,7 +64,7 @@ class CompartmentsDAO {
         var ret:Compartment = null
 
         Console.print("After loading Jena Model")
-        var reader = new RDF2Bean[Compartment](model)
+        var reader = new RDF2Bean(model)
         Console.print("After creating a new RDF2Bean")
         val l
         = reader.load( new Compartment().getClass, compartmentMetaid  )

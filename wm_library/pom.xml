@@ -11,6 +11,10 @@
   <name>wm_library</name>
   <version>1.0-SNAPSHOT</version>
   <inceptionYear>2008</inceptionYear>
+  <properties>
+      <scala.version>2.8.0.r18462-b20090811081019</scala.version>
+  </properties>
+
   <build>
     <sourceDirectory>src/main/scala</sourceDirectory>
     <testSourceDirectory>src/test/scala</testSourceDirectory>
@@ -86,17 +90,6 @@
         <artifactId>slf4j-log4j12</artifactId>
         <version>1.5.8</version>
     </dependency>
-    <!--<dependency>
-        <groupId>log4j</groupId>
-        <artifactId>log4j</artifactId>
-        <version>1.2.15</version>
-        <exclusions>
-            <exclusion>
-                <artifactId>jms</artifactId>
-                <groupId>javax.jms</groupId>
-            </exclusion>
-        </exclusions>
-    </dependency>-->
     <dependency>
         <groupId>com.hp.hpl.jena</groupId>
         <artifactId>jena</artifactId>

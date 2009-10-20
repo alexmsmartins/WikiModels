@@ -52,7 +52,7 @@ object UsersDAO {
             Console.print("Number of individuals in loaded model is " + myModel.size)
 
             Console.print("After loading Jena Model")
-            var reader = new RDF2Bean[User](myModel)
+            var reader = new RDF2Bean(myModel)
             Console.print("After creating a new RDF2Bean")
             val l:java.util.Collection[User]
                 = reader.load( new User().getClass)

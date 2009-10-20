@@ -64,7 +64,7 @@ class ReactionsDAO {
         var ret:Reaction = null
 
         Console.print("After loading Jena Model")
-        var reader = new RDF2Bean[Reaction](model)
+        var reader = new RDF2Bean(model)
         Console.print("After creating a new RDF2Bean")
         val l
         = reader.load( new Reaction().getClass, reactionMetaid  )

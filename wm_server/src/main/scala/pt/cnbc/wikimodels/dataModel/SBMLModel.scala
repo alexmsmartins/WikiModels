@@ -9,9 +9,8 @@
 package pt.cnbc.wikimodels.dataModel
 
 import java.util.Date
-import java.util.{Collection => JCollection}
 
-import org.scala_tools.javautils.Imports._
+//import org.scala_tools.javautils.Imports._
 
 import scala.reflect.BeanInfo
 import scala.xml.Elem
@@ -45,22 +44,22 @@ case class SBMLModel extends Element{
     var name:String = null
 
     //listOf definitions
-    var listOfFunctionDefinitions:JCollection[FunctionDefinition] = null
+    var listOfFunctionDefinitions:Collection[FunctionDefinition] = null
     //var listOfUnitDefinitions:List[ÛnitDefinition] = List()
     //var listOfCompartmentTypes:List[CompartmentType] = List()
     //var listOfSpeciesTypes:List[SpeciesType] = List()
     @RdfProperty("http://wikimodels.cnbc.pt/ontologies/sbml.owl#hasPart")
-    var listOfCompartments:JCollection[Compartment] = null
+    var listOfCompartments:Collection[Compartment] = null
     @RdfProperty("http://wikimodels.cnbc.pt/ontologies/sbml.owl#hasPart")
-    var listOfSpecies:JCollection[Species] = null
+    var listOfSpecies:Collection[Species] = null
     @RdfProperty("http://wikimodels.cnbc.pt/ontologies/sbml.owl#hasParameter")
-    var listOfParameters:JCollection[Parameter] = null
+    var listOfParameters:Collection[Parameter] = null
     //var listOfInitialAssignments:List[InitialAssignment] = List()
     //var listOfRules:List[Rule] = List()
     @RdfProperty("http://wikimodels.cnbc.pt/ontologies/sbml.owl#hasPart")
-    var listOfConstraints:JCollection[Constraint] = null
+    var listOfConstraints:Collection[Constraint] = null
     @RdfProperty("http://wikimodels.cnbc.pt/ontologies/sbml.owl#hasPart")
-    var listOfReactions:JCollection[Reaction] = null
+    var listOfReactions:Collection[Reaction] = null
     //var listOfEvents:List[Event] = List()
 
     def this(metaid:String,
@@ -97,7 +96,7 @@ case class SBMLModel extends Element{
             {new SBMLHandler().genNotesFromHTML(notes)}
             {if(listOfFunctionDefinitions != null && listOfFunctionDefinitions.size != 0 )
              <listOfFunctionDefinitions>
-                    {listOfFunctionDefinitions.asScala.map(i => i.toXML)}
+                    {listOfFunctionDefinitions.map(i => i.toXML)}
              </listOfFunctionDefinitions> else scala.xml.Null
             
             }
@@ -115,17 +114,17 @@ case class SBMLModel extends Element{
             }
             {if(listOfCompartments != null && listOfCompartments.size != 0)
              <listOfCompartments>
-                    {listOfCompartments.asScala.map(i => i.toXML)}
+                    {listOfCompartments.map(i => i.toXML)}
              </listOfCompartments> else scala.xml.Null
             }
             {if(listOfSpecies != null && listOfSpecies.size != 0)
              <listOfSpecies>
-                    {listOfSpecies.asScala.map(i => i.toXML)}
+                    {listOfSpecies.map(i => i.toXML)}
              </listOfSpecies> else scala.xml.Null
             }
             {if(listOfParameters != null && listOfParameters.size != 0)
              <listOfParameters>
-                    {listOfParameters.asScala.map(i => i.toXML)}
+                    {listOfParameters.map(i => i.toXML)}
              </listOfParameters> else scala.xml.Null
             }
             {if(false)
@@ -138,12 +137,12 @@ case class SBMLModel extends Element{
             }
             {if(listOfConstraints != null && listOfConstraints.size != 0)
              <listOfConstraints>
-                    {listOfConstraints.asScala.map(i => i.toXML)}
+                    {listOfConstraints.map(i => i.toXML)}
              </listOfConstraints> else scala.xml.Null
             }
             {if(listOfReactions != null && listOfReactions.size != 0)
              <listOfReactions>
-                    {listOfReactions.asScala.map(i => i.toXML)}
+                    {listOfReactions.map(i => i.toXML)}
              </listOfReactions> else scala.xml.Null
             }
             {if(false)

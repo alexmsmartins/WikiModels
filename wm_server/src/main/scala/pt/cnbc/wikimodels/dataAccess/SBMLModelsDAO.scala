@@ -65,7 +65,7 @@ class SBMLModelsDAO {
         var ret:SBMLModel = null
 
         Console.print("After loading Jena Model")
-        var reader = new RDF2Bean[SBMLModel](model)
+        var reader = new RDF2Bean(model)
         Console.print("After creating a new RDF2Bean")
         val l
         = reader.load( new SBMLModel().getClass, modelMetaid  )

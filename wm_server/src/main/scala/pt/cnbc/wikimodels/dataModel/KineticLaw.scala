@@ -8,7 +8,7 @@
 
 package pt.cnbc.wikimodels.dataModel
 
-import org.scala_tools.javautils.Imports._
+//import org.scala_tools.javautils.Imports._
 
 import scala.reflect.BeanInfo
 import scala.xml.Elem
@@ -30,7 +30,7 @@ case class KineticLaw extends Element{
     var math:String = null
 
     @RdfProperty("http://wikimodels.cnbc.pt/ontologies/sbml.owl#hasParameter")
-    var listOfParameters:java.util.Collection[Parameter] = null
+    var listOfParameters:Collection[Parameter] = null
 
     def this(metaid:String,
              notes:NodeSeq,
@@ -54,7 +54,7 @@ case class KineticLaw extends Element{
             {XML.loadString(this.math)}
             {if(listOfParameters != null && listOfParameters.size != 0)
             <listOfParameters>
-                    {listOfParameters.asScala.map(i => i.toXML)}
+                    {listOfParameters.map(i => i.toXML)}
              </listOfParameters> else scala.xml.Null
             }
         </kineticLaw>

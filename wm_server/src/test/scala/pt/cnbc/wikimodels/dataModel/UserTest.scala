@@ -26,11 +26,11 @@ class UserTest {
     @Test
     def xmlUserRoundTripTest = {
         var users:List[User] = Nil
-        users += User("alex","alexp","Alexandre", "Martins","alexmsmartins@gmail.com")
-        users += User("Alexandre","Alexandrep","Alexandre Mesquita", "Martins","alexmsmartins@gmail.com")
-        users += User("Armindo","Armindop","Armindo", "Salvador","armindo.salvador@gmail.com")
-        users += User("Gonçalo", "goncalop", "Gonçalo", "Neto", "gonneto@gmail.com")
-        users += User("admin", "adminp", "Admin", "Root", "admin@gmail.com")
+        users ::= User("alex","alexp","Alexandre", "Martins","alexmsmartins@gmail.com")
+        users ::= User("Alexandre","Alexandrep","Alexandre Mesquita", "Martins","alexmsmartins@gmail.com")
+        users ::= User("Armindo","Armindop","Armindo", "Salvador","armindo.salvador@gmail.com")
+        users ::= User("Gonçalo", "goncalop", "Gonçalo", "Neto", "gonneto@gmail.com")
+        users ::= User("admin", "adminp", "Admin", "Root", "admin@gmail.com")
 
         assertTrue("XML reamin equal after round trip conversion",
                    users.map( i => {

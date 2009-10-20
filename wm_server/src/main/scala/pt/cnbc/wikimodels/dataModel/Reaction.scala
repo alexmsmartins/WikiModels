@@ -8,7 +8,7 @@
 
 package pt.cnbc.wikimodels.dataModel
 
-import org.scala_tools.javautils.Imports._
+//import org.scala_tools.javautils.Imports._
 
 import scala.xml.Group
 import scala.xml.Node
@@ -33,9 +33,9 @@ case class Reaction extends Element{
 
     //TODO - MATH wiil be done in the DAO since it is very complicated to do it
     //all here
-    var listOfReactants:java.util.Collection[SpeciesReference] = null
-    var listOfProducts:java.util.Collection[SpeciesReference] = null
-    var listOfModifiers:java.util.Collection[ModifierSpeciesReference] = null
+    var listOfReactants:Collection[SpeciesReference] = null
+    var listOfProducts:Collection[SpeciesReference] = null
+    var listOfModifiers:Collection[ModifierSpeciesReference] = null
 
     var kineticLaw:KineticLaw = null //optional
 
@@ -68,17 +68,17 @@ case class Reaction extends Element{
             {new SBMLHandler().genNotesFromHTML(notes)}
             {if(listOfReactants != null && listOfReactants.size != 0)
             <listOfReactants>
-                    {listOfReactants.asScala.map(i => i.toXML)}
+                    {listOfReactants.map(i => i.toXML)}
              </listOfReactants> else scala.xml.Null
             }
             {if(listOfProducts != null && listOfProducts.size != 0)
             <listOfProducts>
-                    {listOfProducts.asScala.map(i => i.toXML)}
+                    {listOfProducts.map(i => i.toXML)}
              </listOfProducts> else scala.xml.Null
             }
             {if(listOfModifiers != null && listOfModifiers != 0)
             <listOfModifiers>
-                    {listOfModifiers.asScala.map(i => i.toXML)}
+                    {listOfModifiers.map(i => i.toXML)}
              </listOfModifiers> else scala.xml.Null
             }
             {if(this.kineticLaw != null) this.kineticLaw.toXML else null.asInstanceOf[Elem]}

@@ -13,7 +13,6 @@
 
     <packaging>pom</packaging>
     <modules>
-	<module>jorgeortiz85-scala-javautils</module>
         <module>wm_library</module>
         <module>wm_server</module>
         <module>wm_web_client</module>
