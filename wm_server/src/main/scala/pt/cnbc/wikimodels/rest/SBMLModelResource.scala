@@ -57,7 +57,7 @@ class SBMLModelResource extends RESTResource {
                 val sbmlModel = dao.loadSBMLModel(sbmlModelResource)
                 if(sbmlModel != null &&
                    sbmlModel.metaid == sbmlModelResource){
-                   sbmlModel.toXML.toString
+                    sbmlModel.toXML.toString
                 } else {
                     throw new WebApplicationException(Response.Status.NOT_FOUND)
                 }
@@ -221,16 +221,17 @@ class SBMLModelResource extends RESTResource {
      Console.print("functionDefinition resource was used in user " + username)
      }*/
 
-     @Path("{modelid}/parameter/")
-     def parameterResource(@PathParam("modelid") sbmlModelResource:String):ParameterResource = {
-        val username = security.getUserPrincipal().getName()
+    @Path("{modelid}/parameter/")
+    def parameterResource(@PathParam("modelid") sbmlModelResource:String):ParameterResource = {
+        /*val username = security.getUserPrincipal().getName()
         Console.print("parameter resource was used in user " + username)
         val resource:ParameterResource = new ParameterResource(sbmlModelResource)
         resource.security = this.security
-        resource
-     }
+        resource*/
+        new ParameterResource(sbmlModelResource)
+    }
 
-     /*@Path("{modelid}/reaction/")
+    /*@Path("{modelid}/reaction/")
      def reactionResource(@PathParam("modelid") sbmlModelResource:String) = {
      val username = security.getUserPrincipal().getName()
      Console.print("reaction resource was used in user " + username)

@@ -81,6 +81,9 @@ case class SBMLModel extends Element{
              (new SBMLHandler).checkCurrentLabelForNotes(xmlModel),
              (new SBMLHandler).toStringOrNull((xmlModel \ "@id").text),
              (new SBMLHandler).toStringOrNull((xmlModel \ "@name").text) )
+        this.listOfParameters =
+            (xmlModel \ "listOfParameters" \ "parameter")
+            .map(i => new Parameter(i.asInstanceOf[scala.xml.Elem]))
     }
 
     /**
@@ -98,7 +101,6 @@ case class SBMLModel extends Element{
              <listOfFunctionDefinitions>
                     {listOfFunctionDefinitions.map(i => i.toXML)}
              </listOfFunctionDefinitions> else scala.xml.Null
-            
             }
             {if(false)
              <listOfUnitDefinitions>

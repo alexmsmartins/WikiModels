@@ -57,13 +57,13 @@ case class Parameter extends Element{
              units:String,
              constant:Boolean) = {
         this()
-        /*this.metaid = metaid
+        this.metaid = metaid
         this.setNotesFromXML(notes)
         this.id = id
         this.name = name
         this.value = value
         this.units = units
-        this.constant = constant*/
+        this.constant = constant
     }
 
     def this(xmlParameter:Elem) = {
@@ -76,12 +76,10 @@ case class Parameter extends Element{
             } catch {
                 case _ => null
             },
-            (new SBMLHandler).toStringOrNull((xmlParameter \ "@units").text),
-            (xmlParameter \ "@constant").text.toBoolean
+             (new SBMLHandler).toStringOrNull((xmlParameter \ "@units").text),
+             (xmlParameter \ "@constant").text.toBoolean
         )
     }
-
-
 
     override def toXML:Elem = {
         <parameter metaid={metaid} id={id} name={name} value={

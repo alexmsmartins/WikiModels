@@ -59,7 +59,7 @@ class ParameterResource(sbmlModelResource:String) extends RESTResource {
                 val parameter = dao.loadParameter(parameterResource)
                 if(parameter != null &&
                    parameter.metaid == parameterResource){
-                    parameter.toXML.toString
+                   parameter.toXML.toString
                 } else {
                     throw new WebApplicationException(Response.Status.NOT_FOUND)
                 }

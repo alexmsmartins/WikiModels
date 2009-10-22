@@ -277,4 +277,26 @@ class SBMLModelTest {
                         + sbml2.toXML.toString)
         assertTrue(sbml == sbml2 )
     }
+
+    @Test
+    def createModelWithParameters = {
+        val xmlModelWithParameters = <model>
+  <listOfParameters>
+    <parameter id="transcriptionDelay" value="10" units="time"/>
+    <parameter id="transcriptionDelay2" value="102" units="time"/>
+  </listOfParameters>
+  <listOfEvents>
+    <event>
+      <delay>
+	<math xmlns="http://www.w3.org/1998/Math/MathML">
+	  <ci> transcriptionDelay </ci>
+	</math>
+      </delay>
+    </event>
+  </listOfEvents>
+</model>
+        (xmlModelWithParameters \ "listOfParameters" \ "parameter").map(i => i.asInstanceOf[scala.xml.Elem]).map(i => new pt.cnbc.wikimodels.dataModel.Parameter(<parameter value="10" units="time" id="transcriptionDelay"></parameter>))
+        .map(i => new pt.cnbc.wikimodels.dataModel.Parameter(i.asInstanceOf[scala.xml.Elem] ) )
+        assertTrue(true)
+    }
 }
