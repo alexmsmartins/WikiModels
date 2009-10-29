@@ -5,7 +5,6 @@
  * and open the template in the editor.
  * @author Alexandre Martins
  */
-
 package pt.cnbc.wikimodels.dataModel
 
 import scala.reflect.BeanInfo
@@ -19,6 +18,7 @@ import thewebsemantic.Namespace
 import thewebsemantic.RdfProperty
 import thewebsemantic.RdfType
 
+import pt.cnbc.wikimodels.exceptions.BadFormatException
 import pt.cnbc.wikimodels.util.SBMLHandler
 
 @BeanInfo
@@ -71,14 +71,17 @@ case class Parameter extends Element{
              (new SBMLHandler).checkCurrentLabelForNotes(xmlParameter),
              (new SBMLHandler).toStringOrNull((xmlParameter \ "@id").text),
              (new SBMLHandler).toStringOrNull((xmlParameter \ "@name").text),
-             try{
-                java.lang.Double.parseDouble( (xmlParameter \ "@value").text )
-            } catch {
-                case _ => null
-            },
+             null,
              (new SBMLHandler).toStringOrNull((xmlParameter \ "@units").text),
-             (xmlParameter \ "@constant").text.toBoolean
+             true
         )
+        this.value = try{
+                        java.lang.Double.parseDouble( (xmlParameter \ "@value").text )
+                    } catch {
+                        case _ => null
+                    }
+        this.constant = (new SBMLHandler)
+        .convertStringToBool((xmlParameter \ "@constant").text, true)
     }
 
     override def toXML:Elem = {

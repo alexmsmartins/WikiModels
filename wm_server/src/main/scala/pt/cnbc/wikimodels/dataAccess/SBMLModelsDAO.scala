@@ -34,7 +34,6 @@ import pt.cnbc.wikimodels.dataModel.Comment
 import pt.cnbc.wikimodels.dataModel.Element
 import pt.cnbc.wikimodels.exceptions.NotImplementedException
 import pt.cnbc.wikimodels.ontology.ManipulatorWrapper
-import pt.cnbc.wikimodels.util.ImplicitConversions
 import com.hp.hpl.jena.rdf.model.InfModel
 
 class SBMLModelsDAO {

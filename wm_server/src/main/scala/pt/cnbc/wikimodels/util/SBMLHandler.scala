@@ -18,6 +18,7 @@ import scala.xml.TopScope
 import scala.xml.UnprefixedAttribute
 import scala.xml.XML
 
+import pt.cnbc.wikimodels.exceptions.BadFormatException
 
 object SBMLHandler{ var LibSBMLLoaded = false}
 
@@ -166,6 +167,15 @@ class SBMLHandler {
      * actually return nothing and not an empty string
      */
     def toStringOrNull(str:String) = if(str.trim == "") null else str.trim
+
+    def convertStringToBool(strBol:String, defaultVal:Boolean):Boolean = {
+        strBol match {
+            case "true" => true
+            case "" => defaultVal
+            case "false" => false
+            case _ => throw new BadFormatException(strBol + " not a boolean value!")
+        }
+    }
 }
 
 

@@ -41,7 +41,7 @@ class ParameterResource(sbmlModelResource:String) extends RESTResource {
     @Context
     var security:SecurityContext = null
     @Context
-    var uriInfo:UriInfo =null;
+    var uriInfo:UriInfo = null
 
     @GET
     @Produces(Array("application/xml"))
@@ -143,7 +143,7 @@ class ParameterResource(sbmlModelResource:String) extends RESTResource {
         var ret = ""
         if(secContext.isAuthorizedTo(username,
                                      "PUT", "model/" + sbmlModelResource +
-                                     "/parameter/" + parameterResource ) ){
+            "/parameter/" + parameterResource ) ){
             try{
                 val dao = new ParametersDAO
                 //XXX if there are performance problems in this part replace:
@@ -202,6 +202,7 @@ class ParameterResource(sbmlModelResource:String) extends RESTResource {
                             Response.Status.BAD_REQUEST)
                     }
             }
+           //Console.print(uriInfo + " HERE")
         } else {
             //user is trying to access a resource for which
             //it does not have permissions

@@ -42,7 +42,7 @@ object App {
         var testNumber = 0
         try {
             setUp
-            log.info("======================" )
+            /*log.info("======================" )
             testNumber+=1
             log.info("TEST " + testNumber + " - Login" )
             loginTest
@@ -91,7 +91,47 @@ object App {
             testNumber+=1
             log.info("TEST " + testNumber + " - DeleteModel2" )
             deleteModelTest
+            log.info("SUCCESS" )*/
+            log.info("======================" )
+            testNumber+=1
+            log.info("TEST " + testNumber + " - deleteNonExistantParameter" )
+            deleteNonExistantParameterTest
             log.info("SUCCESS" )
+            /*log.info("======================" )
+            testNumber+=1
+            log.info("TEST " + testNumber + " - editParameterBeforeCreation" )
+            editParameterBeforeCreationTest
+            log.info("SUCCESS" )
+            log.info("======================" )
+            testNumber+=1
+            log.info("TEST " + testNumber + " - CreateParameter" )
+            createParameterTest
+            log.info("SUCCESS" )
+            log.info("======================" )
+            testNumber+=1
+            log.info("TEST " + testNumber + " - CreateAnotherParameter" )
+            createAnotherParameterTest
+            log.info("SUCCESS" )
+            log.info("======================" )
+            testNumber+=1
+            log.info("TEST " + testNumber + " - BrowseParameter" )
+            browseParameterTest
+            log.info("SUCCESS" )
+            log.info("======================" )
+            testNumber+=1
+            log.info("TEST " + testNumber + " - BrowseNonExistantParameter" )
+            browseNonExistantParameterTest
+            log.info("SUCCESS" )
+            log.info("======================" )
+            testNumber+=1
+            log.info("TEST " + testNumber + " - EditParameter" )
+            editParameterTest
+            log.info("SUCCESS" )
+            log.info("======================" )
+            testNumber+=1
+            log.info("TEST " + testNumber + " - DeleteParameter2" )
+            deleteParameterTest
+            log.info("SUCCESS" )*/
             log.info("======================" )
             log.info("INTEGRATION TESTING SUCCEDED")
             //basicAuthentication
@@ -121,6 +161,7 @@ object App {
     def tearDown: Unit = {
         ra.close
     }
+
     val model:Elem =
     <model metaid="metaid_0000002" id="model_0000001" name="Izhikevich2004_SpikingNeurons_Class1Excitable">
         <notes>
@@ -220,10 +261,6 @@ object App {
             assertTrue( (xml \ "notes").size > 0 )
         } else throw new Exception("Wrong StatusCode. Should be 200 Not Found")
     }
-
-
-
-
 
 
     val model2 =
@@ -414,4 +451,61 @@ object App {
         </listOfEvents>
     </model>
 
+
+/*    @Test
+    def createModelTest = {
+        val uriModel:URI = ra.postRequest("/model", model)
+        log.debug("Created model with URI in " + uriModel.toString)
+    }
+
+    @Test
+    def createAnotherModelTest = {
+        val uriModel:URI = ra.postRequest("/model", model)
+        log.debug("Created model with URI in " + uriModel.toString)
+    }
+
+    @Test
+    def deleteModelTest = {
+        ra.deleteRequest("/model/metaid_0000002")
+        if(ra.getStatusCode == 204) {
+        } else throw new Exception("Wrong StatusCode. Should be 200 No Content")
+    }
+*/
+    @Test
+    def deleteNonExistantParameterTest = {
+        ra.deleteRequest("/model/metaid_0000002/parameter/metaid_0000023")
+        if(ra.getStatusCode == 404) {
+        } else throw new Exception("Wrong StatusCode. Should be 404 Not Found")
+    }
+/*
+    @Test
+    def editModelTest = {
+        ra.putRequest("/model/metaid_0000002", model)
+        if(ra.getStatusCode == 200) {
+        } else throw new Exception("Wrong StatusCode. Should be 200 Not Found")
+    }
+
+    @Test
+    def editModelBeforeCreationTest = {
+        ra.putRequest("/model/metaid_0000002", model)
+        if(ra.getStatusCode == 404) {
+        } else throw new Exception("Wrong StatusCode. Should be 404 Not Found")
+    }
+
+    @Test
+    def browseNonExistantModelTest = {
+        val xml = ra.getRequest("/model/xxx")
+        if(ra.getStatusCode == 404) {
+
+        } else throw new Exception("Wrong StatusCode. Should be 404 Not Found")
+    }
+
+    @Test
+    def browseModelTest = {
+        val xml = ra.getRequest("/model/metaid_00000020")
+        if(ra.getStatusCode == 200) {
+            assertTrue( (xml \ "notes").size > 0 )
+        } else throw new Exception("Wrong StatusCode. Should be 200 Not Found")
+    }
+*/
 }

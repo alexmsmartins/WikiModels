@@ -45,9 +45,6 @@ case class Element extends DataModel {
         this.notes = Group((new SBMLHandler).addNamespaceToXHTML(notes)).toString()
     }
 
-
-
-
     def this(xmlModel:Elem) = {
         this()
         this.metaid = (xmlModel \ "@metaid").text

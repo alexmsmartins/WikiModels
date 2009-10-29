@@ -4,7 +4,6 @@
  * To change this template, choose Tools | Template Manager
  * and open the template in the editor.
  */
-
 package pt.cnbc.wikimodels.rest
 
 import java.io.InputStream
@@ -224,11 +223,12 @@ class SBMLModelResource extends RESTResource {
     @Path("{modelid}/parameter/")
     def parameterResource(@PathParam("modelid") sbmlModelResource:String):ParameterResource = {
         /*val username = security.getUserPrincipal().getName()
-        Console.print("parameter resource was used in user " + username)
+        Console.print("parameter resource was used in user " + username)*/
         val resource:ParameterResource = new ParameterResource(sbmlModelResource)
-        resource.security = this.security
-        resource*/
-        new ParameterResource(sbmlModelResource)
+        //TODO find out why the annotation @Context does not work on subresources
+        resource.security = this.security //ugly hack
+        resource.uriInfo = this.uriInfo //ugly hack
+        resource
     }
 
     /*@Path("{modelid}/reaction/")

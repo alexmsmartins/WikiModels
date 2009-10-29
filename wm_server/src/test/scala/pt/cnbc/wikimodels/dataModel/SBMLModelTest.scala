@@ -295,8 +295,9 @@ class SBMLModelTest {
     </event>
   </listOfEvents>
 </model>
-        (xmlModelWithParameters \ "listOfParameters" \ "parameter").map(i => i.asInstanceOf[scala.xml.Elem]).map(i => new pt.cnbc.wikimodels.dataModel.Parameter(<parameter value="10" units="time" id="transcriptionDelay"></parameter>))
-        .map(i => new pt.cnbc.wikimodels.dataModel.Parameter(i.asInstanceOf[scala.xml.Elem] ) )
+        (xmlModelWithParameters \ "listOfParameters" \ "parameter")
+        .map(i => i.asInstanceOf[scala.xml.Elem])
+        .map(i => new pt.cnbc.wikimodels.dataModel.Parameter(<parameter value="10" units="time" id="transcriptionDelay"></parameter>))
         assertTrue(true)
     }
 }
