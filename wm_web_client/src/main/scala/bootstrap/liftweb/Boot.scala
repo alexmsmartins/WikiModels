@@ -48,7 +48,9 @@ class Boot {
             //Menu(Loc("listM", List("models","list"), "List of Models"))) ::
         Menu(Loc("tags", List("tags"), "Tags")) ::
         Menu(Loc("new_comment", List("models","new_comment"), "New Comment", Hidden)) ::
-        Menu(Loc("view_comments", List("models","view_comments"), "View Comment", Hidden)) ::
+        Menu(Loc("new_model_comment", List("models","new_model_comment"), "New Model Comment", Hidden)) ::
+        Menu(Loc("view_comments", List("models","view_comments"), "View Comments", Hidden)) ::
+        Menu(Loc("view_all_comments", List("models","view_all_comments"), "View All Comments", Hidden)) ::
         Menu(Loc("help", List("help","index"), "Help"),
             Menu(Loc("helpMath", List("help","helpMath"), "Help Math", Hidden))) ::
         Menu(Loc("administrator", List("administrator","index"), "Administrator", Hidden, loggedIn)) ::

@@ -1,8 +1,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:lift="http://liftweb.net/" xml:lang="en">
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-		<meta name="description" content="" />
-		<meta name="keywords" content="" />
+        <meta name="description" content="" />
+        <meta name="keywords" content="" />
         <title>WikiModels Webpage</title>
         <link rel="shortcut icon" href="/classpath/images/Logotipo.ico" />
         <link type="text/css" rel="stylesheet" href="/classpath/css/style.css" />
@@ -14,19 +14,71 @@
         <script src="/classpath/js/functions.js" type="text/javascript" />
         <script src="/classpath/js/fckeditor/fckeditor.js" type="text/javascript"></script>
         <script src="/classpath/js/popup.js" type="text/javascript"></script>
+        <script type="text/javascript" src="/classpath/math/json2.js"/>
+        <script type="text/javascript" src="/classpath/math/tokens.js"/>
+        <script type="text/javascript" src="/classpath/math/parse.js"/>
+        <script type="text/javascript" src="/classpath/math/math-exceptions.js"/>
+        <script type="text/javascript" src="/classpath/math/math-templates.js"/>
+        <script type="text/javascript" src="/classpath/math/math-categories.js"/>
+        <script type="text/javascript" src="/classpath/math/math-utils.js"/>
+        <script type="text/javascript" src="/classpath/math/math-infer.js"/>
+        <script type="text/javascript" src="/classpath/math/math-node.js"/>
+        <script type="text/javascript" src="/classpath/math/math-model.js"/>
+        <script type="text/javascript" src="/classpath/math/math-parser.js"/>
+        <script type="text/javascript" src="/classpath/math/math-position.js"/>
+        <script type="text/javascript" src="/classpath/math/math-render.js"/>
+        <script type="text/javascript" src="/classpath/math/math-input.js"/>
+        <script type="text/javascript" src="/classpath/math/math-editor.js"/>
+        <script type="text/javascript">
+        //<![CDATA[
+        Ext.onReady(function(){
+        	MathUtil.rootPath = "./";
+        	new MathEditor(document.getElementById('editor'));
+
+        	var cookie = new Ext.state.CookieProvider();
+			//var value = cookie.get('math-editor-popup-open');
+			//alert("open? "+value);
+			cookie.set('math-editor-popup-open', 'opened');
+
+
+			// Start a simple task that refocuses the window if the parent window was refreshed
+			var task = {
+			    run: function(){
+			    	var cookie = new Ext.state.CookieProvider();
+					var value = cookie.get('math-editor-popup-open');
+					if('focus' == value) {
+						cookie.set('math-editor-popup-open', 'opened');
+
+			        	window.focus();
+			        }
+			    },
+			    interval: 1000 //1 second
+			}
+			var runner = new Ext.util.TaskRunner();
+			runner.start(task);
+        });
+
+        window.onbeforeunload = function() {
+        	var cookie = new Ext.state.CookieProvider();
+			cookie.clear('math-editor-popup-open');
+        	//return "Before closing, are you sure you manually Cut or Copied MathML from this page and inserted it into the module?";
+        }
+    	//]]>
+    </script>
+
         <script id="jquery" src="/classpath/js/jquery.js" type="text/javascript" />
         <script type="text/javascript">
             window.onload = function() {
                 document.getElementById("username").focus();
             }
         </script>
-	</head>
-	<body>
+    </head>
+    <body>
         <div id="header">
             <div id="logo">
-            <a href="/index">
-                <img title="WikiModels Logo" src="/classpath/images/Logo_v0.07.png"></img>
-            </a><h2>Live models</h2>
+                <a href="/index">
+                    <img title="WikiModels Logo" src="/classpath/images/Logo_v0.07.png"></img>
+                </a><h2>Live models</h2>
             </div>
             <div id="search">
                 <form action="" method="get">
@@ -41,7 +93,7 @@
                 <lift:bind name="content" />
             </div>
         </div>
-    <div id="footer">
+        <div id="footer">
             <div id="sponsors">
                 <a title="Portugal"><img width="50px" height="27.5px" src="/classpath/images/portugal.gif" /></a>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -51,6 +103,6 @@
                 <a title="CNC" href="http://www.cnbc.pt/"><img width="50px" height="27.5px" src="/classpath/images/im_logo01.gif" /></a>
             </div>
             <p>Webpage developed by <a href="index">WikiModels</a> webmasters.<br /> © Copyright 2009</p>
-    </div>
-	</body>
+        </div>
+    </body>
 </html>

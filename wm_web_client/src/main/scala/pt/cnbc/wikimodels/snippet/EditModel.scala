@@ -17,6 +17,7 @@ import js.jquery._
 import JqJsCmds._
 import java.util.Hashtable
 import java.util.Enumeration
+import net.liftweb.common._
 
 import pt.cnbc.wikimodels.rest.client.BasicAuth
 import pt.cnbc.wikimodels.rest.client.RestfulAccess

@@ -16,6 +16,7 @@ import S._
 import SHtml._
 import Helpers._
 import scala.xml._
+import net.liftweb.common._
 
 class HomePage {
     def formatter = {

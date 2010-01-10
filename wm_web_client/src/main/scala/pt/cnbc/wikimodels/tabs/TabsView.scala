@@ -2,7 +2,6 @@ package pt.cnbc.wikimodels.tabs
 
 import _root_.scala.xml._
 import _root_.net.liftweb.util.Helpers._
-import _root_.net.liftweb.util.{Box, Full, Empty}
 import _root_.net.liftweb.http.S._
 import _root_.net.liftweb.http.LiftRules
 import _root_.net.liftweb.http.{LiftResponse, JsonResponse}
@@ -12,6 +11,7 @@ import JsCmds._
 import JE._
 import JqJsCmds._
 import JqJE._
+import net.liftweb.common._
 
 object TabsView {
 

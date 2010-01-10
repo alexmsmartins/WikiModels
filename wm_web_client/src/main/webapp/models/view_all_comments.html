@@ -2,15 +2,15 @@
     <head>
         <title>WikiModels Webpage - View Comments</title>
     </head>
-    <h1>View Comments</h1>
+    <h1>View All Comments</h1>
     <hr />
     <br />
-    <lift:Comments.viewComments>
-        <a id="comment_link_selected">Comments about the Model</a>
-        <a id="comment_link" href="../models/view_all_comments.html">Show all comments</a>
+    <lift:Comments.viewAllComments>
+        <a id="comment_link" href="../models/view_comments.html">Comments about the Model</a>
+        <a id="comment_link_selected">Show all comments</a>
         <lift:ModelTree.renderComment />
         <view:data />
         <br />
         <view:close />
-    </lift:Comments.viewComments>
+    </lift:Comments.viewAllComments>
 </lift:surround>

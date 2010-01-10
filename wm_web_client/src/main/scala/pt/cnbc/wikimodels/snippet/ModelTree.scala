@@ -34,4 +34,7 @@ class ModelTree {
   def render6(xhtml: Group): NodeSeq = {
     TreeView("model_tree_parameter", JsObj(("animated" -> 150)))
   }
+  def renderComment(xhtml: Group): NodeSeq = {
+    TreeView("model_tree_comment", JsObj(("animated" -> 150)))
+  }
 }

@@ -21,6 +21,7 @@ import js.JE
 import js.JE._
 import js.jquery._
 import JqJsCmds._
+import net.liftweb.common._
 
 import pt.cnbc.wikimodels.rest.client.BasicAuth
 import pt.cnbc.wikimodels.rest.client.RestfulAccess

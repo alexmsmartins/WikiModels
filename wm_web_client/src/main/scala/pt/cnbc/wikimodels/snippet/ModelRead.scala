@@ -19,6 +19,7 @@ import js.JsCmds._
 import js.Jx
 import js.JE
 import js.JE._
+import net.liftweb.common._
 
 class ModelRead {
 
@@ -201,9 +202,9 @@ class ModelRead {
                      "listFunctionsMath" -> {
                         for(val fun <- modelSBML \ "model" \ "listOfFunctionDefinitions" \\ "functionDefinition";
                             val addFun <- fun \\ "@id" ) yield{
-                            <ul><h8><a onclick="window.open('../models/editModel.html','Edit Model','location=no,resizable=no,scrollbars=no,width=800,height=500');">Edit</a>
-                                    <a onclick="window.open('../models/new_comment.html','New Comment','location=no,resizable=no,scrollbars=no,width=600,height=300');">Make Comment</a>
-                                    <a onclick="window.open('../models/view_comments.html','View Comments','location=no, resizable=no,scrollbars=yes,width=500,height=600');">View Comments</a></h8>
+                            <ul><h8><a onclick="window.open('../models/editModel.html','Edit Model','width=800,height=500');">Edit</a>
+                                    <a onclick="window.open('../models/new_comment.html','New Comment','width=600,height=300');">Make Comment</a>
+                                    <a onclick="window.open('../models/view_comments.html','View Comments','width=600,height=600');">View Comments</a></h8>
                                 <li class="closed"><span><tr id={fun \\ "@metaid"}>
                                             {if((fun \\ "@name").isEmpty){
                                                     <td class="main">{addFun}</td>} else{
@@ -241,9 +242,9 @@ class ModelRead {
                      "listReactionsMath" -> {
                         for(val react <- modelSBML \ "model" \ "listOfReactions" \\ "reaction";
                             val addRe <- react \\ "@id" ) yield{
-                            <ul><h8><a onclick="window.open('../models/editModel.html','Edit Model','location=no, resizable=no, scrollbars=no,width=800,height=500');">Edit</a>
-                                    <a onclick="window.open('../models/new_comment.html','New Comment','location=no, resizable=no, scrollbars=no,width=600,height=300');">Make Comment</a>
-                                    <a onclick="window.open('../models/view_comments.html','View Comments','location=no, resizable=no, scrollbars=yes, width=500,height=600');">View Comments</a></h8>
+                            <ul><h8><a onclick="window.open('../models/editModel.html','Edit Model','width=800,height=500');">Edit</a>
+                                    <a onclick="window.open('../models/new_comment.html','New Comment','width=600,height=300');">Make Comment</a>
+                                    <a onclick="window.open('../models/view_comments.html','View Comments','width=600,height=600');">View Comments</a></h8>
                                 <li class="closed"><span><tr id={react \\ "@metaid"}>{
                                                 if((react \\ "@name").isEmpty){
                                                     <td class="main">{addRe}</td>} else{
@@ -284,9 +285,9 @@ class ModelRead {
                      "compartmentData" ->{
                         for(val compartData <- modelSBML \ "model" \ "listOfCompartments" \\ "compartment";
                             val compartDataId <- compartData \\ "@id") yield {
-                            <ul><h8><a onclick="window.open('../models/editModel.html','Edit Model','location=no, resizable=no, scrollbars=no,width=800,height=500');">Edit</a>
-                                    <a onclick="window.open('../models/new_comment.html','New Comment','location=no, resizable=no, scrollbars=no,width=600,height=300');">Make Comment</a>
-                                    <a onclick="window.open('../models/view_comments.html','View Comments','location=no, resizable=no, scrollbars=yes, width=500,height=600');">View Comments</a></h8>
+                            <ul><h8><a onclick="window.open('../models/editModel.html','Edit Model','width=800,height=500');">Edit</a>
+                                    <a onclick="window.open('../models/new_comment.html','New Comment','width=600,height=300');">Make Comment</a>
+                                    <a onclick="window.open('../models/view_comments.html','View Comments','width=600,height=600');">View Comments</a></h8>
                                 <li class="closed"><span><tr id={compartData \\ "@metaid"}>{
                                                 if((compartData \\ "@name").isEmpty){
                                                     <td class="main">{compartDataId}</td>} else{
@@ -330,9 +331,9 @@ class ModelRead {
                      "speciesData" ->{
                         for(val specData <- modelSBML \ "model" \ "listOfSpecies" \\ "species";
                             val specDataId <- specData \\ "@id") yield {
-                            <ul><h8><a onclick="window.open('../models/editModel.html','Edit Model','location=no, resizable=no, scrollbars=no,width=800,height=500');">Edit</a>
-                                    <a onclick="window.open('../models/new_comment.html','New Comment','location=no, resizable=no, scrollbars=no,width=600,height=300');">Make Comment</a>
-                                    <a onclick="window.open('../models/view_comments.html','View Comments','location=no, resizable=no, scrollbars=yes, width=500,height=600');">View Comments</a></h8>
+                            <ul><h8><a onclick="window.open('../models/editModel.html','Edit Model','width=800,height=500');">Edit</a>
+                                    <a onclick="window.open('../models/new_comment.html','New Comment','width=600,height=300');">Make Comment</a>
+                                    <a onclick="window.open('../models/view_comments.html','View Comments','width=600,height=600');">View Comments</a></h8>
                                 <li class="closed"><span><tr>{
                                                 if((specData \\ "@name").isEmpty){
                                                     <td class="main">{specDataId}<br /><hr />Compartment: <i>{specData \\ "@compartment"}</i></td>} else{
@@ -376,9 +377,9 @@ class ModelRead {
                      "parametersData" ->{
                         for(val paramData <- modelSBML \ "model" \ "listOfParameters" \\ "parameter";
                             val paramDataId <- paramData \\ "@id") yield {
-                            <ul><h8><a onclick="window.open('../models/editModel.html','Edit Model','location=no, resizable=no, scrollbars=no,width=800,height=500');">Edit</a>
-                                    <a onclick="window.open('../models/new_comment.html','New Comment','location=no, resizable=no, scrollbars=no,width=600,height=300');">Make Comment</a>
-                                    <a onclick="window.open('../models/view_comments.html','View Comments','location=no, resizable=no, scrollbars=yes, width=500,height=600');">View Comments</a></h8>
+                            <ul><h8><a onclick="window.open('../models/editModel.html','Edit Model','width=800,height=500');">Edit</a>
+                                    <a onclick="window.open('../models/new_comment.html','New Comment','width=600,height=300');">Make Comment</a>
+                                    <a onclick="window.open('../models/view_comments.html','View Comments','width=600,height=600');">View Comments</a></h8>
                                 <li class="closed"><span><tr>{
                                                 if((paramData \\ "@name").isEmpty){
                                                     <td class="main">{paramDataId}</td>} else{
@@ -420,9 +421,9 @@ class ModelRead {
                                         <ul><li class="closed">
                                                 <table class="browseModelTable" id="modelTable_Overview">
                                                     <tbody>
-                                                        <ul><h8><a onclick="window.open('../models/editModel.html','Edit Model','location=no, resizable=no, scrollbars=no,width=800,height=500');">Edit</a>
-                                                                <a onclick="window.open('../models/new_comment.html','New Comment','location=no, resizable=no, scrollbars=no,width=600,height=300');">Make Comment</a>
-                                                                <a onclick="window.open('../models/view_comments.html','View Comments','location=no, resizable=no, scrollbars=yes, width=500,height=600');">View Comments</a></h8>
+                                                        <ul><h8><a onclick="window.open('../models/editModel.html','Edit Model','width=800,height=500');">Edit</a>
+                                                                <a onclick="window.open('../models/new_comment.html','New Comment','width=600,height=300');">Make Comment</a>
+                                                                <a onclick="window.open('../models/view_comments.html','View Comments','width=600,height=600');">View Comments</a></h8>
                                                             <li class="closed"><span><tr>{
                                                                             if((extra \\ "@name").isEmpty){
                                                                                 <td class="main">{extra \\ "@id"}</td>} else{

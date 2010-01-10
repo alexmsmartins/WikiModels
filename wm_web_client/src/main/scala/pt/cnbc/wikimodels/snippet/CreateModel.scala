@@ -1,25 +1,22 @@
 package pt.cnbc.wikimodels.snippet
 
-import net.liftweb._
-import http._
-import util._
-import Helpers._
-import sitemap.Loc.If
+import net.liftweb.util.Helpers._
+import net.liftweb.sitemap.Loc.If
 import scala.xml.{ XML, Elem, Group, Node, NodeSeq, Null, Text, TopScope }
-import S._
-import net.liftweb.http.js._
-import js.JsCmds
-import js.JsCmds._
-import js.Jx
-import js.JE
-import js.JE._
-import js.jquery._
-import JqJsCmds._
+import net.liftweb.http.S
+import net.liftweb.http.SHtml
+import net.liftweb.http.js.JsCmd
+import net.liftweb.http.js.JsCmds.JsCrVar
+import net.liftweb.http.js.Jx
+import net.liftweb.http.js.JE._
+import net.liftweb.http.js.jquery._
+import net.liftweb.http.js.jquery.JqJsCmds._
 import java.util.Hashtable
 import java.util.Enumeration
+import net.liftweb.common._
 
-import pt.cnbc.wikimodels.rest.client.BasicAuth
-import pt.cnbc.wikimodels.rest.client.RestfulAccess
+import rest.client.BasicAuth
+import rest.client.RestfulAccess
 
 
 class CreateModel {
@@ -29,12 +26,18 @@ class CreateModel {
         case Full(user) => {
                 var id:String = null
                 var model_id:String = null
-                var name:String = null
+                var model_name:String = null
                 var incr:Int = 0
                 var count:Int = 0
+                var reactant_count:Int = 0
+                var reactant_key:String = null
                 var reactant_ul:String = null
                 var product_ul:String = null
+                var product_count:Int = 0
+                var product_key:String = null
                 var modifier_ul:String = null
+                var modifier_count:String = null
+                var modifier_key:String = null
                 var description:String = null
                 var function_def_id = List[String]()
                 var function_def_name = List[String]()
@@ -64,16 +67,11 @@ class CreateModel {
                 var constraint_message = List[String]()
                 var constraint_note = List[String]()
                 var reaction_id = List[String]()
+                var reaction_number = List[String]()
                 var reaction_name = List[String]()
                 var reaction_reversible = List[String]()
                 var reaction_fast = List[String]()
                 var reaction_list = List[Unit]()
-                var reactant_name = List[String]()
-                var reactant_id = List[String]()
-                var reactant_specie = List[String]()
-                var reactant_stoic = List[String]()
-                var reactant_stoic_math = List[String]()
-                var reactant_note = List[String]()
                 var product_name = List[String]()
                 var product_id = List[String]()
                 var product_specie = List[String]()
@@ -93,6 +91,7 @@ class CreateModel {
                 var reaction_modifier = List[String]()
                 var reaction_kinetic = List[String]()
                 var reaction_kinetic_param = List[String]()
+                var reactant_hash = new Hashtable[String,Reactant]()
                 //var reaction_kinetic_param_group = List[List[String]]()
                 var reaction_note = List[String]()
                 val msgName: String = S.attr("id_msgs") openOr "messages"
@@ -104,158 +103,143 @@ class CreateModel {
                  * @return the XML representing the user
                  */
                 def createNewModel () = {
-                    model_id = name.replace(" ", "").toLowerCase
-                    for(val i <- 0 to (reaction_id.length-1)) {
-                        if(reaction_id(i).contains(" ")){
-                            println("Localizacao "+reaction_id(i).indexOf("reaction_ul"))
-                        }
-                        println("Idreaction -"+reaction_id(i)+"- Nome -"+reaction_name(i)+"-")
-                    }
-                    if (model_id.length == 0 && name.length == 0) {
+                    model_id = model_name.replace(" ", "").toLowerCase
+                    
+                    if (model_id.length == 0 && model_name.length == 0) {
                         S.error("Invalid Data")
                     } else {
-                        val modelSBML = {
-                            <model id={model_id} name={name}>
-                            <notes>
-                                <body>{XML.loadString(description)}
-                                </body>
-                            </notes>
-                            {if(function_def_id != null) {
-                                    <listOfFunctionDefinitions>
-                                        {for(val i <- 0 to (function_def_id.length-1)) yield{
-                                                <functionDefinition name={function_def_name(i)} id={function_def_id(i)}>
-                                                    <math xmlns="http://www.w3.org/1998/Math/MathML">{function_def_math(i)}</math>
-                                                    <notes>{function_def_note(i)}</notes>
-                                                </functionDefinition>
+                        val modelSBML = {<test>This is only a test</test>}
+                        val modelInitialTag = {
+                            <model id={model_id} name={model_name}>
+                                <notes>
+                                    <body>{XML.loadString(description)}
+                                    </body>
+                                </notes>
+                                {modelSBML.attributes}
+                            </model>
+                        }/*
+
+                                {
+                                    if(function_def_id != null) {
+                                        <listOfFunctionDefinitions>
+                                            {for(val i <- 0 to (function_def_id.length-1)) yield{
+                                                    <functionDefinition name={function_def_name(i)} id={function_def_id(i)}>
+                                                        <math xmlns="http://www.w3.org/1998/Math/MathML">{function_def_math(i)}</math>
+                                                        <notes>{function_def_note(i)}</notes>
+                                                    </functionDefinition>
+                                                }
                                             }
-                                        }
-                                    </listOfFunctionDefinitions>} else scala.xml.Null}
-                            {if(compartment_id != null) {
-                                    <listOfCompartments>
-                                        {for(val i <- 0 to (compartment_id.length-1)) yield{
-                                                <compartment outside={compartment_outside(i)} spacialDimensions={compartment_sd(i)} size={compartment_size(i)}
-                                                    name={compartment_name(i)} id={compartment_id(i)} constant={compartment_constant(i)}>
-                                                    <notes>{compartment_note(i)}</notes>
-                                                </compartment>
+                                        </listOfFunctionDefinitions>} else scala.xml.Null}
+                                {if(compartment_id != null) {
+                                        <listOfCompartments>
+                                            {for(val i <- 0 to (compartment_id.length-1)) yield{
+                                                    <compartment outside={compartment_outside(i)} spacialDimensions={compartment_sd(i)} size={compartment_size(i)}
+                                                        name={compartment_name(i)} id={compartment_id(i)} constant={compartment_constant(i)}>
+                                                        <notes>{compartment_note(i)}</notes>
+                                                    </compartment>
+                                                }
                                             }
-                                        }
-                                    </listOfCompartments>} else scala.xml.Null}
-                            {if(species_id != null) {
-                                    <listOfSpecies>
-                                        {for(i <- 0 to species_id.length-1) yield{
-                                                <species id={species_id(i)} name={species_name(i)} compartment={species_compartment(i)}
-                                                    initialAmount={species_init_amount(i)} initialConcentration={species_init_concent(i)}
-                                                    boundaryCondition={species_bound_cond(i)} constant={species_constant(i)}>
-                                                    <notes>{species_note(i)}</notes>
-                                                </species>
+                                        </listOfCompartments>} else scala.xml.Null}
+                                {if(species_id != null) {
+                                        <listOfSpecies>
+                                            {for(i <- 0 to species_id.length-1) yield{
+                                                    <species id={species_id(i)} name={species_name(i)} compartment={species_compartment(i)}
+                                                        initialAmount={species_init_amount(i)} initialConcentration={species_init_concent(i)}
+                                                        boundaryCondition={species_bound_cond(i)} constant={species_constant(i)}>
+                                                        <notes>{species_note(i)}</notes>
+                                                    </species>
                                         
                                         
+                                                }
                                             }
-                                        }
-                                    </listOfSpecies>} else scala.xml.Null}
-                            {if(parameter_id != null) {
-                                    <listOfParameters>
-                                        {for(i <- 0 to parameter_id.length-1) yield{
-                                                <parameter id={parameter_id(i)} name={parameter_name(i)} value={parameter_value(i)}
-                                                    constant={parameter_constant(i)}>
-                                                    <notes>{parameter_note(i)}</notes>
-                                                </parameter>
-                                            }}
-                                    </listOfParameters>} else scala.xml.Null}
-                            {if(constraint_math != null) {
-                                    <listOfConstraints>
-                                        {for(i <- 0 to constraint_math.length-1) yield{
-                                                <constraint><math xmlns="http://www.w3.org/1998/Math/MathML">{constraint_math(i)}
-                                                            </math>
-                                                    <message>{constraint_message(i)}</message>
-                                                    <notes>{constraint_note(i)}</notes>
-                                                </constraint>
-                                            }}
-                                    </listOfConstraints>} else scala.xml.Null}
-                            {if(reaction_list != null){
-                                    <listOfReactions>
-                                        {for(i <- 0 to reaction_id.length-1) yield{
-                                                <reaction reversible={reaction_reversible(i)} name={reaction_name(i)} id={reaction_id(i)} fast={reaction_fast(i)}>
-                                                    <notes>{reaction_note(i)}</notes>
-                                                    {if(reactant_id != null){
-                                                            <listOfReactants>{
-                                                                    for(j <- 0 to reactant_id.length-1) yield {
-                                                                        <speciesReference id={reactant_id(j)} name={reactant_name(j)} species={reactant_specie(j)} stoichiometry={reactant_stoic(j)}>
-                                                                        <notes>{}</notes>
-                                                                        {if(reactant_stoic_math != 0){
-                                                                                <stoichiometryMath>
-                                                                                    {reactant_stoic_math(j)}
-                                                                                </stoichiometryMath>
-                                                                            }}
-                                                                        </speciesReference>}
-                                                                }</listOfReactants>}} else scala.xml.Null
-                                                </reaction>}
-                                        }
-                                    </listOfReactions>}}
-                        </model>}
-                    XML.save("file.xml", modelSBML)
-                }
-            }
-            val listaNova = List("true","false")
-            def selectValue(va :String){
-                compartment_sd = va :: compartment_sd
-            }
-            def selectValueC(va :String){
-                compartment_constant = va :: compartment_constant
-            }
-            def setSpecieBC(va :String){
-                species_bound_cond = va :: species_bound_cond
-            }
-            def setSpecieC(va :String){
-                species_constant = va :: species_constant
-            }
-            def setParameterC(va :String){
-                parameter_constant = va :: parameter_constant
-            }
-            def setReactionR(va :String){
-                reaction_reversible = va :: reaction_reversible
-            }
-            def setReactionF(va :String){
-                reaction_fast = va :: reaction_fast
-            }
-
-            // This method creates the id of the model
-            def createNameAndId(nameml: NodeSeq) = {
-                SHtml.ajaxText("", ref => { name = ref;
-                                           DisplayMessage(msgName,
-                                                          bind("text", nameml, "model_id" ->
-                                                               SHtml.text(Text(ref.replace(" ", "").toLowerCase).toString, refer2 => model_id = refer2, ("id", "model_id"), ("size", "40"), ("disabled", "disabled"))),
-                                                          300000 seconds, 1 second)}, ("id", "name_model"), ("size", "40"), ("maxlength", "1000"))
-            }
-
-            def saveReaction(): JsCmd = {/*
-                reaction_list = {
-                    for(i <- 0 to reaction_list.length-1){
-                        println("Final Reaction = "+reaction_list(i))
+                                        </listOfSpecies>} else scala.xml.Null}
+                                {if(parameter_id != null) {
+                                        <listOfParameters>
+                                            {for(i <- 0 to parameter_id.length-1) yield{
+                                                    <parameter id={parameter_id(i)} name={parameter_name(i)} value={parameter_value(i)}
+                                                        constant={parameter_constant(i)}>
+                                                        <notes>{parameter_note(i)}</notes>
+                                                    </parameter>
+                                                }}
+                                        </listOfParameters>} else scala.xml.Null}
+                                {if(constraint_math != null) {
+                                        <listOfConstraints>
+                                            {for(i <- 0 to constraint_math.length-1) yield{
+                                                    <constraint><math xmlns="http://www.w3.org/1998/Math/MathML">{constraint_math(i)}
+                                                                </math>
+                                                        <message>{constraint_message(i)}</message>
+                                                        <notes>{constraint_note(i)}</notes>
+                                                    </constraint>
+                                                }}
+                                        </listOfConstraints>} else scala.xml.Null}
+                                {if(reaction_id.length != 0){
+                                        <listOfReactions>
+                                            {for(i <- 0 to reaction_id.length-1) yield{
+                                                    <reaction reversible={reaction_reversible(i)} name={reaction_name(i)} id={reaction_id(i)} fast={reaction_fast(i)}>
+                                                        <notes>{reaction_note(i)}</notes>
+                                                        <listOfReactants>aqui
+                                                            {
+                                                                var count = 0
+                                                                    var va = reactant_hash.elements
+                                                                    while(va.hasMoreElements){
+                                                                        var elemm = va.nextElement
+                                                                        count = count+1
+                                                                        var vvv = ((i+1) + "_" + count).toString
+                                                                        Console.println("Valor i=" + vvv + " Contem=" + reactant_hash.containsKey(vvv) + " o que tem-" + elemm)
+                                                                        if(reactant_hash.containsKey(vvv)){
+                                                                            Console.println("Aqui "+elemm.get_reactant_id+" "+elemm.get_reactant_name)
+                                                                            /*<speciesReference id={elements.get_reactant_id} name={elements.get_reactant_name} species={elements.get_reactant_specie} stoichiometry={elements.get_reactant_stoic}>
+                                                                             <notes>{elements.get_reactant_note}</notes>
+                                                                             {if(elements.get_reactant_stoic_math.length != 0){
+                                                                             <stoichiometryMath>
+                                                                             {elements.get_reactant_stoic_math}
+                                                                             </stoichiometryMath>
+                                                                             } else scala.xml.Null}
+                                                                             </speciesReference>*/
+                                                                        } else scala.xml.Null
+                                                                    }
+                                                                } e aqui!
+                                                        </listOfReactants>
+                                                    </reaction>
+                                                }
+                                            }
+                                        </listOfReactions>} else scala.xml.Null}
+                            </model>}*/
+                        Console.println(modelInitialTag)
+                        XML.save("file.xml", modelInitialTag)
                     }
-                    reaction_id = null
-                    reaction_name = null
-                    reaction_reversible = null
-                    reaction_fast = null
-                    reaction_list = null
-                    reactant_name = null
-                    reactant_id = null
-                    reactant_specie = null
-                    reactant_stoic = null
-                    reactant_stoic_math = null
-                    reactant_note = null
-                    reaction_reactant_stoi = null
-                    reaction_reactant_stoi_math = null
-                    reaction_product_stoi = null
-                    reaction_product_stoi_math = null
-                    reaction_modifier = null
-                    reaction_kinetic = null
-                    reaction_kinetic_param = null
-                    //var reaction_kinetic_param_group = List[List[String]]()
-                    reaction_note = null*/
-                    JsRaw("")
+                }
+                val listaNova = List("true","false")
+                def selectValue(va :String){
+                    compartment_sd = va :: compartment_sd
+                }
+                def selectValueC(va :String){
+                    compartment_constant = va :: compartment_constant
+                }
+                def setSpecieBC(va :String){
+                    species_bound_cond = va :: species_bound_cond
+                }
+                def setSpecieC(va :String){
+                    species_constant = va :: species_constant
+                }
+                def setParameterC(va :String){
+                    parameter_constant = va :: parameter_constant
+                }
+                def setReactionR(va :String){
+                    reaction_reversible = va :: reaction_reversible
+                }
+                def setReactionF(va :String){
+                    reaction_fast = va :: reaction_fast
                 }
 
+                // This method creates the id of the model
+                def createNameAndId(nameml: NodeSeq) = {
+                    SHtml.ajaxText("", ref => { model_name = ref;
+                                               DisplayMessage(msgName,
+                                                              bind("text", nameml, "model_id" ->
+                                                                   SHtml.text(Text(ref.replace(" ", "").toLowerCase).toString, refer2 => model_id = refer2, ("id", "model_id"), ("size", "40"), ("disabled", "disabled"))),
+                                                              300000 seconds, 1 second)}, ("id", "name_model"), ("size", "40"), ("maxlength", "1000"))
+                }
 
                 bind("createDescription", xhtml,
                      "name" -> createNameAndId _,
@@ -357,95 +341,103 @@ class CreateModel {
                             product_ul = "product_"+count+"_"
                             modifier_ul = "modifier_"+count+"_"
         
-                            JsCrVar("reactionFunc", Jx(<form><ul>
-                                            {
-                                                Jx(<li>Reaction Name <span id="required_field">*</span>:&nbsp;
-                                                   {SHtml.text("", v => {reaction_name = v :: reaction_name
-                                                                         reaction_id = v.replace(" ", "") :: reaction_id},("id", "reactionName"), ("size", "40"), ("maxlength", "10000"))}</li>
-                                                   <li>Reaction Reversible: &nbsp;<i>(default="true")</i> &nbsp;
-                                                        {SHtml.select(listaNova.map(v => (v, v)), Empty, setReactionR _)}</li>
-                                                   <li>Reaction Fast: &nbsp;<i>(default="false")</i> &nbsp;
-                                                        {SHtml.select(listaNova.reverse.map(v => (v, v)), Empty, setReactionF _)}</li>
-                                                   <ul id={reactant_ul}></ul>
-                                                   <li>{SHtml.ajaxButton(Text("Add Reactant"), () => {
-                                                                    JsCrVar("reactionNewReactant", Jx(<hr /><ul id="reactantStyle">{
-                                                                                Jx(<li><font style="font-weight:bold; font-size:110%;">New Reactant</font>
-                                                                                   </li><br /><li>Reactant Name <span id="required_field">*</span>: &nbsp;
-                                                                                   {SHtml.text("", v => {reactant_name = v :: reactant_name
-                                                                                                         reactant_id = v.replace(" ","") :: reactant_id
-                                                                                            }
-                                                                                               ,("id", "reactantName"), ("size", "40"), ("maxlength", "10000"))}</li>
-                                                                                   <li>Reactant Specie <span id="required_field">*</span>: &nbsp;
-                                                                                        {SHtml.text("", v => {reactant_specie = v :: reactant_specie
-                                                                                                },("id", "reactantSpecie"), ("size", "40"), ("maxlength", "10000"))}</li>
-                                                                                   <li>Reactant Stoichiometry: &nbsp;<i>(default="1")</i>&nbsp;
-                                                                                        {SHtml.text("1", v => {reactant_stoic = v :: reactant_stoic
-                                                                                                },("id", "reactantStoic"), ("size", "10"), ("maxlength", "10000"))}</li>
-                                                                                   <li>Reactant Stoichiometry Math: <a value="Help on Mathematical Formulas" href="" onclick="window.open('../help/helpMath','Help','width=500,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=400,top=300,screenX=400,screenY=300');">
-                                                <img src="../classpath/images/question.png" width="20px" height="20px" /></a><br />
-                                                                                        {SHtml.textarea("amath [insert mathematical formula here] endamath", v => {reactant_stoic_math = v :: reactant_stoic_math
-                                                                                                },("id", "reactantStoicMath"), ("rows","10"), ("cols", "120"), ("maxlength", "50000"))}</li>
-                                                                                   <li>Reactant Note:<br />
-                                                                                        {SHtml.textarea("", v => {reactant_note = v :: reactant_note
-                                                                                                },("id", "reactantNote"), ("rows","10"), ("cols", "120"), ("maxlength", "50000"))}</li>)}<br /></ul>
-                                                                        ).toJs) &
-                                                                    (ElemById(reactant_ul) ~> (JsFunc("appendChild", Call("reactionNewReactant", ""))))})}
-                                                   </li>
-                                                   <ul id={product_ul}></ul>
-                                                   <li>{SHtml.ajaxButton(Text("Add Product"), () => {
-                                                                    JsCrVar("reactionNewProduct", Jx(<hr /><ul id="productStyle">{
-                                                                                Jx(<li><font style="font-weight:bold; font-size:110%;">New Product</font>
-                                                                                   </li><br /><li>Product Name <span id="required_field">*</span>: &nbsp;
-                                                                                   {SHtml.text("", v => {product_name = v :: product_name
-                                                                                                         product_id = v.replace(" ","") :: product_id
-                                                                                            }
-                                                                                               ,("id", "productName"), ("size", "40"), ("maxlength", "10000"))}</li>
-                                                                                   <li>Product Specie <span id="required_field">*</span>: &nbsp;
-                                                                                        {SHtml.text("", v => {product_specie = v :: product_specie
-                                                                                                },("id", "productSpecie"), ("size", "40"), ("maxlength", "10000"))}</li>
-                                                                                   <li>Product Stoichiometry: &nbsp;<i>(default="1")</i>&nbsp;
-                                                                                        {SHtml.text("1", v => {product_stoic = v :: product_stoic
-                                                                                                },("id", "productStoic"), ("size", "10"), ("maxlength", "10000"))}</li>
-                                                                                   <li>Product Stoichiometry Math: <a value="Help on Mathematical Formulas" href="" onclick="window.open('../help/helpMath','Help','width=500,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=400,top=300,screenX=400,screenY=300');">
-                                                <img src="../classpath/images/question.png" width="20px" height="20px" /></a><br />
-                                                                                        {SHtml.textarea("amath [insert mathematical formula here] endamath", v => {product_stoic_math = v :: product_stoic_math
-                                                                                                },("id", "productStoicMath"), ("rows","10"), ("cols", "120"), ("maxlength", "50000"))}</li>
-                                                                                   <li>Product Note:<br />
-                                                                                        {SHtml.textarea("", v => {product_note = v :: product_note
-                                                                                                },("id", "productNote"), ("rows","10"), ("cols", "120"), ("maxlength", "50000"))}</li>)}<br /></ul>
-                                                                        ).toJs) &
-                                                                    (ElemById(product_ul) ~> (JsFunc("appendChild", Call("reactionNewProduct", ""))))})}
-                                                   </li>
-                                                   <ul id={modifier_ul}></ul>
-                                                   <li>{SHtml.ajaxButton(Text("Add Modifier"), () => {
-                                                                    JsCrVar("reactionNewModifier", Jx(<hr /><ul id="modifierStyle">{
-                                                                                Jx(<li><font style="font-weight:bold; font-size:110%;">New Modifier</font>
-                                                                                   </li><br /><li>Modifier Name <span id="required_field">*</span>: &nbsp;
-                                                                                   {SHtml.text("", v => {modifier_name = v :: modifier_name
-                                                                                                         modifier_id = v.replace(" ","") :: modifier_id
-                                                                                            }
-                                                                                               ,("id", "modifierName"), ("size", "40"), ("maxlength", "10000"))}</li>
-                                                                                   <li>Modifier Specie <span id="required_field">*</span>: &nbsp;
-                                                                                        {SHtml.text("", v => {modifier_specie = v :: modifier_specie
-                                                                                                },("id", "modifierSpecie"), ("size", "40"), ("maxlength", "10000"))}</li>
-                                                                                   <li>Modifier Stoichiometry: &nbsp;<i>(default="1")</i>&nbsp;
-                                                                                        {SHtml.text("1", v => {modifier_stoic = v :: modifier_stoic
-                                                                                                },("id", "modifierStoic"), ("size", "10"), ("maxlength", "10000"))}</li>
-                                                                                   <li>Modifier Stoichiometry Math: <a value="Help on Mathematical Formulas" href="" onclick="window.open('../help/helpMath','Help','width=500,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=400,top=300,screenX=400,screenY=300');">
-                                                <img src="../classpath/images/question.png" width="20px" height="20px" /></a><br />
-                                                                                        {SHtml.textarea("amath [insert mathematical formula here] endamath", v => {modifier_stoic_math = v :: modifier_stoic_math
-                                                                                                },("id", "modifierStoicMath"), ("rows","10"), ("cols", "120"), ("maxlength", "50000"))}</li>
-                                                                                   <li>Modifier Note:<br />
-                                                                                        {SHtml.textarea("", v => {modifier_note = v :: modifier_note
-                                                                                                },("id", "productNote"), ("rows","10"), ("cols", "120"), ("maxlength", "50000"))}</li>)}<br /></ul>
-                                                                        ).toJs) &
-                                                                    (ElemById(modifier_ul) ~> (JsFunc("appendChild", Call("reactionNewModifier", ""))))})}
-                                                   </li>
-                                                   <li>Reaction Note:<br />
-                                                        {SHtml.textarea("", n => reaction_note = n :: reaction_note,("id", "reactionArea"), ("rows","10"), ("cols", "120"), ("maxlength", "50000"))}</li>
-                                                   <li><br /><b>Please, save this reaction before adding more reactions.</b><br/>
-                                                        {SHtml.ajaxButton("Save Reaction", saveReaction _)}</li>
-                                                )}</ul><hr /></form>).toJs) &
+                            JsCrVar("reactionFunc", Jx(<ul>
+                                                       {
+                                        Jx(<li>Reaction Name <span id="required_field">*</span>:
+                                           {SHtml.text("", v => {reaction_name = v :: reaction_name
+                                                                 reaction_id = v.replace(" ", "") :: reaction_id},("id", "reactionName"), ("size", "40"), ("maxlength", "10000"))}</li>
+                                           <li>Reaction Reversible:  <i>(default="true")</i>
+                                                {SHtml.select(listaNova.map(v => (v, v)), Empty, setReactionR _)}</li>
+                                           <li>Reaction Fast:  <i>(default="false")</i>
+                                                {SHtml.select(listaNova.reverse.map(v => (v, v)), Empty, setReactionF _)}</li>
+                                           <ul id={reactant_ul}></ul>
+                                           <li>{SHtml.ajaxButton(Text("Add Reactant"), () => {
+                                                            reactant_count = reactant_count+1
+                                                            reactant_key = count+"_"+reactant_count
+                                                            var reactant = new Reactant();
+                                                            JsCrVar("reactionNewReactant", Jx(<hr /><ul id="reactantStyle">{
+                                                                        Jx(<li><font style="font-weight:bold; font-size:110%;">New Reactant</font>
+                                                                           </li><br /><li>Reactant Name <span id="required_field">*</span>:
+                                                                           {SHtml.text("", v => {reactant.set_reactant_name(v)
+                                                                                                 reactant.set_reactant_id(v.replace(" ",""))
+                                                                                    }
+                                                                                       ,("id", "reactantName"), ("size", "40"), ("maxlength", "10000"))}</li>
+                                                                           <li>Reactant Specie <span id="required_field">*</span>:
+                                                                                {SHtml.text("", v => {reactant.set_reactant_specie(v)
+                                                                                        },("id", "reactantSpecie"), ("size", "40"), ("maxlength", "10000"))}</li>
+                                                                           <li>Reactant Stoichiometry:  <i>(default="1")</i>
+                                                                                {SHtml.text("1", v => {reactant.set_reactant_stoic(v)
+                                                                                        },("id", "reactantStoic"), ("size", "10"), ("maxlength", "10000"))}</li>
+                                                                           <li>Reactant Stoichiometry Math: <a value="Help on Mathematical Formulas" href="" onclick="window.open('../help/helpMath','Help','width=500,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=400,top=300,screenX=400,screenY=300');">
+                                                                                    <img src="../classpath/images/question.png" width="20px" height="20px" /></a><br />
+                                                                                {SHtml.textarea("amath [insert mathematical formula here] endamath", v => {reactant.set_reactant_stoic_math(v)
+                                                                                        },("id", "reactantStoicMath"), ("rows","10"), ("cols", "120"), ("maxlength", "50000"))}</li>
+                                                                           <li>Reactant Note:<br />
+                                                                                {SHtml.textarea("", v => {reactant.set_reactant_note(v)
+                                                                                        },("id", "reactantNote"), ("rows","10"), ("cols", "120"), ("maxlength", "50000"))
+                                                                                }</li>)}<br />{reactant_hash.put(reactant_key, reactant)}</ul>
+                                                                ).toJs) &
+                                                            (ElemById(reactant_ul) ~> (JsFunc("appendChild", Call("reactionNewReactant", ""))))})}
+                                           </li>
+                                           <ul id={product_ul}></ul>
+                                           <li>{SHtml.ajaxButton(Text("Add Product"), () => {
+                                                            product_count = product_count+1
+                                                            product_key = count+"_"+product_count
+                                                            var product = new Product();
+                                                            JsCrVar("reactionNewProduct", Jx(<hr /><ul id="productStyle">{
+                                                                        Jx(<li><font style="font-weight:bold; font-size:110%;">New Product</font>
+                                                                           </li><br /><li>Product Name <span id="required_field">*</span>:
+                                                                           {SHtml.text("", v => {product.set_product_name(v)
+                                                                                                 product.set_product_id(v.replace(" ",""))
+                                                                                    }
+                                                                                       ,("id", "productName"), ("size", "40"), ("maxlength", "10000"))}</li>
+                                                                           <li>Product Specie <span id="required_field">*</span>:
+                                                                                {SHtml.text("", v => {product.set_product_specie(v)
+                                                                                        },("id", "productSpecie"), ("size", "40"), ("maxlength", "10000"))}</li>
+                                                                           <li>Product Stoichiometry:  <i>(default="1")</i>
+                                                                                {SHtml.text("1", v => {product.set_product_stoic(v)
+                                                                                        },("id", "productStoic"), ("size", "10"), ("maxlength", "10000"))}</li>
+                                                                           <li>Product Stoichiometry Math: <a value="Help on Mathematical Formulas" href="" onclick="window.open('../help/helpMath','Help','width=500,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=400,top=300,screenX=400,screenY=300');">
+                                                                                    <img src="../classpath/images/question.png" width="20px" height="20px" /></a><br />
+                                                                                {SHtml.textarea("amath [insert mathematical formula here] endamath", v => {product.set_product_stoic_math(v)
+                                                                                        },("id", "productStoicMath"), ("rows","10"), ("cols", "120"), ("maxlength", "50000"))}</li>
+                                                                           <li>Product Note:<br />
+                                                                                {SHtml.textarea("", v => {product.set_product_note(v)
+                                                                                        },("id", "productNote"), ("rows","10"), ("cols", "120"), ("maxlength", "50000"))}</li>)}<br /></ul>
+                                                                ).toJs) &
+                                                            (ElemById(product_ul) ~> (JsFunc("appendChild", Call("reactionNewProduct", ""))))})}
+                                           </li>
+                                           <ul id={modifier_ul}></ul>
+                                           <li>{SHtml.ajaxButton(Text("Add Modifier"), () => {
+                                                            modifier_count = modifier_count+1
+                                                            modifier_key = count+"_"+modifier_count
+                                                            var modifier = new Modifier();
+                                                            JsCrVar("reactionNewModifier", Jx(<hr /><ul id="modifierStyle">{
+                                                                        Jx(<li><font style="font-weight:bold; font-size:110%;">New Modifier</font>
+                                                                           </li><br /><li>Modifier Name <span id="required_field">*</span>:
+                                                                           {SHtml.text("", v => {modifier.set_modifier_name(v)
+                                                                                                 modifier.set_modifier_id(v.replace(" ",""))
+                                                                                    }
+                                                                                       ,("id", "modifierName"), ("size", "40"), ("maxlength", "10000"))}</li>
+                                                                           <li>Modifier Specie <span id="required_field">*</span>:
+                                                                                {SHtml.text("", v => {modifier.set_modifier_specie(v)
+                                                                                        },("id", "modifierSpecie"), ("size", "40"), ("maxlength", "10000"))}</li>
+                                                                           <li>Modifier Stoichiometry:  <i>(default="1")</i>
+                                                                                {SHtml.text("1", v => {modifier.set_modifier_stoic(v)
+                                                                                        },("id", "modifierStoic"), ("size", "10"), ("maxlength", "10000"))}</li>
+                                                                           <li>Modifier Stoichiometry Math: <a value="Help on Mathematical Formulas" href="" onclick="window.open('../help/helpMath','Help','width=500,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=400,top=300,screenX=400,screenY=300');">
+                                                                                    <img src="../classpath/images/question.png" width="20px" height="20px" /></a><br />
+                                                                                {SHtml.textarea("amath [insert mathematical formula here] endamath", v => {modifier.set_modifier_stoic_math(v)
+                                                                                        },("id", "modifierStoicMath"), ("rows","10"), ("cols", "120"), ("maxlength", "50000"))}</li>
+                                                                           <li>Modifier Note:<br />
+                                                                                {SHtml.textarea("", v => {modifier.set_modifier_note(v)
+                                                                                        },("id", "productNote"), ("rows","10"), ("cols", "120"), ("maxlength", "50000"))}</li>)}<br /></ul>
+                                                                ).toJs) &
+                                                            (ElemById(modifier_ul) ~> (JsFunc("appendChild", Call("reactionNewModifier", ""))))})}
+                                           </li>
+                                           <li>Reaction Note:<br />
+                                                {SHtml.textarea("", n => reaction_note = n :: reaction_note,("id", "reactionArea"), ("rows","10"), ("cols", "120"), ("maxlength", "50000"))}</li>
+                                        )}</ul><hr />).toJs) &
                             (ElemById("react") ~> JsFunc("appendChild", Call("reactionFunc", "")))
                         }),
                      "save" -> SHtml.submit("Save Model", createNewModel,("id","buttonSave")))

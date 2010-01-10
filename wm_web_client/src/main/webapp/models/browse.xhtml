@@ -96,7 +96,9 @@ Rendered:<br/>
 			<div id="tabs-1">
                 <lift:ModelTree.render2 />
                 <ul id="model_tree_model" class="treeview-gray">
-                <li><span><h2>&nbsp;&nbsp;&nbsp;Model </h2></span>
+                <li><span><h2>&nbsp;&nbsp;&nbsp;Model <h9><a onclick="window.open('../models/editModel.html','Edit Model','width=800,height=500');">Edit</a>
+                <a onclick="window.open('../models/new_model_comment.html','New Comment','width=600,height=320');">Make Comment</a>
+                <a onclick="window.open('../models/view_comments.html','View Comments','width=600,height=600');">View Comments</a></h9></h2></span>
                 <ul>
                         <li class="browseModelLI">
                 <table class="" id="modelTable_Model">
@@ -122,11 +124,9 @@ Rendered:<br/>
                 </table>
                 <br /></li>
                 </ul>
+                <br />
                 </li>
                 <li><span><h2>&nbsp;&nbsp;&nbsp;Notes</h2></span>
-                <h7><a onclick="window.open('../models/editModel.html','Edit Model','location=no, resizable=no, scrollbars=no,width=800,height=500');">Edit</a></h7>
-                <h7><a onclick="window.open('../models/new_comment.html','New Comment','location=no, resizable=no, scrollbars=no,width=600,height=300');">Make Comment</a></h7>
-                <h7><a onclick="window.open('../models/view_comments.html','View Comments','location=no, resizable=no, scrollbars=yes, width=500,height=600');">View Comments</a></h7>
                 <ul>
                         <li class="browseModelLI"><modelInformation:model_notes />
                 </li>
