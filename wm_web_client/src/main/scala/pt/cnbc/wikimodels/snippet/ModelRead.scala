@@ -5,13 +5,13 @@
 
 package pt.cnbc.wikimodels.snippet
 
-import net.liftweb._
-import http._
-import util._
-import Helpers._
-import sitemap.Loc.If
+import net.liftweb.http._
+import net.liftweb.util._
+import net.liftweb.util.Helpers._
+import net.liftweb.sitemap.Loc.If
 import scala.xml.{ MetaData, XML, Elem, Group, Node, NodeSeq, Null, Text, TopScope, PrettyPrinter }
 import scala.xml.transform._
+import net.liftweb.http.S
 import S._
 import js._
 import js.JsCmds
@@ -20,6 +20,9 @@ import js.Jx
 import js.JE
 import js.JE._
 import net.liftweb.common._
+
+/*import pt.cnbc.wikimodels.rest.client.BasicAuth
+ import pt.cnbc.wikimodels.rest.client.RestfulAccess*/
 
 class ModelRead {
 
@@ -30,10 +33,11 @@ class ModelRead {
         val model004 = XML.load("BIOMD0000000168.xml")
         val model005 = XML.load("BIOMD0000000206.xml")
         val model006 = XML.load("BIOMD0000000212.xml")
+        val newModel = XML.load("file.xml")
 
         bind("listModels", xhtml,
              "list" -> {
-                <table id="myTable" class="tablesorter">
+                        <table id="myTable" class="tablesorter">
                     <thead>
                         <tr>
                             <th>Model Name</th>
@@ -42,43 +46,49 @@ class ModelRead {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>{for(val data <- (model001 \ "model")) yield {
-                                    <td title="Model Name"><a href="/models/browse/model001">{data \ "@name"}</a></td>
+                        <tr>{for(val data <- (model001 \\ "model")) yield {
+                                    <td title="Model Name"><a href="/models/browse.xhtml?modelID=model001">{data \ "@name"}</a></td>
                                     <td title="Author"><a href="../user/admin"></a></td>
                                     <td title="Last Modification"></td>}}
                         </tr>
                         <tr>
-                            {for(val data <- (model002 \ "model")) yield {
-                                    <td title="Model Name"><a href="/models/browse/model002">{data \ "@name"}</a></td>
+                            {for(val data <- (model002 \\ "model")) yield {
+                                    <td title="Model Name"><a href="/models/browse.xhtml?modelID=model002">{data \ "@name"}</a></td>
                                     <td title="Author"><a href="../user/admin"></a></td>
                                     <td title="Last Modification"></td>}}
                         </tr>
                         <tr>
-                            {for(val data <- (model003 \ "model")) yield {
-                                    <td title="Model Name"><a href="/models/browse/model003">{data \ "@name"}</a></td>
+                            {for(val data <- (model003 \\ "model")) yield {
+                                    <td title="Model Name"><a href="/models/browse.xhtml?modelID=model003">{data \ "@name"}</a></td>
                                     <td title="Author"><a href="../user/admin"></a></td>
                                     <td title="Last Modification"></td>}}
                         </tr>
                         <tr>
-                            {for(val data <- (model004 \ "model")) yield {
-                                    <td title="Model Name"><a href="/models/browse/model004">{data \ "@name"}</a></td>
+                            {for(val data <- (model004 \\ "model")) yield {
+                                    <td title="Model Name"><a href="/models/browse.xhtml?modelID=model004">{data \ "@name"}</a></td>
                                     <td title="Author"><a href="../user/admin"></a></td>
                                     <td title="Last Modification"></td>}}
                         </tr>
                         <tr>
-                            {for(val data <- (model005 \ "model")) yield {
-                                    <td title="Model Name"><a href="/models/browse/model005">{data \ "@name"}</a></td>
+                            {for(val data <- (model005 \\ "model")) yield {
+                                    <td title="Model Name"><a href="/models/browse.xhtml?modelID=model005">{data \ "@name"}</a></td>
                                     <td title="Author"><a href="../user/admin"></a></td>
                                     <td title="Last Modification"></td>}}
                         </tr>
                         <tr>
-                            {for(val data <- (model006 \ "model")) yield {
-                                    <td title="Model Name"><a href="/models/browse/model006">{data \ "@name"}</a></td>
+                            {for(val data <- (model006 \\ "model")) yield {
+                                    <td title="Model Name"><a href="/models/browse.xhtml?modelID=model006">{data \ "@name"}</a></td>
+                                    <td title="Author"><a href="../user/admin"></a></td>
+                                    <td title="Last Modification"></td>}}
+                        </tr>
+                        <tr>
+                            {for(val data <- (newModel \\ "model")) yield {
+                                    <td title="Model Name"><a href="/models/browse.xhtml?modelID=file">{data \ "@name"}</a></td>
                                     <td title="Author"><a href="../user/admin"></a></td>
                                     <td title="Last Modification"></td>}}
                         </tr>
                     </tbody>
-                </table>})
+                        </table>})
     }
 
     def browseModel (xhtml : NodeSeq) : NodeSeq = User.currentUserName match {
@@ -101,21 +111,29 @@ class ModelRead {
                                               Text("")}
                     case Full("model006") => {modelRef = "BIOMD0000000212.xml"
                                               Text("")}
-                    case _ => {Text("")}
+                    case Full("file") => {modelRef = "file.xml"
+                                          Text("")}
+                    case _ => {Console.println("Aqui2....")
+                               Text("")}
 
                 }
+                val teste = S.uri
+                Console.println("aqui..->"+teste)
                 val modelSBML = XML.load(modelRef)
                 //val model_qq = (modelSBML \ "sbml" \ "@xmlns").text
-                val model_id= (modelSBML \ "model" \ "@id").text
-                val model_name = (modelSBML \ "model" \ "@name").text
-                val model_notes = (modelSBML \ "model" \ "notes").toString
+                val model_id= (modelSBML \\ "model" \ "@id").text
+                val model_name = (modelSBML \\ "model" \ "@name").text
+                val model_notes = (modelSBML \\ "model" \ "notes").toString
                 var v1 = ""
+                if((modelSBML \\ "model" \\ "listOfReactions" \ "reaction" == null) || (modelSBML \\ "model" \\ "listOfFunctionDefinitions" \ "functionDefinition" == null)
+                   || (modelSBML \\ "model" \\ "listOfFunctionDefinitions" \ "functionDefinition" == null)) {
 
-                for(val spec <- modelSBML \ "model" \ "listOfReactions" \ "reaction" ;
-                    val addSpec <- spec \\ "@name"  ) { countR = countR+1}
-                for(val func <- modelSBML \ "model" \ "listOfFunctionDefinitions" \ "functionDefinition" ;
-                    val addSpec <- func \\ "@id"  ) { countF = countF+1}
-
+                } else {
+                    for(val spec <- modelSBML \\ "model" \\ "listOfReactions" \ "reaction" ;
+                        val addSpec <- spec \\ "@name"  ) { countR = countR+1}
+                    for(val func <- modelSBML \\ "model" \\ "listOfFunctionDefinitions" \ "functionDefinition" ;
+                        val addSpec <- func \\ "@id"  ) { countF = countF+1}
+                }
                 // Search for the <body> and <notes> and replaces for the <div> tag
                 if(model_notes.contains("body")){
                     var var2 = ""
@@ -164,7 +182,7 @@ class ModelRead {
                      "model_name" -> model_name,
                      "model_notes" -> model_notes_p,
                      "listOfReactions" -> {
-                        val reac = modelSBML \ "model" \ "listOfReactions" \\ "reaction"
+                        val reac = modelSBML \\ "model" \\ "listOfReactions" \ "reaction"
                         if((reac \\ "@name").isEmpty){
                             generateTableFromXML(reac \\ "@id",reac \\ "@metaid",4)
                         } else {
@@ -175,7 +193,7 @@ class ModelRead {
                      "numberReactions" -> {<span>{countR}</span>},
                      "numberFunctions" -> {<span>{countF}</span>},
                      "listOfCompartments" -> {
-                        val comp = modelSBML \ "model" \ "listOfCompartments" \\ "compartment"
+                        val comp = modelSBML \\ "model" \\ "listOfCompartments" \ "compartment"
                         if((comp \\ "@name").isEmpty){
                             generateTableFromXML(comp \\ "@id",comp \\ "@metaid",1)
                         } else {
@@ -183,16 +201,16 @@ class ModelRead {
                         }
                     },
                      "listOfSpecies" -> {
-                        val spec = modelSBML \ "model" \ "listOfSpecies" \\ "species"
+                        val spec = modelSBML \\ "model" \\ "listOfSpecies" \ "species"
                         if((spec \\ "@name").isEmpty){
                             generateTableFromXML(spec \\ "@id",spec \\ "@metaid",4)
                         } else {
                             generateTableFromXML(spec \\ "@name",spec \\ "@metaid",4)
                         }
                     },
-                     "downloadSBML" -> {<a href={"../"+modelRef} target="_blank"><input type="submit" class="buttonExportModel" title="Export this model in SBML" value="Export SBML Model" /></a>},
+                     "downloadSBML" -> {<a href={"./"+modelRef} target="_blank"><input type="submit" class="buttonExportModel" title="Export this model in SBML" value="Export SBML Model" /></a>},
                      "listOfParameters" -> {
-                        val param = modelSBML \ "model" \ "listOfParameters" \\ "parameter"
+                        val param = modelSBML \\ "model" \\ "listOfParameters" \ "parameter"
                         if((param \\ "@name").isEmpty){
                             generateTableFromXML(param \\ "@id",param \\ "@metaid",5)
                         } else {
@@ -200,9 +218,11 @@ class ModelRead {
                         }
                     },
                      "listFunctionsMath" -> {
-                        for(val fun <- modelSBML \ "model" \ "listOfFunctionDefinitions" \\ "functionDefinition";
+                        for(val fun <- modelSBML \\ "model" \\ "listOfFunctionDefinitions" \ "functionDefinition";
                             val addFun <- fun \\ "@id" ) yield{
-                            <ul><h8><a onclick="window.open('../models/editModel.html','Edit Model','width=800,height=500');">Edit</a>
+                            <ul><h8><form action="../models/editModel.xhtml?module=001" method="post">
+                                        <input type="hidden" name="reaction" value="fun" size="20" /><input type="submit" value="Edit" />
+                                    </form>
                                     <a onclick="window.open('../models/new_comment.html','New Comment','width=600,height=300');">Make Comment</a>
                                     <a onclick="window.open('../models/view_comments.html','View Comments','width=600,height=600');">View Comments</a></h8>
                                 <li class="closed"><span><tr id={fun \\ "@metaid"}>
@@ -240,19 +260,21 @@ class ModelRead {
                                                                     <b>{fun_notes_p}</b>}}</td></tr>}}</li></ul></li></ul>}
                     },
                      "listReactionsMath" -> {
-                        for(val react <- modelSBML \ "model" \ "listOfReactions" \\ "reaction";
+                        for(val react <- modelSBML \\ "model" \\ "listOfReactions" \ "reaction";
                             val addRe <- react \\ "@id" ) yield{
-                            <ul><h8><a onclick="window.open('../models/editModel.html','Edit Model','width=800,height=500');">Edit</a>
+                            <ul><h8><form action="../models/editModel.xhtml?module=002" method="post">
+                                        <input type="hidden" name="reaction" value="react" size="20" /><input type="submit" value="Edit" />
+                                    </form>
                                     <a onclick="window.open('../models/new_comment.html','New Comment','width=600,height=300');">Make Comment</a>
                                     <a onclick="window.open('../models/view_comments.html','View Comments','width=600,height=600');">View Comments</a></h8>
                                 <li class="closed"><span><tr id={react \\ "@metaid"}>{
                                                 if((react \\ "@name").isEmpty){
                                                     <td class="main">{addRe}</td>} else{
                                                     <td class="main">{react \\ "@name"}</td>}}
-                                            <td class="sub_main"><br /><b>[{for(val x <- react\\"listOfReactants"\\"speciesReference"\\"@species") yield x}]</b>
+                                            <td class="sub_main"><br /><b>[{for(val x <- react\\"listOfReactants"\"speciesReference"\\"@species") yield x}]</b>
                                                 {if(react \\"@reversible" != "false"){<b>&harr;</b>} else {<b>&rarr;</b>}}
-                                                <b>[{for(val y <- react\\"listOfProducts"\\"speciesReference"\\"@species") yield y}];&nbsp;&nbsp;</b>
-                                                {for(val z <- react\\"listOfModifiers"\\"modifierSpeciesReference"\\"@species") yield {
+                                                <b>[{for(val y <- react\\"listOfProducts"\"speciesReference"\\"@species") yield y}];&nbsp;&nbsp;</b>
+                                                {for(val z <- react\\"listOfModifiers"\"modifierSpeciesReference"\\"@species") yield {
                                                         <b>&#123;{z}&#125;&nbsp;</b>}}</td></tr></span>
                                     <ul><li><tr><td class="main_under">Math:</td>
                                                 <td class="sub_main_under">
@@ -283,9 +305,9 @@ class ModelRead {
                             </ul>}
                     },
                      "compartmentData" ->{
-                        for(val compartData <- modelSBML \ "model" \ "listOfCompartments" \\ "compartment";
+                        for(val compartData <- modelSBML \\ "model" \\ "listOfCompartments" \ "compartment";
                             val compartDataId <- compartData \\ "@id") yield {
-                            <ul><h8><a onclick="window.open('../models/editModel.html','Edit Model','width=800,height=500');">Edit</a>
+                            <ul><h8><a onclick="window.open('../models/editModel.xhtml','Edit Model','width=800,height=500');">Edit</a>
                                     <a onclick="window.open('../models/new_comment.html','New Comment','width=600,height=300');">Make Comment</a>
                                     <a onclick="window.open('../models/view_comments.html','View Comments','width=600,height=600');">View Comments</a></h8>
                                 <li class="closed"><span><tr id={compartData \\ "@metaid"}>{
@@ -329,9 +351,9 @@ class ModelRead {
                                         </li></ul></li></ul>}
                     },
                      "speciesData" ->{
-                        for(val specData <- modelSBML \ "model" \ "listOfSpecies" \\ "species";
+                        for(val specData <- modelSBML \\ "model" \\ "listOfSpecies" \ "species";
                             val specDataId <- specData \\ "@id") yield {
-                            <ul><h8><a onclick="window.open('../models/editModel.html','Edit Model','width=800,height=500');">Edit</a>
+                            <ul><h8><a onclick="window.open('../models/editModel.xhtml','Edit Model','width=800,height=500');">Edit</a>
                                     <a onclick="window.open('../models/new_comment.html','New Comment','width=600,height=300');">Make Comment</a>
                                     <a onclick="window.open('../models/view_comments.html','View Comments','width=600,height=600');">View Comments</a></h8>
                                 <li class="closed"><span><tr>{
@@ -375,9 +397,9 @@ class ModelRead {
                                         </li></ul></li></ul>}
                     },
                      "parametersData" ->{
-                        for(val paramData <- modelSBML \ "model" \ "listOfParameters" \\ "parameter";
+                        for(val paramData <- modelSBML \\ "model" \\ "listOfParameters" \\ "parameter";
                             val paramDataId <- paramData \\ "@id") yield {
-                            <ul><h8><a onclick="window.open('../models/editModel.html','Edit Model','width=800,height=500');">Edit</a>
+                            <ul><h8><a onclick="window.open('../models/editModel.xhtml','Edit Model','width=800,height=500');">Edit</a>
                                     <a onclick="window.open('../models/new_comment.html','New Comment','width=600,height=300');">Make Comment</a>
                                     <a onclick="window.open('../models/view_comments.html','View Comments','width=600,height=600');">View Comments</a></h8>
                                 <li class="closed"><span><tr>{
@@ -412,16 +434,16 @@ class ModelRead {
                                         </li></ul></li></ul>}
                     },
                      "extraParametersData" -> {
-                        for(val extraParamData <- modelSBML \ "model" \ "listOfReactions" \ "reaction";
+                        for(val extraParamData <- modelSBML \\ "model" \\ "listOfReactions" \ "reaction";
                             val extraParamDataId <- extraParamData \ "@id") yield {
-                            <li>{val extra = extraParamData \ "kineticLaw" \ "listOfParameters" \ "parameter"
+                            <li>{val extra = extraParamData \ "kineticLaw" \\ "listOfParameters" \ "parameter"
                                  if( extra.isEmpty){
                                     } else{
                                         <span><h2>&nbsp;&nbsp;&nbsp;{extraParamData \\ "@name"}</h2></span>
                                         <ul><li class="closed">
                                                 <table class="browseModelTable" id="modelTable_Overview">
                                                     <tbody>
-                                                        <ul><h8><a onclick="window.open('../models/editModel.html','Edit Model','width=800,height=500');">Edit</a>
+                                                        <ul><h8><a onclick="window.open('../models/editModel.xhtml','Edit Model','width=800,height=500');">Edit</a>
                                                                 <a onclick="window.open('../models/new_comment.html','New Comment','width=600,height=300');">Make Comment</a>
                                                                 <a onclick="window.open('../models/view_comments.html','View Comments','width=600,height=600');">View Comments</a></h8>
                                                             <li class="closed"><span><tr>{

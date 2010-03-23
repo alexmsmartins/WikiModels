@@ -295,7 +295,19 @@ br.both{
     border-bottom:2px solid #444; border-right:2px solid #444; border-top:0; border-left:1px solid #444; color:#222;
 }
 
+#content h8 input {
+    -moz-border-radius-topleft: 0px; -webkit-border-top-left-radius: 0px;
+    -moz-border-radius-bottomright: 7px; -webkit-border-bottom-right-radius: 7px;
+    -moz-border-radius-topright: 0px; -webkit-border-top-right-radius: 0px;
+    -moz-border-radius-bottomleft: 7px; -webkit-border-bottom-left-radius: 7px;
+    display:inline;	background-color:transparent; font:bold 100% Georgia; text-decoration:none;
+    border-bottom:2px solid #444; border-right:2px solid #444; border-top:0; border-left:1px solid #444; color:#222;
+}
+
 #content h8 a:hover {
+    background-color:#3564a9;
+}
+#content h8 input:hover {
     background-color:#3564a9;
 }
 
@@ -444,6 +456,19 @@ br.both{
     border-bottom:#767676 solid 2px; border-right:#767676 solid 2px;
     background-color:#ffffff; width:100%;
 }
+
+#content #userTableTD1 {
+    -moz-border-radius: 2px; -webkit-border-radius: 2px; border:#767676 1px solid;
+    padding:.2em 1em .2em 1em; vertical-align:top; text-align:left;
+    border-bottom:#767676 solid 2px; border-right:#767676 solid 2px;
+    background-color:#ffffff; width:10%;
+}
+#content #userTableTD2 {
+    
+    padding:.2em 1em .2em 1em; vertical-align:top; text-align:left;
+    background-color:#eee; width:60%;
+}
+
 
 #userTable1{
     font-size:small; border-top:1px solid #999;
