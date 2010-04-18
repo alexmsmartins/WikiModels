@@ -20,6 +20,7 @@ import js.Jx
 import js.JE
 import js.JE._
 import net.liftweb.common._
+import java.util.LinkedList
 
 /*import pt.cnbc.wikimodels.rest.client.BasicAuth
  import pt.cnbc.wikimodels.rest.client.RestfulAccess*/
@@ -27,17 +28,23 @@ import net.liftweb.common._
 class ModelRead {
 
     def listOfModels (xhtml : NodeSeq) : NodeSeq = {
-        val model001 = XML.load("BIOMD0000000055.xml")
-        val model002 = XML.load("BIOMD0000000103.xml")
-        val model003 = XML.load("BIOMD0000000117.xml")
-        val model004 = XML.load("BIOMD0000000168.xml")
-        val model005 = XML.load("BIOMD0000000206.xml")
-        val model006 = XML.load("BIOMD0000000212.xml")
-        val newModel = XML.load("file.xml")
+        var model = new LinkedList[String]()
+        model.add("BIOMD0000000055.xml")
+        model.add("BIOMD0000000070.xml")
+        model.add("BIOMD0000000103.xml")
+        model.add("BIOMD0000000117.xml")
+        model.add("BIOMD0000000168.xml")
+        model.add("BIOMD0000000206.xml")
+        model.add("BIOMD0000000212.xml")
+        model.add("BIOMD00000002122.xml")
+        
+        //val newModel = "file.xml"
+        var count = 0
+        var mod:String = ""
 
         bind("listModels", xhtml,
              "list" -> {
-                        <table id="myTable" class="tablesorter">
+                <table id="myTable" class="tablesorter">
                     <thead>
                         <tr>
                             <th>Model Name</th>
@@ -46,49 +53,20 @@ class ModelRead {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>{for(val data <- (model001 \\ "model")) yield {
-                                    <td title="Model Name"><a href="/models/browse.xhtml?modelID=model001">{data \ "@name"}</a></td>
-                                    <td title="Author"><a href="../user/admin"></a></td>
-                                    <td title="Last Modification"></td>}}
-                        </tr>
-                        <tr>
-                            {for(val data <- (model002 \\ "model")) yield {
-                                    <td title="Model Name"><a href="/models/browse.xhtml?modelID=model002">{data \ "@name"}</a></td>
-                                    <td title="Author"><a href="../user/admin"></a></td>
-                                    <td title="Last Modification"></td>}}
-                        </tr>
-                        <tr>
-                            {for(val data <- (model003 \\ "model")) yield {
-                                    <td title="Model Name"><a href="/models/browse.xhtml?modelID=model003">{data \ "@name"}</a></td>
-                                    <td title="Author"><a href="../user/admin"></a></td>
-                                    <td title="Last Modification"></td>}}
-                        </tr>
-                        <tr>
-                            {for(val data <- (model004 \\ "model")) yield {
-                                    <td title="Model Name"><a href="/models/browse.xhtml?modelID=model004">{data \ "@name"}</a></td>
-                                    <td title="Author"><a href="../user/admin"></a></td>
-                                    <td title="Last Modification"></td>}}
-                        </tr>
-                        <tr>
-                            {for(val data <- (model005 \\ "model")) yield {
-                                    <td title="Model Name"><a href="/models/browse.xhtml?modelID=model005">{data \ "@name"}</a></td>
-                                    <td title="Author"><a href="../user/admin"></a></td>
-                                    <td title="Last Modification"></td>}}
-                        </tr>
-                        <tr>
-                            {for(val data <- (model006 \\ "model")) yield {
-                                    <td title="Model Name"><a href="/models/browse.xhtml?modelID=model006">{data \ "@name"}</a></td>
-                                    <td title="Author"><a href="../user/admin"></a></td>
-                                    <td title="Last Modification"></td>}}
-                        </tr>
-                        <tr>
-                            {for(val data <- (newModel \\ "model")) yield {
-                                    <td title="Model Name"><a href="/models/browse.xhtml?modelID=file">{data \ "@name"}</a></td>
-                                    <td title="Author"><a href="../user/admin"></a></td>
-                                    <td title="Last Modification"></td>}}
-                        </tr>
+                        {
+                            for(k <- 0 to (model.size-1)) yield {
+                                var modelo = XML.load(model.get(k))
+                                Console.println("Modelo-"+modelo)
+                                var data = (modelo \ "model")
+                                <tr>
+                                            <td title="Model Name"><a href={"/models/browse.xhtml?modelID=model00"+(k+1)}>{data \ "@name"}</a></td>
+                                            <td title="Author"><a href="../user/admin"></a></td>
+                                            <td title="Last Modification"></td>
+                                </tr>
+                            }
+                        }
                     </tbody>
-                        </table>})
+                </table>})
     }
 
     def browseModel (xhtml : NodeSeq) : NodeSeq = User.currentUserName match {
@@ -101,38 +79,40 @@ class ModelRead {
                 modelID match {
                     case Full("model001") => {modelRef = "BIOMD0000000055.xml"
                                               Text("")}
-                    case Full("model002") => {modelRef = "BIOMD0000000103.xml"
+                    case Full("model002") => {modelRef = "BIOMD0000000070.xml"
                                               Text("")}
-                    case Full("model003") => {modelRef = "BIOMD0000000117.xml"
+                    case Full("model003") => {modelRef = "BIOMD0000000103.xml"
                                               Text("")}
-                    case Full("model004") => {modelRef = "BIOMD0000000168.xml"
+                    case Full("model004") => {modelRef = "BIOMD0000000117.xml"
                                               Text("")}
-                    case Full("model005") => {modelRef = "BIOMD0000000206.xml"
+                    case Full("model005") => {modelRef = "BIOMD0000000168.xml"
                                               Text("")}
-                    case Full("model006") => {modelRef = "BIOMD0000000212.xml"
+                    case Full("model006") => {modelRef = "BIOMD0000000206.xml"
+                                              Text("")}
+                    case Full("model007") => {modelRef = "BIOMD0000000212.xml"
+                                              Text("")}
+                    case Full("model008") => {modelRef = "BIOMD00000002122.xml"
                                               Text("")}
                     case Full("file") => {modelRef = "file.xml"
                                           Text("")}
-                    case _ => {Console.println("Aqui2....")
-                               Text("")}
+                    case _ => {
+                            Text("")}
 
                 }
                 val teste = S.uri
                 Console.println("aqui..->"+teste)
                 val modelSBML = XML.load(modelRef)
-                //val model_qq = (modelSBML \ "sbml" \ "@xmlns").text
-                val model_id= (modelSBML \\ "model" \ "@id").text
-                val model_name = (modelSBML \\ "model" \ "@name").text
-                val model_notes = (modelSBML \\ "model" \ "notes").toString
-                var v1 = ""
-                if((modelSBML \\ "model" \\ "listOfReactions" \ "reaction" == null) || (modelSBML \\ "model" \\ "listOfFunctionDefinitions" \ "functionDefinition" == null)
-                   || (modelSBML \\ "model" \\ "listOfFunctionDefinitions" \ "functionDefinition" == null)) {
 
-                } else {
-                    for(val spec <- modelSBML \\ "model" \\ "listOfReactions" \ "reaction" ;
-                        val addSpec <- spec \\ "@name"  ) { countR = countR+1}
-                    for(val func <- modelSBML \\ "model" \\ "listOfFunctionDefinitions" \ "functionDefinition" ;
-                        val addSpec <- func \\ "@id"  ) { countF = countF+1}
+                //val model_qq = (modelSBML \ "sbml" \ "@xmlns").text
+                val model_id= (modelSBML \ "model" \ "@id").text
+                val model_name = (modelSBML \ "model" \ "@name").text
+                val model_notes = (modelSBML \ "model" \ "notes").toString
+                var v1 = ""
+                if((modelSBML \ "model" \ "listOfReactions" \\ "reaction" != null) || (modelSBML \ "model" \ "listOfFunctionDefinitions" \\ "functionDefinition" != null)) {
+                    for(val spec <- modelSBML \ "model" \ "listOfReactions" \\ "reaction" ;
+                        val addSpec <- spec \ "@name"  ) { countR = countR+1}
+                    for(val func <- modelSBML \ "model" \ "listOfFunctionDefinitions" \\ "functionDefinition" ;
+                        val addSpec <- func \ "@id"  ) { countF = countF+1}
                 }
                 // Search for the <body> and <notes> and replaces for the <div> tag
                 if(model_notes.contains("body")){
@@ -150,7 +130,7 @@ class ModelRead {
                     val metElems:NodeSeq = metid
                     val nodeNum = relElems.size
 
-                    val rowNum = ( nodeNum + columnNum -1 )  / columnNum
+                    val rowNum = ( nodeNum + columnNum - 1 )  / columnNum
                     <table id="modelTable_Overview">
                         {
                             for(i <- 0 until rowNum) yield {
@@ -182,7 +162,7 @@ class ModelRead {
                      "model_name" -> model_name,
                      "model_notes" -> model_notes_p,
                      "listOfReactions" -> {
-                        val reac = modelSBML \\ "model" \\ "listOfReactions" \ "reaction"
+                        val reac = modelSBML \ "model" \ "listOfReactions" \\ "reaction"
                         if((reac \\ "@name").isEmpty){
                             generateTableFromXML(reac \\ "@id",reac \\ "@metaid",4)
                         } else {
@@ -193,7 +173,7 @@ class ModelRead {
                      "numberReactions" -> {<span>{countR}</span>},
                      "numberFunctions" -> {<span>{countF}</span>},
                      "listOfCompartments" -> {
-                        val comp = modelSBML \\ "model" \\ "listOfCompartments" \ "compartment"
+                        val comp = modelSBML \ "model" \ "listOfCompartments" \ "compartment"
                         if((comp \\ "@name").isEmpty){
                             generateTableFromXML(comp \\ "@id",comp \\ "@metaid",1)
                         } else {
@@ -201,7 +181,7 @@ class ModelRead {
                         }
                     },
                      "listOfSpecies" -> {
-                        val spec = modelSBML \\ "model" \\ "listOfSpecies" \ "species"
+                        val spec = modelSBML \ "model" \ "listOfSpecies" \ "species"
                         if((spec \\ "@name").isEmpty){
                             generateTableFromXML(spec \\ "@id",spec \\ "@metaid",4)
                         } else {
@@ -210,19 +190,17 @@ class ModelRead {
                     },
                      "downloadSBML" -> {<a href={"./"+modelRef} target="_blank"><input type="submit" class="buttonExportModel" title="Export this model in SBML" value="Export SBML Model" /></a>},
                      "listOfParameters" -> {
-                        val param = modelSBML \\ "model" \\ "listOfParameters" \ "parameter"
+                        val param = modelSBML \ "model" \ "listOfParameters" \\ "parameter"
                         if((param \\ "@name").isEmpty){
-                            generateTableFromXML(param \\ "@id",param \\ "@metaid",5)
+                            generateTableFromXML(param \\ "@id",param \\ "@metaid",4)
                         } else {
-                            generateTableFromXML(param \\ "@name",param \\ "@metaid",5)
+                            generateTableFromXML(param \\ "@name",param \\ "@metaid",4)
                         }
                     },
                      "listFunctionsMath" -> {
-                        for(val fun <- modelSBML \\ "model" \\ "listOfFunctionDefinitions" \ "functionDefinition";
+                        for(val fun <- modelSBML \ "model" \ "listOfFunctionDefinitions" \\ "functionDefinition";
                             val addFun <- fun \\ "@id" ) yield{
-                            <ul><h8><form action="../models/editModel.xhtml?module=001" method="post">
-                                        <input type="hidden" name="reaction" value="fun" size="20" /><input type="submit" value="Edit" />
-                                    </form>
+                            <ul><h8><a onclick="window.open('../models/editModel.xhtml','Edit Model','width=800,height=500');">Edit</a>
                                     <a onclick="window.open('../models/new_comment.html','New Comment','width=600,height=300');">Make Comment</a>
                                     <a onclick="window.open('../models/view_comments.html','View Comments','width=600,height=600');">View Comments</a></h8>
                                 <li class="closed"><span><tr id={fun \\ "@metaid"}>
@@ -233,8 +211,8 @@ class ModelRead {
                                                          </tr></span>
                                     <ul><li><tr><td class="main_under">Math:</td>
                                                 <td class="sub_main_under">
-                                                    {for(val x <- fun\\"math") yield {
-                                                            if((x \"lambda").isEmpty){
+                                                    {for(val x <- fun \\ "math") yield {
+                                                            if((x \\ "lambda").isEmpty){
                                                                 <b style="color:red;">MathML with errors!</b>
                                                             } else{
                                                                 val te = x.toString
@@ -243,10 +221,10 @@ class ModelRead {
                                                                 val v2 = te.substring(va+10)
                                                                 val fi = XML.loadString(v1.concat(v2))
                                                                 <b>{fi}</b>}}}</td></tr></li></ul><ul>
-                                        <li>{if((fun\\"notes").isEmpty){} else{
+                                        <li>{if((fun \\ "notes").isEmpty){} else{
                                                     <tr><td class="main_under">Notes:</td>
                                                         <td class="sub_main_under">
-                                                            {for(val x <- fun\\"notes") yield {
+                                                            {for(val x <- fun \\ "notes") yield {
                                                                     val fun_notes = x.toString
                                                                     if(fun_notes.contains("body")){
                                                                         val var2 = fun_notes.replaceAll("body", "div")
@@ -260,27 +238,26 @@ class ModelRead {
                                                                     <b>{fun_notes_p}</b>}}</td></tr>}}</li></ul></li></ul>}
                     },
                      "listReactionsMath" -> {
-                        for(val react <- modelSBML \\ "model" \\ "listOfReactions" \ "reaction";
-                            val addRe <- react \\ "@id" ) yield{
-                            <ul><h8><form action="../models/editModel.xhtml?module=002" method="post">
-                                        <input type="hidden" name="reaction" value="react" size="20" /><input type="submit" value="Edit" />
-                                    </form>
+                        for(val react <- modelSBML \ "model" \ "listOfReactions" \\ "reaction") yield{
+                            <ul><h8><a onclick="window.open('../models/editModel.xhtml','Edit Model','width=800,height=500');">Edit</a>
                                     <a onclick="window.open('../models/new_comment.html','New Comment','width=600,height=300');">Make Comment</a>
                                     <a onclick="window.open('../models/view_comments.html','View Comments','width=600,height=600');">View Comments</a></h8>
-                                <li class="closed"><span><tr id={react \\ "@metaid"}>{
+                                <li class="closed"><span><tr name={react \\ "@metaid"}>{
+                                                val addRe = react \\ "@id"
                                                 if((react \\ "@name").isEmpty){
                                                     <td class="main">{addRe}</td>} else{
                                                     <td class="main">{react \\ "@name"}</td>}}
-                                            <td class="sub_main"><br /><b>[{for(val x <- react\\"listOfReactants"\"speciesReference"\\"@species") yield x}]</b>
-                                                {if(react \\"@reversible" != "false"){<b>&harr;</b>} else {<b>&rarr;</b>}}
-                                                <b>[{for(val y <- react\\"listOfProducts"\"speciesReference"\\"@species") yield y}];&nbsp;&nbsp;</b>
-                                                {for(val z <- react\\"listOfModifiers"\"modifierSpeciesReference"\\"@species") yield {
+                                            <td class="sub_main"><br /><b>[{for(val x <- react \ "listOfReactants" \\ "speciesReference" \\ "@species") yield x}]</b>
+                                                {if(react \\ "@reversible" != "false"){<b>&harr;</b>} else {<b>&rarr;</b>}}
+                                                <b>[{for(val y <- react \ "listOfProducts" \\ "speciesReference" \\ "@species") yield y}];&nbsp;&nbsp;</b>
+                                                {for(val z <- react \ "listOfModifiers" \\ "modifierSpeciesReference" \\ "@species") yield {
                                                         <b>&#123;{z}&#125;&nbsp;</b>}}</td></tr></span>
                                     <ul><li><tr><td class="main_under">Math:</td>
                                                 <td class="sub_main_under">
-                                                    {for(val x <- react\\"kineticLaw"\"math") yield {
+                                                    {for(val x <- react \ "kineticLaw" \ "math") yield {
                                                             val te = x.toString
                                                             val va = te.indexOf("/version")
+                                                            Console.println("INDEX--->"+va+" te-"+te)
                                                             val v1 = te.substring(0,(va-39))
                                                             val v2 = te.substring(va+10)
                                                             val fi = XML.loadString(v1.concat(v2))
@@ -288,10 +265,10 @@ class ModelRead {
                                                              <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">"""))*/
                                                             <b>{fi}</b>}}</td></tr></li></ul>
                                     <ul>
-                                        <li>{if((react\\"notes").isEmpty){} else{
+                                        <li>{if((react \ "notes").isEmpty){} else{
                                                     <tr><td class="main_under">Notes:</td>
                                                         <td class="sub_main_under">
-                                                            {for(val x <- react\\"notes") yield {
+                                                            {for(val x <- react \\ "notes") yield {
                                                                     val react_notes = x.toString
                                                                     if(react_notes.contains("body")){
                                                                         val var2 = react_notes.replaceAll("body", "div")
@@ -305,40 +282,41 @@ class ModelRead {
                             </ul>}
                     },
                      "compartmentData" ->{
-                        for(val compartData <- modelSBML \\ "model" \\ "listOfCompartments" \ "compartment";
+                        for(val compartData <- modelSBML \ "model" \ "listOfCompartments" \\ "compartment";
                             val compartDataId <- compartData \\ "@id") yield {
                             <ul><h8><a onclick="window.open('../models/editModel.xhtml','Edit Model','width=800,height=500');">Edit</a>
                                     <a onclick="window.open('../models/new_comment.html','New Comment','width=600,height=300');">Make Comment</a>
                                     <a onclick="window.open('../models/view_comments.html','View Comments','width=600,height=600');">View Comments</a></h8>
-                                <li class="closed"><span><tr id={compartData \\ "@metaid"}>{
+                                <li class="closed"><span><tr name={compartData \\ "@metaid"} id={compartData \\ "@metaid"}>{
                                                 if((compartData \\ "@name").isEmpty){
                                                     <td class="main">{compartDataId}</td>} else{
                                                     <td class="main">{compartData \\ "@name"}</td>}}
-                                            <td class="sub_main" style="width:100%;"><br />{
+                                            <td class="sub_main"><br />{
                                                     if((compartData \\ "@spatialDimensions").isEmpty){
                                                         <b>Spatial dimensions: </b><i>3;  </i>
                                                     } else {
                                                         <b>Spatial dimensions: </b><i>{compartData \\ "@spatialDimensions"};  </i>
-                                                    }}{
-                                                    if((compartData \\ "@size").isEmpty){
-                                                    } else {
+                                                    }
+                                                    if(!(compartData \\ "@size").isEmpty){
                                                         <b>Size: </b><i>{compartData \\ "@size"};  </i>
-                                                    }}{
-                                                    if((compartData \\ "@outside").isEmpty){
-                                                    } else {
+                                                    }
+                                                    if(!(compartData \\ "@outside").isEmpty){
                                                         <b>Outside: </b><i>{compartData \\ "@outside"};  </i>
-                                                    }}{
+                                                    }
                                                     if((compartData \\ "@constant").isEmpty){
                                                         <b>Constant: </b><i>true;</i>
                                                     } else{
                                                         <b>Constant: </b><i>false;</i>
-                                                    }}
-                                            </td></tr></span>
+                                                    }
+                                                }
+                                            </td>
+                                                         </tr>
+                                                   </span>
                                     <ul>
-                                        <li>{if((compartData\\"notes").isEmpty){} else{
-                                                    <tr><td class="main_under" style="width:80%;">Notes:</td>
-                                                        <td class="sub_main_under" style="width:100%;">
-                                                            {for(val x <- compartData\\"notes") yield {
+                                        <li>{if(!(compartData \\ "notes").isEmpty){
+                                                    <tr><td class="main_under">Notes:</td>
+                                                        <td class="sub_main_under">
+                                                            {for(val x <- compartData \\ "notes") yield {
                                                                     val react_notes = x.toString
                                                                     if(react_notes.contains("body")){
                                                                         val var2 = react_notes.replaceAll("body", "div")
@@ -348,27 +326,31 @@ class ModelRead {
                                                                     }
                                                                     val reaction_notes_p = XML.loadString(v1)
                                                                     <b>{reaction_notes_p}</b>}}</td></tr>}}
-                                        </li></ul></li></ul>}
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>}
                     },
                      "speciesData" ->{
-                        for(val specData <- modelSBML \\ "model" \\ "listOfSpecies" \ "species";
+                        for(val specData <- modelSBML \ "model" \ "listOfSpecies" \\ "species";
                             val specDataId <- specData \\ "@id") yield {
                             <ul><h8><a onclick="window.open('../models/editModel.xhtml','Edit Model','width=800,height=500');">Edit</a>
                                     <a onclick="window.open('../models/new_comment.html','New Comment','width=600,height=300');">Make Comment</a>
                                     <a onclick="window.open('../models/view_comments.html','View Comments','width=600,height=600');">View Comments</a></h8>
                                 <li class="closed"><span><tr>{
                                                 if((specData \\ "@name").isEmpty){
-                                                    <td class="main">{specDataId}<br /><hr />Compartment: <i>{specData \\ "@compartment"}</i></td>} else{
-                                                    <td class="main">{specData \\ "@name"}<br /><hr />Compartment: <i>{specData \\ "@compartment"}</i></td>}}
-                                            <td class="sub_main" style="width:100%;"><br />{
-                                                    if((specData \\ "@initialAmount").isEmpty){
-                                                    } else {
+                                                    <td class="main">{specDataId}<br /><hr />Compartment: <i>{specData \\ "@compartment"}</i></td>
+                                                } else{
+                                                    <td class="main">{specData \\ "@name"}<br /><hr />Compartment: <i>{specData \\ "@compartment"}</i></td>
+                                                }
+                                            }
+                                            <td class="sub_main"><br />{
+                                                    if(!(specData \\ "@initialAmount").isEmpty){
                                                         <b>Initial amount: </b><i>{specData \\ "@initialAmount"};  </i>
-                                                    }}{
-                                                    if((specData \\ "@initialConcentration").isEmpty){
-                                                    } else {
+                                                    }
+                                                    if(!(specData \\ "@initialConcentration").isEmpty){
                                                         <b>Initial concentration: </b><i>{specData \\ "@initialConcentration"};  </i>
-                                                    }}{
+                                                    }
                                                     if((specData \\ "@boundaryCondition").isEmpty){
                                                         <b>Boundary condition: </b><i>false;  </i>
                                                     } else {
@@ -381,10 +363,10 @@ class ModelRead {
                                                     }}
                                             </td></tr></span>
                                     <ul>
-                                        <li>{if((specData\\"notes").isEmpty){} else{
-                                                    <tr><td class="main_under" style="width:80%;">Notes:</td>
-                                                        <td class="sub_main_under" style="width:100%;">
-                                                            {for(val x <- specData\\"notes") yield {
+                                        <li>{if(!(specData \\ "notes").isEmpty){
+                                                    <tr><td class="main_under">Notes:</td>
+                                                        <td class="sub_main_under">
+                                                            {for(val x <- specData \\ "notes") yield {
                                                                     val react_notes = x.toString
                                                                     if(react_notes.contains("body")){
                                                                         val var2 = react_notes.replaceAll("body", "div")
@@ -393,11 +375,20 @@ class ModelRead {
                                                                         v1 = react_notes.replaceAll("notes", "div")
                                                                     }
                                                                     val reaction_notes_p = XML.loadString(v1)
-                                                                    <b>{reaction_notes_p}</b>}}</td></tr>}}
-                                        </li></ul></li></ul>}
+                                                                    <b>{reaction_notes_p}</b>}
+                                                            }
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        }
                     },
                      "parametersData" ->{
-                        for(val paramData <- modelSBML \\ "model" \\ "listOfParameters" \\ "parameter";
+                        for(val paramData <- modelSBML \ "model" \ "listOfParameters" \\ "parameter";
                             val paramDataId <- paramData \\ "@id") yield {
                             <ul><h8><a onclick="window.open('../models/editModel.xhtml','Edit Model','width=800,height=500');">Edit</a>
                                     <a onclick="window.open('../models/new_comment.html','New Comment','width=600,height=300');">Make Comment</a>
@@ -406,11 +397,10 @@ class ModelRead {
                                                 if((paramData \\ "@name").isEmpty){
                                                     <td class="main">{paramDataId}</td>} else{
                                                     <td class="main">{paramData \\ "@name"}</td>}}
-                                            <td class="sub_main" style="width:100%;"><br />{
-                                                    if((paramData \\ "@value").isEmpty){
-                                                    } else {
+                                            <td class="sub_main"><br />{
+                                                    if(!(paramData \\ "@value").isEmpty){
                                                         <b>Value: </b><i>{paramData \\ "@value"};  </i>
-                                                    }}{
+                                                    }
                                                     if((paramData \\ "@constant").isEmpty){
                                                         <b>Constant: </b> <i>true;</i>
                                                     } else{
@@ -418,10 +408,10 @@ class ModelRead {
                                                     }}
                                             </td></tr></span>
                                     <ul>
-                                        <li>{if((paramData\\"notes").isEmpty){} else{
-                                                    <tr><td class="main_under" style="width:80%;">Notes:</td>
-                                                        <td class="sub_main_under" style="width:100%;">
-                                                            {for(val x <- paramData\\"notes") yield {
+                                        <li>{if(!(paramData \\ "notes").isEmpty) {
+                                                    <tr><td class="main_under">Notes:</td>
+                                                        <td class="sub_main_under">
+                                                            {for(val x <- paramData \\ "notes") yield {
                                                                     val react_notes = x.toString
                                                                     if(react_notes.contains("body")){
                                                                         val var2 = react_notes.replaceAll("body", "div")
@@ -430,15 +420,23 @@ class ModelRead {
                                                                         v1 = react_notes.replaceAll("notes", "div")
                                                                     }
                                                                     val reaction_notes_p = XML.loadString(v1)
-                                                                    <b>{reaction_notes_p}</b>}}</td></tr>}}
-                                        </li></ul></li></ul>}
+                                                                    <b>{reaction_notes_p}</b>}
+                                                            }
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        }
                     },
                      "extraParametersData" -> {
-                        for(val extraParamData <- modelSBML \\ "model" \\ "listOfReactions" \ "reaction";
-                            val extraParamDataId <- extraParamData \ "@id") yield {
-                            <li>{val extra = extraParamData \ "kineticLaw" \\ "listOfParameters" \ "parameter"
-                                 if( extra.isEmpty){
-                                    } else{
+                        for(val extraParamData <- modelSBML \ "model" \ "listOfReactions" \\ "reaction";
+                            val extraParamDataId <- extraParamData \\ "@id") yield {
+                            <li>{val extra = extraParamData \ "kineticLaw" \ "listOfParameters" \\ "parameter"
+                                 if(!extra.isEmpty){
                                         <span><h2>&nbsp;&nbsp;&nbsp;{extraParamData \\ "@name"}</h2></span>
                                         <ul><li class="closed">
                                                 <table class="browseModelTable" id="modelTable_Overview">
@@ -450,22 +448,22 @@ class ModelRead {
                                                                             if((extra \\ "@name").isEmpty){
                                                                                 <td class="main">{extra \\ "@id"}</td>} else{
                                                                                 <td class="main">{extra \\ "@name"}</td>}}
-                                                                        <td class="sub_main" style="width:100%;"><br />{
-                                                                                if((extra \\ "@value").isEmpty){
-                                                                                } else {
+                                                                        <td class="sub_main"><br />{
+                                                                                if(!(extra \\ "@value").isEmpty){
                                                                                     <b>Value: </b><i>{extra \\ "@value"};  </i>
-                                                                                }}{
+                                                                                }
                                                                                 if((extra \\ "@constant").isEmpty){
                                                                                     <b>Constant: </b> <i>true;</i>
                                                                                 } else{
                                                                                     <b>Constant: </b> <i>false;</i>
-                                                                                }}
+                                                                                }
+                                                                            }
                                                                         </td></tr></span>
                                                                 <ul>
-                                                                    <li>{if((extra\\"notes").isEmpty){} else{
-                                                                                <tr><td class="main_under" style="width:80%;">Notes:</td>
-                                                                                    <td class="sub_main_under" style="width:100%;">
-                                                                                        {for(val x <- extra \\"notes") yield {
+                                                                    <li>{if(!(extra \\ "notes").isEmpty) {
+                                                                                <tr><td class="main_under">Notes:</td>
+                                                                                    <td class="sub_main_under">
+                                                                                        {for(val x <- extra \\ "notes") yield {
                                                                                                 val react_notes = x.toString
                                                                                                 if(react_notes.contains("body")){
                                                                                                     val var2 = react_notes.replaceAll("body", "div")
@@ -474,8 +472,17 @@ class ModelRead {
                                                                                                     v1 = react_notes.replaceAll("notes", "div")
                                                                                                 }
                                                                                                 val reaction_notes_p = XML.loadString(v1)
-                                                                                                <b>{reaction_notes_p}</b>}}</td></tr>}}
-                                                                    </li></ul></li></ul>
+                                                                                                <b>{reaction_notes_p}</b>
+                                                                                            }
+                                                                                        }
+                                                                                    </td>
+                                                                                </tr>
+                                                                            }
+                                                                        }
+                                                                    </li>
+                                                                </ul>
+                                                            </li>
+                                                        </ul>
                                                     </tbody>
                                                 </table>
                                             </li>

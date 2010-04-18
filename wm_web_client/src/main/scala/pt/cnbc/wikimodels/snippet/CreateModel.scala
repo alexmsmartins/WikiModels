@@ -353,6 +353,7 @@ class CreateModel {
                                            <li>Function Definition Math:
                                                 <a value="Help on Mathematical Formulas" href="" onclick="window.open('../help/helpMath','Help','width=500,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=400,top=300,screenX=400,screenY=300');">
                                                     <img src="../classpath/images/question.png" width="20px" height="20px" /></a><br />
+                                                <a value="Copy paste the MathML expression" href="" onclick="window.open('http://cnx.org/math-editor/popup','Help','width=500,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=400,top=300,screenX=400,screenY=300');">MathML Editor</a>
                                                 {SHtml.textarea("amath [insert mathematical formula here] endamath", v => function_def_math.add(v),("id", "functionDefinitionMath"), ("rows","3"), ("cols", "120"), ("maxlength", "20000"))}</li>
                                            <li>Function Definition Note:<br />
                                                 {SHtml.textarea("", v => function_def_note.add(v),("id", "functionDefinitionNote"), ("rows","10"), ("cols", "120"), ("maxlength", "50000"))

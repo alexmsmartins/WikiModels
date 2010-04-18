@@ -283,7 +283,7 @@ br.both{
     background-color:#3564a9;
 }
 #content h8 {
-    padding-left:4px; padding-right:4px; position:absolute; right:30px; margin-top:5px;
+    padding-left:4px; padding-right:4px; position:absolute; right:30px; margin-top:1px;
 }
 
 #content h8 a {
@@ -291,7 +291,7 @@ br.both{
     -moz-border-radius-bottomright: 7px; -webkit-border-bottom-right-radius: 7px;
     -moz-border-radius-topright: 0px; -webkit-border-top-right-radius: 0px;
     -moz-border-radius-bottomleft: 7px; -webkit-border-bottom-left-radius: 7px;
-    display:inline;	background-color:transparent; font:bold 100% Georgia; text-decoration:none;
+    display:inline;	background-color:transparent; font:bold 80% Georgia; text-decoration:none;
     border-bottom:2px solid #444; border-right:2px solid #444; border-top:0; border-left:1px solid #444; color:#222;
 }
 
@@ -300,7 +300,7 @@ br.both{
     -moz-border-radius-bottomright: 7px; -webkit-border-bottom-right-radius: 7px;
     -moz-border-radius-topright: 0px; -webkit-border-top-right-radius: 0px;
     -moz-border-radius-bottomleft: 7px; -webkit-border-bottom-left-radius: 7px;
-    display:inline;	background-color:transparent; font:bold 100% Georgia; text-decoration:none;
+    display:inline;	background-color:transparent; font:bold 80% Georgia; text-decoration:none;
     border-bottom:2px solid #444; border-right:2px solid #444; border-top:0; border-left:1px solid #444; color:#222;
 }
 
@@ -320,7 +320,7 @@ br.both{
     -moz-border-radius-bottomright: 7px; -webkit-border-bottom-right-radius: 7px;
     -moz-border-radius-topright: 0px; -webkit-border-top-right-radius: 0px;
     -moz-border-radius-bottomleft: 7px; -webkit-border-bottom-left-radius: 7px;
-    display:inline;	background-color:transparent; font:bold 85% Georgia; text-decoration:none;
+    display:inline;	background-color:transparent; font:bold 80% Georgia; text-decoration:none;
     border-bottom:2px solid #444; border-right:2px solid #444; border-top:0; border-left:1px solid #444; color:#222;
 }
 
@@ -429,6 +429,7 @@ br.both{
     -moz-border-radius: 2px; -webkit-border-radius: 2px;
     padding:.2em 1em .2em 1em; text-align:left;
     background-color: #a0b3dc; font-weight:bold;
+    width:300px;
 }
 
 #content #modelTable_Overview .sub_main {
@@ -436,13 +437,12 @@ br.both{
     padding:.2em 1em .2em 1em; vertical-align:top; width:100%;
     text-align:left; border-bottom: 2px solid #ddd; border-right: 2px solid #ddd;
     background-color:#cad2e5; border-top: 0.5px solid #ddd; border-left: 0.5px solid #ddd;
+    width:70%;
 }
 
 #content #modelTable_Overview .sub_main2 {
-    -moz-border-radius: 2px; -webkit-border-radius: 2px;
     padding:.2em 1em .2em 1em; vertical-align:top;
-    text-align:left; border-bottom: 2px solid #ddd; border-right: 2px solid #ddd;
-    background-color:#cad2e5; border-top: 0.5px solid #ddd; border-left: 0.5px solid #ddd;
+    text-align:left; border: 2px solid #fff; background-color:#cad2e5;
 }
 
 #content #modelTable_Overview .main_under {
@@ -455,6 +455,7 @@ br.both{
     padding:.2em 1em .2em 1em; vertical-align:top; text-align:left;
     border-bottom:#767676 solid 2px; border-right:#767676 solid 2px;
     background-color:#ffffff; width:100%;
+    width:100%;
 }
 
 #content #userTableTD1 {
@@ -462,6 +463,7 @@ br.both{
     padding:.2em 1em .2em 1em; vertical-align:top; text-align:left;
     border-bottom:#767676 solid 2px; border-right:#767676 solid 2px;
     background-color:#ffffff; width:10%;
+
 }
 #content #userTableTD2 {
     

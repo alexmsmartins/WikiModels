@@ -41,7 +41,7 @@ class Boot {
                            Menu(Loc("people", List("people"), "People")),
                            Menu(Loc("contacts", List("contacts"), "Contacts")),
                            Menu(Loc("faq", List("faq"), "FAQ"))) ::
-        Menu(Loc("models", List("models","index"), "Models"),
+        Menu(Loc("models", List(""), "Models"),
             Menu(Loc("createM", List("models","create"), "Create Model", loggedIn)),
             Menu(Loc("browseM", List("models","index"), "Browse Model", loggedIn)),
             Menu(Loc("browseMm", List("models","browse.xhtml"), "Browse Model", Hidden, loggedIn)),
