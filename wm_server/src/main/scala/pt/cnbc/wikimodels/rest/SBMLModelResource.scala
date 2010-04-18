@@ -181,6 +181,7 @@ class SBMLModelResource extends RESTResource {
                 val dao = new SBMLModelsDAO
                 if(dao.deleteSBMLModel(
                         new SBMLModel(sbmlModelResource, Nil, null , null))){
+                      System.out.print("XXXXXXXXXXXXXXXXXXXXXX")
                 } else {
                     throw new WebApplicationException(
                         Response.Status.NOT_FOUND)
@@ -202,51 +203,76 @@ class SBMLModelResource extends RESTResource {
     }
 
 
-    /*@Path("{modelid}/compartment/")
-     def compartmentResource(@PathParam("modelid") sbmlModelResource:String) = {
-     val username = security.getUserPrincipal().getName()
-     Console.print("compartment resource was used in user " + username)
-     }
+  @Path("{modelid}/compartment/")
+   def compartmentResource(@PathParam("modelid") sbmlModelResource:String) = {
+      /*val username = security.getUserPrincipal().getName()
+       Console.print("compartment resource was used in user " + username)*/
+      val resource:CompartmentResource = new CompartmentResource(sbmlModelResource)
+      //TODO find out why the annotation @Context does not work on subresources
+      resource.security = this.security //ugly hack
+      resource.uriInfo = this.uriInfo //ugly hack
+      resource
+   }
 
-     @Path("{modelid}/constraint/")
-     def constraintResource(@PathParam("modelid") sbmlModelResource:String) = {
-     val username = security.getUserPrincipal().getName()
-     Console.print("constraint resource was used in user " + username)
-     }
+   @Path("{modelid}/constraint/")
+   def constraintResource(@PathParam("modelid") sbmlModelResource:String) = {
+      /*val username = security.getUserPrincipal().getName()
+       Console.print("constraint resource was used in user " + username)*/
+      val resource:ConstraintResource = new ConstraintResource(sbmlModelResource)
+      //TODO find out why the annotation @Context does not work on subresources
+      resource.security = this.security //ugly hack
+      resource.uriInfo = this.uriInfo //ugly hack
+      resource
+   }
 
-     @Path("{modelid}/functionDefinition/")
-     def functionDefinitionResource(@PathParam("modelid") sbmlModelResource:String) = {
-     val username = security.getUserPrincipal().getName()
-     Console.print("functionDefinition resource was used in user " + username)
-     }*/
-
-    @Path("{modelid}/parameter/")
-    def parameterResource(@PathParam("modelid") sbmlModelResource:String):ParameterResource = {
-        /*val username = security.getUserPrincipal().getName()
-        Console.print("parameter resource was used in user " + username)*/
-        val resource:ParameterResource = new ParameterResource(sbmlModelResource)
-        //TODO find out why the annotation @Context does not work on subresources
-        resource.security = this.security //ugly hack
-        resource.uriInfo = this.uriInfo //ugly hack
-        resource
+   @Path("{modelid}/functionDefinition/")
+   def functionDefinitionResource(@PathParam("modelid") sbmlModelResource:String) = {
+      /*val username = security.getUserPrincipal().getName()
+       Console.print("functionDefinition resource was used in user " + username)*/
+      val resource:FunctionDefinitionResource = new FunctionDefinitionResource(sbmlModelResource)
+      //TODO find out why the annotation @Context does not work on subresources
+      resource.security = this.security //ugly hack
+      resource.uriInfo = this.uriInfo //ugly hack
+      resource
     }
 
-    /*@Path("{modelid}/reaction/")
-     def reactionResource(@PathParam("modelid") sbmlModelResource:String) = {
-     val username = security.getUserPrincipal().getName()
-     Console.print("reaction resource was used in user " + username)
-     }
+  @Path("{modelid}/parameter/")
+  def parameterResource(@PathParam("modelid") sbmlModelResource:String):ParameterResource = {
+    /*val username = security.getUserPrincipal().getName()
+     Console.print("parameter resource was used in user " + username)*/
+    val resource:ParameterResource = new ParameterResource(sbmlModelResource)
+    //TODO find out why the annotation @Context does not work on subresources
+    resource.security = this.security //ugly hack
+    resource.uriInfo = this.uriInfo //ugly hack
+    resource
+  }
 
-     @Path("{modelid}/species/")
-     def speciesResource(@PathParam("modelid") sbmlModelResource:String) = {
-     val username = security.getUserPrincipal().getName()
-     Console.print("species resource was used in user " + username)
-     }
+  @Path("{modelid}/reaction/")
+  def reactionResource(@PathParam("modelid") sbmlModelResource:String) = {
+    /*val username = security.getUserPrincipal().getName()
+     Console.print("reaction resource was used in user " + username)*/
+    val resource:ReactionResource = new ReactionResource(sbmlModelResource)
+    //TODO find out why the annotation @Context does not work on subresources
+    resource.security = this.security //ugly hack
+    resource.uriInfo = this.uriInfo //ugly hack
+    resource
+  }
 
-     @Path("{modelid}/comments/")
-     def commentsResource(@PathParam("modelid") sbmlModelResource:String) = {
-     val username = security.getUserPrincipal().getName()
-     Console.print("comments resource was used in user " + username)
-     new CommentsResource()
-     }*/
+  @Path("{modelid}/species/")
+  def speciesResource(@PathParam("modelid") sbmlModelResource:String) = {
+    /*val username = security.getUserPrincipal().getName()
+     Console.print("species resource was used in user " + username)*/
+    val resource:SpeciesResource = new SpeciesResource(sbmlModelResource)
+    //TODO find out why the annotation @Context does not work on subresources
+    resource.security = this.security //ugly hack
+    resource.uriInfo = this.uriInfo //ugly hack
+    resource
+  }
+
+  @Path("{modelid}/comments/")
+  def commentsResource(@PathParam("modelid") sbmlModelResource:String) = {
+    val username = security.getUserPrincipal().getName()
+    Console.print("comments resource was used in user " + username)
+    new CommentsResource()
+  }
 }

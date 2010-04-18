@@ -117,7 +117,6 @@ class SpeciesResource(sbmlModelResource:String) extends RESTResource {
             //it does not have permissions
             throw new WebApplicationException(Response.Status.FORBIDDEN);
         }
-
     }
 
     /**

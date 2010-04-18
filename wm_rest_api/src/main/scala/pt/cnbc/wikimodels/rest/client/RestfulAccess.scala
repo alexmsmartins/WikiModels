@@ -162,42 +162,48 @@ class RestfulAccess(val host:String,
     }
 
     protected def getResponseEntiy(response:HttpResponse) = {
-        // Get hold of the response entity
-        val entity:HttpEntity = response.getEntity();
+      // Get hold of the response entity
+      val entity:HttpEntity = response.getEntity();
 
-        // If the response does not enclose an entity, there is no need
-        // to worry about connection release
-        if (entity != null) {
-            val instream:InputStream = entity.getContent();
-            try {
+      // If the response does not enclose an entity, there is no need
+      // to worry about connection release
+      if (entity != null) {
+        val instream:InputStream = entity.getContent();
+        try {
 
-                val reader:BufferedReader  = new BufferedReader(
-                    new InputStreamReader(instream));
-                // do something useful with the response
-                System.out.println(reader.readLine());
+            val reader:BufferedReader  = new BufferedReader(
+                new InputStreamReader(instream));
+            // do something useful with the response
+            System.out.println(reader.readLine());
 
-            } catch {
-                case ex:IOException => {
+        } catch {
+          case ex:IOException => {
 
-                        // In case of an IOException the connection will be released
-                        // back to the connection manager automatically
-                        throw ex;
-                    }
-                case ex:RuntimeException => {
-
-                        // In case of an unexpected exception you may want to abort
-                        // the HTTP request in order to shut down the underlying
-                        // connection and release it back to the connection manager.
-                        this.restart
-                        throw ex;
-                    }
-            } finally {
-
-                // Closing the input stream will trigger connection release
-                instream.close();
-
+              // In case of an IOException the connection will be released
+              // back to the connection manager automatically
+              throw ex;
             }
+          case ex:RuntimeException => {
+
+              // In case of an unexpected exception you may want to abort
+              // the HTTP request in order to shut down the underlying
+              // connection and release it back to the connection manager.
+              this.restart
+              throw ex;
+              }
+        } finally {
+
+          // Closing the input stream will trigger connection release
+          if(instream != null) {
+            try {
+              instream.close();
+            } catch {
+              case ex:IOException =>
+                // ignored
+            }
+          }
         }
+      }
     }
 
     def restart = {
@@ -222,7 +228,7 @@ class RestfulAccess(val host:String,
 
 /**
  * An object that contains the function that initializes
- * RestfulAccess to Basic Authetication
+ * RestfulAccess to Basic Authentication
  *
  */
 object BasicAuth {

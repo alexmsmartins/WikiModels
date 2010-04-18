@@ -34,7 +34,7 @@ case class Element extends DataModel {
 
     @Id
     @RdfProperty("http://wikimodels.cnbc.pt/ontologies/sbml.owl#metaid")
-    var metaid:String = null
+    var metaid:java.lang.String = null
 
     //these two lines have to be repeated in any descendant of this class
     //since annotations are not inherited

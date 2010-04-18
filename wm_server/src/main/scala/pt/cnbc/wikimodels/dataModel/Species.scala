@@ -83,9 +83,21 @@ case class Species extends Element{
                 case _ => null
             },
              (new SBMLHandler).toStringOrNull((xmlSpecies \ "@substanceUnits").text),
-             (xmlSpecies \ "@hasOnlySubstanceUnits").text.toBoolean,
-             (xmlSpecies \ "@boundaryCondition").text.toBoolean,
-             (xmlSpecies \ "@constant").text.toBoolean)
+             try{
+              (xmlSpecies \ "@hasOnlySubstanceUnits").text.toBoolean
+             } catch {
+              case _ => false
+             },
+             try{
+              (xmlSpecies \ "@boundaryCondition").text.toBoolean
+             } catch {
+              case _ => false
+             },
+             try{
+              (xmlSpecies \ "@constant").text.toBoolean
+                           } catch {
+               case _ => false
+             })
     }
 
     override def toXML:Elem = {

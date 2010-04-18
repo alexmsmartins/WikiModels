@@ -36,6 +36,7 @@ import pt.cnbc.wikimodels.dataModel.SBMLModel
 import pt.cnbc.wikimodels.exceptions.NotImplementedException
 import pt.cnbc.wikimodels.ontology.ManipulatorWrapper
 import pt.cnbc.wikimodels.ontology.{Namespaces => NS}
+import thewebsemantic.Sparql
 
 class ReactionsDAO {
     /**
@@ -64,11 +65,17 @@ class ReactionsDAO {
         var ret:Reaction = null
 
         Console.print("After loading Jena Model")
-        var reader = new RDF2Bean(model)
-        Console.print("After creating a new RDF2Bean")
-        val l
-        = reader.load( new Reaction().getClass, reactionMetaid  )
-                .asInstanceOf[java.util.Collection[Reaction]]
+        Console.print("Jena Model content")
+        val queryString =
+        """
+        PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        SELECT ?s WHERE
+        { ?s rdf:type sbml:Reaction .
+        """ +  "?s sbml:metaid \"" + reactionMetaid + "\"^^<http://www.w3.org/2001/XMLSchema#string> } "
+
+        val l:java.util.LinkedList[Reaction]
+        = Sparql.exec(model, classOf[Reaction], queryString)
         Console.println("Found " + l.size + " Reactions with metaid " + reactionMetaid)
         if(l.size > 0)
             l.iterator.next
@@ -166,18 +173,20 @@ class ReactionsDAO {
                                     reaction:Reaction,
                                     model:Model):String = {
         if(sbmlModelsDAO.modelMetaidExists(modelMetaid)){
-            val reactionMetaid = trytoCreateReaction(reaction, model)
+          val reactionMetaid = trytoCreateReaction(reaction, model)
+          if(reactionMetaid != null){
 
             //Jena API used directly
             val sbmlModelRes = model.createResource(
                          NS.sbml + "Model/" + modelMetaid)
             val reactionRes = model.createResource(
-                        NS.sbml + "Model/" + reactionMetaid)
+                        NS.sbml + "Reaction/" + reactionMetaid)
 
             sbmlModelRes.addProperty(model
                          .getProperty(NS.sbml + "hasPArameter"),
                                      reactionRes)
             reactionMetaid
+          } else null
         } else null
     }
 

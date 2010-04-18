@@ -36,6 +36,7 @@ import pt.cnbc.wikimodels.dataModel.SBMLModel
 import pt.cnbc.wikimodels.exceptions.NotImplementedException
 import pt.cnbc.wikimodels.ontology.ManipulatorWrapper
 import pt.cnbc.wikimodels.ontology.{Namespaces => NS}
+import thewebsemantic.Sparql
 
 class FunctionDefinitionsDAO {
     /**
@@ -64,11 +65,17 @@ class FunctionDefinitionsDAO {
         var ret:FunctionDefinition = null
 
         Console.print("After loading Jena Model")
-        var reader = new RDF2Bean(model)
-        Console.print("After creating a new RDF2Bean")
-        val l
-        = reader.load( new FunctionDefinition().getClass, functionDefinitionMetaid  )
-                .asInstanceOf[java.util.Collection[FunctionDefinition]]
+        Console.print("Jena Model content")
+        val queryString =
+        """
+        PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        SELECT ?s WHERE
+        { ?s rdf:type sbml:FunctionDefinition .
+        """ +  "?s sbml:metaid \"" + functionDefinitionMetaid + "\"^^<http://www.w3.org/2001/XMLSchema#string> } "
+
+        val l:java.util.LinkedList[FunctionDefinition]
+        = Sparql.exec(model, classOf[FunctionDefinition], queryString)
         Console.println("Found " + l.size + " FunctionDefinitions with metaid " + functionDefinitionMetaid)
         if(l.size > 0)
             l.iterator.next
@@ -166,18 +173,21 @@ class FunctionDefinitionsDAO {
                                     functionDefinition:FunctionDefinition,
                                     model:Model):String = {
         if(sbmlModelsDAO.modelMetaidExists(modelMetaid)){
-            val functionDefinitionMetaid = trytoCreateFunctionDefinition(functionDefinition, model)
+          val functionDefinitionMetaid = trytoCreateFunctionDefinition(functionDefinition, model)
+          if(functionDefinitionMetaid != null){
+
 
             //Jena API used directly
             val sbmlModelRes = model.createResource(
                          NS.sbml + "Model/" + modelMetaid)
             val functionDefinitionRes = model.createResource(
-                        NS.sbml + "Model/" + functionDefinitionMetaid)
+                        NS.sbml + "FunctionDefinition/" + functionDefinitionMetaid)
 
             sbmlModelRes.addProperty(model
                          .getProperty(NS.sbml + "hasPArameter"),
                                      functionDefinitionRes)
             functionDefinitionMetaid
+          } else null
         } else null
     }
 

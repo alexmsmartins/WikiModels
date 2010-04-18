@@ -30,7 +30,7 @@ case class Compartment extends Element{
     var name:String = null
     var compartmentType:String = null //not implemented yet
     var spacialDimensions:Int = 0
-    var size:Double = 0
+    var size:java.lang.Double = 0
     var units:String = null  //not implemented yet
     var outside:String = null
     var constant:Boolean = false
@@ -43,7 +43,7 @@ case class Compartment extends Element{
              name:String,
              compartmentType:String, //not implemented yet
              spacialDimensions:Int,
-             size:Double,
+             size:java.lang.Double,
              units:String,  //not implemented yet
              outside:String,
              constant:Boolean) = {
@@ -65,11 +65,23 @@ case class Compartment extends Element{
              (new SBMLHandler).toStringOrNull((xmlCompartment \ "@id").text),
              (new SBMLHandler).toStringOrNull((xmlCompartment \ "@name").text),
              (xmlCompartment \ "@compartmentType").text,
-             (xmlCompartment \ "@spacialDimensions").text.toInt,
-             (xmlCompartment \ "@size").text.toDouble,
-             (xmlCompartment \ "@units").text,
-             (xmlCompartment \ "@outside").text,
-             (xmlCompartment \ "@constant").text.toBoolean)
+             try{
+             (xmlCompartment \ "@spacialDimensions").text.toInt
+             } catch {
+               case _ => 3
+             },
+             try{
+              (xmlCompartment \ "@size").text.toDouble
+             } catch {
+               case _ => null //TODO . check conditions by which size is optional
+             },
+             (new SBMLHandler).toStringOrNull((xmlCompartment \ "@units").text),
+             (new SBMLHandler).toStringOrNull((xmlCompartment \ "@outside").text),
+             try{
+                (xmlCompartment \ "@constant").text.toBoolean
+             } catch {
+               case _ => true
+             })
     }
 
     override def toXML:Elem = {

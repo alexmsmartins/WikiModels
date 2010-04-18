@@ -38,6 +38,8 @@ import scala.Array
 
 object ManipulatorWrapper {
 
+    protected var jenaModel:Model = null
+
     def initializeDB = {
         val store = SDBFactory.connectStore("sdb.ttl")
         store.getTableFormatter.create
@@ -73,11 +75,14 @@ object ManipulatorWrapper {
     }
 
     def loadModelfromDB:Model = {
+      if(jenaModel != null && jenaModel.supportsTransactions == true) jenaModel
+      else
         try{
             Console.println("current directory is " + System.getProperty("user.dir"))
             //val myConfigFile:URL = ManipulatorWrapper.getClass.getClassLoader().getResource("/sdb.ttl");
-            var store = SDBFactory.connectStore("/home/alex/develop/estagio/workspace/wikimodels/wm_server/src/main/sdb.ttl")
-            SDBFactory.connectDefaultModel(store)
+            val store = SDBFactory.connectStore("/home/alex/develop/estagio/workspace/wikimodels/wm_server/src/main/resources/sdb.ttl")
+            jenaModel = SDBFactory.connectDefaultModel(store)
+            jenaModel
         } catch {
             case ex:Exception => Console.print(
                     """Strange mistake.
@@ -86,7 +91,6 @@ object ManipulatorWrapper {
                 throw ex
         }
     }
-
 
     def saveModelToFile(model:OntModel, fileName:String) ={
         try{
@@ -100,7 +104,6 @@ It resulted in the followning exception:""" + ex.printStackTrace)
                     """Strange mistake.
 It resulted in the followning exception:""" + ex.printStackTrace)
         }
-
     }
 
     def loadModelfromfile(fileName:String):OntModel = {

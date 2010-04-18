@@ -27,8 +27,10 @@ import com.hp.hpl.jena.reasoner.ReasonerRegistry
 
 import thewebsemantic.Bean2RDF
 import thewebsemantic.RDF2Bean
+import thewebsemantic.Sparql
 
 import scala.Collection
+import scala.collection.JavaConversions._
 
 import pt.cnbc.wikimodels.dataModel.Compartment
 import pt.cnbc.wikimodels.dataModel.Element
@@ -64,14 +66,20 @@ class CompartmentsDAO {
         var ret:Compartment = null
 
         Console.print("After loading Jena Model")
-        var reader = new RDF2Bean(model)
-        Console.print("After creating a new RDF2Bean")
-        val l
-        = reader.load( new Compartment().getClass, compartmentMetaid  )
-                .asInstanceOf[java.util.Collection[Compartment]]
+        Console.print("Jena Model content")
+        val queryString =
+        """
+        PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        SELECT ?s WHERE
+        { ?s rdf:type sbml:Compartment .
+        """ +  "?s sbml:metaid \"" + compartmentMetaid + "\"^^<http://www.w3.org/2001/XMLSchema#string> } "
+
+        val l:java.util.LinkedList[Compartment]
+        = Sparql.exec(model, classOf[Compartment], queryString)
         Console.println("Found " + l.size + " Compartments with metaid " + compartmentMetaid)
         if(l.size > 0)
-            l.iterator.next
+          l.iterator.next
         else null
     }
 
@@ -171,18 +179,19 @@ class CompartmentsDAO {
                                     compartment:Compartment,
                                     model:Model):String = {
         if(sbmlModelsDAO.modelMetaidExists(modelMetaid)){
-            val compartmentMetaid = trytoCreateCompartment(compartment, model)
-
+          val compartmentMetaid = trytoCreateCompartment(compartment, model)
+          if(compartmentMetaid != null){
             //Jena API used directly
             val sbmlModelRes = model.createResource(
                          NS.sbml + "Model/" + modelMetaid)
             val compartmentRes = model.createResource(
-                        NS.sbml + "Model/" + compartmentMetaid)
+                        NS.sbml + "Compartment/" + compartmentMetaid)
 
             sbmlModelRes.addProperty(model
-                         .getProperty(NS.sbml + "hasPArameter"),
+                         .getProperty(NS.sbml + "hasPart"),
                                      compartmentRes)
             compartmentMetaid
+          } else null
         } else null
     }
 

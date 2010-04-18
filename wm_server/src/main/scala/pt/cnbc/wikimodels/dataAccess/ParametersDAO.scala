@@ -37,6 +37,7 @@ import pt.cnbc.wikimodels.dataModel.SBMLModel
 import pt.cnbc.wikimodels.exceptions.NotImplementedException
 import pt.cnbc.wikimodels.ontology.ManipulatorWrapper
 import pt.cnbc.wikimodels.ontology.{Namespaces => NS}
+import thewebsemantic.Sparql
 
 class ParametersDAO {
     /**
@@ -65,11 +66,17 @@ class ParametersDAO {
         var ret:Parameter = null
 
         Console.print("After loading Jena Model")
-        var reader = new RDF2Bean(model)
-        Console.print("After creating a new RDF2Bean")
-        val l
-        = reader.load( new Parameter().getClass, parameterMetaid  )
-                .asInstanceOf[java.util.Collection[Parameter]]
+        Console.print("Jena Model content")
+        val queryString =
+        """
+        PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        SELECT ?s WHERE
+        { ?s rdf:type sbml:Parameter .
+        """ +  "?s sbml:metaid \"" + parameterMetaid + "\"^^<http://www.w3.org/2001/XMLSchema#string> } "
+
+        val l:java.util.LinkedList[Parameter]
+        = Sparql.exec(model, classOf[Parameter], queryString)
         Console.println("Found " + l.size + " Parameters with metaid " + parameterMetaid)
         if(l.size > 0)
             l.iterator.next
@@ -168,17 +175,18 @@ class ParametersDAO {
                                     model:Model):String = {
         if(sbmlModelsDAO.modelMetaidExists(modelMetaid)){
             val parameterMetaid = trytoCreateParameter(parameter, model)
+            if(parameterMetaid != null){
+              //Jena API used directly
+              val sbmlModelRes = model.createResource(
+                           NS.sbml + "Model/" + modelMetaid)
+              val parameterRes = model.createResource(
+                          NS.sbml + "Parameter/" + parameterMetaid)
 
-            //Jena API used directly
-            val sbmlModelRes = model.createResource(
-                         NS.sbml + "Model/" + modelMetaid)
-            val parameterRes = model.createResource(
-                        NS.sbml + "Model/" + parameterMetaid)
-
-            sbmlModelRes.addProperty(model
-                         .getProperty(NS.sbml + "hasPArameter"),
-                                     parameterRes)
-            parameterMetaid
+              sbmlModelRes.addProperty(model
+                           .getProperty(NS.sbml + "hasParameter"),
+                                       parameterRes)
+              parameterMetaid
+            } else null
         } else null
     }
 
@@ -325,10 +333,10 @@ class ParametersDAO {
     def deleteParameter(parameter:Parameter, model:Model):Boolean = {
         try{
             if( parameterMetaidExists(parameter.metaid ) ){
-                val writer = new Bean2RDF(model)
-                writer.delete(parameter)
-                //TODO delete subelements
-                true
+              val writer = new Bean2RDF(model)
+              writer.delete(parameter)
+              //TODO delete subelements
+              true
             } else false
         } catch {
             case ex:thewebsemantic.NotFoundException => {

@@ -36,6 +36,7 @@ import pt.cnbc.wikimodels.dataModel.SBMLModel
 import pt.cnbc.wikimodels.exceptions.NotImplementedException
 import pt.cnbc.wikimodels.ontology.ManipulatorWrapper
 import pt.cnbc.wikimodels.ontology.{Namespaces => NS}
+import thewebsemantic.Sparql
 
 class ConstraintsDAO {
     /**
@@ -64,11 +65,17 @@ class ConstraintsDAO {
         var ret:Constraint = null
 
         Console.print("After loading Jena Model")
-        var reader = new RDF2Bean(model)
-        Console.print("After creating a new RDF2Bean")
-        val l
-        = reader.load( new Constraint().getClass, constraintMetaid  )
-                .asInstanceOf[java.util.Collection[Constraint]]
+        Console.print("Jena Model content")
+        val queryString =
+        """
+        PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        SELECT ?s WHERE
+        { ?s rdf:type sbml:Constraint .
+        """ +  "?s sbml:metaid \"" + constraintMetaid + "\"^^<http://www.w3.org/2001/XMLSchema#string> } "
+
+        val l:java.util.LinkedList[Constraint]
+        = Sparql.exec(model, classOf[Constraint], queryString)
         Console.println("Found " + l.size + " Constraints with metaid " + constraintMetaid)
         if(l.size > 0)
             l.iterator.next
@@ -166,18 +173,20 @@ class ConstraintsDAO {
                                     constraint:Constraint,
                                     model:Model):String = {
         if(sbmlModelsDAO.modelMetaidExists(modelMetaid)){
-            val constraintMetaid = trytoCreateConstraint(constraint, model)
+          val constraintMetaid = trytoCreateConstraint(constraint, model)
+          if(constraintMetaid != null){
 
             //Jena API used directly
             val sbmlModelRes = model.createResource(
                          NS.sbml + "Model/" + modelMetaid)
             val constraintRes = model.createResource(
-                        NS.sbml + "Model/" + constraintMetaid)
+                        NS.sbml + "Constraint/" + constraintMetaid)
 
             sbmlModelRes.addProperty(model
                          .getProperty(NS.sbml + "hasPArameter"),
                                      constraintRes)
             constraintMetaid
+          } else null
         } else null
     }
 

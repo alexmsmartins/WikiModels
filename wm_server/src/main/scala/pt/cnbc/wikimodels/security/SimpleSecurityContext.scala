@@ -23,7 +23,7 @@ class SimpleSecurityContext extends SecurityContext{
      *  - all other users are atuthrized to do anything to models their personal
      *  information
      */
-    def isAuthorizedTo(user:String , method:String, resource:String):boolean = {
+    def isAuthorizedTo(user:String , method:String, resource:String):Boolean = {
         //TODO change isAuthorizedTo to use match case if
         //the called resource is checked with regular expressions
         //TODO Incomplete rule -> users can change their own information with the exception of their username

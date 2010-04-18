@@ -36,6 +36,7 @@ import pt.cnbc.wikimodels.dataModel.SBMLModel
 import pt.cnbc.wikimodels.exceptions.NotImplementedException
 import pt.cnbc.wikimodels.ontology.ManipulatorWrapper
 import pt.cnbc.wikimodels.ontology.{Namespaces => NS}
+import thewebsemantic.Sparql
 
 class SpeciessDAO {
     /**
@@ -64,11 +65,17 @@ class SpeciessDAO {
         var ret:Species = null
 
         Console.print("After loading Jena Model")
-        var reader = new RDF2Bean(model)
-        Console.print("After creating a new RDF2Bean")
-        val l
-        = reader.load( new Species().getClass, speciesMetaid  )
-                .asInstanceOf[java.util.Collection[Species]]
+        Console.print("Jena Model content")
+        val queryString =
+        """
+        PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        SELECT ?s WHERE
+        { ?s rdf:type sbml:Species .
+        """ +  "?s sbml:metaid \"" + speciesMetaid + "\"^^<http://www.w3.org/2001/XMLSchema#string> } "
+
+        val l:java.util.LinkedList[Species]
+        = Sparql.exec(model, classOf[Species], queryString)
         Console.println("Found " + l.size + " Speciess with metaid " + speciesMetaid)
         if(l.size > 0)
             l.iterator.next
@@ -91,8 +98,6 @@ class SpeciessDAO {
                 null
         }
     }
-
-
 
     /**
      * Saves an Species into the KnowledgeBase
@@ -166,18 +171,20 @@ class SpeciessDAO {
                                     species:Species,
                                     model:Model):String = {
         if(sbmlModelsDAO.modelMetaidExists(modelMetaid)){
-            val speciesMetaid = trytoCreateSpecies(species, model)
+          val speciesMetaid = trytoCreateSpecies(species, model)
+          if(speciesMetaid != null){
 
             //Jena API used directly
             val sbmlModelRes = model.createResource(
                          NS.sbml + "Model/" + modelMetaid)
             val speciesRes = model.createResource(
-                        NS.sbml + "Model/" + speciesMetaid)
+                        NS.sbml + "Species/" + speciesMetaid)
 
             sbmlModelRes.addProperty(model
                          .getProperty(NS.sbml + "hasPArameter"),
                                      speciesRes)
             speciesMetaid
+          } else null
         } else null
     }
 

@@ -8,11 +8,19 @@
 package pt.cnbc.wikimodels.ontology
 
 import org.apache.log4j.Logger
-import com.hp.hpl.jena.rdf.model.ModelFactory
+import com.hp.hpl.jena.graph.GraphEvents
 import com.hp.hpl.jena.ontology.OntModel
-import com.hp.hpl.jena.sdb.StoreDesc
+import com.hp.hpl.jena.query.Query
+import com.hp.hpl.jena.query.QueryExecution
+import com.hp.hpl.jena.query.QueryExecutionFactory
+import com.hp.hpl.jena.query.QueryFactory
+import com.hp.hpl.jena.query.QuerySolution
+import com.hp.hpl.jena.query.ResultSet
+import com.hp.hpl.jena.query.ResultSetFormatter
+import com.hp.hpl.jena.rdf.model.ModelFactory
+import com.hp.hpl.jena.rdf.model.Model
 import com.hp.hpl.jena.rdf.model.Resource
-import com.hp.hpl.jena.vocabulary.VCARD
+import com.hp.hpl.jena.sdb.StoreDesc
 import com.hp.hpl.jena.sdb.store.LayoutType
 import com.hp.hpl.jena.sdb.store.DatabaseType
 import com.hp.hpl.jena.sdb.sql.JDBC
@@ -20,16 +28,17 @@ import com.hp.hpl.jena.sdb.sql.SDBConnection
 import com.hp.hpl.jena.sdb.Store
 import com.hp.hpl.jena.sdb.SDBFactory
 import com.hp.hpl.jena.shared.NotFoundException
-import com.hp.hpl.jena.graph.GraphEvents
+import com.hp.hpl.jena.vocabulary.VCARD
 
 import java.io.File
-import java.lang.Thread
-import scala.Array
 import java.net.URL
-import com.hp.hpl.jena.rdf.model.Model
+
+import scala.Array
 
 
 object ManipulatorWrapper {
+
+    protected var jenaModel:Model = null
 
     def initializeDB = {
         val store = SDBFactory.connectStore("sdb.ttl")
@@ -66,16 +75,14 @@ object ManipulatorWrapper {
     }
 
     def loadModelfromDB:Model = {
+      if(jenaModel != null && jenaModel.supportsTransactions == true) jenaModel
+      else
         try{
-            val url = Thread.currentThread
-            .getContextClassLoader
-            .getResource("sdb.ttl")
-            Console.println("url.toExternalForm - " + url.toExternalForm)
-            Console.println("url.toString - " + url.toString)
-            url.toString
-
-            val store = SDBFactory.connectStore("/home/alex/develop/estagio/workspace/wikimodels/wm_server/src/main/sdb.ttl")
-            SDBFactory.connectDefaultModel(store)
+            Console.println("current directory is " + System.getProperty("user.dir"))
+            //val myConfigFile:URL = ManipulatorWrapper.getClass.getClassLoader().getResource("/sdb.ttl");
+            val store = SDBFactory.connectStore("/home/alex/develop/estagio/workspace/wikimodels/wm_server/src/main/resources/sdb.ttl")
+            jenaModel = SDBFactory.connectDefaultModel(store)
+            jenaModel
         } catch {
             case ex:Exception => Console.print(
                     """Strange mistake.
@@ -85,8 +92,7 @@ object ManipulatorWrapper {
         }
     }
 
-
-    def saveModelToFile(model:Model, fileName:String) ={
+    def saveModelToFile(model:OntModel, fileName:String) ={
         try{
             val out = new java.io.FileOutputStream(fileName)
             model.write(out, "RDF/XML-ABBREV")
@@ -98,13 +104,13 @@ It resulted in the followning exception:""" + ex.printStackTrace)
                     """Strange mistake.
 It resulted in the followning exception:""" + ex.printStackTrace)
         }
-
     }
 
-    def loadModelfromfile(fileName:String):Model = {
+    def loadModelfromfile(fileName:String):OntModel = {
         try{
             val in = new java.io.FileInputStream(fileName)
-            ModelFactory.createDefaultModel.read(in, null, null)
+            ModelFactory.createOntologyModel.read(in, null, null)
+            .asInstanceOf[OntModel]
         } catch {
             case ex:java.io.IOException =>
                 Console.print(
@@ -118,5 +124,27 @@ It resulted in the followning exception:""" + ex.printStackTrace)
                     ex.printStackTrace);
                 null
         }
+    }
+
+
+    def executeSPARQLQuery(queryString:String, model:OntModel):ResultSet = {
+        val query:Query = QueryFactory.create(queryString);
+
+        // Execute the query and obtain results
+        val qe:QueryExecution = QueryExecutionFactory.create(query, model);
+        val results:ResultSet = qe.execSelect();
+
+        // Output query results
+        ResultSetFormatter.out(System.out, results, query);
+
+        // Important - free up resources used running the query
+        results
+    }
+
+    /**
+     * Is this really necessary?
+     */
+    def freeSPARQLQueryResources(qe:QueryExecution) = {
+        qe.close();
     }
 }

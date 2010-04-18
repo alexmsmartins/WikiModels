@@ -29,7 +29,7 @@ case class Reaction extends Element{
     var id:String = null
     var name:String = null
     var reversible:Boolean = true
-    var fast:boolean = false
+    var fast:Boolean = false
 
     //TODO - MATH wiil be done in the DAO since it is very complicated to do it
     //all here
@@ -44,7 +44,7 @@ case class Reaction extends Element{
              id:String,
              name:String,
              reversible:Boolean,
-             fast:boolean) = {
+             fast:Boolean) = {
         this()
         this.metaid = metaid
         this.setNotesFromXML(notes)

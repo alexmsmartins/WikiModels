@@ -11,6 +11,7 @@ package pt.cnbc.wikimodels.dataModel
 import java.util.Date
 
 //import org.scala_tools.javautils.Imports._
+import scalaj.collection.Imports._
 
 import scala.reflect.BeanInfo
 import scala.xml.Elem
@@ -44,22 +45,22 @@ case class SBMLModel extends Element{
     var name:String = null
 
     //listOf definitions
-    var listOfFunctionDefinitions:Collection[FunctionDefinition] = null
+    var listOfFunctionDefinitions:java.util.Collection[FunctionDefinition] = null
     //var listOfUnitDefinitions:List[ÛnitDefinition] = List()
     //var listOfCompartmentTypes:List[CompartmentType] = List()
     //var listOfSpeciesTypes:List[SpeciesType] = List()
     @RdfProperty("http://wikimodels.cnbc.pt/ontologies/sbml.owl#hasPart")
-    var listOfCompartments:Collection[Compartment] = null
+    var listOfCompartments:java.util.Collection[Compartment] = null
     @RdfProperty("http://wikimodels.cnbc.pt/ontologies/sbml.owl#hasPart")
-    var listOfSpecies:Collection[Species] = null
+    var listOfSpecies:java.util.Collection[Species] = null
     @RdfProperty("http://wikimodels.cnbc.pt/ontologies/sbml.owl#hasParameter")
-    var listOfParameters:Collection[Parameter] = null
+    var listOfParameters:java.util.Collection[Parameter] = null
     //var listOfInitialAssignments:List[InitialAssignment] = List()
     //var listOfRules:List[Rule] = List()
     @RdfProperty("http://wikimodels.cnbc.pt/ontologies/sbml.owl#hasPart")
-    var listOfConstraints:Collection[Constraint] = null
+    var listOfConstraints:java.util.Collection[Constraint] = null
     @RdfProperty("http://wikimodels.cnbc.pt/ontologies/sbml.owl#hasPart")
-    var listOfReactions:Collection[Reaction] = null
+    var listOfReactions:java.util.Collection[Reaction] = null
     //var listOfEvents:List[Event] = List()
 
     def this(metaid:String,
@@ -83,7 +84,7 @@ case class SBMLModel extends Element{
              (new SBMLHandler).toStringOrNull((xmlModel \ "@name").text) )
         this.listOfParameters =
             (xmlModel \ "listOfParameters" \ "parameter")
-            .map(i => new Parameter(i.asInstanceOf[scala.xml.Elem]))
+          .map(i => new Parameter(i.asInstanceOf[scala.xml.Elem])).asJava
     }
 
     /**
@@ -99,7 +100,7 @@ case class SBMLModel extends Element{
             {new SBMLHandler().genNotesFromHTML(notes)}
             {if(listOfFunctionDefinitions != null && listOfFunctionDefinitions.size != 0 )
              <listOfFunctionDefinitions>
-                    {listOfFunctionDefinitions.map(i => i.toXML)}
+                    {listOfFunctionDefinitions.asScala.map(i => i.toXML)}
              </listOfFunctionDefinitions> else scala.xml.Null
             }
             {if(false)
@@ -116,17 +117,17 @@ case class SBMLModel extends Element{
             }
             {if(listOfCompartments != null && listOfCompartments.size != 0)
              <listOfCompartments>
-                    {listOfCompartments.map(i => i.toXML)}
+                    {listOfCompartments.asScala.map(i => i.toXML)}
              </listOfCompartments> else scala.xml.Null
             }
             {if(listOfSpecies != null && listOfSpecies.size != 0)
              <listOfSpecies>
-                    {listOfSpecies.map(i => i.toXML)}
+                    {listOfSpecies.asScala.map(i => i.toXML)}
              </listOfSpecies> else scala.xml.Null
             }
             {if(listOfParameters != null && listOfParameters.size != 0)
              <listOfParameters>
-                    {listOfParameters.map(i => i.toXML)}
+                    {listOfParameters.asScala.map(i => i.toXML)}
              </listOfParameters> else scala.xml.Null
             }
             {if(false)
@@ -139,12 +140,12 @@ case class SBMLModel extends Element{
             }
             {if(listOfConstraints != null && listOfConstraints.size != 0)
              <listOfConstraints>
-                    {listOfConstraints.map(i => i.toXML)}
+                    {listOfConstraints.asScala.map(i => i.toXML)}
              </listOfConstraints> else scala.xml.Null
             }
             {if(listOfReactions != null && listOfReactions.size != 0)
              <listOfReactions>
-                    {listOfReactions.map(i => i.toXML)}
+                    {listOfReactions.asScala.map(i => i.toXML)}
              </listOfReactions> else scala.xml.Null
             }
             {if(false)

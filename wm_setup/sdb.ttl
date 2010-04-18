@@ -7,7 +7,7 @@
 
 
 <#store> rdf:type sdb:Store ;
-    sdb:layout         "layout1" ;
+    sdb:layout         "layout2" ;
     sdb:connection     <#conn> ;
 .
 

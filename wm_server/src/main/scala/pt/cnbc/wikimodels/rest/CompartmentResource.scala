@@ -57,8 +57,10 @@ class CompartmentResource(sbmlModelResource:String) extends RESTResource {
             try{
                 val dao = new CompartmentsDAO
                 val compartment = dao.loadCompartment(compartmentResource)
+                Console.println("Obtained compartment:")
                 if(compartment != null &&
                    compartment.metaid == compartmentResource){
+                  Console.println("The right compartment is being returned")
                     compartment.toXML.toString
                 } else {
                     throw new WebApplicationException(Response.Status.NOT_FOUND)
