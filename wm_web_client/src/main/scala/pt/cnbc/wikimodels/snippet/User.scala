@@ -15,6 +15,7 @@ import _root_.scala.xml.transform._
 import net.liftweb.sitemap.Loc._
 import net.liftweb.sitemap._
 import net.liftweb.util._
+import net.liftweb.common._
 
 object User {
     object UserName extends SessionVar[Box[String]](Empty)

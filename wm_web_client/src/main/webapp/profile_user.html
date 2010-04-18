@@ -1,0 +1,70 @@
+<lift:surround with="default" at="content">
+    <lift:HomePage.logInfo>
+        <div id="login">
+            <h1><lift:HomePage.profile /></h1>
+            <h1><lift:Menu.item name="Logout" /></h1>
+        </div>
+    </lift:HomePage.logInfo>
+    <div id="error_msg">
+        <lift:snippet type="msgs">
+            <lift:error_msg></lift:error_msg>
+            <lift:error_class>errorBox</lift:error_class>
+        </lift:snippet>
+    </div>
+    <div id="content">
+        <h1>Your profile</h1>
+        <hr />
+        <lift:ProfileUser.viewUser>
+            <br />
+            <table width="100%">
+                <tr>
+                    <td id="userTableTD1" width="20%">Username </td>
+                    <td id="userTableTD2" width="60%"><userInformation:username /></td>
+                </tr>
+            </table>
+            <br />
+            <table width="100%">
+                <tr>
+                    <td id="userTableTD1">Name </td>
+                    <td id="userTableTD2"><b><userInformation:title /> <userInformation:surName /></b>, <userInformation:firstName /></td>
+
+                </tr>
+            </table>
+            <br />
+            <table width="100%">
+                <tr>
+                    <td id="userTableTD1">Email </td>
+                    <td id="userTableTD2"><userInformation:firstEmail /></td>
+                </tr>
+            </table>
+            <br />
+            <table width="100%">
+                <tr>
+                    <td id="userTableTD1">Alternative Email </td>
+                    <td id="userTableTD2"><userInformation:alternativeEmail /></td>
+                </tr>
+            </table>
+            <br />
+            <table width="100%">
+                <tr>
+                    <td id="userTableTD1">Contacts </td>
+                    <td id="userTableTD2"></td>
+                </tr>
+            </table>
+            <br />
+            <table width="100%">
+                <tr>
+                    <td id="userTableTD1">Institution </td>
+                    <td id="userTableTD2"><userInformation:institution /></td>
+                </tr>
+            </table>
+            <br />
+            <table width="100%">
+                <tr>
+                    <td id="userTableTD1">Country </td>
+                    <td id="userTableTD2"><userInformation:country /></td>
+                </tr>
+            </table>
+        </lift:ProfileUser.viewUser>
+    </div>
+</lift:surround>

@@ -21,6 +21,7 @@ import js.JE
 import js.JE._
 import js.jquery._
 import JqJsCmds._
+import net.liftweb.common._
 
 import pt.cnbc.wikimodels.rest.client.BasicAuth
 import pt.cnbc.wikimodels.rest.client.RestfulAccess
@@ -39,20 +40,14 @@ class LogUser {
                 S.error("Password missing")
             } else {
 
-                ra = new RestfulAccess("localhost",
-                                    8080,
-                                    "/wm_server-1.0-SNAPSHOT/resources",
-                                    username,
-                                    password,
-                                    BasicAuth.startWithBasicAuth)
-                val userXML = ra.getRequest("/user/"+username).asInstanceOf[scala.xml.Elem]
-                println("STATUS MESSAGE => "+ra.getStatusCode)
-                if(ra.getStatusCode == 503 || ra.getStatusCode == 403){
-                    S.error("Error in username or password")
-                } else if(ra.getStatusCode == 200){
+                //ra = new RestfulAccess("localhost", 8080, "/wm_server-1.0-SNAPSHOT/resources", username, password, BasicAuth.startWithBasicAuth)
+                //val userXML = ra.getRequest("/user/"+username).asInstanceOf[scala.xml.Elem]
+                //Console.println("STATUS MESSAGE => "+ra.getStatusCode)
+                //if(ra.getStatusCode == 200){
                     User.UserName(Full(username))
-                    println("Status msg "+ra.getStatusCode)
-                }
+                //} else {
+                    //S.error("Error in username or password")
+                //}
 
             }
         }

@@ -1,7 +1,7 @@
 <lift:surround with="default" at="content">
     <head>
         <script type="text/javascript">
-             /*window.onload = function() {
+            /*window.onload = function() {
                 var oFCKeditor01 = new FCKeditor( 'commentArea' );
                 oFCKeditor01.BasePath = '/classpath/js/fckeditor/' ;
                 oFCKeditor01.ReplaceTextarea() ;
@@ -41,11 +41,15 @@
         function sourceIn(source) {
             document.getElementById('myinputarea').value = source;
         }
-        ]]>*/</script>
+        ]]>*/
+        $(function() {
+            $('#model_tab').tabs({ fxSlide: true, fxFade: true, fxSpeed: 'normal' });
+        });
+        </script>
     </head>
     <lift:HomePage.logInfo>
         <div id="login">
-        	<h1><lift:HomePage.profile /></h1>
+            <h1><lift:HomePage.profile /></h1>
             <h1><lift:Menu.item name="Logout" /></h1>
         </div>
     </lift:HomePage.logInfo>
@@ -57,18 +61,18 @@
     </div>
     <div id="content">
         <lift:ModelRead.browseModel>
-        <h1><b>Model name: </b><modelInformation:model_name /></h1>
-        <hr />
-        <!--<p><a id="applettop"/>
+            <h1><b>Model name: </b><modelInformation:model_name /></h1>
+            <hr />
+            <!--<p><a id="applettop"/>
 <object id="myinputapplet" classid="java:MathTransApplet.class" type="application/x-java-applet"
-	archive="../classpath/css/mathtrans.jar" height="1" width="1"/></p>
+    archive="../classpath/css/mathtrans.jar" height="1" width="1"/></p>
 <table><tr><td valign="top">
 <strong>Enter source mark-up here:</strong><form action="">
 
 <fieldset style="border:none;">
 <textarea id="myinputarea" rows="15" cols="50">Type input source here</textarea><br/>
 <input type="button" id="here" value="Render" onclick="document.getElementById('myinputapplet').setBlockDisplay('false');
-	     showMathML('myoutputlayer',document.getElementById('myinputapplet').preOut(document.getElementById('myinputarea').value));
+         showMathML('myoutputlayer',document.getElementById('myinputapplet').preOut(document.getElementById('myinputarea').value));
              document.getElementById('myinputapplet').setBlockDisplay('true');
              renderMathML('myrenderlayer',document.getElementById('myinputapplet').mmlOut(document.getElementById('myinputarea').value));"/><br/>
 </fieldset></form><br/>
@@ -80,57 +84,57 @@ Copy and Paste Content MathML from here (after rendering):
 Rendered:<br/>
 <div id="myrenderlayer" style="height:100px;width:450px;"></div>
 </td></tr></table>-->
-        <br />
-        <modelInformation:downloadSBML />
-        <br />
-        <br />
-        <lift:ModelTab.render />
-        <div id="model_tab">
-			<ul>
-				<li><a href="#tabs-1">Model</a></li>
-				<li><a href="#tabs-2">Overview</a></li>
-				<li><a href="#tabs-3">Math</a></li>
-                <li><a href="#tabs-4">Physical entities</a></li>
-                <li><a href="#tabs-5">Parameters</a></li>
-			</ul>
-			<div id="tabs-1">
-                <lift:ModelTree.render2 />
-                <ul id="model_tree_model" class="treeview-gray">
-                <li><span><h2>&nbsp;&nbsp;&nbsp;Model </h2></span>
+            <br />
+            <modelInformation:downloadSBML />
+            <br />
+            <br />
+            <lift:ModelTab.render />
+            <div id="model_tab">
                 <ul>
-                        <li class="browseModelLI">
-                <table class="" id="modelTable_Model">
-                <thead></thead>
-                <tbody>
-                <tr>
-                    <td class="main" title="Model Name">Model Name: </td>
-                    <td class="sub_main" id=""><modelInformation:model_name /></td>
-                </tr>
-                <tr>
-                    <td class="main" title="Name of the submitter/author">Submitter/author: </td>
-                    <td class="sub_main" id="">: </td>
-                </tr>
-                <tr id="testone">
-                    <td class="main" title="Date of submission">Submission date: </td>
-                    <td class="sub_main" id="">: </td>
-                </tr>
-                <tr>
-                    <td class="main" title="Date of the last modification in the model">Last modification: </td>
-                    <td class="sub_main" id="">: </td>
-                </tr>
-                </tbody>
-                </table>
-                <br /></li>
+                    <li><a href="#tabs-1">Model</a></li>
+                    <li><a href="#tabs-2">Overview</a></li>
+                    <li><a href="#tabs-3">Math</a></li>
+                    <li><a href="#tabs-4">Physical entities</a></li>
+                    <li><a href="#tabs-5">Parameters</a></li>
                 </ul>
-                </li>
-                <li><span><h2>&nbsp;&nbsp;&nbsp;Notes</h2></span>
-                <h7><a onclick="window.open('../models/editModel.html','Edit Model','location=no, resizable=no, scrollbars=no,width=800,height=500');">Edit</a></h7>
-                <h7><a onclick="window.open('../models/new_comment.html','New Comment','location=no, resizable=no, scrollbars=no,width=600,height=300');">Make Comment</a></h7>
-                <h7><a onclick="window.open('../models/view_comments.html','View Comments','location=no, resizable=no, scrollbars=yes, width=500,height=600');">View Comments</a></h7>
-                <ul>
-                        <li class="browseModelLI"><modelInformation:model_notes />
-                </li>
-                <!--<lift:ModelRead.newCommentForm form="post">
+                <div id="tabs-1">
+                    <lift:ModelTree.render2 />
+                    <ul id="model_tree_model" class="treeview-gray">
+                        <li><span><h2>&nbsp;&nbsp;&nbsp;Model <h9><a onclick="window.open('../models/editModel.html','Edit Model','width=800,height=500');">Edit</a>
+                                        <a onclick="window.open('../models/new_model_comment.html','New Comment','width=600,height=320');">Make Comment</a>
+                            <a onclick="window.open('../models/view_comments.html','View Comments','width=600,height=600');">View Comments</a></h9></h2></span>
+                            <ul>
+                                <li class="browseModelLI">
+                                    <table class="" id="modelTable_Model">
+                                        <thead></thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="main" title="Model Name">Model Name: </td>
+                                                <td class="sub_main" id=""><modelInformation:model_name /></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="main" title="Name of the submitter/author">Submitter/author: </td>
+                                                <td class="sub_main" id="">-</td>
+                                            </tr>
+                                            <tr id="testone">
+                                                <td class="main" title="Date of submission">Submission date: </td>
+                                                <td class="sub_main" id="">-</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="main" title="Date of the last modification in the model">Last modification: </td>
+                                                <td class="sub_main" id="">-</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                <br /></li>
+                            </ul>
+                            <br />
+                        </li>
+                        <li><span><h2>&nbsp;&nbsp;&nbsp;Notes</h2></span>
+                            <ul>
+                                <li class="browseModelLI"><modelInformation:model_notes />
+                                </li>
+                                <!--<lift:ModelRead.newCommentForm form="post">
                 <li class="closed"><span><h7>&nbsp;&nbsp;Make Comment&nbsp;&nbsp;</h7></span>
                     <ul>
                         <li><makeComment:newComment /></li>
@@ -138,134 +142,127 @@ Rendered:<br/>
                     </ul>
                 </li>
                 </lift:ModelRead.newCommentForm>-->
-                </ul></li>
-                <!--<li class="closed"><span><h7>View Model Comments (0)</h7><br /></span>
+                        </ul></li>
+                        <!--<li class="closed"><span><h7>View Model Comments (0)</h7><br /></span>
                     <ul>
                         <li class="browseModelLI"><a href="#" onclick="return false">View Comments</a></li>
                     </ul>
                 </li>-->
-                </ul>
+                    </ul>
+                </div>
+                <div id="tabs-2">
+                    <lift:ModelTree.render3 />
+                    <ul id="model_tree_overview" class="treeview-gray">
+                        <li><span><h2>&nbsp;&nbsp;&nbsp;Mathematical expressions</h2></span>
+                            <ul>
+                                <li class="browseModelLI">
+                                    <table class="" id="modelTable_Overview">
+                                        <thead><h6>Reactions</h6></thead>
+                                    </table>
+                                    <modelInformation:listOfReactions />
+                                </li>
+                            </ul>
+                        </li>
+                        <li><span><h2>&nbsp;&nbsp;&nbsp;Physical entities</h2></span>
+                            <ul>
+                                <li class="browseModelLI">
+                                    <table class="" id="modelTable_Overview">
+                                        <thead><tr><td><h6>Compartments</h6></td>
+                                        <td><h6>Species</h6></td></tr></thead>
+                                        <tbody>
+                                            <tr>
+                                                <td style="width:300px; vertical-align:top;"><modelInformation:listOfCompartments /></td>
+                                                <td style="width:100%; vertical-align:top;"><modelInformation:listOfSpecies /></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </li>
+                            </ul>
+                        </li>
+                        <li><span><h2>&nbsp;&nbsp;&nbsp;Global Parameters</h2></span>
+                            <ul>
+                                <li class="browseModelLI">
+                                    <table class="" id="modelTable_Overview">
+                                        <thead><h6>Parameters</h6></thead>
+                                        <tbody>
+                                            <modelInformation:listOfParameters />
+                                        </tbody>
+                                    </table>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div id="tabs-3">
+                    <lift:ModelTree.render4 />
+                    <ul id="model_tree_math" class="treeview-gray">
+                        <li><span><h2>&nbsp;&nbsp;&nbsp;Reactions</h2></span>
+                            <ul>
+                                <li class="open"><span>
+                                        <table class="browseModelTable" id="modelTable_Overview">
+                                            <thead><h6>Total number of reactions - <modelInformation:numberReactions /></h6></thead>
+                                        </table>
+                                        <table class="browseModelTable" id="modelTable_Overview">
+                                            <modelInformation:listReactionsMath />
+                                        </table>
+                                </span></li>
+                            </ul>
+                        </li>
+                        <li><span><h2>&nbsp;&nbsp;&nbsp;Functions</h2></span>
+                            <ul>
+                                <li class="open">
+                                    <table class="browseModelTable" id="modelTable_Overview">
+                                        <h6>Total number of functions - <modelInformation:numberFunctions /></h6>
+                                    </table>
+                                    <table class="browseModelTable" id="modelTable_Overview">
+
+                                        <modelInformation:listFunctionsMath />
+
+                                    </table>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div id="tabs-4">
+                    <lift:ModelTree.render5 />
+                    <ul id="model_tree_physical" class="treeview-gray">
+                        <li><span><h2>&nbsp;&nbsp;&nbsp;Compartment</h2></span>
+                            <ul>
+                                <li class="open"><span>
+                                        <table class="browseModelTable" id="modelTable_Overview">
+                                            <modelInformation:compartmentData />
+                                        </table>
+                                </span></li>
+                            </ul>
+                        </li>
+                        <li><span><h2>&nbsp;&nbsp;&nbsp;Species</h2></span>
+                            <ul>
+                                <li class="open">
+                                    <table class="browseModelTable" id="modelTable_Overview">
+                                        <modelInformation:speciesData />
+                                    </table>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div id="tabs-5">
+                    <lift:ModelTree.render6 />
+                    <ul id="model_tree_parameter" class="treeview-gray">
+                        <li><span><h2>&nbsp;&nbsp;&nbsp;Global Parameters</h2></span>
+                            <ul>
+                                <li class="open"><span>
+                                        <table class="browseModelTable" id="modelTable_Overview">
+                                            <modelInformation:parametersData />
+                                        </table>
+                                </span></li>
+                            </ul>
+                        </li>
+                        <modelInformation:extraParametersData />
+                    </ul>
+                </div>
             </div>
-            <div id="tabs-2">
-                <lift:ModelTree.render3 />
-                <ul id="model_tree_overview" class="treeview-gray">
-                <li><span><h2>&nbsp;&nbsp;&nbsp;Mathematical expressions</h2></span>
-                <ul>
-                    <li class="browseModelLI">
-                        <table class="" id="modelTable_Overview">
-                            <thead><h6>Reactions</h6></thead>
-                        </table>
-                        <modelInformation:listOfReactions />
-                    </li>
-                </ul>
-                </li>
-                <li><span><h2>&nbsp;&nbsp;&nbsp;Physical entities</h2></span>
-                <ul>
-                        <li class="browseModelLI">
-                <table class="" id="modelTable_Overview">
-                <thead><tr><td><h6>Compartments</h6></td>
-                <td><h6>Species</h6></td></tr></thead>
-                <tbody>
-                    <tr>
-                        <td style="width:300px; vertical-align:top;"><modelInformation:listOfCompartments /></td>
-                        <td style="width:100%; vertical-align:top;"><modelInformation:listOfSpecies /></td>
-                    </tr>
-                </tbody>
-                        </table>
-                </li>
-                </ul>
-                </li>
-                <li><span><h2>&nbsp;&nbsp;&nbsp;Global Parameters</h2></span>
-                <ul>
-                        <li class="browseModelLI">
-                <table class="" id="modelTable_Overview">
-                    <thead><h6>Parameters</h6></thead>
-                <tbody>
-                    <modelInformation:listOfParameters />
-                </tbody>
-                        </table>
-                </li>
-                </ul>
-                </li>
-                </ul>
-            </div>
-			<div id="tabs-3">
-                <lift:ModelTree.render4 />
-                <ul id="model_tree_math" class="treeview-gray">
-                <li><span><h2>&nbsp;&nbsp;&nbsp;Reactions</h2></span>
-                <ul>
-                    <li class="open"><span>
-                        <table class="browseModelTable" id="modelTable_Overview">
-                            <thead><h6>Total number of reactions - <modelInformation:numberReactions /></h6></thead>
-                        </table>
-                        <table class="browseModelTable" id="modelTable_Overview">
-                            <tbody><modelInformation:listReactionsMath />
-                            </tbody>
-                        </table>
-                    </span></li>
-                </ul>
-                </li>
-                <li><span><h2>&nbsp;&nbsp;&nbsp;Functions</h2></span>
-                <ul>
-                        <li class="open">
-                <table class="browseModelTable" id="modelTable_Overview">
-                    <thead><h6>Total number of functions - <modelInformation:numberFunctions /></h6></thead>
-                </table>
-                <table class="browseModelTable" id="modelTable_Overview">
-                    <tbody>
-                        <modelInformation:listFunctionsMath />
-                    </tbody>
-                </table>
-                </li>
-                </ul>
-                </li>
-                </ul>
-            </div>
-            <div id="tabs-4">
-                <lift:ModelTree.render5 />
-                <ul id="model_tree_physical" class="treeview-gray">
-                <li><span><h2>&nbsp;&nbsp;&nbsp;Compartment</h2></span>
-                <ul>
-                    <li class="open"><span>
-                        <table class="browseModelTable" id="modelTable_Overview">
-                            <tbody>
-                                <modelInformation:compartmentData />
-                            </tbody>
-                        </table>
-                    </span></li>
-                </ul>
-                </li>
-                <li><span><h2>&nbsp;&nbsp;&nbsp;Species</h2></span>
-                <ul>
-                    <li class="open">
-                        <table class="browseModelTable" id="modelTable_Overview">
-                            <tbody>
-                                <modelInformation:speciesData />
-                            </tbody>
-                        </table>
-                    </li>
-                </ul>
-                </li>
-                </ul>
-            </div>
-            <div id="tabs-5">
-                <lift:ModelTree.render6 />
-                <ul id="model_tree_parameter" class="treeview-gray">
-                <li><span><h2>&nbsp;&nbsp;&nbsp;Global Parameters</h2></span>
-                <ul>
-                    <li class="open"><span>
-                        <table class="browseModelTable" id="modelTable_Overview">
-                            <tbody>
-                                <modelInformation:parametersData />
-                            </tbody>
-                        </table>
-                    </span></li>
-                </ul>
-                </li>
-                <modelInformation:extraParametersData />
-                </ul>
-            </div>
-		</div>
 
         </lift:ModelRead.browseModel>
     </div>

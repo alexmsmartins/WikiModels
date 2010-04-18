@@ -41,14 +41,20 @@ class Boot {
                            Menu(Loc("people", List("people"), "People")),
                            Menu(Loc("contacts", List("contacts"), "Contacts")),
                            Menu(Loc("faq", List("faq"), "FAQ"))) ::
-        Menu(Loc("models", List("models","index"), "Models"),
+        Menu(Loc("models", List(""), "Models"),
             Menu(Loc("createM", List("models","create"), "Create Model", loggedIn)),
-            Menu(Loc("browseM", List("models","browse"), "Browse Model", loggedIn)),
-            Menu(Loc("editM", List("models","editModel"), "Edit Model", Hidden, loggedIn))) ::
+            Menu(Loc("browseM", List("models","index"), "Browse Model", loggedIn)),
+            Menu(Loc("browseMm", List("models","browse.xhtml"), "Browse Model", Hidden, loggedIn)),
+            Menu(Loc("editM", List("models","editModel.xhtml"), "Edit Model", Hidden, loggedIn))) ::
             //Menu(Loc("listM", List("models","list"), "List of Models"))) ::
         Menu(Loc("tags", List("tags"), "Tags")) ::
+        Menu(Loc("create_user", List("create_user"), "Create User", Hidden)) ::
+        Menu(Loc("profile_user", List("profile_user"), "Profile User", Hidden, loggedIn)) ::
+        Menu(Loc("edit_user", List("edit_user"), "Edit User", Hidden, loggedIn)) ::
         Menu(Loc("new_comment", List("models","new_comment"), "New Comment", Hidden)) ::
-        Menu(Loc("view_comments", List("models","view_comments"), "View Comment", Hidden)) ::
+        Menu(Loc("new_model_comment", List("models","new_model_comment"), "New Model Comment", Hidden)) ::
+        Menu(Loc("view_comments", List("models","view_comments"), "View Comments", Hidden)) ::
+        Menu(Loc("view_all_comments", List("models","view_all_comments"), "View All Comments", Hidden)) ::
         Menu(Loc("help", List("help","index"), "Help"),
             Menu(Loc("helpMath", List("help","helpMath"), "Help Math", Hidden))) ::
         Menu(Loc("administrator", List("administrator","index"), "Administrator", Hidden, loggedIn)) ::

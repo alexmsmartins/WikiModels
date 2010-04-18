@@ -283,7 +283,7 @@ br.both{
     background-color:#3564a9;
 }
 #content h8 {
-    padding-left:4px; padding-right:4px; position:absolute; right:30px; margin-top:5px;
+    padding-left:4px; padding-right:4px; position:absolute; right:30px; margin-top:1px;
 }
 
 #content h8 a {
@@ -291,11 +291,40 @@ br.both{
     -moz-border-radius-bottomright: 7px; -webkit-border-bottom-right-radius: 7px;
     -moz-border-radius-topright: 0px; -webkit-border-top-right-radius: 0px;
     -moz-border-radius-bottomleft: 7px; -webkit-border-bottom-left-radius: 7px;
-    display:inline;	background-color:transparent; font:bold 100% Georgia; text-decoration:none;
+    display:inline;	background-color:transparent; font:bold 80% Georgia; text-decoration:none;
+    border-bottom:2px solid #444; border-right:2px solid #444; border-top:0; border-left:1px solid #444; color:#222;
+}
+
+#content h8 input {
+    -moz-border-radius-topleft: 0px; -webkit-border-top-left-radius: 0px;
+    -moz-border-radius-bottomright: 7px; -webkit-border-bottom-right-radius: 7px;
+    -moz-border-radius-topright: 0px; -webkit-border-top-right-radius: 0px;
+    -moz-border-radius-bottomleft: 7px; -webkit-border-bottom-left-radius: 7px;
+    display:inline;	background-color:transparent; font:bold 80% Georgia; text-decoration:none;
     border-bottom:2px solid #444; border-right:2px solid #444; border-top:0; border-left:1px solid #444; color:#222;
 }
 
 #content h8 a:hover {
+    background-color:#3564a9;
+}
+#content h8 input:hover {
+    background-color:#3564a9;
+}
+
+#content h9 {
+    padding-left:4px; padding-right:4px; position:absolute; right:30px; margin-top:-3px;
+}
+
+#content h9 a {
+    -moz-border-radius-topleft: 0px; -webkit-border-top-left-radius: 0px;
+    -moz-border-radius-bottomright: 7px; -webkit-border-bottom-right-radius: 7px;
+    -moz-border-radius-topright: 0px; -webkit-border-top-right-radius: 0px;
+    -moz-border-radius-bottomleft: 7px; -webkit-border-bottom-left-radius: 7px;
+    display:inline;	background-color:transparent; font:bold 80% Georgia; text-decoration:none;
+    border-bottom:2px solid #444; border-right:2px solid #444; border-top:0; border-left:1px solid #444; color:#222;
+}
+
+#content h9 a:hover {
     background-color:#3564a9;
 }
 
@@ -400,6 +429,7 @@ br.both{
     -moz-border-radius: 2px; -webkit-border-radius: 2px;
     padding:.2em 1em .2em 1em; text-align:left;
     background-color: #a0b3dc; font-weight:bold;
+    width:300px;
 }
 
 #content #modelTable_Overview .sub_main {
@@ -407,13 +437,12 @@ br.both{
     padding:.2em 1em .2em 1em; vertical-align:top; width:100%;
     text-align:left; border-bottom: 2px solid #ddd; border-right: 2px solid #ddd;
     background-color:#cad2e5; border-top: 0.5px solid #ddd; border-left: 0.5px solid #ddd;
+    width:70%;
 }
 
 #content #modelTable_Overview .sub_main2 {
-    -moz-border-radius: 2px; -webkit-border-radius: 2px;
     padding:.2em 1em .2em 1em; vertical-align:top;
-    text-align:left; border-bottom: 2px solid #ddd; border-right: 2px solid #ddd;
-    background-color:#cad2e5; border-top: 0.5px solid #ddd; border-left: 0.5px solid #ddd;
+    text-align:left; border: 2px solid #fff; background-color:#cad2e5;
 }
 
 #content #modelTable_Overview .main_under {
@@ -426,16 +455,35 @@ br.both{
     padding:.2em 1em .2em 1em; vertical-align:top; text-align:left;
     border-bottom:#767676 solid 2px; border-right:#767676 solid 2px;
     background-color:#ffffff; width:100%;
+    width:100%;
 }
 
-#userTable{
-    font-size:small; border-bottom:1px solid #000; border-left:2px solid #4e4eff;
-    border-right:2px solid #4e4eff; border-top:2px solid #4e4eff;
-    -moz-border-radius-bottomright: 0px; -webkit-border-bottom-right-radius: 0px;
-    -moz-border-radius-topright: 10px; -webkit-border-top-right-radius: 10px;
-    -moz-border-radius-bottomleft: 0px; -webkit-border-bottom-left-radius: 0px;
-    -moz-border-radius-topleft: 10px; -webkit-border-top-left-radius: 10px;
-    background-color:transparent; width:100px;
+#content #userTableTD1 {
+    -moz-border-radius: 2px; -webkit-border-radius: 2px; border:#767676 1px solid;
+    padding:.2em 1em .2em 1em; vertical-align:top; text-align:left;
+    border-bottom:#767676 solid 2px; border-right:#767676 solid 2px;
+    background-color:#ffffff; width:10%;
+
+}
+#content #userTableTD2 {
+    
+    padding:.2em 1em .2em 1em; vertical-align:top; text-align:left;
+    background-color:#eee; width:60%;
+}
+
+
+#userTable1{
+    font-size:small; border-top:1px solid #999;
+    padding-left:10px; padding-right:10px;
+    background-color:#a0b3dc; width:25%;
+}
+#userTable2{
+    font-size:small; border-top:1px solid #999;
+    padding-left:10px; padding-right:10px;
+    background-color:#cad2e5; width:75%;
+}
+#userTableLinks{
+    text-align:right;
 }
 #cTable{
     font-size:small; border-bottom:2px solid #4e4eff; border-left:2px solid #4e4eff;
@@ -446,17 +494,58 @@ br.both{
     -moz-border-radius-topleft: 0px; -webkit-border-top-left-radius: 0px;
     background-color:white; width:550px;
 }
-#cReply a{
-    font-size:small; border-bottom:2px solid #4e4eff; border-left:2px solid #4e4eff;
-    border-right:2px solid #4e4eff;padding-left:3px; padding-right:3px;
+#comReply{
+    border-left:2px solid #999; border-right:2px solid #999;
+    padding-left:3px; padding-right:3px;
+    background-color:transparent; color:black;
+}
+#comReply:hover{
+    color:blue; border-left:2px solid blue; border-right:2px solid blue;
+}
+#comPer{
+    border-left:2px solid #999; border-right:2px solid #999;
+    padding-left:3px; padding-right:3px;
+    background-color:transparent;color:black;
+}
+#comPer:hover{
+    color:blue; border-left:2px solid blue; border-right:2px solid blue;
+}
+
+#view_box{
+    height:470px; width:550px; overflow:auto;
+    border:1px solid #999;
     -moz-border-radius-bottomright: 10px; -webkit-border-bottom-right-radius: 10px;
-    -moz-border-radius-topright: 0px; -webkit-border-top-right-radius: 0px;
+    -moz-border-radius-topright: 10px; -webkit-border-top-right-radius: 10px;
     -moz-border-radius-bottomleft: 10px; -webkit-border-bottom-left-radius: 10px;
     -moz-border-radius-topleft: 0px; -webkit-border-top-left-radius: 0px;
-    background-color:transparent; position:absolute; right:30px; color:black;
+    background-color:transparent;
 }
-#cReply a:hover{
-    background-color:#3564a9;
+
+#comment_link {
+    border:1px solid #999; color:black;
+    padding-left:10px; padding-right:10px; padding-top:3px;
+    -moz-border-radius-bottomright: 0px; -webkit-border-bottom-right-radius: 0px;
+    -moz-border-radius-topright: 10px; -webkit-border-top-right-radius: 10px;
+    -moz-border-radius-bottomleft: 0px; -webkit-border-bottom-left-radius: 0px;
+    -moz-border-radius-topleft: 10px; -webkit-border-top-left-radius: 10px;
+    background-color:transparent;
+}
+#comment_link:hover {
+    border-top:2px solid #efa300; color:#444;
+}
+
+#comment_link_selected {
+    border:1px solid #999; border-top:2px solid #efa300; color:black;
+    padding-left:10px; padding-right:10px; padding-top:3px;
+    -moz-border-radius-bottomright: 0px; -webkit-border-bottom-right-radius: 0px;
+    -moz-border-radius-topright: 10px; -webkit-border-top-right-radius: 10px;
+    -moz-border-radius-bottomleft: 0px; -webkit-border-bottom-left-radius: 0px;
+    -moz-border-radius-topleft: 10px; -webkit-border-top-left-radius: 10px;
+    background-color:white;
+}
+
+#buttonCloseView {
+    width:150px;text-align:center;border:3px solid #880000; position:relative; left:400px;
 }
 
 #reactantStyle {

@@ -1,0 +1,57 @@
+<lift:surround with="default" at="content">
+    <lift:HomePage.logInfo>
+        <div id="login">
+            <h1><lift:HomePage.profile /></h1>
+            <h1><lift:Menu.item name="Logout" /></h1>
+        </div>
+    </lift:HomePage.logInfo>
+    <div id="error_msg">
+        <lift:snippet type="msgs">
+            <lift:error_msg></lift:error_msg>
+            <lift:error_class>errorBox</lift:error_class>
+        </lift:snippet>
+    </div>
+    <div id="content">
+        <h1>Edit User</h1>
+        <hr />
+        <lift:CreateUser.editUser form="post" name="createForm" id_msgs="messages" >
+            <h4><span id="required_field">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* required fields</span></h4><br />
+            <table width="40%">
+                <br />
+                <tr>
+                    <td>Username - <updateUser:username /></td>
+                    <td style="text-align:right;">&nbsp;</td>
+                </tr>
+                <br />
+                <tr>
+                    <td>Password: <span id="required_field">*</span></td>
+                    <td style="text-align:right;"><updateUser:password /></td>
+                </tr>
+                <br />
+                <tr>
+                    <td>Confirm password: <span id="required_field">*</span></td>
+                    <td style="text-align:right;"><updateUser:verifyPassword /></td>
+                </tr>
+                <br />
+                <tr>
+                    <td>First name: <span id="required_field">*</span></td>
+                    <td style="text-align:right;"><updateUser:firstName /></td>
+                </tr>
+                <br />
+                <tr>
+                    <td>Surname: <span id="required_field">*</span></td>
+                    <td style="text-align:right;"><updateUser:surName /></td>
+                </tr>
+                <br/>
+                <tr>
+                    <td>Email: <span id="required_field">*</span></td>
+                    <td style="text-align:right;"><updateUser:firstEmail /></td>
+                </tr>
+                <br />
+            </table>
+            <br />
+            <hr />
+            <h3 style="text-align:right;"><updateUser:save /></h3>
+        </lift:CreateUser.editUser>
+    </div>
+</lift:surround>

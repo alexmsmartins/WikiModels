@@ -17,10 +17,7 @@ import js.jquery._
 import JqJsCmds._
 import java.util.Hashtable
 import java.util.Enumeration
-
-import pt.cnbc.wikimodels.rest.client.BasicAuth
-import pt.cnbc.wikimodels.rest.client.RestfulAccess
-
+import net.liftweb.common._
 
 class EditModel {
     var global:String = null
@@ -32,6 +29,9 @@ class EditModel {
                 var name:String = null
                 var description:String = null
                 val msgName: String = S.attr("id_msgs") openOr "messages"
+
+                val module = S.param("module")
+                Console.println("Valor ---> "+module)
 
                 /**
                  * generates a XML representation of the SBML Model
@@ -63,11 +63,24 @@ class EditModel {
                                                                    SHtml.text(Text(ref.replace(" ", "").toLowerCase).toString, refer2 => model_id = refer2, ("id", "model_id"), ("size", "40"), ("disabled", "disabled"))),
                                                               300000 seconds, 1 second)}, ("id", "name_model"), ("size", "40"), ("maxlength", "1000"))
                 }
-
-                bind("editModel", xhtml,
-                     "name" -> createNameAndId _,
-                     "description" -> SHtml.textarea("", description = _, ("id", "editArea"), ("maxlength", "20000")),
-                     "save" -> SHtml.submit("Save Changes", updateModel,("id","buttonSaveChange")))
+                module match {
+                    case Full("001") => {
+                            bind("editModel", xhtml,
+                                 "name" -> createNameAndId _,
+                                 "description" -> SHtml.textarea("", description = _, ("id", "editArea"), ("maxlength", "20000")),
+                                 "something" -> SHtml.textarea("", description = _, ("id", "editArea"), ("maxlength", "20000")),
+                                 "save" -> SHtml.submit("Save Changes", updateModel,("id","buttonSaveChange"))
+                            )
+                        }
+                    case Full("002") => {
+                            bind("editModel", xhtml,
+                                 "name" -> createNameAndId _,
+                                 "description" -> SHtml.textarea("", description = _, ("id", "editArea"), ("maxlength", "20000")),
+                                 "save" -> SHtml.submit("Save Changes", updateModel,("id","buttonSaveChange"))
+                            )
+                        }
+                    case _ => Text("")
+                }
             }
         case _ => Text("")
     }

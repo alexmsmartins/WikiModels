@@ -1,0 +1,89 @@
+<lift:surround with="default" at="content">
+    <lift:HomePage.logInfo>
+        <div id="login">
+            <h1><lift:HomePage.profile /></h1>
+            <h1><lift:Menu.item name="Logout" /></h1>
+        </div>
+    </lift:HomePage.logInfo>
+    <div id="error_msg">
+        <lift:snippet type="msgs">
+            <lift:error_msg></lift:error_msg>
+            <lift:error_class>errorBox</lift:error_class>
+        </lift:snippet>
+    </div>
+    <div id="content">
+        <h1>New User</h1>
+        <hr />
+        <lift:CreateUser.createNewUser form="post" name="createForm" id_msgs="messages" >
+            <h4><span id="required_field">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* required fields</span></h4><br />
+            <table width="40%">
+                <br />
+                <tr>
+                    <td>Username: <span id="required_field">*</span></td>
+                    <td style="text-align:right;"><createNewUser:username /></td>
+                </tr>
+                <br />
+                <tr>
+                    <td>Password: <span id="required_field">*</span></td>
+                    <td style="text-align:right;"><createNewUser:password /></td>
+                </tr>
+                <br />
+                <tr>
+                    <td>Confirm password: <span id="required_field">*</span></td>
+                    <td style="text-align:right;"><createNewUser:verifyPassword /></td>
+                </tr>
+                <br />
+                <tr>
+                    <td>First name: <span id="required_field">*</span></td>
+                    <td style="text-align:right;"><createNewUser:firstName /></td>
+                </tr>
+                <br />
+                <tr>
+                    <td>Surname: <span id="required_field">*</span></td>
+                    <td style="text-align:right;"><createNewUser:surName /></td>
+                </tr>
+                <br/>
+                <tr>
+                    <td>Title:</td>
+                    <td style="text-align:right;" align="right"><createNewUser:title /></td>
+                </tr>
+                <br/>
+                <tr>
+                    <td>Email: <span id="required_field">*</span></td>
+                    <td style="text-align:right;"><createNewUser:firstEmail /></td>
+                </tr>
+                <br />
+                <tr>
+                    <td>Optional Email:</td>
+                    <td style="text-align:right;"><createNewUser:secondaryEmail /></td>
+                </tr>
+                <br/>
+            </table>
+            <br />
+            <table width="40%" style="border-top:1px solid #ccc;">
+                <br />
+                <tr>
+                    <td>Contacts:</td>
+                    <td style="text-align:right;"><div id ="contact_new" /></td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td style="text-align:right;">&nbsp;<createNewUser:contacts /></td>
+                </tr>
+                <br />
+                <tr>
+                    <td>Institution:</td>
+                    <td style="text-align:right;"><createNewUser:institution /></td>
+                </tr>
+                <br />
+                <tr>
+                    <td>Country:</td>
+                    <td style="text-align:right;"><createNewUser:country /></td>
+                </tr>
+            </table>
+            <br />
+            <hr />
+            <h3 style="text-align:right;"><createNewUser:save /></h3>
+        </lift:CreateUser.createNewUser>
+    </div>
+</lift:surround>

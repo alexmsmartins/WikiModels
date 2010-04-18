@@ -16,6 +16,7 @@ import S._
 import SHtml._
 import Helpers._
 import scala.xml._
+import net.liftweb.common._
 
 class HomePage {
     def formatter = {
@@ -34,7 +35,7 @@ class HomePage {
             <div id="login">
                 <lift:LogUser.form form="post" >
                     <h1>Username <entry:username /> Password <entry:password /> <entry:submit /></h1>
-                    <h1><a title="!Under Construction!" onclick="return false" href="createUser.html">Create User</a></h1>
+                    <h1><a title="Create a new user" href="create_user">Create User</a></h1>
                 </lift:LogUser.form>
             </div>
         }
@@ -74,7 +75,7 @@ Please feel free to browse and comment the available models.</p>
     }
     
     def profile = User.currentUserName match {
-        case Full(user) => Text(user +"'s profile")
+        case Full(user) => {<h1><a title="See profile" href="profile_user">{user}'s profile</a></h1>}
             case _ => Nil
     }
 
