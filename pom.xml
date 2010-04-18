@@ -24,7 +24,7 @@
     <modules>
         <module>wm_library</module>
         <module>wm_server</module>
-        <!--<module>wm_web_client</module>-->
+        <module>wm_web_client</module>
         <module>wm_rest_api</module>
         <module>wm_auth_realm</module>
         <module>wm_setup</module>
