@@ -39,315 +39,339 @@ import pt.cnbc.wikimodels.ontology.{Namespaces => NS}
 import thewebsemantic.Sparql
 
 class SpeciessDAO {
-    /**
-     * Allows testing procedures. This is not to be used from outside this class
-     */
-    var  kb:Model = null
-    val sbmlModelsDAO = new SBMLModelsDAO()
+  /**
+   * Allows testing procedures. This is not to be used from outside this class
+   */
+  var  kb:Model = null
+  val sbmlModelsDAO = new SBMLModelsDAO()
 
-    def loadSpecies(speciesMetaid:String):Species = {
-        try{
-            val myModel:Model = ManipulatorWrapper.loadModelfromDB
-            loadSpecies(speciesMetaid, myModel)
-        } catch {
-            case ex:thewebsemantic.NotFoundException =>
-                Console.println("Bean of " + Species.getClass + "and " +
-                                "id is not found")
-                ex.printStackTrace()
-                null
-            case ex =>
-                ex.printStackTrace()
-                null
-        }
+  def loadSpecies(speciesMetaid:String):Species = {
+    try{
+      val myModel:Model = ManipulatorWrapper.loadModelfromDB
+      loadSpecies(speciesMetaid, myModel)
+    } catch {
+      case ex:thewebsemantic.NotFoundException =>
+        Console.println("Bean of " + Species.getClass + "and " +
+                        "id is not found")
+        ex.printStackTrace()
+        null
+      case ex =>
+        ex.printStackTrace()
+        null
     }
+  }
 
-    def loadSpecies(speciesMetaid:String, model:Model):Species = {
-        var ret:Species = null
+  def loadSpecies(speciesMetaid:String, model:Model):Species = {
+    var ret:Species = null
 
-        Console.print("After loading Jena Model")
-        Console.print("Jena Model content")
-        val queryString =
-        """
+    Console.print("After loading Jena Model")
+    Console.print("Jena Model content")
+    val queryString =
+      """
         PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
         PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
         SELECT ?s WHERE
         { ?s rdf:type sbml:Species .
         """ +  "?s sbml:metaid \"" + speciesMetaid + "\"^^<http://www.w3.org/2001/XMLSchema#string> } "
 
-        val l:java.util.LinkedList[Species]
-        = Sparql.exec(model, classOf[Species], queryString)
-        Console.println("Found " + l.size + " Speciess with metaid " + speciesMetaid)
-        if(l.size > 0)
-            l.iterator.next
-        else null
-    }
+    val l:java.util.LinkedList[Species]
+    = Sparql.exec(model, classOf[Species], queryString)
+    Console.println("Found " + l.size + " Speciess with metaid " + speciesMetaid)
+    if(l.size > 0)
+      l.iterator.next
+    else null
+  }
 
-    def loadSpecies():java.util.Collection[Species] = {
-        try{
-            val myModel:Model = ManipulatorWrapper.loadModelfromDB
-            Console.print("After loading Jena Model")
-            var reader = new RDF2Bean(myModel)
-            Console.print("After creating a new RDF2Bean")
-            val l:java.util.List[Species] = reader.load(new Species().getClass )
-                .asInstanceOf[java.util.List[Species]]
-            l
-        } catch {
-            case ex:thewebsemantic.NotFoundException =>
-                Console.println("Bean of " + Species.getClass + "and id is not found")
-                ex.printStackTrace()
-                null
+  def loadSpeciesInModel(modelMetaId:String,
+                            model:Model):java.util.Collection[Species] = {
+    val c =
+    Console.print("After loading Jena Model")
+    Console.print("Jena Model content")
+    val queryString =
+      """
+        PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        SELECT ?s WHERE
+        { ?m rdf:type sbml:Model .
+          ?m sbml:metaid """" + modelMetaId + """"^^<http://www.w3.org/2001/XMLSchema#string> .
+          ?m sbml:hasSpecies ?s .
+          ?s rdf:type sbml:Species .
+         } """
+
+    val l:java.util.LinkedList[Species]
+    = Sparql.exec(model, classOf[Species], queryString)
+    Console.println("Found " + l.size + " Compartments from model " + modelMetaId)
+    if(l.size > 0)
+      l
+    else null
+  }
+
+  def loadSpecies():java.util.Collection[Species] = {
+    try{
+      val myModel:Model = ManipulatorWrapper.loadModelfromDB
+      Console.print("After loading Jena Model")
+      var reader = new RDF2Bean(myModel)
+      Console.print("After creating a new RDF2Bean")
+      val l:java.util.List[Species] = reader.load(new Species().getClass )
+      .asInstanceOf[java.util.List[Species]]
+      l
+    } catch {
+      case ex:thewebsemantic.NotFoundException =>
+        Console.println("Bean of " + Species.getClass + "and id is not found")
+        ex.printStackTrace()
+        null
+    }
+  }
+
+  /**
+   * Saves an Species into the KnowledgeBase
+   * @param  true if
+   * @return true if
+   */
+  def createSpecies(species:Species):Boolean = {
+    var ret = false
+    var myModel:Model = null
+    try{
+      myModel = ManipulatorWrapper.loadModelfromDB
+      myModel.begin
+      ret = createSpecies(species, myModel)
+      myModel.commit
+    } catch {
+      case ex:Exception => {
+          Console.println("Saving model " + species +
+                          "was not possible")
+          ex.printStackTrace
+
+          false
         }
     }
+    ret
+  }
 
-    /**
-     * Saves an Species into the KnowledgeBase
-     * @param  true if
-     * @return true if
-     */
-    def createSpecies(species:Species):Boolean = {
-        var ret = false
-        var myModel:Model = null
-        try{
-            myModel = ManipulatorWrapper.loadModelfromDB
-            myModel.begin
-            ret = createSpecies(species, myModel)
-            myModel.commit
-        } catch {
-            case ex:Exception => {
-                    Console.println("Saving model " + species +
-                                    "was not possible")
-                    ex.printStackTrace
-
-                    false
-                }
+  /**
+   * Creates a new SBML model individual in the Knowledgebase
+   * @return true if creating the new model was possible and false otherwise
+   */
+  def createSpecies(species:Species, model:Model):Boolean = {
+    try{
+      val writer = new Bean2RDF(model)
+      writer.save(species)
+      true
+    } catch {
+      case ex:thewebsemantic.NotFoundException => {
+          Console.println("Bean of " + Species.getClass + "and " +
+                          "id is not found")
+          ex.printStackTrace()
+          false
         }
-        ret
-    }
-
-    /**
-     * Creates a new SBML model individual in the Knowledgebase
-     * @return true if creating the new model was possible and false otherwise
-     */
-    def createSpecies(species:Species, model:Model):Boolean = {
-        try{
-            val writer = new Bean2RDF(model)
-            writer.save(species)
-            true
-        } catch {
-            case ex:thewebsemantic.NotFoundException => {
-                    Console.println("Bean of " + Species.getClass + "and " +
-                                    "id is not found")
-                    ex.printStackTrace()
-                    false
-                }
-            case ex => {
-                    Console.println(ex.toString)
-                    ex.printStackTrace()
-                    false
-                }
+      case ex => {
+          Console.println(ex.toString)
+          ex.printStackTrace()
+          false
         }
     }
+  }
 
-    def trytoCreateSpeciesInModel(modelMetaid:String,
-                                    species:Species):String = {
-        try{
-            val myModel:Model = ManipulatorWrapper.loadModelfromDB
-            trytoCreateSpeciesInModel(modelMetaid, species, myModel)
-        } catch {
-            case ex:thewebsemantic.NotFoundException => {
-                    Console.println("Bean of " + Species.getClass + "and " +
-                                    "id is not found")
-                    ex.printStackTrace()
-                    null
-                }
-            case ex => {
-                    ex.printStackTrace()
-                    null
-                }
+  def trytoCreateSpeciesInModel(modelMetaid:String,
+                                species:Species):String = {
+    try{
+      val myModel:Model = ManipulatorWrapper.loadModelfromDB
+      trytoCreateSpeciesInModel(modelMetaid, species, myModel)
+    } catch {
+      case ex:thewebsemantic.NotFoundException => {
+          Console.println("Bean of " + Species.getClass + "and " +
+                          "id is not found")
+          ex.printStackTrace()
+          null
+        }
+      case ex => {
+          ex.printStackTrace()
+          null
         }
     }
+  }
 
-    def trytoCreateSpeciesInModel(modelMetaid:String,
-                                    species:Species,
-                                    model:Model):String = {
-        if(sbmlModelsDAO.modelMetaidExists(modelMetaid)){
-          val speciesMetaid = trytoCreateSpecies(species, model)
-          if(speciesMetaid != null){
+  def trytoCreateSpeciesInModel(modelMetaid:String,
+                                species:Species,
+                                model:Model):String = {
+    if(sbmlModelsDAO.modelMetaidExists(modelMetaid)){
+      val speciesMetaid = trytoCreateSpecies(species, model)
+      if(speciesMetaid != null){
 
-            //Jena API used directly
-            val sbmlModelRes = model.createResource(
-                         NS.sbml + "Model/" + modelMetaid)
-            val speciesRes = model.createResource(
-                        NS.sbml + "Species/" + speciesMetaid)
+        //Jena API used directly
+        val sbmlModelRes = model.createResource(
+          NS.sbml + "Model/" + modelMetaid)
+        val speciesRes = model.createResource(
+          NS.sbml + "Species/" + speciesMetaid)
 
-            sbmlModelRes.addProperty(model
-                         .getProperty(NS.sbml + "hasPArameter"),
-                                     speciesRes)
-            speciesMetaid
-          } else null
-        } else null
-    }
+        sbmlModelRes.addProperty(model
+                                 .getProperty(NS.sbml + "hasSpecies"),
+                                 speciesRes)
+        speciesMetaid
+      } else null
+    } else null
+  }
 
-    /**
-     * Method that creates a new Model in the KnowledgeBase after checking
-     * if everything is valid with the model that is being created
-     * This method also issues an available metaid
-     *
-     */
-    def trytoCreateSpecies(species:Species):String = {
-        try{
-            val myModel:Model = ManipulatorWrapper.loadModelfromDB
-            trytoCreateSpecies(species, myModel)
-        } catch {
-            case ex:thewebsemantic.NotFoundException => {
-                    Console.println("Bean of " + Species.getClass + "and " +
-                                    "id is not found")
-                    ex.printStackTrace()
-                    null
-                }
-            case ex => {
-                    ex.printStackTrace()
-                    null
-                }
+  /**
+   * Method that creates a new Model in the KnowledgeBase after checking
+   * if everything is valid with the model that is being created
+   * This method also issues an available metaid
+   *
+   */
+  def trytoCreateSpecies(species:Species):String = {
+    try{
+      val myModel:Model = ManipulatorWrapper.loadModelfromDB
+      trytoCreateSpecies(species, myModel)
+    } catch {
+      case ex:thewebsemantic.NotFoundException => {
+          Console.println("Bean of " + Species.getClass + "and " +
+                          "id is not found")
+          ex.printStackTrace()
+          null
+        }
+      case ex => {
+          ex.printStackTrace()
+          null
         }
     }
+  }
 
-    def trytoCreateSpecies(species:Species, model:Model):String = {
-        if( if( sbmlModelsDAO.metaidExists(species.metaid ) == false ){
-                createSpecies(species, model)
-            } else {
-                species.metaid = sbmlModelsDAO.generateNewMetaIdFrom(species,
-                                                         model)
-                createSpecies(species,
-                                model)
-            } == true)
-        {
-            species.metaid
-        } else null
+  def trytoCreateSpecies(species:Species, model:Model):String = {
+    if( if( sbmlModelsDAO.metaidExists(species.metaid ) == false ){
+        createSpecies(species, model)
+      } else {
+        species.metaid = sbmlModelsDAO.generateNewMetaIdFrom(species,
+                                                             model)
+        createSpecies(species,
+                      model)
+      } == true)
+    {
+      species.metaid
+    } else null
 
-    }
+  }
 
-    def speciesMetaidExists(metaid:String):Boolean = {
-        try{
-            val myModel:Model = ManipulatorWrapper.loadModelfromDB
-            speciesMetaidExists(metaid, myModel)
-        } catch {
-            case ex:thewebsemantic.NotFoundException => {
-                    Console.println("Bean of " + Species.getClass + "and " +
-                                    "id is not found")
-                    ex.printStackTrace()
-                    false
-                }
-            case ex => {
-                    ex.printStackTrace()
-                    false
-                }
+  def speciesMetaidExists(metaid:String):Boolean = {
+    try{
+      val myModel:Model = ManipulatorWrapper.loadModelfromDB
+      speciesMetaidExists(metaid, myModel)
+    } catch {
+      case ex:thewebsemantic.NotFoundException => {
+          Console.println("Bean of " + Species.getClass + "and " +
+                          "id is not found")
+          ex.printStackTrace()
+          false
+        }
+      case ex => {
+          ex.printStackTrace()
+          false
         }
     }
+  }
 
-    def speciesMetaidExists(metaid:String, model:Model):Boolean = {
-        val reasoner:Reasoner = ReasonerRegistry.getOWLReasoner
-        //val ontModelSpec:OntModelSpec = null
-        //val ont:OntModel = ModelFactory.createOntologyModel(ontModelSpec, model)
-        val ont:InfModel = ModelFactory.createInfModel(reasoner, model)
-        val queryString =
-        """
+  def speciesMetaidExists(metaid:String, model:Model):Boolean = {
+    val reasoner:Reasoner = ReasonerRegistry.getOWLReasoner
+    //val ontModelSpec:OntModelSpec = null
+    //val ont:OntModel = ModelFactory.createOntologyModel(ontModelSpec, model)
+    val ont:InfModel = ModelFactory.createInfModel(reasoner, model)
+    val queryString =
+      """
         PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
         PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
         ASK
         { ?s rdf:type sbml:Species .
         """ +  "?s sbml:metaid \"" + metaid + "\"^^<http://www.w3.org/2001/XMLSchema#string> } "
 
-        val query:Query = QueryFactory.create(queryString);
-        val qe:QueryExecution = QueryExecutionFactory.create(query, ont);
-        val results:Boolean = qe.execAsk;
+    val query:Query = QueryFactory.create(queryString);
+    val qe:QueryExecution = QueryExecutionFactory.create(query, ont);
+    val results:Boolean = qe.execAsk;
 
-        Console.println("SPARQL query \n" + queryString + "\nIs " + results)
+    Console.println("SPARQL query \n" + queryString + "\nIs " + results)
 
-        results
-    }
+    results
+  }
     
-    /**
-     * Updates a Species into the KnowledgeBase
-     * @param  true if
-     * @return true if
-     */
-    def updateSpecies(species:Species):Boolean = {
-        try{
-            val myModel:Model = ManipulatorWrapper.loadModelfromDB
-            updateSpecies(species, myModel)
-        } catch {
-            case ex:thewebsemantic.NotFoundException => {
-                    Console.println("Bean of " + Species.getClass + "and " +
-                                    "id is not found")
-                    ex.printStackTrace()
-                    false
-                }
-            case ex => {
-                    Console.println(ex.toString)
-                    ex.printStackTrace()
-                    false
-                }
+  /**
+   * Updates a Species into the KnowledgeBase
+   * @param  true if
+   * @return true if
+   */
+  def updateSpecies(species:Species):Boolean = {
+    try{
+      val myModel:Model = ManipulatorWrapper.loadModelfromDB
+      updateSpecies(species, myModel)
+    } catch {
+      case ex:thewebsemantic.NotFoundException => {
+          Console.println("Bean of " + Species.getClass + "and " +
+                          "id is not found")
+          ex.printStackTrace()
+          false
+        }
+      case ex => {
+          Console.println(ex.toString)
+          ex.printStackTrace()
+          false
         }
     }
+  }
 
-    /**
-     * Updates a Species individual in the Knowledgebase
-     * @return true if creating the new model was possible and false otherwise
-     */
-    def updateSpecies(species:Species, model:Model):Boolean = {
-        if( sbmlModelsDAO.metaidExists(species.metaid ) ){
-            val writer = new Bean2RDF(model)
-            writer.save(species)
-            true
-        } else false
-    }
+  /**
+   * Updates a Species individual in the Knowledgebase
+   * @return true if creating the new model was possible and false otherwise
+   */
+  def updateSpecies(species:Species, model:Model):Boolean = {
+    if( sbmlModelsDAO.metaidExists(species.metaid ) ){
+      val writer = new Bean2RDF(model)
+      writer.save(species)
+      true
+    } else false
+  }
 
 
-    /**
-     * Deletes an Species in the KnowledgeBase
-     * @param  true if
-     * @return true if
-     */
-    def deleteSpecies(species:Species):Boolean = {
-        try{
-            val myModel:Model = ManipulatorWrapper.loadModelfromDB
-            deleteSpecies(species, myModel)
-        } catch {
-            case ex:Exception => {
-                    Console.println("Deleting model " + species +
-                                    "was not possible")
-                    ex.printStackTrace
+  /**
+   * Deletes an Species in the KnowledgeBase
+   * @param  true if
+   * @return true if
+   */
+  def deleteSpecies(species:Species):Boolean = {
+    try{
+      val myModel:Model = ManipulatorWrapper.loadModelfromDB
+      deleteSpecies(species, myModel)
+    } catch {
+      case ex:Exception => {
+          Console.println("Deleting model " + species +
+                          "was not possible")
+          ex.printStackTrace
 
-                    false
-                }
+          false
         }
     }
+  }
 
-    /**
-     * Deletes an Species in the KnowledgeBase
-     * @return true if creating the new model was possible and false otherwise
-     */
-    def deleteSpecies(species:Species, model:Model):Boolean = {
-        try{
-            if( speciesMetaidExists(species.metaid ) ){
-                val writer = new Bean2RDF(model)
-                writer.delete(species)
-                //TODO delete subelements
-                true
-            } else false
-        } catch {
-            case ex:thewebsemantic.NotFoundException => {
-                    Console.println("Bean of " + Species.getClass + "and " +
-                                    "id is not found")
-                    ex.printStackTrace()
-                    false
-                }
-            case ex => {
-                    Console.println(ex.toString)
-                    ex.printStackTrace()
-                    false
-                }
+  /**
+   * Deletes an Species in the KnowledgeBase
+   * @return true if creating the new model was possible and false otherwise
+   */
+  def deleteSpecies(species:Species, model:Model):Boolean = {
+    try{
+      if( speciesMetaidExists(species.metaid ) ){
+        val writer = new Bean2RDF(model)
+        writer.delete(species)
+        //TODO delete subelements
+        true
+      } else false
+    } catch {
+      case ex:thewebsemantic.NotFoundException => {
+          Console.println("Bean of " + Species.getClass + "and " +
+                          "id is not found")
+          ex.printStackTrace()
+          false
+        }
+      case ex => {
+          Console.println(ex.toString)
+          ex.printStackTrace()
+          false
         }
     }
+  }
 }

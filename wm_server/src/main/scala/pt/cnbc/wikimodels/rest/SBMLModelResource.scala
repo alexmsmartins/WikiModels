@@ -52,7 +52,7 @@ class SBMLModelResource extends RESTResource {
         if(secContext.isAuthorizedTo(username,
                                      "GET", "model/" + sbmlModelResource ) ){
             try{
-                val dao = new SBMLModelsDAO
+                val dao = new SBMLModelsDAO()
                 val sbmlModel = dao.loadSBMLModel(sbmlModelResource)
                 if(sbmlModel != null &&
                    sbmlModel.metaid == sbmlModelResource){

@@ -435,7 +435,7 @@ s      browseNonExistantSpeciesTest
 
   @Test
   def createAnotherModelTest = {
-    val uriModel:URI = ra.postRequest("/model", model)
+    val uriModel:URI = ra.postRequest("/model", model2)
     log.debug("Created model with URI in " + uriModel.toString)
     uriModel
   }
@@ -453,7 +453,7 @@ s      browseNonExistantSpeciesTest
 
   @Test
   def deleteNonExistantModelTest = {
-    ra.deleteRequest("/model/metaid_0000002")
+    ra.deleteRequest("/model/metaid_xxx")
     if(ra.getStatusCode == 404) {
     } else throw new Exception("Wrong StatusCode. Should be 404 Not Found")
   }
@@ -481,10 +481,16 @@ s      browseNonExistantSpeciesTest
 
   @Test
   def browseModelTest = {
-    val xml = ra.getRequest("/model/metaid_00000020")
+    val xml = ra.getRequest("/model/metaid_0000002")
     if(ra.getStatusCode == 200) {
-      assertTrue( (xml \ "notes").size > 0 )
     } else throw new Exception("Wrong StatusCode. Should be 200 Ok")
+    assertTrue( (xml \ "notes").size > 0 )
+
+
+    val xml2 = ra.getRequest("/model/metaid_00000020")
+    if(ra.getStatusCode == 200) {
+    } else throw new Exception("Wrong StatusCode. Should be 200 Ok")
+    assertTrue( (xml2 \ "listOfParameters" \ "parameter").size > 8 )
   }
 
   
@@ -708,7 +714,7 @@ s      browseNonExistantSpeciesTest
     
   @Test
   def deleteNonExistantParameterTest = {
-    ra.deleteRequest("/model/metaid_0000002/parameter/metaid_0000023")
+    ra.deleteRequest("/model/metaid_0000002/parameter/metaid_xxx")
     if(ra.getStatusCode == 404) {
     } else throw new Exception("Wrong StatusCode. Should be 404 Not Found")
   }
@@ -774,7 +780,7 @@ s      browseNonExistantSpeciesTest
 
   @Test
   def deleteNonExistantSpeciesTest = {
-    ra.deleteRequest("/model/metaid_0000002/species/metaid_0000023")
+    ra.deleteRequest("/model/metaid_0000002/species/metaid_xxx")
     if(ra.getStatusCode == 404) {
     } else throw new Exception("Wrong StatusCode. Should be 404 Not Found")
   }
@@ -839,7 +845,7 @@ s      browseNonExistantSpeciesTest
 
   @Test
   def deleteNonExistantCompartmentTest = {
-    ra.deleteRequest("/model/metaid_0000002/compartment/metaid_0000023")
+    ra.deleteRequest("/model/metaid_0000002/compartment/metaid_xxx")
     if(ra.getStatusCode == 404) {
     } else throw new Exception("Wrong StatusCode. Should be 404 Not Found")
   }
@@ -909,7 +915,7 @@ s      browseNonExistantSpeciesTest
 
   @Test
   def deleteNonExistantFunctionDefinitionTest = {
-    ra.deleteRequest("/model/metaid_0000002/functionDefinition/metaid_0000023")
+    ra.deleteRequest("/model/metaid_0000002/functionDefinition/metaid_xxx")
     if(ra.getStatusCode == 404) {
     } else throw new Exception("Wrong StatusCode. Should be 404 Not Found")
   }
@@ -942,5 +948,4 @@ s      browseNonExistantSpeciesTest
       assertTrue( (xml \ "@metaid") == "functiondefinition_00000060" )
     } else throw new Exception("Wrong StatusCode. Should be 200 Ok")
   }
-
 }
