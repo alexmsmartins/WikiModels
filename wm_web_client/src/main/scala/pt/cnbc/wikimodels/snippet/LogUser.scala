@@ -26,6 +26,7 @@ import net.liftweb.common._
 import pt.cnbc.wikimodels.rest.client.BasicAuth
 import pt.cnbc.wikimodels.rest.client.RestfulAccess
 
+
 class LogUser {
     def form (xhtml : NodeSeq) : NodeSeq = {
 
@@ -40,14 +41,14 @@ class LogUser {
                 S.error("Password missing")
             } else {
 
-                //ra = new RestfulAccess("localhost", 8080, "/wm_server-1.0-SNAPSHOT/resources", username, password, BasicAuth.startWithBasicAuth)
-                //val userXML = ra.getRequest("/user/"+username).asInstanceOf[scala.xml.Elem]
-                //Console.println("STATUS MESSAGE => "+ra.getStatusCode)
-                //if(ra.getStatusCode == 200){
+                ra = new RestfulAccess("localhost", 8080, "/wm_server-1.0-SNAPSHOT/resources", username, password, BasicAuth.startWithBasicAuth)
+                val userXML = ra.getRequest("/user/"+username).asInstanceOf[scala.xml.Elem]
+                Console.println("STATUS MESSAGE => "+ra.getStatusCode)
+                if(ra.getStatusCode == 200){
                     User.UserName(Full(username))
-                //} else {
-                    //S.error("Error in username or password")
-                //}
+                } else {
+                    S.error("Error in username or password")
+                }
 
             }
         }
