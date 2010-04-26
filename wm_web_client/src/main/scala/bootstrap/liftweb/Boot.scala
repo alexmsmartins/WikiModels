@@ -13,9 +13,9 @@ import pt.cnbc.wikimodels.tabs.TabsView
 import pt.cnbc.wikimodels.snippet._
 
 /**
-  * A class that's instantiated early and run.  It allows the application
-  * to modify lift's environment
-  */
+ * A class that's instantiated early and run.  It allows the application
+ * to modify lift's environment
+ */
 class Boot {
     def boot {
         val any = ""
@@ -42,11 +42,11 @@ class Boot {
                            Menu(Loc("contacts", List("contacts"), "Contacts")),
                            Menu(Loc("faq", List("faq"), "FAQ"))) ::
         Menu(Loc("models", List(""), "Models"),
-            Menu(Loc("createM", List("models","create"), "Create Model", loggedIn)),
-            Menu(Loc("browseM", List("models","index"), "Browse Model", loggedIn)),
-            Menu(Loc("browseMm", List("models","browse.xhtml"), "Browse Model", Hidden, loggedIn)),
-            Menu(Loc("editM", List("models","editModel.xhtml"), "Edit Model", Hidden, loggedIn))) ::
-            //Menu(Loc("listM", List("models","list"), "List of Models"))) ::
+             Menu(Loc("createM", List("models","create"), "Create Model", loggedIn)),
+             Menu(Loc("browseM", List("models","index"), "Browse Model", loggedIn)),
+             Menu(Loc("browseMm", List("models","browse.xhtml"), "Browse Model", Hidden, loggedIn)),
+             Menu(Loc("editM", List("models","editModel.xhtml"), "Edit Model", Hidden, loggedIn))) ::
+        //Menu(Loc("listM", List("models","list"), "List of Models"))) ::
         Menu(Loc("tags", List("tags"), "Tags")) ::
         Menu(Loc("create_user", List("create_user"), "Create User", Hidden)) ::
         Menu(Loc("profile_user", List("profile_user"), "Profile User", Hidden, loggedIn)) ::
@@ -56,7 +56,7 @@ class Boot {
         Menu(Loc("view_comments", List("models","view_comments"), "View Comments", Hidden)) ::
         Menu(Loc("view_all_comments", List("models","view_all_comments"), "View All Comments", Hidden)) ::
         Menu(Loc("help", List("help","index"), "Help"),
-            Menu(Loc("helpMath", List("help","helpMath"), "Help Math", Hidden))) ::
+             Menu(Loc("helpMath", List("help","helpMath"), "Help Math", Hidden))) ::
         Menu(Loc("administrator", List("administrator","index"), "Administrator", Hidden, loggedIn)) ::
         User.sitemap
         
@@ -68,27 +68,23 @@ class Boot {
 
         // redirects the pages, it is used for the bookmarks
         /*LiftRules.rewrite.append {
-            case RewriteRequest(
-                    ParsePath(List("models","browse",modelID),_,_,_),_,_) =>
-                RewriteResponse("models" :: "browse" :: Nil, Map("modelID" -> modelID))
-        }*/
+         case RewriteRequest(
+         ParsePath(List("models","browse",modelID),_,_,_),_,_) =>
+         RewriteResponse("models" :: "browse" :: Nil, Map("modelID" -> modelID))
+         }*/
 
-        /*LiftRules.rewrite.append {
-           case RewriteRequest(
-                   ParsePath(List("models",any),_,_,_),_,_) => any match {
-                    case "model001" => {
-                            RewriteResponse("models" :: "browse" :: Nil, Map("modelID" -> any))
-                    }
-                    case _ => {
-                            RewriteResponse("models" :: any :: Nil, Map("name" -> any))
-                    }
-                   }
+        LiftRules.rewrite.append {
+            case RewriteRequest(
+                    ParsePath(List("model",any),_,_,_),_,_) => {any}
+                RewriteResponse("models" :: "browse.xhtml" :: Nil, Map("" -> any))
+                    
+        }
                
-        }*/
-        
-        MenuWidget init;
-        TreeView init;
-        TableSorter init;
-        TabsView init;
     }
+        
+    MenuWidget init;
+    TreeView init;
+    TableSorter init;
+    TabsView init;
+
 }

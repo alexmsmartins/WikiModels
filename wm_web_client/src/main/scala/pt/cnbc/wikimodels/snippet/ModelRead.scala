@@ -22,8 +22,8 @@ import js.JE._
 import net.liftweb.common._
 import java.util.LinkedList
 
-/*import pt.cnbc.wikimodels.rest.client.BasicAuth
- import pt.cnbc.wikimodels.rest.client.RestfulAccess*/
+
+import pt.cnbc.wikimodels.rest.client.RestfulAccess
 
 class ModelRead {
 
@@ -74,7 +74,7 @@ class ModelRead {
             
                 var countR = 0
                 var countF = 0
-                val modelID = S.param("modelID")
+                /*val modelID = S.param("modelID")
                 var modelRef = "BIOMD0000000055.xml"
                 modelID match {
                     case Full("model001") => {modelRef = "BIOMD0000000055.xml"
@@ -98,10 +98,13 @@ class ModelRead {
                     case _ => {
                             Text("")}
 
-                }
+                }*/
                 val teste = S.uri
+                var restful:RestfulAccess = User.getRestful
                 Console.println("aqui..->"+teste)
-                val modelSBML = XML.load(modelRef)
+                val modelSBML = restful.getRequest(teste)
+                //XML.load(modelRef)
+                XML.save("file.xml", modelSBML)
 
                 //val model_qq = (modelSBML \ "sbml" \ "@xmlns").text
                 val model_id= (modelSBML \ "model" \ "@id").text
@@ -188,7 +191,7 @@ class ModelRead {
                             generateTableFromXML(spec \\ "@name",spec \\ "@metaid",4)
                         }
                     },
-                     "downloadSBML" -> {<a href={"./"+modelRef} target="_blank"><input type="submit" class="buttonExportModel" title="Export this model in SBML" value="Export SBML Model" /></a>},
+                     "downloadSBML" -> {<a href="./file.xml" target="_blank"><input type="submit" class="buttonExportModel" title="Export this model in SBML" value="Export SBML Model" />{PlainTextResponse}</a>},
                      "listOfParameters" -> {
                         val param = modelSBML \ "model" \ "listOfParameters" \\ "parameter"
                         if((param \\ "@name").isEmpty){

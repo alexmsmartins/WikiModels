@@ -18,8 +18,7 @@ import scala.collection.jcl.Collection
 import net.liftweb.common._
 import pt.cnbc.wikimodels.model._
 
-/*import pt.cnbc.wikimodels.rest.client.BasicAuth
- import pt.cnbc.wikimodels.rest.client.RestfulAccess*/
+import pt.cnbc.wikimodels.rest.client.RestfulAccess
 
 
 class CreateModel {
@@ -297,9 +296,17 @@ class CreateModel {
                                 }
                             </model>
                         }
-                        Console.println(modelSBML)
-                        XML.save("file.xml", modelSBML)
-                        S.redirectTo("/models/browse.xhtml?modelID=file")
+                        //Console.println(modelSBML)
+                        var restful:RestfulAccess = User.getRestful
+                        restful.postRequest("/models", modelSBML)
+                        Console.println("Resultado---->"+restful.getStatusCode)
+                        /*if(restful.getStatusCode == 200){
+                            
+                        } else {
+                            S.error("Error in username or password")
+                        }*/
+                        //XML.save("file.xml", modelSBML)
+                        //S.redirectTo("/models/browse.xhtml?modelID=file")
                     }
                 }
                 val listaNova = List("true","false")
@@ -353,7 +360,7 @@ class CreateModel {
                                            <li>Function Definition Math:
                                                 <a value="Help on Mathematical Formulas" href="" onclick="window.open('../help/helpMath','Help','width=500,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=400,top=300,screenX=400,screenY=300');">
                                                     <img src="../classpath/images/question.png" width="20px" height="20px" /></a><br />
-                                                <a value="Copy paste the MathML expression" href="" onclick="window.open('http://cnx.org/math-editor/popup','Help','width=500,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=400,top=300,screenX=400,screenY=300');">MathML Editor</a>
+                                                <a name="Copy paste the MathML expression" href="" onclick="window.open('http://cnx.org/math-editor/popup','Help','width=900,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=200,top=200,screenX=200,screenY=200');">MathML Editor (only for Mozilla Firefox users)</a><br />
                                                 {SHtml.textarea("amath [insert mathematical formula here] endamath", v => function_def_math.add(v),("id", "functionDefinitionMath"), ("rows","3"), ("cols", "120"), ("maxlength", "20000"))}</li>
                                            <li>Function Definition Note:<br />
                                                 {SHtml.textarea("", v => function_def_note.add(v),("id", "functionDefinitionNote"), ("rows","10"), ("cols", "120"), ("maxlength", "50000"))
@@ -426,6 +433,7 @@ class CreateModel {
                                         Jx(<li>Constraint Math:
                                            <a value="Help on Mathematical Formulas" href="" onclick="window.open('../help/helpMath','Help','width=500,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=400,top=300,screenX=400,screenY=300');">
                                                 <img src="../classpath/images/question.png" width="20px" height="20px" /></a><br />
+                                           <a name="Copy paste the MathML expression" href="" onclick="window.open('http://cnx.org/math-editor/popup','Help','width=900,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=200,top=200,screenX=200,screenY=200');">MathML Editor (only for Mozilla Firefox users)</a><br />
                                            {SHtml.textarea("amath [insert mathematical formula here] endamath", v => constraint_math.add(v),("id", "constraintMath"), ("rows","3"), ("cols", "120"), ("maxlength", "10000"))}</li>
                                            <li>Constraint Message:<br />
                                                 {SHtml.textarea("", v => constraint_message.add(v),("id", "constraintMessage"), ("rows","3"), ("cols", "120"), ("maxlength", "10000"))}</li>
@@ -471,6 +479,7 @@ class CreateModel {
                                                                                         },("id", "reactantStoic"), ("size", "10"), ("maxlength", "10000"))}</li>
                                                                            <li>Reactant Stoichiometry Math: <a value="Help on Mathematical Formulas" href="" onclick="window.open('../help/helpMath','Help','width=500,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=400,top=300,screenX=400,screenY=300');">
                                                                                     <img src="../classpath/images/question.png" width="20px" height="20px" /></a><br />
+                                                                                <a name="Copy paste the MathML expression" href="" onclick="window.open('http://cnx.org/math-editor/popup','Help','width=900,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=200,top=200,screenX=200,screenY=200');">MathML Editor (only for Mozilla Firefox users)</a><br />
                                                                                 {SHtml.textarea("amath [insert mathematical formula here] endamath", v => {reactant.set_reactant_stoic_math(v)
                                                                                         },("id", "reactantStoicMath"), ("rows","10"), ("cols", "120"), ("maxlength", "50000"))}</li>
                                                                            <li>Reactant Note:<br />
@@ -500,6 +509,7 @@ class CreateModel {
                                                                                         },("id", "productStoic"), ("size", "10"), ("maxlength", "10000"))}</li>
                                                                            <li>Product Stoichiometry Math: <a value="Help on Mathematical Formulas" href="" onclick="window.open('../help/helpMath','Help','width=500,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=400,top=300,screenX=400,screenY=300');">
                                                                                     <img src="../classpath/images/question.png" width="20px" height="20px" /></a><br />
+                                                                                <a name="Copy paste the MathML expression" href="" onclick="window.open('http://cnx.org/math-editor/popup','Help','width=900,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=200,top=200,screenX=200,screenY=200');">MathML Editor (only for Mozilla Firefox users)</a><br />
                                                                                 {SHtml.textarea("amath [insert mathematical formula here] endamath", v => {product.set_product_stoic_math(v)
                                                                                         },("id", "productStoicMath"), ("rows","10"), ("cols", "120"), ("maxlength", "50000"))}</li>
                                                                            <li>Product Note:<br />
@@ -529,6 +539,7 @@ class CreateModel {
                                                                                         },("id", "modifierStoic"), ("size", "10"), ("maxlength", "10000"))}</li>
                                                                            <li>Modifier Stoichiometry Math: <a value="Help on Mathematical Formulas" href="" onclick="window.open('../help/helpMath','Help','width=500,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=400,top=300,screenX=400,screenY=300');">
                                                                                     <img src="../classpath/images/question.png" width="20px" height="20px" /></a><br />
+                                                                                <a name="Copy paste the MathML expression" href="" onclick="window.open('http://cnx.org/math-editor/popup','Help','width=900,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=200,top=200,screenX=200,screenY=200');">MathML Editor (only for Mozilla Firefox users)</a><br />
                                                                                 {SHtml.textarea("amath [insert mathematical formula here] endamath", v => {modifier.set_modifier_stoic_math(v)
                                                                                         },("id", "modifierStoicMath"), ("rows","10"), ("cols", "120"), ("maxlength", "50000"))}</li>
                                                                            <li>Modifier Note:<br />
@@ -540,6 +551,7 @@ class CreateModel {
                                            </li>
                                            <li>Kinetic Law: <a value="Help on Mathematical Formulas" href="" onclick="window.open('../help/helpMath','Help','width=500,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=400,top=300,screenX=400,screenY=300');">
                                                     <img src="../classpath/images/question.png" width="20px" height="20px" /></a><br />
+                                                <a name="Copy paste the MathML expression" href="" onclick="window.open('http://cnx.org/math-editor/popup','Help','width=900,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=200,top=200,screenX=200,screenY=200');">MathML Editor (only for Mozilla Firefox users)</a><br />
                                                 {SHtml.textarea("amath [insert mathematical formula here] endamath", v => {reaction_kinetic.add(v)
                                                         },("id", "reactionKineticLaw"), ("rows","10"), ("cols", "120"), ("maxlength", "50000"))}</li>
                                            <ul id={parameter_ul}></ul>

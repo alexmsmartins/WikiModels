@@ -46,6 +46,7 @@ class LogUser {
                 Console.println("STATUS MESSAGE => "+ra.getStatusCode)
                 if(ra.getStatusCode == 200){
                     User.UserName(Full(username))
+                    User.setRestful(ra)
                 } else {
                     S.error("Error in username or password")
                 }
