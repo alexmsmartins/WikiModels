@@ -25,8 +25,44 @@ import javax.ws.rs.core.Context
 import javax.ws.rs.core.SecurityContext
 import javax.ws.rs.core.Response
 import javax.ws.rs.core.UriInfo
+import pt.cnbc.wikimodels.dataAccess.SBMLModelsDAO
 
-
+@Path("/models/")
 class SBMLModelsResource extends RESTResource{
-    
+
+    @Context
+    var security:SecurityContext = null
+    @Context
+    var uriInfo:UriInfo =null;
+
+    @GET
+    @Produces(Array("application/xml"))
+    def get(@PathParam("modelid") sbmlModelResource:String
+    ):String = {
+        val username:String = security.getUserPrincipal().getName()
+
+        Console.print("GET verb was used in model " + sbmlModelResource)
+        if(secContext.isAuthorizedTo(username,
+                                     "GET", "model/" + sbmlModelResource ) ){
+            try{
+                val dao = new SBMLModelsDAO()
+                val sbmlModels = dao.loadSBMLModels
+                if(sbmlModels != null &&
+                   sbmlModels.listOfModels.size > 0){
+                    sbmlModels.toXML.toString
+                } else {
+                    throw new WebApplicationException(Response.Status.NOT_FOUND)
+                }
+            } catch {
+                case e:WebApplicationException => throw e
+                case e:Exception => {
+                        e.printStackTrace
+                        throw throw new WebApplicationException(
+                            Response.Status.BAD_REQUEST)
+                    }
+            }
+        } else {
+            throw new WebApplicationException(Response.Status.FORBIDDEN);
+        }
+    }
 }

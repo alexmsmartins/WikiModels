@@ -22,7 +22,6 @@ import scala.xml.NodeSeq
 import scala.xml.UnprefixedAttribute
 import scala.xml.XML
 
-
 import thewebsemantic.Id
 import thewebsemantic.Namespace
 import thewebsemantic.RdfProperty
@@ -112,66 +111,66 @@ case class SBMLModel extends Element{
      */
     override def toXML():Elem = {
         Console.println("HTML to generate SBML notes in toXML = "+ notes)
-        <model metaid={metaid} id={id} name={name}>
-            <!--order is important according to SBML Specifications-->
-            {new SBMLHandler().genNotesFromHTML(notes)}
-            {if(listOfFunctionDefinitions != null && listOfFunctionDefinitions.size != 0 )
-             <listOfFunctionDefinitions>
-                    {listOfFunctionDefinitions.map(i => i.toXML)}
-             </listOfFunctionDefinitions> else scala.xml.Null
-            }
-            {if(false)
-             <listOfUnitDefinitions>
-             </listOfUnitDefinitions> else scala.xml.Null
-            }
-            {if(false)
-             <listOfCompartmentTypes>
-             </listOfCompartmentTypes> else scala.xml.Null
-            }
-            {if(false)
-             <listOfSpeciesTypes>
-             </listOfSpeciesTypes> else scala.xml.Null
-            }
-            {if(listOfCompartments != null && listOfCompartments.size != 0)
-             <listOfCompartments>
-                    {listOfCompartments.map(i => i.toXML)}
-             </listOfCompartments> else scala.xml.Null
-            }
-            {if(listOfSpecies != null && listOfSpecies.size != 0)
-             <listOfSpecies>
-                    {listOfSpecies.map(i => i.toXML)}
-             </listOfSpecies> else scala.xml.Null
-            }
-            {if(listOfParameters != null && listOfParameters.size != 0)
-             <listOfParameters>
-                    {listOfParameters.map(i => i.toXML)}
-             </listOfParameters> else scala.xml.Null
-            }
-            {if(false)
-             <listOfInitialAssignments>
-             </listOfInitialAssignments> else scala.xml.Null
-            }
-            {if(false)
-             <listOfRules>
-             </listOfRules> else scala.xml.Null
-            }
-            {if(listOfConstraints != null && listOfConstraints.size != 0)
-             <listOfConstraints>
-                    {listOfConstraints.map(i => i.toXML)}
-             </listOfConstraints> else scala.xml.Null
-            }
-            {if(listOfReactions != null && listOfReactions.size != 0)
-             <listOfReactions>
-                    {listOfReactions.map(i => i.toXML)}
-             </listOfReactions> else scala.xml.Null
-            }
-            {if(false)
-             <listOfEvents>
-             </listOfEvents> else scala.xml.Null
-            }
-        </model>
-    }
+<model metaid={metaid} id={id} name={name}>
+<!--order is important according to SBML Specifications-->
+{new SBMLHandler().genNotesFromHTML(notes)}
+{if(listOfFunctionDefinitions != null && listOfFunctionDefinitions.size != 0 )
+  <listOfFunctionDefinitions>
+    {listOfFunctionDefinitions.map(i => i.toXML)}
+  </listOfFunctionDefinitions> else scala.xml.Null
+}
+{if(false)
+  <listOfUnitDefinitions>
+  </listOfUnitDefinitions> else scala.xml.Null
+}
+{if(false)
+  <listOfCompartmentTypes>
+  </listOfCompartmentTypes> else scala.xml.Null
+}
+{if(false)
+  <listOfSpeciesTypes>
+  </listOfSpeciesTypes> else scala.xml.Null
+}
+{if(listOfCompartments != null && listOfCompartments.size != 0)
+  <listOfCompartments>
+    {listOfCompartments.map(i => i.toXML)}
+  </listOfCompartments> else scala.xml.Null
+}
+{if(listOfSpecies != null && listOfSpecies.size != 0)
+  <listOfSpecies>
+    {listOfSpecies.map(i => i.toXML)}
+  </listOfSpecies> else scala.xml.Null
+}
+{if(listOfParameters != null && listOfParameters.size != 0)
+  <listOfParameters>
+    {listOfParameters.map(i => i.toXML)}
+  </listOfParameters> else scala.xml.Null
+}
+{if(false)
+  <listOfInitialAssignments>
+  </listOfInitialAssignments> else scala.xml.Null
+}
+{if(false)
+  <listOfRules>
+  </listOfRules> else scala.xml.Null
+}
+{if(listOfConstraints != null && listOfConstraints.size != 0)
+  <listOfConstraints>
+    {listOfConstraints.map(i => i.toXML)}
+  </listOfConstraints> else scala.xml.Null
+}
+{if(listOfReactions != null && listOfReactions.size != 0)
+  <listOfReactions>
+    {listOfReactions.map(i => i.toXML)}
+  </listOfReactions> else scala.xml.Null
+}
+{if(false)
+  <listOfEvents>
+  </listOfEvents> else scala.xml.Null
+}
+</model>
+  }
 
-    override def theId = this.id
-    override def theName = this.name
+  override def theId = this.id
+  override def theName = this.name
 }

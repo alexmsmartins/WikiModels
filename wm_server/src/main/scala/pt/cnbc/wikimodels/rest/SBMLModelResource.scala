@@ -53,7 +53,7 @@ class SBMLModelResource extends RESTResource {
                                      "GET", "model/" + sbmlModelResource ) ){
             try{
                 val dao = new SBMLModelsDAO()
-                val sbmlModel = dao.loadSBMLModel(sbmlModelResource)
+                val sbmlModel = dao.deepLoadSBMLModel(sbmlModelResource)
                 if(sbmlModel != null &&
                    sbmlModel.metaid == sbmlModelResource){
                     sbmlModel.toXML.toString

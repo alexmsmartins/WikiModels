@@ -37,7 +37,7 @@ object Setup {
 
         //Get the current directory
         try {
-            file = new File(System.getProperty("user.dir") );
+            file = new File(System.getProperty("user.dir") )
             file.listFiles()
             //select non hidden files
             .filter(i => i.isFile && !i.isHidden)

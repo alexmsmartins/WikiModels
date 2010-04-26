@@ -4,7 +4,6 @@
  * To change this template, choose Tools | Template Manager
  * and open the template in the editor.
  */
-
 package pt.cnbc.wikimodels.ontology
 
 import org.apache.log4j.Logger
@@ -31,9 +30,11 @@ import com.hp.hpl.jena.shared.NotFoundException
 import com.hp.hpl.jena.vocabulary.VCARD
 
 import java.io.File
+import java.io.FileOutputStream
 import java.net.URL
 
 import scala.Array
+import scala.collection.mutable.ArrayBuffer
 
 
 object ManipulatorWrapper {
@@ -60,7 +61,7 @@ object ManipulatorWrapper {
             var stmt      = iter.nextStatement  // get next statement
             var subject   = stmt.getSubject     // get the subject
             var predicate = stmt.getPredicate   // get the predicate
-            var objct    = stmt.getObject      // get the object
+            var objct     = stmt.getObject      // get the object
 
             System.out.print(subject)
             System.out.print(" " + predicate + " ");
@@ -79,7 +80,17 @@ object ManipulatorWrapper {
       else
         try{
             Console.println("current directory is " + System.getProperty("user.dir"))
-            //val myConfigFile:URL = ManipulatorWrapper.getClass.getClassLoader().getResource("/sdb.ttl");
+
+            //gets the content of the file from the wm_library jar
+            val myConfigFile = ManipulatorWrapper.getClass.getClassLoader().getResource("sdb.ttl")
+            /*val myConfigFileStream = ManipulatorWrapper.getClass.getClassLoader().getResourceAsStream("sdb.ttl")
+            val outputstream = new FileOutputStream("sdb.ttl")
+            var array = Array[Byte]()
+            val nBytes = myConfigFileStream.read
+            outputstream.write(array, 0, nBytes)
+            //Console.println("current URL is " + myConfigFile)
+
+            val store = SDBFactory.connectStore(System.getProperty("user.dir") + "/sdb.ttl")*/
             val store = SDBFactory.connectStore("/home/alex/develop/estagio/workspace/wikimodels/wm_server/src/main/resources/sdb.ttl")
             jenaModel = SDBFactory.connectDefaultModel(store)
             jenaModel

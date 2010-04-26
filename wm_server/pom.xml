@@ -145,11 +145,11 @@
             <artifactId>scalaj-collection_2.8.0.Beta1</artifactId>
             <version>1.0.Beta2</version>
         </dependency>
-        <!--<dependency>
+        <dependency>
             <groupId>pt.cnbc.wikimodels</groupId>
             <artifactId>wm_library</artifactId>
             <version>1.0-SNAPSHOT</version>
-        </dependency>-->
+        </dependency>
         <!-- TODO - delete after transitioning this code to wm_library-->
         <dependency>
             <groupId>org.slf4j</groupId>

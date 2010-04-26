@@ -89,6 +89,11 @@ object App {
       log.info("SUCCESS" )
       log.info("======================" )
       testNumber+=1
+      log.info("TEST " + testNumber + " - GetListOfModels" )
+      getListOfModelsTest
+      log.info("SUCCESS" )
+      log.info("======================" )
+      testNumber+=1
       log.info("TEST " + testNumber + " - DeleteModel2" )
       deleteModelTest
       log.info("SUCCESS" )
@@ -491,6 +496,15 @@ s      browseNonExistantSpeciesTest
     if(ra.getStatusCode == 200) {
     } else throw new Exception("Wrong StatusCode. Should be 200 Ok")
     assertTrue( (xml2 \ "listOfParameters" \ "parameter").size > 8 )
+  }
+
+
+  @Test
+  def getListOfModelsTest = {
+    val xml = ra.getRequest("/models")
+    if(ra.getStatusCode == 200) {
+    } else throw new Exception("Wrong StatusCode. Should be 200 Ok")
+    assertTrue( (xml \ "listOfModels" \ "model").size == 2)
   }
 
   

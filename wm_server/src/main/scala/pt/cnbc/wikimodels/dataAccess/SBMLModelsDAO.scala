@@ -35,6 +35,7 @@ import scala.collection.JavaConversions._
 import pt.cnbc.wikimodels.dataModel.SBMLModel
 import pt.cnbc.wikimodels.dataModel.Comment
 import pt.cnbc.wikimodels.dataModel.Element
+import pt.cnbc.wikimodels.dataModel.SBMLModels
 import pt.cnbc.wikimodels.exceptions.NotImplementedException
 import pt.cnbc.wikimodels.ontology.ManipulatorWrapper
 import com.hp.hpl.jena.rdf.model.InfModel
@@ -48,10 +49,10 @@ class SBMLModelsDAO {
   var  kb:Model = null
 
 
-  def loadSBMLModel(modelMetaid:String):SBMLModel = {
+  def deepLoadSBMLModel(modelMetaid:String):SBMLModel = {
     try{
       val myModel:Model = ManipulatorWrapper.loadModelfromDB
-      loadSBMLModel(modelMetaid, myModel)
+      deepLoadSBMLModel(modelMetaid, myModel)
     } catch {
       case ex:thewebsemantic.NotFoundException =>
         Console.println("Bean of " + SBMLModel.getClass + "and " +
@@ -64,7 +65,7 @@ class SBMLModelsDAO {
     }
   }
 
-  def loadSBMLModel(modelMetaid:String, model:Model):SBMLModel = {
+  def deepLoadSBMLModel(modelMetaid:String, model:Model):SBMLModel = {
     var ret:SBMLModel = null
 
     Console.print("After loading Jena Model")
@@ -115,15 +116,13 @@ class SBMLModelsDAO {
     sbmlmodel
   }
 
-  def loadSBMLModel():java.util.Collection[SBMLModel] = {
+
+
+
+  def loadSBMLModels():SBMLModels = {
     try{
       val myModel:Model = ManipulatorWrapper.loadModelfromDB
-      Console.print("After loading Jena Model")
-      var reader = new RDF2Bean(myModel)
-      Console.print("After creating a new RDF2Bean")
-      val l:java.util.List[SBMLModel] = reader.load(new SBMLModel().getClass )
-      .asInstanceOf[java.util.List[SBMLModel]]
-      l
+      loadSBMLModels(myModel)
     } catch {
       case ex:thewebsemantic.NotFoundException =>
         Console.println("Bean of " + SBMLModel.getClass + "and id is not found")
@@ -131,6 +130,20 @@ class SBMLModelsDAO {
         null
     }
   }
+
+  def loadSBMLModels(model:Model):SBMLModels = {
+    val sbmlmodels = new SBMLModels()
+    sbmlmodels.listOfModels = loadListOfSBMLModels(model)
+    sbmlmodels
+  }
+
+  def loadListOfSBMLModels(myModel:Model):java.util.Collection[SBMLModel] = {
+      Console.print("After loading Jena Model")
+      var reader = new RDF2Bean(myModel)
+      Console.print("After creating a new RDF2Bean")
+      reader.load[SBMLModel](classOf[SBMLModel])
+  }
+
 
   /**
    * Saves an SBMLModel into the KnowledgeBase
@@ -517,7 +530,7 @@ class SBMLModelsDAO {
         //TODO This can and should be optinized to a SPARQL query that only gets the metaids of teh subelements
         //of the model using propery 'has[element]' or even 'hasPart'. Using hasPart depends on the existence of a
         //InfModel and might not be the best choice
-        val deepSbmlModel = loadSBMLModel(sbmlmodel.metaid, model)
+        val deepSbmlModel = deepLoadSBMLModel(sbmlmodel.metaid, model)
         
         if(deepSbmlModel.listOfFunctionDefinitions != null && deepSbmlModel.listOfFunctionDefinitions.size != 0 ){
           val funcDefDAO = new FunctionDefinitionsDAO()
