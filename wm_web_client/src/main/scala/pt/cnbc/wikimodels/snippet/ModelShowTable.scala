@@ -11,5 +11,5 @@ import scala.xml.NodeSeq
 import net.liftweb.widgets.tablesorter.TableSorter
 
 class ModelShowTable {
-    def render(xhtml: NodeSeq): NodeSeq = TableSorter("table")
+    def render(xhtml: NodeSeq): NodeSeq = TableSorter("table-id")
 }

@@ -19,6 +19,8 @@ import java.util.Hashtable
 import java.util.Enumeration
 import net.liftweb.common._
 
+import pt.cnbc.wikimodels.rest.client.RestfulAccess
+
 class EditModel {
     var global:String = null
 
@@ -31,7 +33,17 @@ class EditModel {
                 val msgName: String = S.attr("id_msgs") openOr "messages"
 
                 val module = S.param("module")
-                Console.println("Valor ---> "+module)
+
+                val teste = S.uri
+                var restful:RestfulAccess = User.getRestful
+                //Console.println("aqui..->"+teste)
+                val modelSBML = restful.getRequest(teste)
+                Console.println("Resultado----no EDIT>"+restful.getStatusCode)
+                if(restful.getStatusCode == 200){
+                    Console.println("EDIT...----->>>> "+modelSBML)
+                } else {
+                    S.error("SBML model does not exist")
+                }
 
                 /**
                  * generates a XML representation of the SBML Model

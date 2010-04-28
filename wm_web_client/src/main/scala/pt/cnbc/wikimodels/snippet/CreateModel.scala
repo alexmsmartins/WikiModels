@@ -105,18 +105,25 @@ class CreateModel {
                         S.error("Invalid Data")
                     } else {
                         val modelSBML = {
-                            <model id={model_id} name={model_name}>
+                            <model id={model_id} name={model_name} metaid="metaid_0000001">
                                 <notes>
                                     <body>{XML.loadString(description)}
                                     </body>
                                 </notes>
                                 {
-                                    if(function_def_id != null) {
+                                    if(function_def_id.size > 0) {
                                         <listOfFunctionDefinitions>
                                             {
                                                 for(val i <- 0 to (function_def_id.size-1)) yield{
-                                                    <functionDefinition name={function_def_name.get(i)} id={function_def_id.get(i)}>
-                                                        <math xmlns="http://www.w3.org/1998/Math/MathML">{function_def_math.get(i)}</math>
+                                                    <functionDefinition name={function_def_name.get(i)} id={function_def_id.get(i)} metaid="metaid_0000001">
+                                                        {
+                                                            if(function_def_math.get(i).contains("amath")){
+                                                                <math xmlns="http://www.w3.org/1998/Math/MathML">{function_def_math.get(i)}</math>
+                                                            }
+                                                            else {
+                                                                XML.loadString(function_def_math.get(i))
+                                                            }
+                                                        }
                                                         <notes>{function_def_note.get(i)}</notes>
                                                     </functionDefinition>
                                                 }
@@ -125,11 +132,11 @@ class CreateModel {
                                     } else scala.xml.Null
                                 }
                                 {
-                                    if(compartment_id != null) {
+                                    if(compartment_id.size > 0) {
                                         <listOfCompartments>
                                             {for(val i <- 0 to (compartment_id.size-1)) yield{
-                                                    <compartment outside={compartment_outside.get(i)} spacialDimensions={compartment_sd.get(i)} size={compartment_size.get(i)}
-                                                        name={compartment_name.get(i)} id={compartment_id.get(i)} constant={compartment_constant.get(i)}>
+                                                    <compartment outside={compartment_outside.get(i)} spatialDimensions={compartment_sd.get(i)} size={compartment_size.get(i)}
+                                                        name={compartment_name.get(i)} id={compartment_id.get(i)} constant={compartment_constant.get(i)} metaid="metaid_0000001">
                                                         <notes>{compartment_note.get(i)}</notes>
                                                     </compartment>
                                                 }
@@ -138,13 +145,13 @@ class CreateModel {
                                     } else scala.xml.Null
                                 }
                                 {
-                                    if(species_id != null) {
+                                    if(species_id.size > 0) {
                                         <listOfSpecies>
                                             {
                                                 for(i <- 0 to species_id.size-1) yield{
                                                     <species id={species_id.get(i)} name={species_name.get(i)} compartment={species_compartment.get(i)}
                                                         initialAmount={species_init_amount.get(i)} initialConcentration={species_init_concent.get(i)}
-                                                        boundaryCondition={species_bound_cond.get(i)} constant={species_constant.get(i)}>
+                                                        boundaryCondition={species_bound_cond.get(i)} constant={species_constant.get(i)} metaid="metaid_0000001">
                                                         <notes>{species_note.get(i)}</notes>
                                                     </species>
                                                 }
@@ -153,12 +160,12 @@ class CreateModel {
                                     } else scala.xml.Null
                                 }
                                 {
-                                    if(parameter_id != null) {
+                                    if(parameter_id.size > 0) {
                                         <listOfParameters>
                                             {
                                                 for(i <- 0 to parameter_id.size-1) yield{
                                                     <parameter id={parameter_id.get(i)} name={parameter_name.get(i)} value={parameter_value.get(i)}
-                                                        constant={parameter_constant.get(i)}>
+                                                        constant={parameter_constant.get(i)} metaid="metaid_0000001">
                                                         <notes>{parameter_note.get(i)}</notes>
                                                     </parameter>
                                                 }
@@ -167,12 +174,12 @@ class CreateModel {
                                     } else scala.xml.Null
                                 }
                                 {
-                                    if(constraint_math != null) {
+                                    if(constraint_math.size > 0) {
                                         <listOfConstraints>
                                             {
                                                 for(i <- 0 to constraint_math.size-1) yield{
-                                                    <constraint><math xmlns="http://www.w3.org/1998/Math/MathML">{constraint_math.get(i)}
-                                                                </math>
+                                                    <constraint metaid="metaid_0000001"><math xmlns="http://www.w3.org/1998/Math/MathML">{constraint_math.get(i)}
+                                                                                        </math>
                                                         <message>{constraint_message.get(i)}</message>
                                                         <notes>{constraint_note.get(i)}</notes>
                                                     </constraint>
@@ -181,86 +188,92 @@ class CreateModel {
                                         </listOfConstraints>
                                     } else scala.xml.Null
                                 }
-                                {if(reaction_id.size != 0){
+                                {if(reaction_id.size > 0){
                                         <listOfReactions>
                                             {for(i <- 1 to reaction_id.size) yield{
-                                                    <reaction reversible={reaction_reversible.get(i-1)} name={reaction_name.get(i-1)} id={reaction_id.get(i-1)} fast={reaction_fast.get(i-1)}>
+                                                    <reaction reversible={reaction_reversible.get(i-1)} name={reaction_name.get(i-1)} id={reaction_id.get(i-1)} fast={reaction_fast.get(i-1)} metaid="metaid_0000001">
                                                         <notes>{reaction_note.get(i-1)}</notes>
-                                                        <listOfReactants>{
-                                                                if((reactant_hash.size > 0)) {
-                                                                    contadorReactant = contadorReactant+1
-                                                                    var ent = reactant_hash.entrySet
-                                                                    var enum = ent.iterator
-                                                                    for(k <- 1 to reactant_hash.size) yield{
-                                                                        for ( l <- enum.hasNext) yield {
-                                                                            var entry = enum.next
-                                                                            var teste = "reactant_"+i+"_"+k
-                                                                            if((entry.getKey.equals(teste)) && (contadorReactant == i)){
-                                                                                var valor = entry.getValue
-                                                                                <speciesReference id={valor.get_reactant_id} name={valor.get_reactant_name} species={valor.get_reactant_specie} stoichiometry={valor.get_reactant_stoic}>
-                                                                                    <notes>{valor.get_reactant_note}</notes>
-                                                                                    {
-                                                                                        if(valor.get_reactant_stoic_math.length > 0){
-                                                                                            <stoichiometryMath>
-                                                                                                {valor.get_reactant_stoic_math}
-                                                                                            </stoichiometryMath>
-                                                                                        } else scala.xml.Null}
-                                                                                </speciesReference>
-                                                                            } else scala.xml.Null
-                                                                        }
-                                                                    }
-                                                                } else scala.xml.Null}
-                                                        </listOfReactants>
-                                                        <listOfProducts>{
-                                                                if((product_hash.size > 0)) {
-                                                                    contadorProduct = contadorProduct+1
-                                                                    var ent = product_hash.entrySet
-                                                                    var enum = ent.iterator
-                                                                    for(k <- 1 to product_hash.size) yield{
-                                                                        for ( l <- enum.hasNext) yield {
-                                                                            var entry = enum.next
-                                                                            var teste = "product_"+i+"_"+k
-                                                                            if((entry.getKey.equals(teste)) && (contadorProduct == i)){
-                                                                                var valor = entry.getValue
-                                                                                <speciesReference id={valor.get_product_name} name={valor.get_product_name} species={valor.get_product_specie} stoichiometry={valor.get_product_stoic}>
-                                                                                    <notes>{valor.get_product_note}</notes>
-                                                                                    {
-                                                                                        if(valor.get_product_stoic_math.length > 0){
-                                                                                            <stoichiometryMath>
-                                                                                                {valor.get_product_stoic_math}
-                                                                                            </stoichiometryMath>
-                                                                                        } else scala.xml.Null}
-                                                                                </speciesReference>
-                                                                            } else scala.xml.Null
-                                                                        }
-                                                                    }
-                                                                } else scala.xml.Null}
-                                                        </listOfProducts>
-                                                        <listOfModifiers>{
-                                                                if((modifier_hash.size > 0)) {
-                                                                    contadorModifier = contadorModifier+1
-                                                                    var ent = modifier_hash.entrySet
-                                                                    var enum = ent.iterator
-                                                                    for(k <- 1 to modifier_hash.size) yield{
-                                                                        for ( l <- enum.hasNext) yield {
-                                                                            var entry = enum.next
-                                                                            var teste = "modifier_"+i+"_"+k
-                                                                            if((entry.getKey.equals(teste)) && (contadorModifier == i)){
-                                                                                var valor = entry.getValue
-                                                                                <speciesReference id={valor.get_modifier_id} name={valor.get_modifier_name} species={valor.get_modifier_specie} stoichiometry={valor.get_modifier_stoic}>
-                                                                                    <notes>{valor.get_modifier_note}</notes>
-                                                                                    {
-                                                                                        if(valor.get_modifier_stoic_math.length > 0){
-                                                                                            <stoichiometryMath>
-                                                                                                {valor.get_modifier_stoic_math}
-                                                                                            </stoichiometryMath>
-                                                                                        } else scala.xml.Null}
-                                                                                </speciesReference>
-                                                                            } else scala.xml.Null
-                                                                        }
-                                                                    }
-                                                                } else scala.xml.Null}
-                                                        </listOfModifiers>
+                                                        {if(reactant_hash.size > 0){
+                                                                <listOfReactants>{
+                                                                        if((reactant_hash.size > 0)) {
+                                                                            contadorReactant = contadorReactant+1
+                                                                            var ent = reactant_hash.entrySet
+                                                                            var enum = ent.iterator
+                                                                            for(k <- 1 to reactant_hash.size) yield{
+                                                                                for ( l <- enum.hasNext) yield {
+                                                                                    var entry = enum.next
+                                                                                    var teste = "reactant_"+i+"_"+k
+                                                                                    if((entry.getKey.equals(teste)) && (contadorReactant == i)){
+                                                                                        var valor = entry.getValue
+                                                                                        <speciesReference id={valor.get_reactant_id} name={valor.get_reactant_name} species={valor.get_reactant_specie} stoichiometry={valor.get_reactant_stoic} metaid="metaid_0000001">
+                                                                                            <notes>{valor.get_reactant_note}</notes>
+                                                                                            {
+                                                                                                if(valor.get_reactant_stoic_math.length > 0){
+                                                                                                    <stoichiometryMath>
+                                                                                                        {valor.get_reactant_stoic_math}
+                                                                                                    </stoichiometryMath>
+                                                                                                } else scala.xml.Null}
+                                                                                        </speciesReference>
+                                                                                    } else scala.xml.Null
+                                                                                }
+                                                                            }
+                                                                        } else scala.xml.Null}
+                                                                </listOfReactants>
+                                                            } else scala.xml.Null}
+                                                        {if((product_hash.size > 0)) {
+                                                                <listOfProducts>{
+                                                                        if((product_hash.size > 0)) {
+                                                                            contadorProduct = contadorProduct+1
+                                                                            var ent = product_hash.entrySet
+                                                                            var enum = ent.iterator
+                                                                            for(k <- 1 to product_hash.size) yield{
+                                                                                for ( l <- enum.hasNext) yield {
+                                                                                    var entry = enum.next
+                                                                                    var teste = "product_"+i+"_"+k
+                                                                                    if((entry.getKey.equals(teste)) && (contadorProduct == i)){
+                                                                                        var valor = entry.getValue
+                                                                                        <speciesReference id={valor.get_product_name} name={valor.get_product_name} species={valor.get_product_specie} stoichiometry={valor.get_product_stoic} metaid="metaid_0000001">
+                                                                                            <notes>{valor.get_product_note}</notes>
+                                                                                            {
+                                                                                                if(valor.get_product_stoic_math.length > 0){
+                                                                                                    <stoichiometryMath>
+                                                                                                        {valor.get_product_stoic_math}
+                                                                                                    </stoichiometryMath>
+                                                                                                } else scala.xml.Null}
+                                                                                        </speciesReference>
+                                                                                    } else scala.xml.Null
+                                                                                }
+                                                                            }
+                                                                        } else scala.xml.Null}
+                                                                </listOfProducts>
+                                                            } else scala.xml.Null}
+                                                        {if((modifier_hash.size > 0)) {
+                                                                <listOfModifiers>{
+                                                                        if((modifier_hash.size > 0)) {
+                                                                            contadorModifier = contadorModifier+1
+                                                                            var ent = modifier_hash.entrySet
+                                                                            var enum = ent.iterator
+                                                                            for(k <- 1 to modifier_hash.size) yield{
+                                                                                for ( l <- enum.hasNext) yield {
+                                                                                    var entry = enum.next
+                                                                                    var teste = "modifier_"+i+"_"+k
+                                                                                    if((entry.getKey.equals(teste)) && (contadorModifier == i)){
+                                                                                        var valor = entry.getValue
+                                                                                        <speciesReference id={valor.get_modifier_id} name={valor.get_modifier_name} species={valor.get_modifier_specie} stoichiometry={valor.get_modifier_stoic} metaid="metaid_0000001">
+                                                                                            <notes>{valor.get_modifier_note}</notes>
+                                                                                            {
+                                                                                                if(valor.get_modifier_stoic_math.length > 0){
+                                                                                                    <stoichiometryMath>
+                                                                                                        {valor.get_modifier_stoic_math}
+                                                                                                    </stoichiometryMath>
+                                                                                                } else scala.xml.Null}
+                                                                                        </speciesReference>
+                                                                                    } else scala.xml.Null
+                                                                                }
+                                                                            }
+                                                                        } else scala.xml.Null}
+                                                                </listOfModifiers>
+                                                            } else scala.xml.Null}
                                                         <kineticLaw>{
                                                                 if((reaction_kinetic.size > 0)) {
                                                                     for(k <- 0 to reaction_kinetic.size-1) yield{
@@ -279,7 +292,7 @@ class CreateModel {
                                                                                     if((entry.getKey.equals(teste)) && (contadorParameter == i)){
                                                                                         var valor = entry.getValue
                                                                                         <parameter id={valor.get_parameter_id} name={valor.get_parameter_name} value={valor.get_parameter_value}
-                                                                                            constant={valor.get_parameter_constant}>
+                                                                                            constant={valor.get_parameter_constant} metaid="metaid_0000001">
                                                                                             <notes>{valor.get_parameter_note}</notes>
                                                                                         </parameter>
                                                                                     } else scala.xml.Null
@@ -296,15 +309,16 @@ class CreateModel {
                                 }
                             </model>
                         }
-                        //Console.println(modelSBML)
+                        Console.println(modelSBML)
+
                         var restful:RestfulAccess = User.getRestful
-                        restful.postRequest("/models", modelSBML)
+                        restful.postRequest("/model", modelSBML)
                         Console.println("Resultado---->"+restful.getStatusCode)
                         /*if(restful.getStatusCode == 200){
                             
-                        } else {
-                            S.error("Error in username or password")
-                        }*/
+                         } else {
+                         S.error("Error in username or password")
+                         }*/
                         //XML.save("file.xml", modelSBML)
                         //S.redirectTo("/models/browse.xhtml?modelID=file")
                     }
@@ -357,11 +371,11 @@ class CreateModel {
                                         Jx(<li>Function Definition Name <span id="required_field">*</span>:
                                            {SHtml.text("", v => {function_def_name.add(v)
                                                                  function_def_id.add(v.replace(" ", "").toLowerCase)},("id", "functionDefinitionName"), ("size", "40"), ("maxlength", "10000"))}</li>
-                                           <li>Function Definition Math:
-                                                <a value="Help on Mathematical Formulas" href="" onclick="window.open('../help/helpMath','Help','width=500,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=400,top=300,screenX=400,screenY=300');">
-                                                    <img src="../classpath/images/question.png" width="20px" height="20px" /></a><br />
-                                                <a name="Copy paste the MathML expression" href="" onclick="window.open('http://cnx.org/math-editor/popup','Help','width=900,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=200,top=200,screenX=200,screenY=200');">MathML Editor (only for Mozilla Firefox users)</a><br />
-                                                {SHtml.textarea("amath [insert mathematical formula here] endamath", v => function_def_math.add(v),("id", "functionDefinitionMath"), ("rows","3"), ("cols", "120"), ("maxlength", "20000"))}</li>
+                                           <li>Function Definition Math: <i>(Content MathML)</i><br />
+                                                <!--<p><a value="Help on Mathematical Formulas" href="" onclick="window.open('../help/helpMath','Help','width=500,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=400,top=300,screenX=400,screenY=300');">Help on Mathematical Formula for ASCIIMathML
+                                                <img src="../classpath/images/question.png" width="20px" height="20px" /></a></p><br />-->
+                                                <a style="color:orange" name="Copy paste the MathML expression" href="" onclick="window.open('http://cnx.org/math-editor/popup','Help','width=900,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=200,top=200,screenX=200,screenY=200');"><b>Use the online MathML Editor (only for Mozilla Firefox users)</b></a><br />
+                                                {SHtml.textarea("Copy and paste the Content MathML code in here", v => function_def_math.add(v),("id", "functionDefinitionMath"), ("rows","10"), ("cols", "120"), ("maxlength", "200000"))}</li>
                                            <li>Function Definition Note:<br />
                                                 {SHtml.textarea("", v => function_def_note.add(v),("id", "functionDefinitionNote"), ("rows","10"), ("cols", "120"), ("maxlength", "50000"))
                                                 }</li>)
@@ -430,11 +444,11 @@ class CreateModel {
                      "buttonConstraint" -> SHtml.ajaxButton(Text("Add Constraint"), () => {
                             JsCrVar("constr", Jx(<ul>
                                                  {
-                                        Jx(<li>Constraint Math:
-                                           <a value="Help on Mathematical Formulas" href="" onclick="window.open('../help/helpMath','Help','width=500,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=400,top=300,screenX=400,screenY=300');">
-                                                <img src="../classpath/images/question.png" width="20px" height="20px" /></a><br />
-                                           <a name="Copy paste the MathML expression" href="" onclick="window.open('http://cnx.org/math-editor/popup','Help','width=900,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=200,top=200,screenX=200,screenY=200');">MathML Editor (only for Mozilla Firefox users)</a><br />
-                                           {SHtml.textarea("amath [insert mathematical formula here] endamath", v => constraint_math.add(v),("id", "constraintMath"), ("rows","3"), ("cols", "120"), ("maxlength", "10000"))}</li>
+                                        Jx(<li>Constraint Math: <i>(Content MathML)</i><br />
+                                           <!--<p><a value="Help on Mathematical Formulas" href="" onclick="window.open('../help/helpMath','Help','width=500,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=400,top=300,screenX=400,screenY=300');">Help on Mathematical Formula for ASCIIMathML
+                                           <img src="../classpath/images/question.png" width="20px" height="20px" /></a></p><br />-->
+                                           <a style="color:orange" name="Copy paste the MathML expression" href="" onclick="window.open('http://cnx.org/math-editor/popup','Help','width=900,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=200,top=200,screenX=200,screenY=200');"><b>Use the online MathML Editor (only for Mozilla Firefox users)</b></a><br />
+                                           {SHtml.textarea("Copy and paste the Content MathML code in here", v => constraint_math.add(v),("id", "constraintMath"), ("rows","10"), ("cols", "120"), ("maxlength", "10000"))}</li>
                                            <li>Constraint Message:<br />
                                                 {SHtml.textarea("", v => constraint_message.add(v),("id", "constraintMessage"), ("rows","3"), ("cols", "120"), ("maxlength", "10000"))}</li>
                                            <li>Constraint Note:<br />
@@ -477,10 +491,11 @@ class CreateModel {
                                                                            <li>Reactant Stoichiometry:  <i>(default="1")</i>
                                                                                 {SHtml.text("1", v => {reactant.set_reactant_stoic(v)
                                                                                         },("id", "reactantStoic"), ("size", "10"), ("maxlength", "10000"))}</li>
-                                                                           <li>Reactant Stoichiometry Math: <a value="Help on Mathematical Formulas" href="" onclick="window.open('../help/helpMath','Help','width=500,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=400,top=300,screenX=400,screenY=300');">
-                                                                                    <img src="../classpath/images/question.png" width="20px" height="20px" /></a><br />
-                                                                                <a name="Copy paste the MathML expression" href="" onclick="window.open('http://cnx.org/math-editor/popup','Help','width=900,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=200,top=200,screenX=200,screenY=200');">MathML Editor (only for Mozilla Firefox users)</a><br />
-                                                                                {SHtml.textarea("amath [insert mathematical formula here] endamath", v => {reactant.set_reactant_stoic_math(v)
+                                                                           <li>Reactant Stoichiometry Math: <i>(Content MathML)</i><br />
+                                                                                <!--<p><a value="Help on Mathematical Formulas" href="" onclick="window.open('../help/helpMath','Help','width=500,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=400,top=300,screenX=400,screenY=300');">Help on Mathematical Formula for ASCIIMathML
+                                                                                <img src="../classpath/images/question.png" width="20px" height="20px" /></a></p><br />-->
+                                                                                <a style="color:orange" name="Copy paste the MathML expression" href="" onclick="window.open('http://cnx.org/math-editor/popup','Help','width=900,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=200,top=200,screenX=200,screenY=200');"><b>Use the online MathML Editor (only for Mozilla Firefox users)</b></a><br />
+                                                                                {SHtml.textarea("Copy and paste the Content MathML code in here", v => {reactant.set_reactant_stoic_math(v)
                                                                                         },("id", "reactantStoicMath"), ("rows","10"), ("cols", "120"), ("maxlength", "50000"))}</li>
                                                                            <li>Reactant Note:<br />
                                                                                 {SHtml.textarea("", v => {reactant.set_reactant_note(v)
@@ -507,10 +522,11 @@ class CreateModel {
                                                                            <li>Product Stoichiometry:  <i>(default="1")</i>
                                                                                 {SHtml.text("1", v => {product.set_product_stoic(v)
                                                                                         },("id", "productStoic"), ("size", "10"), ("maxlength", "10000"))}</li>
-                                                                           <li>Product Stoichiometry Math: <a value="Help on Mathematical Formulas" href="" onclick="window.open('../help/helpMath','Help','width=500,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=400,top=300,screenX=400,screenY=300');">
-                                                                                    <img src="../classpath/images/question.png" width="20px" height="20px" /></a><br />
-                                                                                <a name="Copy paste the MathML expression" href="" onclick="window.open('http://cnx.org/math-editor/popup','Help','width=900,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=200,top=200,screenX=200,screenY=200');">MathML Editor (only for Mozilla Firefox users)</a><br />
-                                                                                {SHtml.textarea("amath [insert mathematical formula here] endamath", v => {product.set_product_stoic_math(v)
+                                                                           <li>Product Stoichiometry Math: <i>(Content MathML)</i><br />
+                                                                                <!--<p><a value="Help on Mathematical Formulas" href="" onclick="window.open('../help/helpMath','Help','width=500,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=400,top=300,screenX=400,screenY=300');">Help on Mathematical Formula for ASCIIMathML
+                                                                                <img src="../classpath/images/question.png" width="20px" height="20px" /></a></p><br />-->
+                                                                                <a style="color:orange" name="Copy paste the MathML expression" href="" onclick="window.open('http://cnx.org/math-editor/popup','Help','width=900,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=200,top=200,screenX=200,screenY=200');"><b>Use the online MathML Editor (only for Mozilla Firefox users)</b></a><br />
+                                                                                {SHtml.textarea("Copy and paste the Content MathML code in here", v => {product.set_product_stoic_math(v)
                                                                                         },("id", "productStoicMath"), ("rows","10"), ("cols", "120"), ("maxlength", "50000"))}</li>
                                                                            <li>Product Note:<br />
                                                                                 {SHtml.textarea("", v => {product.set_product_note(v)
@@ -537,10 +553,11 @@ class CreateModel {
                                                                            <li>Modifier Stoichiometry:  <i>(default="1")</i>
                                                                                 {SHtml.text("1", v => {modifier.set_modifier_stoic(v)
                                                                                         },("id", "modifierStoic"), ("size", "10"), ("maxlength", "10000"))}</li>
-                                                                           <li>Modifier Stoichiometry Math: <a value="Help on Mathematical Formulas" href="" onclick="window.open('../help/helpMath','Help','width=500,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=400,top=300,screenX=400,screenY=300');">
-                                                                                    <img src="../classpath/images/question.png" width="20px" height="20px" /></a><br />
-                                                                                <a name="Copy paste the MathML expression" href="" onclick="window.open('http://cnx.org/math-editor/popup','Help','width=900,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=200,top=200,screenX=200,screenY=200');">MathML Editor (only for Mozilla Firefox users)</a><br />
-                                                                                {SHtml.textarea("amath [insert mathematical formula here] endamath", v => {modifier.set_modifier_stoic_math(v)
+                                                                           <li>Modifier Stoichiometry Math: <i>(Content MathML)</i><br />
+                                                                                <!--<p><a value="Help on Mathematical Formulas" href="" onclick="window.open('../help/helpMath','Help','width=500,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=400,top=300,screenX=400,screenY=300');">Help on Mathematical Formula for ASCIIMathML
+                                                                                <img src="../classpath/images/question.png" width="20px" height="20px" /></a></p><br />-->
+                                                                                <a style="color:orange" name="Copy paste the MathML expression" href="" onclick="window.open('http://cnx.org/math-editor/popup','Help','width=900,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=200,top=200,screenX=200,screenY=200');"><b>Use the online MathML Editor (only for Mozilla Firefox users)</b></a><br />
+                                                                                {SHtml.textarea("Copy and paste the Content MathML code in here", v => {modifier.set_modifier_stoic_math(v)
                                                                                         },("id", "modifierStoicMath"), ("rows","10"), ("cols", "120"), ("maxlength", "50000"))}</li>
                                                                            <li>Modifier Note:<br />
                                                                                 {SHtml.textarea("", v => {modifier.set_modifier_note(v)
@@ -549,10 +566,11 @@ class CreateModel {
                                                                 ).toJs) &
                                                             (ElemById(modifier_ul) ~> (JsFunc("appendChild", Call("reactionNewModifier", ""))))})}
                                            </li>
-                                           <li>Kinetic Law: <a value="Help on Mathematical Formulas" href="" onclick="window.open('../help/helpMath','Help','width=500,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=400,top=300,screenX=400,screenY=300');">
-                                                    <img src="../classpath/images/question.png" width="20px" height="20px" /></a><br />
-                                                <a name="Copy paste the MathML expression" href="" onclick="window.open('http://cnx.org/math-editor/popup','Help','width=900,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=200,top=200,screenX=200,screenY=200');">MathML Editor (only for Mozilla Firefox users)</a><br />
-                                                {SHtml.textarea("amath [insert mathematical formula here] endamath", v => {reaction_kinetic.add(v)
+                                           <li>Kinetic Law: <i>(Content MathML)</i><br />
+                                                <!--<p><a value="Help on Mathematical Formulas" href="" onclick="window.open('../help/helpMath','Help','width=500,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=400,top=300,screenX=400,screenY=300');">Help on Mathematical Formula for ASCIIMathML
+                                                    <img src="../classpath/images/question.png" width="20px" height="20px" /></a></p><br />-->
+                                           <a style="color:orange" name="Copy paste the MathML expression" href="" onclick="window.open('http://cnx.org/math-editor/popup','Help','width=900,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=200,top=200,screenX=200,screenY=200');"><b>Use the online MathML Editor (only for Mozilla Firefox users)</b></a><br />
+                                           {SHtml.textarea("Copy and paste the Content MathML code in here", v => {reaction_kinetic.add(v)
                                                         },("id", "reactionKineticLaw"), ("rows","10"), ("cols", "120"), ("maxlength", "50000"))}</li>
                                            <ul id={parameter_ul}></ul>
                                            <li>{SHtml.ajaxButton(Text("Add Kinetic Law Parameter"), () => {

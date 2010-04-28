@@ -71,13 +71,27 @@ class Boot {
          case RewriteRequest(
          ParsePath(List("models","browse",modelID),_,_,_),_,_) =>
          RewriteResponse("models" :: "browse" :: Nil, Map("modelID" -> modelID))
-         }*/
+         }
+
+         LiftRules.rewrite.append {
+         case RewriteRequest(
+         ParsePath(List("account",acctName),_,_,_),_,_) =>
+         RewriteResponse("viewAcct" :: Nil, Map("name" -> acctName))
+         case RewriteRequest(
+         ParsePath(List("account",acctName, tag),_,_,_),_,_) =>
+         RewriteResponse("viewAcct" :: Nil, Map("name" -> acctName,
+         "tag" -> tag)))
+         }
+
+
+         */
 
         LiftRules.rewrite.append {
-            case RewriteRequest(
-                    ParsePath(List("model",any),_,_,_),_,_) => {any}
+            case RewriteRequest(ParsePath(List("model",any),_,_,_),_,_) =>
                 RewriteResponse("models" :: "browse.xhtml" :: Nil, Map("" -> any))
-                    
+            case RewriteRequest(ParsePath(List("model",any,"parameter",some),_,_,_),_,_) =>
+                RewriteResponse("models" :: "editModel.xhtml" :: Nil, Map("" -> any, "" -> some))
+
         }
                
     }

@@ -1,7 +1,7 @@
 <lift:surround with="default" at="content">
     <lift:HomePage.logInfo>
         <div id="login">
-        	<h1><lift:HomePage.profile /></h1>
+            <h1><lift:HomePage.profile /></h1>
             <h1><lift:Menu.item name="Logout" /></h1>
         </div>
     </lift:HomePage.logInfo>
@@ -15,8 +15,18 @@
         <h1>Models</h1>
         <p>&nbsp;</p>
         <lift:ModelRead.listOfModels>
-        <lift:ModelShowTable />
-        <listModels:list />
+            <lift:ModelShowTable />
+            <table id="table-id" class="tablesorter">
+                <thead>
+                    <tr>
+                        <th>Model Metaid</th>
+                        <th>Model Name</th>
+                        <th>Author</th>
+                        <th>Last Modification</th>
+                    </tr>
+                </thead>
+                <listModels:list />
+            </table>
         </lift:ModelRead.listOfModels>
     </div>
 </lift:surround>
