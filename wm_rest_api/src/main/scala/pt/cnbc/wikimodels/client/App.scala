@@ -98,9 +98,9 @@ object App {
       deleteModelTest
       log.info("SUCCESS" )
 
-      //------------- Species integration tests -------------
+      //------------- PArameter integration tests -------------
 
-      /*log.info("======================" )
+      log.info("======================" )
       testNumber+=1
       log.info("TEST " + testNumber + " - deleteNonExistantParameter" )
       deleteNonExistantParameterTest
@@ -141,7 +141,7 @@ object App {
       deleteParameterTest
       log.info("SUCCESS" )
 
-      //------------- Species integration tests -------------
+      /*//------------- Species integration tests -------------
 
       log.info("======================" )
       testNumber+=1
@@ -735,8 +735,22 @@ s      browseNonExistantSpeciesTest
 
   @Test
   def editParameterTest = {
+    val xml = ra.getRequest("/model/metaid_0000002/parameter/metaid_0000002")
+    if(ra.getStatusCode == 200) {
+      assertTrue( (xml \ "@metaid") == "metaid_0000002" )
+      assertTrue( (xml \ "@id") == "k11")
+    } else throw new Exception("Wrong StatusCode. Should be 200 Ok")
+
+
+
     ra.putRequest("/model/metaid_0000002/parameter/metaid_000002", parameter2)
     if(ra.getStatusCode == 200) {
+    } else throw new Exception("Wrong StatusCode. Should be 200 Ok")
+
+    val xmlAfter = ra.getRequest("/model/metaid_0000002/parameter/metaid_0000002")
+    if(ra.getStatusCode == 200) {
+      assertTrue( (xmlAfter \ "@metaid") == "metaid_0000002" )
+      assertTrue( (xmlAfter \ "@id") == "k2")
     } else throw new Exception("Wrong StatusCode. Should be 200 Ok")
   }
 

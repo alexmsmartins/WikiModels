@@ -28,7 +28,6 @@ case class Parameter extends Element{
     //this s called SBMMLPArameter because, somehow, Jersey s
     var id:String = null
     var name:String = null
-    this.notes = null
     
     /**
      * The optional attribute value determines the value (of type double)

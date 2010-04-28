@@ -170,6 +170,11 @@ class SBMLModelsDAO {
   def createSBMLModel(sbmlmodel:SBMLModel, model:Model):Boolean = {
     try{
       val writer = new Bean2RDF(model)
+
+      Console.println("SBML Model before removing lists")
+      Console.println(sbmlmodel.toXML.toString)
+      Console.println("")
+
       //Code to keep save from saving the subelements since we need to check if their metaids already exist
       val tmpsbmlmodel = new SBMLModel()
       tmpsbmlmodel.listOfFunctionDefinitions = sbmlmodel.listOfFunctionDefinitions
@@ -184,6 +189,14 @@ class SBMLModelsDAO {
       sbmlmodel.listOfConstraints = null
       tmpsbmlmodel.listOfReactions = sbmlmodel.listOfReactions
       sbmlmodel.listOfReactions = null
+
+      Console.println("Temp SBML Model after addomg lists")
+      Console.println(tmpsbmlmodel.toXML.toString)
+      Console.println("")
+
+      Console.println("SBML Model after removing lists")
+      Console.println(sbmlmodel.toXML.toString)
+      Console.println("")
 
       writer.save(sbmlmodel)
       val funcDefDAO = new FunctionDefinitionsDAO()
