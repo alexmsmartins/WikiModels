@@ -1,5 +1,5 @@
 /*
- * ConstraintsDAO.scala
+ * KineticLawsDAO.scala
  *
  * To change this template, choose Tools | Template Manager
  * and open the template in the editor.
@@ -30,28 +30,30 @@ import thewebsemantic.RDF2Bean
 
 import scala.Collection
 
-import pt.cnbc.wikimodels.dataModel.Constraint
+import pt.cnbc.wikimodels.dataModel.KineticLaw
+import pt.cnbc.wikimodels.dataModel.Comment
 import pt.cnbc.wikimodels.dataModel.Element
-import pt.cnbc.wikimodels.dataModel.SBMLModel
+import pt.cnbc.wikimodels.dataModel.Reaction
 import pt.cnbc.wikimodels.exceptions.NotImplementedException
 import pt.cnbc.wikimodels.ontology.ManipulatorWrapper
 import pt.cnbc.wikimodels.ontology.{Namespaces => NS}
 import thewebsemantic.Sparql
 
-class ConstraintsDAO {
+class KineticLawsDAO {
   /**
    * Allows testing procedures. This is not to be used from outside this class
    */
   var  kb:Model = null
   val sbmlModelsDAO = new SBMLModelsDAO()
+  val reactionsDAO = new ReactionsDAO()
 
-  def loadConstraint(constraintMetaid:String):Constraint = {
+  def loadKineticLaw(kineticLawMetaid:String):KineticLaw = {
     try{
       val myModel:Model = ManipulatorWrapper.loadModelfromDB
-      loadConstraint(constraintMetaid, myModel)
+      loadKineticLaw(kineticLawMetaid, myModel)
     } catch {
       case ex:thewebsemantic.NotFoundException =>
-        Console.println("Bean of " + Constraint.getClass + "and " +
+        Console.println("Bean of " + KineticLaw.getClass + "and " +
                         "id is not found")
         ex.printStackTrace()
         null
@@ -61,8 +63,8 @@ class ConstraintsDAO {
     }
   }
 
-  def loadConstraint(constraintMetaid:String, model:Model):Constraint = {
-    var ret:Constraint = null
+  def loadKineticLaw(kineticLawMetaid:String, model:Model):KineticLaw = {
+    var ret:KineticLaw = null
 
     Console.print("After loading Jena Model")
     Console.print("Jena Model content")
@@ -71,20 +73,19 @@ class ConstraintsDAO {
         PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
         PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
         SELECT ?s WHERE
-        { ?s rdf:type sbml:Constraint .
-        """ +  "?s sbml:metaid \"" + constraintMetaid + "\"^^<http://www.w3.org/2001/XMLSchema#string> } "
+        { ?s rdf:type sbml:KineticLaw .
+        """ +  "?s sbml:metaid \"" + kineticLawMetaid + "\"^^<http://www.w3.org/2001/XMLSchema#string> } "
 
-    val l:java.util.LinkedList[Constraint]
-    = Sparql.exec(model, classOf[Constraint], queryString)
-    Console.println("Found " + l.size + " Constraints with metaid " + constraintMetaid)
+    val l:java.util.LinkedList[KineticLaw]
+    = Sparql.exec(model, classOf[KineticLaw], queryString)
+    Console.println("Found " + l.size + " KineticLaws with metaid " + kineticLawMetaid)
     if(l.size > 0)
       l.iterator.next
     else null
   }
 
-  def loadConstraintsInModel(modelMetaId:String,
-                            model:Model):java.util.Collection[Constraint] = {
-    val c =
+  def loadKineticLawInReaction(reactionMetaId:String,
+                    model:Model):KineticLaw  = {
     Console.print("After loading Jena Model")
     Console.print("Jena Model content")
     val queryString =
@@ -92,76 +93,69 @@ class ConstraintsDAO {
         PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
         PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
         SELECT ?s WHERE
-        { ?m rdf:type sbml:Model .
-          ?m sbml:metaid """" + modelMetaId + """"^^<http://www.w3.org/2001/XMLSchema#string> .
-          ?m sbml:hasConstraint ?s .
-          ?s rdf:type sbml:Constraint .
+        { ?m rdf:type sbml:Reaction .
+          ?m sbml:metaid """" + reactionMetaId + """"^^<http://www.w3.org/2001/XMLSchema#string> .
+          ?m sbml:kineticLaw ?s .
+          ?s rdf:type sbml:KineticLaw .
          } """
 
-    val l:java.util.LinkedList[Constraint]
-    = Sparql.exec(model, classOf[Constraint], queryString)
-    Console.println("Found " + l.size + " Constraints from model " + modelMetaId)
-    if(l.size > 0)
-      l
-    else null
+    val l:java.util.LinkedList[KineticLaw]
+    = Sparql.exec(model, classOf[KineticLaw], queryString)
+    Console.println("Found " + l.size + " KineticLaws from reaction " + reactionMetaId)
+    if(l.size > 0){
+      l.iterator.next.asInstanceOf[KineticLaw]
+    }else null
   }
 
-  def loadConstraint():java.util.Collection[Constraint] = {
+  def loadKineticLaw():java.util.Collection[KineticLaw] = {
     try{
       val myModel:Model = ManipulatorWrapper.loadModelfromDB
       Console.print("After loading Jena Model")
       var reader = new RDF2Bean(myModel)
       Console.print("After creating a new RDF2Bean")
-      val l:java.util.List[Constraint] = reader.load(new Constraint().getClass )
-      .asInstanceOf[java.util.List[Constraint]]
+      val l:java.util.List[KineticLaw] = reader.load(new KineticLaw().getClass )
+      .asInstanceOf[java.util.List[KineticLaw]]
       l
     } catch {
       case ex:thewebsemantic.NotFoundException =>
-        Console.println("Bean of " + Constraint.getClass + "and id is not found")
+        Console.println("Bean of " + KineticLaw.getClass + "and id is not found")
         ex.printStackTrace()
         null
     }
   }
 
-
-
   /**
-   * Saves an Constraint into the KnowledgeBase
+   * Saves an KineticLaw into the KnowledgeBase
    * @param  true if
    * @return true if
    */
-  def createConstraint(constraint:Constraint):Boolean = {
-    var ret = false
-    var myModel:Model = null
+  def createKineticLaw(kineticLaw:KineticLaw):Boolean = {
     try{
-      myModel = ManipulatorWrapper.loadModelfromDB
-      myModel.begin
-      ret = createConstraint(constraint, myModel)
-      myModel.commit
+      val myModel:Model = ManipulatorWrapper.loadModelfromDB
+      createKineticLaw(kineticLaw, myModel)
     } catch {
       case ex:Exception => {
-          Console.println("Saving model " + constraint +
+          Console.println("Saving kineticLaw " + kineticLaw +
                           "was not possible")
           ex.printStackTrace
 
           false
         }
     }
-    ret
   }
 
   /**
-   * Creates a new SBML model individual in the Knowledgebase
-   * @return true if creating the new model was possible and false otherwise
+   * Creates a new SBML kineticLaw individual in the Knowledgebase
+   * @return true if creating the new kineticLaw was possible and false otherwise
    */
-  def createConstraint(constraint:Constraint, model:Model):Boolean = {
+  def createKineticLaw(kineticLaw:KineticLaw, model:Model):Boolean = {
     try{
       val writer = new Bean2RDF(model)
-      writer.save(constraint)
+      writer.save(kineticLaw)
       true
     } catch {
       case ex:thewebsemantic.NotFoundException => {
-          Console.println("Bean of " + Constraint.getClass + "and " +
+          Console.println("Bean of " + KineticLaw.getClass + "and " +
                           "id is not found")
           ex.printStackTrace()
           false
@@ -174,14 +168,14 @@ class ConstraintsDAO {
     }
   }
 
-  def trytoCreateConstraintInModel(modelMetaid:String,
-                                   constraint:Constraint):String = {
+  def trytoCreateKineticLawInReaction(reactionMetaid:String,
+                                  kineticLaw:KineticLaw):String = {
     try{
       val myModel:Model = ManipulatorWrapper.loadModelfromDB
-      trytoCreateConstraintInModel(modelMetaid, constraint, myModel)
+      trytoCreateKineticLawInReaction(reactionMetaid, kineticLaw, myModel)
     } catch {
       case ex:thewebsemantic.NotFoundException => {
-          Console.println("Bean of " + Constraint.getClass + "and " +
+          Console.println("Bean of " + KineticLaw.getClass + "and " +
                           "id is not found")
           ex.printStackTrace()
           null
@@ -193,40 +187,39 @@ class ConstraintsDAO {
     }
   }
 
-  def trytoCreateConstraintInModel(modelMetaid:String,
-                                   constraint:Constraint,
-                                   model:Model):String = {
-    if(sbmlModelsDAO.modelMetaidExists(modelMetaid)){
-      val constraintMetaid = trytoCreateConstraint(constraint, model)
-      if(constraintMetaid != null){
-
+  def trytoCreateKineticLawInReaction(reactionMetaid:String,
+                                  kineticLaw:KineticLaw,
+                                  model:Model):String = {
+    if(reactionsDAO.reactionMetaidExists(reactionMetaid)){
+      val kineticLawMetaid = trytoCreateKineticLaw(kineticLaw, model)
+      if(kineticLawMetaid != null){
         //Jena API used directly
-        val sbmlModelRes = model.createResource(
-          NS.sbml + "Model/" + modelMetaid)
-        val constraintRes = model.createResource(
-          NS.sbml + "Constraint/" + constraintMetaid)
+        val reactionRes = model.createResource(
+          NS.sbml + "Reaction/" + reactionMetaid)
+        val kineticLawRes = model.createResource(
+          NS.sbml + "KineticLaw/" + kineticLawMetaid)
 
-        sbmlModelRes.addProperty(model
-                                 .getProperty(NS.sbml + "hasPArameter"),
-                                 constraintRes)
-        constraintMetaid
+        reactionRes.addProperty(model
+                                 .getProperty(NS.sbml + "kineticLaw"),
+                                 kineticLawRes)
+        kineticLawMetaid
       } else null
     } else null
   }
 
   /**
-   * Method that creates a new Model in the KnowledgeBase after checking
-   * if everything is valid with the model that is being created
+   * Method that creates a new KineticLaw in the KnowledgeBase after checking
+   * if everything is valid with the kineticLaw that is being created
    * This method also issues an available metaid
    *
    */
-  def trytoCreateConstraint(constraint:Constraint):String = {
+  def trytoCreateKineticLaw(kineticLaw:KineticLaw):String = {
     try{
       val myModel:Model = ManipulatorWrapper.loadModelfromDB
-      trytoCreateConstraint(constraint, myModel)
+      trytoCreateKineticLaw(kineticLaw, myModel)
     } catch {
       case ex:thewebsemantic.NotFoundException => {
-          Console.println("Bean of " + Constraint.getClass + "and " +
+          Console.println("Bean of " + KineticLaw.getClass + "and " +
                           "id is not found")
           ex.printStackTrace()
           null
@@ -238,28 +231,28 @@ class ConstraintsDAO {
     }
   }
 
-  def trytoCreateConstraint(constraint:Constraint, model:Model):String = {
-    if( if( sbmlModelsDAO.metaidExists(constraint.metaid ) == false ){
-        createConstraint(constraint, model)
+  def trytoCreateKineticLaw(kineticLaw:KineticLaw, model:Model):String = {
+    if( if( sbmlModelsDAO.metaidExists(kineticLaw.metaid ) == false ){
+        createKineticLaw(kineticLaw, model)
       } else {
-        constraint.metaid = sbmlModelsDAO.generateNewMetaIdFrom(constraint,
-                                                                model)
-        createConstraint(constraint,
-                         model)
+        kineticLaw.metaid = sbmlModelsDAO.generateNewMetaIdFrom(kineticLaw,
+                                                               model)
+        createKineticLaw(kineticLaw,
+                        model)
       } == true)
     {
-      constraint.metaid
+      kineticLaw.metaid
     } else null
 
   }
 
-  def constraintMetaidExists(metaid:String):Boolean = {
+  def kineticLawMetaidExists(metaid:String):Boolean = {
     try{
       val myModel:Model = ManipulatorWrapper.loadModelfromDB
-      constraintMetaidExists(metaid, myModel)
+      kineticLawMetaidExists(metaid, myModel)
     } catch {
       case ex:thewebsemantic.NotFoundException => {
-          Console.println("Bean of " + Constraint.getClass + "and " +
+          Console.println("Bean of " + KineticLaw.getClass + "and " +
                           "id is not found")
           ex.printStackTrace()
           false
@@ -271,7 +264,7 @@ class ConstraintsDAO {
     }
   }
 
-  def constraintMetaidExists(metaid:String, model:Model):Boolean = {
+  def kineticLawMetaidExists(metaid:String, model:Model):Boolean = {
     //val reasoner:Reasoner = ReasonerRegistry.getOWLReasoner
     //val ontModelSpec:OntModelSpec = null
     //val ont:OntModel = ModelFactory.createOntologyModel(ontModelSpec, model)
@@ -281,7 +274,7 @@ class ConstraintsDAO {
         PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
         PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
         ASK
-        { ?s rdf:type sbml:Constraint .
+        { ?s rdf:type sbml:KineticLaw .
         """ +  "?s sbml:metaid \"" + metaid + "\"^^<http://www.w3.org/2001/XMLSchema#string> } "
 
     val query:Query = QueryFactory.create(queryString);
@@ -294,17 +287,17 @@ class ConstraintsDAO {
   }
     
   /**
-   * Updates a Constraint into the KnowledgeBase
+   * Updates a KineticLaw into the KnowledgeBase
    * @param  true if
    * @return true if
    */
-  def updateConstraint(constraint:Constraint):Boolean = {
+  def updateKineticLaw(kineticLaw:KineticLaw):Boolean = {
     try{
       val myModel:Model = ManipulatorWrapper.loadModelfromDB
-      updateConstraint(constraint, myModel)
+      updateKineticLaw(kineticLaw, myModel)
     } catch {
       case ex:thewebsemantic.NotFoundException => {
-          Console.println("Bean of " + Constraint.getClass + "and " +
+          Console.println("Bean of " + KineticLaw.getClass + "and " +
                           "id is not found")
           ex.printStackTrace()
           false
@@ -318,30 +311,30 @@ class ConstraintsDAO {
   }
 
   /**
-   * Updates a Constraint individual in the Knowledgebase
-   * @return true if creating the new model was possible and false otherwise
+   * Updates a KineticLaw individual in the Knowledgebase
+   * @return true if creating the new mkineticLaw was possible and false otherwise
    */
-  def updateConstraint(constraint:Constraint, model:Model):Boolean = {
-    if( sbmlModelsDAO.metaidExists(constraint.metaid ) ){
+  def updateKineticLaw(kineticLaw:KineticLaw, model:Model):Boolean = {
+    if( sbmlModelsDAO.metaidExists(kineticLaw.metaid ) ){
       val writer = new Bean2RDF(model)
-      writer.save(constraint)
+      writer.save(kineticLaw)
       true
     } else false
   }
 
 
   /**
-   * Deletes an Constraint in the KnowledgeBase
+   * Deletes an KineticLaw in the KnowledgeBase
    * @param  true if
    * @return true if
    */
-  def deleteConstraint(constraint:Constraint):Boolean = {
+  def deleteKineticLaw(kineticLaw:KineticLaw):Boolean = {
     try{
       val myModel:Model = ManipulatorWrapper.loadModelfromDB
-      deleteConstraint(constraint, myModel)
+      deleteKineticLaw(kineticLaw, myModel)
     } catch {
       case ex:Exception => {
-          Console.println("Deleting model " + constraint +
+          Console.println("Deleting kineticLaw " + kineticLaw +
                           "was not possible")
           ex.printStackTrace
 
@@ -351,20 +344,20 @@ class ConstraintsDAO {
   }
 
   /**
-   * Deletes an Constraint in the KnowledgeBase
-   * @return true if creating the new model was possible and false otherwise
+   * Deletes an KineticLaw in the KnowledgeBase
+   * @return true if deleting the new kineticLaw was possible and false otherwise
    */
-  def deleteConstraint(constraint:Constraint, model:Model):Boolean = {
+  def deleteKineticLaw(kineticLaw:KineticLaw, model:Model):Boolean = {
     try{
-      if( constraintMetaidExists(constraint.metaid ) ){
+      if( kineticLawMetaidExists(kineticLaw.metaid ) ){
         val writer = new Bean2RDF(model)
-        writer.delete(constraint)
+        writer.delete(kineticLaw)
         //TODO delete subelements
         true
       } else false
     } catch {
       case ex:thewebsemantic.NotFoundException => {
-          Console.println("Bean of " + Constraint.getClass + "and " +
+          Console.println("Bean of " + KineticLaw.getClass + "and " +
                           "id is not found")
           ex.printStackTrace()
           false

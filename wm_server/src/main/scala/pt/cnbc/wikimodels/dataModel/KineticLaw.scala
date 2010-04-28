@@ -8,10 +8,10 @@
 
 package pt.cnbc.wikimodels.dataModel
 
-//import org.scala_tools.javautils.Imports._
+import scalaj.collection.Imports._
 
-import scala.reflect.BeanInfo
 import scala.collection.JavaConversions._
+import scala.reflect.BeanInfo
 import scala.xml.Elem
 import scala.xml.Group
 import scala.xml.Node
@@ -46,6 +46,10 @@ case class KineticLaw extends Element{
         this((new SBMLHandler).toStringOrNull((xmlKineticLaw \ "@metaid").text),
              (new SBMLHandler).checkCurrentLabelForNotes(xmlKineticLaw),
              (xmlKineticLaw \ "math"))
+        this.listOfParameters =
+          (xmlKineticLaw \ "listOfParameters" \ "parameter")
+          .map(i => new Parameter(i.asInstanceOf[scala.xml.Elem])).asJava
+
     }
 
     override def toXML:Elem = {

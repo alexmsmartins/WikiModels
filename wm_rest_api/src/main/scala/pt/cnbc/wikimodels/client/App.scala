@@ -232,43 +232,43 @@ s      browseNonExistantSpeciesTest
 
       /*log.info("======================" )
       testNumber+=1
-      log.info("TEST " + testNumber + " - deleteNonExistantCompartment" )
-      deleteNonExistantCompartmentTest
+      log.info("TEST " + testNumber + " - deleteNonExistantConstraint" )
+      deleteNonExistantConstraintTest
       log.info("SUCCESS" )
       log.info("======================" )
       testNumber+=1
-      log.info("TEST " + testNumber + " - editCompartmentBeforeCreation" )
-      editCompartmentBeforeCreationTest
+      log.info("TEST " + testNumber + " - editConstraintBeforeCreation" )
+      editConstraintBeforeCreationTest
       log.info("SUCCESS" )
       log.info("======================" )
       testNumber+=1
-      log.info("TEST " + testNumber + " - CreateCompartment" )
-      createCompartmentTest
+      log.info("TEST " + testNumber + " - CreateConstraint" )
+      createConstraintTest
       log.info("SUCCESS" )
       log.info("======================" )
       testNumber+=1
-      log.info("TEST " + testNumber + " - CreateAnotherCompartment" )
-      createAnotherCompartmentTest
+      log.info("TEST " + testNumber + " - CreateAnotherConstraint" )
+      createAnotherConstraintTest
       log.info("SUCCESS" )
       log.info("======================" )
       testNumber+=1
-      log.info("TEST " + testNumber + " - BrowseCompartment" )
-      browseCompartmentTest
+      log.info("TEST " + testNumber + " - BrowseConstraint" )
+      browseConstraintTest
       log.info("SUCCESS" )
       log.info("======================" )
       testNumber+=1
-      log.info("TEST " + testNumber + " - BrowseNonExistantCompartment" )
-      browseNonExistantCompartmentTest
+      log.info("TEST " + testNumber + " - BrowseNonExistantConstraint" )
+      browseNonExistantConstraintTest
       log.info("SUCCESS" )
       log.info("======================" )
       testNumber+=1
-      log.info("TEST " + testNumber + " - EditCompartment" )
-      editCompartmentTest
+      log.info("TEST " + testNumber + " - EditConstraint" )
+      editConstraintTest
       log.info("SUCCESS" )
       log.info("======================" )
       testNumber+=1
-      log.info("TEST " + testNumber + " - DeleteCompartment2" )
-      deleteCompartmentTest
+      log.info("TEST " + testNumber + " - DeleteConstraint2" )
+      deleteConstraintTest
       log.info("SUCCESS" )*/
 
       //------------- FunctionDefinition integration tests -------------

@@ -37,6 +37,7 @@ import pt.cnbc.wikimodels.dataModel.Comment
 import pt.cnbc.wikimodels.dataModel.Element
 import pt.cnbc.wikimodels.dataModel.SBMLModels
 import pt.cnbc.wikimodels.exceptions.NotImplementedException
+import pt.cnbc.wikimodels.exceptions.BadFormatException
 import pt.cnbc.wikimodels.ontology.ManipulatorWrapper
 import com.hp.hpl.jena.rdf.model.InfModel
 import thewebsemantic.Sparql
@@ -83,37 +84,35 @@ class SBMLModelsDAO {
     val l:java.util.LinkedList[SBMLModel]
     = Sparql.exec(model, classOf[SBMLModel], queryString)
     Console.println("Found " + l.size + " SBMLModels with metaid " + modelMetaid)
-    val sbmlmodel = if(l.size > 0){
-      Console.println("Found model\n" + l.iterator.next.toXML.toString)
-      l.iterator.next
+
+    if(l.size > 0){
+      val sbmlmodel = l.iterator.next
+
+      val funcDefDAO = new FunctionDefinitionsDAO()
+      sbmlmodel.listOfFunctionDefinitions = funcDefDAO.loadFunctionDefinitionsInModel(
+          sbmlmodel.metaid, model)
+
+      val compDAO = new CompartmentsDAO()
+      sbmlmodel.listOfCompartments = compDAO.loadCompartmentsInModel(
+          sbmlmodel.metaid, model)
+
+      val speciesDAO = new SpeciessDAO()
+      sbmlmodel.listOfSpecies = speciesDAO.loadSpeciesInModel(
+          sbmlmodel.metaid, model)
+
+      val paramDAO = new ParametersDAO()
+      sbmlmodel.listOfParameters = paramDAO.loadParametersInModel(
+        sbmlmodel.metaid, model)
+
+      val constDAO = new ConstraintsDAO()
+      sbmlmodel.listOfConstraints = constDAO.loadConstraintsInModel(
+          sbmlmodel.metaid, model)
+
+      val reactDAO = new ReactionsDAO()
+      sbmlmodel.listOfReactions = reactDAO.loadReactionsInModel(
+          sbmlmodel.metaid, model)
+      sbmlmodel
     } else null
-
-
-    val funcDefDAO = new FunctionDefinitionsDAO()
-    sbmlmodel.listOfFunctionDefinitions = funcDefDAO.loadFunctionDefinitionsInModel(
-        sbmlmodel.metaid, model)
-
-    val compDAO = new CompartmentsDAO()
-    sbmlmodel.listOfCompartments = compDAO.loadCompartmentsInModel(
-        sbmlmodel.metaid, model)
-
-    val speciesDAO = new SpeciessDAO()
-    sbmlmodel.listOfSpecies = speciesDAO.loadSpeciesInModel(
-        sbmlmodel.metaid, model)
-
-    val paramDAO = new ParametersDAO()
-    sbmlmodel.listOfParameters = paramDAO.loadParametersInModel(
-      sbmlmodel.metaid, model)
-
-    val constDAO = new ConstraintsDAO()
-    sbmlmodel.listOfConstraints = constDAO.loadConstraintsInModel(
-        sbmlmodel.metaid, model)
-
-    val reactDAO = new ReactionsDAO()
-    sbmlmodel.listOfReactions = reactDAO.loadReactionsInModel(
-        sbmlmodel.metaid, model)
-
-    sbmlmodel
   }
 
 
@@ -171,38 +170,49 @@ class SBMLModelsDAO {
   def createSBMLModel(sbmlmodel:SBMLModel, model:Model):Boolean = {
     try{
       val writer = new Bean2RDF(model)
+      //Code to keep save from saving the subelements since we need to check if their metaids already exist
+      val tmpsbmlmodel = new SBMLModel()
+      tmpsbmlmodel.listOfFunctionDefinitions = sbmlmodel.listOfFunctionDefinitions
+      sbmlmodel.listOfFunctionDefinitions = null
+      tmpsbmlmodel.listOfCompartments = sbmlmodel.listOfCompartments
+      sbmlmodel.listOfCompartments = null
+      tmpsbmlmodel.listOfSpecies = sbmlmodel.listOfSpecies
+      sbmlmodel.listOfSpecies = null
+      tmpsbmlmodel.listOfParameters = sbmlmodel.listOfParameters
+      sbmlmodel.listOfParameters = null
+      tmpsbmlmodel.listOfConstraints = sbmlmodel.listOfConstraints
+      sbmlmodel.listOfConstraints = null
+      tmpsbmlmodel.listOfReactions = sbmlmodel.listOfReactions
+      sbmlmodel.listOfReactions = null
+
       writer.save(sbmlmodel)
       val funcDefDAO = new FunctionDefinitionsDAO()
-      sbmlmodel.listOfFunctionDefinitions.map(
+      tmpsbmlmodel.listOfFunctionDefinitions.map(
         funcDefDAO.trytoCreateFunctionDefinitionInModel(
           sbmlmodel.metaid, _, model))
 
       val compDAO = new CompartmentsDAO()
-      sbmlmodel.listOfCompartments.map(
+      tmpsbmlmodel.listOfCompartments.map(
         compDAO.trytoCreateCompartmentInModel(
           sbmlmodel.metaid, _, model))
 
       val speciesDAO = new SpeciessDAO()
-
-      sbmlmodel.listOfSpecies.map(
+      tmpsbmlmodel.listOfSpecies.map(
         speciesDAO.trytoCreateSpeciesInModel(
           sbmlmodel.metaid, _, model))
 
       val paramDAO = new ParametersDAO()
-
-      sbmlmodel.listOfParameters.map(
+      tmpsbmlmodel.listOfParameters.map(
         paramDAO.trytoCreateParameterInModel(
           sbmlmodel.metaid, _, model))
 
       val constDAO = new ConstraintsDAO()
-
-      sbmlmodel.listOfConstraints.map(
+      tmpsbmlmodel.listOfConstraints.map(
         constDAO.trytoCreateConstraintInModel(
           sbmlmodel.metaid, _, model))
 
       val reactDAO = new ReactionsDAO()
-
-      sbmlmodel.listOfReactions.map(
+      tmpsbmlmodel.listOfReactions.map(
         reactDAO.trytoCreateReactionInModel(
           sbmlmodel.metaid, _, model))
       true
@@ -273,11 +283,8 @@ class SBMLModelsDAO {
   def generateNewMetaIdFrom(sbmlentity:Element, model:Model):String = {
     if(sbmlentity.metaid == null || sbmlentity.metaid.trim == ""){
       if(sbmlentity.theId == null || sbmlentity.theId.trim == ""){
-        if(sbmlentity.theName == null || sbmlentity.theName.trim == ""){
-          generateNewMetaIdFromString("", model)
-        } else {
-          generateNewMetaIdFromString(sbmlentity.theName, model)
-        }
+        throw new BadFormatException("ids are mandatory")
+        null
       } else {
         generateNewMetaIdFromString(sbmlentity.theId, model)
       }
@@ -363,10 +370,10 @@ class SBMLModelsDAO {
   }
 
   def modelMetaidExists(metaid:String, model:Model):Boolean = {
-    val reasoner:Reasoner = ReasonerRegistry.getOWLReasoner
+    //val reasoner:Reasoner = ReasonerRegistry.getOWLReasoner
     //val ontModelSpec:OntModelSpec = null
     //val ont:OntModel = ModelFactory.createOntologyModel(ontModelSpec, model)
-    val ont:InfModel = ModelFactory.createInfModel(reasoner, model)
+    //val ont:InfModel = ModelFactory.createInfModel(reasoner, model)
     val queryString =
       """
         PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
@@ -376,7 +383,7 @@ class SBMLModelsDAO {
         """ +  "?s sbml:metaid \"" + metaid + "\"^^<http://www.w3.org/2001/XMLSchema#string> } "
 
     val query:Query = QueryFactory.create(queryString);
-    val qe:QueryExecution = QueryExecutionFactory.create(query, ont);
+    val qe:QueryExecution = QueryExecutionFactory.create(query, model);
     val results:Boolean = qe.execAsk;
 
     Console.println("SPARQL query \n" + queryString + "\nIs " + results)
@@ -403,10 +410,10 @@ class SBMLModelsDAO {
   }
 
   def modelIdExists(id:String, model:Model):Boolean = {
-    val reasoner:Reasoner = ReasonerRegistry.getOWLReasoner
+    //val reasoner:Reasoner = ReasonerRegistry.getOWLReasoner
     //val ontModelSpec:OntModelSpec = null
     //val ont:OntModel = ModelFactory.createOntologyModel(ontModelSpec, model)
-    val ont:InfModel = ModelFactory.createInfModel(reasoner, model)
+    //val ont:InfModel = ModelFactory.createInfModel(reasoner, model)
     val queryString =
       """
         PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
@@ -416,7 +423,7 @@ class SBMLModelsDAO {
         """ +  "?s sbml:id \"" + id + "\"^^<http://www.w3.org/2001/XMLSchema#string> } "
 
     val query:Query = QueryFactory.create(queryString);
-    val qe:QueryExecution = QueryExecutionFactory.create(query, ont);
+    val qe:QueryExecution = QueryExecutionFactory.create(query, model);
     val results:Boolean = qe.execAsk;
     Console.println("SPARQL query \n" + queryString + "\nIs " + results)
     results

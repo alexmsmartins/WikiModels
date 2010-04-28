@@ -265,10 +265,10 @@ class ParametersDAO {
   }
 
   def parameterMetaidExists(metaid:String, model:Model):Boolean = {
-    val reasoner:Reasoner = ReasonerRegistry.getOWLReasoner
+    //val reasoner:Reasoner = ReasonerRegistry.getOWLReasoner
     //val ontModelSpec:OntModelSpec = null
     //val ont:OntModel = ModelFactory.createOntologyModel(ontModelSpec, model)
-    val ont:InfModel = ModelFactory.createInfModel(reasoner, model)
+    //val ont:InfModel = ModelFactory.createInfModel(reasoner, model)
     val queryString =
       """
         PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
@@ -278,7 +278,7 @@ class ParametersDAO {
         """ +  "?s sbml:metaid \"" + metaid + "\"^^<http://www.w3.org/2001/XMLSchema#string> } "
 
     val query:Query = QueryFactory.create(queryString);
-    val qe:QueryExecution = QueryExecutionFactory.create(query, ont);
+    val qe:QueryExecution = QueryExecutionFactory.create(query, model);
     val results:Boolean = qe.execAsk;
 
     Console.println("SPARQL query \n" + queryString + "\nIs " + results)

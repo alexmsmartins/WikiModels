@@ -75,18 +75,18 @@
     <rdf:Description>
         <rdf:type rdf:resource="&owl;Axiom"/>
         <acetext:acetext rdf:datatype="&xsd;string"
-            >Everything that compartments something is a Species.</acetext:acetext>
-        <owl:object rdf:resource="#Species"/>
-        <owl:subject rdf:resource="#compartment"/>
-        <owl:predicate rdf:resource="&rdfs;domain"/>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;Axiom"/>
-        <acetext:acetext rdf:datatype="&xsd;string"
             >Everything that is compartmented by something is a Compartment.</acetext:acetext>
         <owl:object rdf:resource="#Compartment"/>
         <owl:subject rdf:resource="#compartment"/>
         <owl:predicate rdf:resource="&rdfs;range"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >Everything that compartments something is a Species.</acetext:acetext>
+        <owl:object rdf:resource="#Species"/>
+        <owl:subject rdf:resource="#compartment"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
     </rdf:Description>
     
 
@@ -148,18 +148,18 @@
     <rdf:Description>
         <rdf:type rdf:resource="&owl;Axiom"/>
         <acetext:acetext rdf:datatype="&xsd;string"
-            >Everything that hasParameters something is a Model.</acetext:acetext>
-        <owl:object rdf:resource="#Model"/>
+            >Everything that hasParameters something is a KineticLaw.</acetext:acetext>
+        <owl:object rdf:resource="#KineticLaw"/>
         <owl:subject rdf:resource="#hasParameter"/>
         <owl:predicate rdf:resource="&rdfs;domain"/>
     </rdf:Description>
     <rdf:Description>
         <rdf:type rdf:resource="&owl;Axiom"/>
         <acetext:acetext rdf:datatype="&xsd;string"
-            >Everything that is hasParametered by something is a Parameter.</acetext:acetext>
-        <owl:object rdf:resource="#Parameter"/>
+            >Everything that hasParameters something is a Model.</acetext:acetext>
+        <owl:object rdf:resource="#Model"/>
         <owl:subject rdf:resource="#hasParameter"/>
-        <owl:predicate rdf:resource="&rdfs;range"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
     </rdf:Description>
     <rdf:Description>
         <rdf:type rdf:resource="&owl;Axiom"/>
@@ -172,10 +172,10 @@
     <rdf:Description>
         <rdf:type rdf:resource="&owl;Axiom"/>
         <acetext:acetext rdf:datatype="&xsd;string"
-            >Everything that hasParameters something is a KineticLaw.</acetext:acetext>
-        <owl:object rdf:resource="#KineticLaw"/>
+            >Everything that is hasParametered by something is a Parameter.</acetext:acetext>
+        <owl:object rdf:resource="#Parameter"/>
         <owl:subject rdf:resource="#hasParameter"/>
-        <owl:predicate rdf:resource="&rdfs;domain"/>
+        <owl:predicate rdf:resource="&rdfs;range"/>
     </rdf:Description>
     
 
@@ -194,18 +194,10 @@
     <rdf:Description>
         <rdf:type rdf:resource="&owl;Axiom"/>
         <acetext:acetext rdf:datatype="&xsd;string"
-            >If X hasParts something that hasParts Y then X hasParts Y.</acetext:acetext>
-        <owl:subject rdf:resource="#hasPart"/>
-        <owl:predicate rdf:resource="&rdf;type"/>
-        <owl:object rdf:resource="&owl;TransitiveProperty"/>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;Axiom"/>
-        <acetext:acetext rdf:datatype="&xsd;string"
-            >Everything that is hasParted by something is an Element.</acetext:acetext>
+            >Everything that hasParts something is an Element.</acetext:acetext>
         <owl:object rdf:resource="#Element"/>
         <owl:subject rdf:resource="#hasPart"/>
-        <owl:predicate rdf:resource="&rdfs;range"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
     </rdf:Description>
     <rdf:Description>
         <rdf:type rdf:resource="&owl;Axiom"/>
@@ -218,10 +210,18 @@
     <rdf:Description>
         <rdf:type rdf:resource="&owl;Axiom"/>
         <acetext:acetext rdf:datatype="&xsd;string"
-            >Everything that hasParts something is an Element.</acetext:acetext>
+            >If X hasParts something that hasParts Y then X hasParts Y.</acetext:acetext>
+        <owl:subject rdf:resource="#hasPart"/>
+        <owl:predicate rdf:resource="&rdf;type"/>
+        <owl:object rdf:resource="&owl;TransitiveProperty"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >Everything that is hasParted by something is an Element.</acetext:acetext>
         <owl:object rdf:resource="#Element"/>
         <owl:subject rdf:resource="#hasPart"/>
-        <owl:predicate rdf:resource="&rdfs;domain"/>
+        <owl:predicate rdf:resource="&rdfs;range"/>
     </rdf:Description>
     
 
@@ -239,6 +239,8 @@
     <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#hasReactant -->
 
     <owl:ObjectProperty rdf:about="#hasReactant">
+        <rdfs:domain rdf:resource="#Reaction"/>
+        <rdfs:range rdf:resource="#SpeciesReference"/>
         <rdfs:subPropertyOf rdf:resource="#hasPart"/>
     </owl:ObjectProperty>
     
@@ -264,9 +266,20 @@
     
 
 
+    <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#kineticLaw -->
+
+    <owl:ObjectProperty rdf:about="#kineticLaw">
+        <rdfs:range rdf:resource="#KineticLaw"/>
+        <rdfs:domain rdf:resource="#Reaction"/>
+    </owl:ObjectProperty>
+    
+
+
     <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#modifierOf -->
 
     <owl:ObjectProperty rdf:about="#modifierOf">
+        <rdfs:domain rdf:resource="#ModifierSpeciesReference"/>
+        <rdfs:range rdf:resource="#Reaction"/>
         <rdfs:subPropertyOf rdf:resource="#partOf"/>
     </owl:ObjectProperty>
     
@@ -287,18 +300,18 @@
     <rdf:Description>
         <rdf:type rdf:resource="&owl;Axiom"/>
         <acetext:acetext rdf:datatype="&xsd;string"
-            >Everything that outsides something is a Compartment.</acetext:acetext>
-        <owl:object rdf:resource="#Compartment"/>
-        <owl:subject rdf:resource="#outside"/>
-        <owl:predicate rdf:resource="&rdfs;domain"/>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;Axiom"/>
-        <acetext:acetext rdf:datatype="&xsd;string"
             >If X outsides something that outsides Y then X outsides Y.</acetext:acetext>
         <owl:subject rdf:resource="#outside"/>
         <owl:predicate rdf:resource="&rdf;type"/>
         <owl:object rdf:resource="&owl;TransitiveProperty"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >Everything that outsides something is a Compartment.</acetext:acetext>
+        <owl:object rdf:resource="#Compartment"/>
+        <owl:subject rdf:resource="#outside"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
     </rdf:Description>
     <rdf:Description>
         <rdf:type rdf:resource="&owl;Axiom"/>
@@ -332,18 +345,18 @@
     <rdf:Description>
         <rdf:type rdf:resource="&owl;Axiom"/>
         <acetext:acetext rdf:datatype="&xsd;string"
-            >Everything that partOfs something is an Element.</acetext:acetext>
-        <owl:object rdf:resource="#Element"/>
-        <owl:subject rdf:resource="#partOf"/>
-        <owl:predicate rdf:resource="&rdfs;domain"/>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;Axiom"/>
-        <acetext:acetext rdf:datatype="&xsd;string"
             >If X hasParts Y then Y partOfs X. If X partOfs Y then Y hasParts X.</acetext:acetext>
         <owl:subject rdf:resource="#hasPart"/>
         <owl:object rdf:resource="#partOf"/>
         <owl:predicate rdf:resource="&owl;inverseOf"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >Everything that partOfs something is an Element.</acetext:acetext>
+        <owl:object rdf:resource="#Element"/>
+        <owl:subject rdf:resource="#partOf"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
     </rdf:Description>
     
 
@@ -355,7 +368,7 @@
         <ace_lexicon:vbg rdf:datatype="&xsd;string">productOfed</ace_lexicon:vbg>
         <ace_lexicon:sg rdf:datatype="&xsd;string">productOfs</ace_lexicon:sg>
         <rdfs:range rdf:resource="#Reaction"/>
-        <rdfs:domain rdf:resource="#Species"/>
+        <rdfs:domain rdf:resource="#SpeciesReference"/>
         <owl:inverseOf rdf:resource="#hasProduct"/>
         <rdfs:subPropertyOf rdf:resource="#partOf"/>
     </owl:ObjectProperty>
@@ -366,14 +379,6 @@
         <owl:object rdf:resource="#partOf"/>
         <owl:subject rdf:resource="#productOf"/>
         <owl:predicate rdf:resource="&rdfs;subPropertyOf"/>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;Axiom"/>
-        <acetext:acetext rdf:datatype="&xsd;string"
-            >Everything that productOfs something is a Species.</acetext:acetext>
-        <owl:object rdf:resource="#Species"/>
-        <owl:subject rdf:resource="#productOf"/>
-        <owl:predicate rdf:resource="&rdfs;domain"/>
     </rdf:Description>
     <rdf:Description>
         <rdf:type rdf:resource="&owl;Axiom"/>
@@ -400,46 +405,18 @@
     <rdf:Description>
         <rdf:type rdf:resource="&owl;Axiom"/>
         <acetext:acetext rdf:datatype="&xsd;string"
-            >If X reactantOfs Y then X partOfs Y.</acetext:acetext>
-        <owl:object rdf:resource="#partOf"/>
-        <owl:subject rdf:resource="#reactantOf"/>
-        <owl:predicate rdf:resource="&rdfs;subPropertyOf"/>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;Axiom"/>
-        <acetext:acetext rdf:datatype="&xsd;string"
             >Everything that is reactantOfed by something is a Reaction.</acetext:acetext>
         <owl:object rdf:resource="#Reaction"/>
         <owl:subject rdf:resource="#reactantOf"/>
         <owl:predicate rdf:resource="&rdfs;range"/>
     </rdf:Description>
-    
-
-
-    <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#species -->
-
-    <owl:ObjectProperty rdf:about="#species">
-        <ace_lexicon:pl rdf:datatype="&xsd;string">species</ace_lexicon:pl>
-        <ace_lexicon:vbg rdf:datatype="&xsd;string">speciesed</ace_lexicon:vbg>
-        <ace_lexicon:sg rdf:datatype="&xsd;string">specieses</ace_lexicon:sg>
-        <rdfs:domain rdf:resource="#SimpleSpeciesReference"/>
-        <rdfs:range rdf:resource="#Species"/>
-    </owl:ObjectProperty>
     <rdf:Description>
         <rdf:type rdf:resource="&owl;Axiom"/>
         <acetext:acetext rdf:datatype="&xsd;string"
-            >Everything that is speciesed by something is a Species.</acetext:acetext>
-        <owl:object rdf:resource="#Species"/>
-        <owl:subject rdf:resource="#species"/>
-        <owl:predicate rdf:resource="&rdfs;range"/>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;Axiom"/>
-        <acetext:acetext rdf:datatype="&xsd;string"
-            >Everything that specieses something is a SimpleSpeciesReference.</acetext:acetext>
-        <owl:object rdf:resource="#SimpleSpeciesReference"/>
-        <owl:subject rdf:resource="#species"/>
-        <owl:predicate rdf:resource="&rdfs;domain"/>
+            >If X reactantOfs Y then X partOfs Y.</acetext:acetext>
+        <owl:object rdf:resource="#partOf"/>
+        <owl:subject rdf:resource="#reactantOf"/>
+        <owl:predicate rdf:resource="&rdfs;subPropertyOf"/>
     </rdf:Description>
     
 
@@ -471,18 +448,18 @@
     <rdf:Description>
         <rdf:type rdf:resource="&owl;Axiom"/>
         <acetext:acetext rdf:datatype="&xsd;string"
-            >/*[FunctionalDataProperty(boundarycondition)]*/</acetext:acetext>
-        <owl:subject rdf:resource="#boundarycondition"/>
-        <owl:predicate rdf:resource="&rdf;type"/>
-        <owl:object rdf:resource="&owl;FunctionalProperty"/>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;Axiom"/>
-        <acetext:acetext rdf:datatype="&xsd;string"
             >/*[DataPropertyRange(boundarycondition boolean)]*/</acetext:acetext>
         <owl:subject rdf:resource="#boundarycondition"/>
         <owl:predicate rdf:resource="&rdfs;range"/>
         <owl:object rdf:resource="&xsd;boolean"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[FunctionalDataProperty(boundarycondition)]*/</acetext:acetext>
+        <owl:subject rdf:resource="#boundarycondition"/>
+        <owl:predicate rdf:resource="&rdf;type"/>
+        <owl:object rdf:resource="&owl;FunctionalProperty"/>
     </rdf:Description>
     <rdf:Description>
         <rdf:type rdf:resource="&owl;Axiom"/>
@@ -510,16 +487,16 @@
     <rdf:Description>
         <rdf:type rdf:resource="&owl;Axiom"/>
         <acetext:acetext rdf:datatype="&xsd;string"
-            >/*[DataPropertyDomain(constant Compartment)]*/</acetext:acetext>
-        <owl:object rdf:resource="#Compartment"/>
+            >/*[DataPropertyDomain(constant Parameter)]*/</acetext:acetext>
+        <owl:object rdf:resource="#Parameter"/>
         <owl:subject rdf:resource="#constant"/>
         <owl:predicate rdf:resource="&rdfs;domain"/>
     </rdf:Description>
     <rdf:Description>
         <rdf:type rdf:resource="&owl;Axiom"/>
         <acetext:acetext rdf:datatype="&xsd;string"
-            >/*[DataPropertyDomain(constant Parameter)]*/</acetext:acetext>
-        <owl:object rdf:resource="#Parameter"/>
+            >/*[DataPropertyDomain(constant Compartment)]*/</acetext:acetext>
+        <owl:object rdf:resource="#Compartment"/>
         <owl:subject rdf:resource="#constant"/>
         <owl:predicate rdf:resource="&rdfs;domain"/>
     </rdf:Description>
@@ -534,18 +511,18 @@
     <rdf:Description>
         <rdf:type rdf:resource="&owl;Axiom"/>
         <acetext:acetext rdf:datatype="&xsd;string"
-            >/*[DataPropertyRange(constant boolean)]*/</acetext:acetext>
-        <owl:subject rdf:resource="#constant"/>
-        <owl:predicate rdf:resource="&rdfs;range"/>
-        <owl:object rdf:resource="&xsd;boolean"/>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;Axiom"/>
-        <acetext:acetext rdf:datatype="&xsd;string"
             >/*[FunctionalDataProperty(constant)]*/</acetext:acetext>
         <owl:subject rdf:resource="#constant"/>
         <owl:predicate rdf:resource="&rdf;type"/>
         <owl:object rdf:resource="&owl;FunctionalProperty"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyRange(constant boolean)]*/</acetext:acetext>
+        <owl:subject rdf:resource="#constant"/>
+        <owl:predicate rdf:resource="&rdfs;range"/>
+        <owl:object rdf:resource="&xsd;boolean"/>
     </rdf:Description>
     
 
@@ -563,18 +540,18 @@
     <rdf:Description>
         <rdf:type rdf:resource="&owl;Axiom"/>
         <acetext:acetext rdf:datatype="&xsd;string"
-            >/*[FunctionalDataProperty(fast)]*/</acetext:acetext>
-        <owl:subject rdf:resource="#fast"/>
-        <owl:predicate rdf:resource="&rdf;type"/>
-        <owl:object rdf:resource="&owl;FunctionalProperty"/>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;Axiom"/>
-        <acetext:acetext rdf:datatype="&xsd;string"
             >/*[DataPropertyDomain(fast Reaction)]*/</acetext:acetext>
         <owl:object rdf:resource="#Reaction"/>
         <owl:subject rdf:resource="#fast"/>
         <owl:predicate rdf:resource="&rdfs;domain"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[FunctionalDataProperty(fast)]*/</acetext:acetext>
+        <owl:subject rdf:resource="#fast"/>
+        <owl:predicate rdf:resource="&rdf;type"/>
+        <owl:object rdf:resource="&owl;FunctionalProperty"/>
     </rdf:Description>
     <rdf:Description>
         <rdf:type rdf:resource="&owl;Axiom"/>
@@ -606,6 +583,14 @@
     <rdf:Description>
         <rdf:type rdf:resource="&owl;Axiom"/>
         <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyDomain(id Model)]*/</acetext:acetext>
+        <owl:object rdf:resource="#Model"/>
+        <owl:subject rdf:resource="#id"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
             >/*[DataPropertyDomain(id Reaction)]*/</acetext:acetext>
         <owl:object rdf:resource="#Reaction"/>
         <owl:subject rdf:resource="#id"/>
@@ -614,24 +599,16 @@
     <rdf:Description>
         <rdf:type rdf:resource="&owl;Axiom"/>
         <acetext:acetext rdf:datatype="&xsd;string"
-            >/*[DataPropertyDomain(id FunctionDefinition)]*/</acetext:acetext>
-        <owl:object rdf:resource="#FunctionDefinition"/>
+            >/*[DataPropertyRange(id ID)]*/</acetext:acetext>
         <owl:subject rdf:resource="#id"/>
-        <owl:predicate rdf:resource="&rdfs;domain"/>
+        <owl:predicate rdf:resource="&rdfs;range"/>
+        <owl:object rdf:resource="&xsd;ID"/>
     </rdf:Description>
     <rdf:Description>
         <rdf:type rdf:resource="&owl;Axiom"/>
         <acetext:acetext rdf:datatype="&xsd;string"
-            >/*[DataPropertyDomain(id Species)]*/</acetext:acetext>
-        <owl:object rdf:resource="#Species"/>
-        <owl:subject rdf:resource="#id"/>
-        <owl:predicate rdf:resource="&rdfs;domain"/>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;Axiom"/>
-        <acetext:acetext rdf:datatype="&xsd;string"
-            >/*[DataPropertyDomain(id Model)]*/</acetext:acetext>
-        <owl:object rdf:resource="#Model"/>
+            >/*[DataPropertyDomain(id Compartment)]*/</acetext:acetext>
+        <owl:object rdf:resource="#Compartment"/>
         <owl:subject rdf:resource="#id"/>
         <owl:predicate rdf:resource="&rdfs;domain"/>
     </rdf:Description>
@@ -646,10 +623,18 @@
     <rdf:Description>
         <rdf:type rdf:resource="&owl;Axiom"/>
         <acetext:acetext rdf:datatype="&xsd;string"
-            >/*[DataPropertyRange(id ID)]*/</acetext:acetext>
+            >/*[DataPropertyDomain(id FunctionDefinition)]*/</acetext:acetext>
+        <owl:object rdf:resource="#FunctionDefinition"/>
         <owl:subject rdf:resource="#id"/>
-        <owl:predicate rdf:resource="&rdfs;range"/>
-        <owl:object rdf:resource="&xsd;ID"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyDomain(id SimpleSpeciesReference)]*/</acetext:acetext>
+        <owl:object rdf:resource="#SimpleSpeciesReference"/>
+        <owl:subject rdf:resource="#id"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
     </rdf:Description>
     <rdf:Description>
         <rdf:type rdf:resource="&owl;Axiom"/>
@@ -662,16 +647,8 @@
     <rdf:Description>
         <rdf:type rdf:resource="&owl;Axiom"/>
         <acetext:acetext rdf:datatype="&xsd;string"
-            >/*[DataPropertyDomain(id Compartment)]*/</acetext:acetext>
-        <owl:object rdf:resource="#Compartment"/>
-        <owl:subject rdf:resource="#id"/>
-        <owl:predicate rdf:resource="&rdfs;domain"/>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;Axiom"/>
-        <acetext:acetext rdf:datatype="&xsd;string"
-            >/*[DataPropertyDomain(id SimpleSpeciesReference)]*/</acetext:acetext>
-        <owl:object rdf:resource="#SimpleSpeciesReference"/>
+            >/*[DataPropertyDomain(id Species)]*/</acetext:acetext>
+        <owl:object rdf:resource="#Species"/>
         <owl:subject rdf:resource="#id"/>
         <owl:predicate rdf:resource="&rdfs;domain"/>
     </rdf:Description>
@@ -731,14 +708,6 @@
     <rdf:Description>
         <rdf:type rdf:resource="&owl;Axiom"/>
         <acetext:acetext rdf:datatype="&xsd;string"
-            >/*[FunctionalDataProperty(initialConcentration)]*/</acetext:acetext>
-        <owl:subject rdf:resource="#initialConcentration"/>
-        <owl:predicate rdf:resource="&rdf;type"/>
-        <owl:object rdf:resource="&owl;FunctionalProperty"/>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;Axiom"/>
-        <acetext:acetext rdf:datatype="&xsd;string"
             >/*[DataPropertyRange(initialConcentration double)]*/</acetext:acetext>
         <owl:subject rdf:resource="#initialConcentration"/>
         <owl:predicate rdf:resource="&rdfs;range"/>
@@ -751,6 +720,14 @@
         <owl:object rdf:resource="#Species"/>
         <owl:subject rdf:resource="#initialConcentration"/>
         <owl:predicate rdf:resource="&rdfs;domain"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[FunctionalDataProperty(initialConcentration)]*/</acetext:acetext>
+        <owl:subject rdf:resource="#initialConcentration"/>
+        <owl:predicate rdf:resource="&rdf;type"/>
+        <owl:object rdf:resource="&owl;FunctionalProperty"/>
     </rdf:Description>
     
 
@@ -779,18 +756,18 @@
     <rdf:Description>
         <rdf:type rdf:resource="&owl;Axiom"/>
         <acetext:acetext rdf:datatype="&xsd;string"
-            >/*[DataPropertyDomain(math FunctionDefinition)]*/</acetext:acetext>
-        <owl:object rdf:resource="#FunctionDefinition"/>
-        <owl:subject rdf:resource="#math"/>
-        <owl:predicate rdf:resource="&rdfs;domain"/>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;Axiom"/>
-        <acetext:acetext rdf:datatype="&xsd;string"
             >/*[DataPropertyRange(math Math)]*/</acetext:acetext>
         <owl:subject rdf:resource="#math"/>
         <owl:object rdf:resource="&mml;Math"/>
         <owl:predicate rdf:resource="&rdfs;range"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyDomain(math FunctionDefinition)]*/</acetext:acetext>
+        <owl:object rdf:resource="#FunctionDefinition"/>
+        <owl:subject rdf:resource="#math"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
     </rdf:Description>
     <rdf:Description>
         <rdf:type rdf:resource="&owl;Axiom"/>
@@ -815,18 +792,18 @@
     <rdf:Description>
         <rdf:type rdf:resource="&owl;Axiom"/>
         <acetext:acetext rdf:datatype="&xsd;string"
-            >/*[DataPropertyDomain(message Constraint)]*/</acetext:acetext>
-        <owl:object rdf:resource="#Constraint"/>
-        <owl:subject rdf:resource="#message"/>
-        <owl:predicate rdf:resource="&rdfs;domain"/>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;Axiom"/>
-        <acetext:acetext rdf:datatype="&xsd;string"
             >/*[DataPropertyRange(message string)]*/</acetext:acetext>
         <owl:subject rdf:resource="#message"/>
         <owl:predicate rdf:resource="&rdfs;range"/>
         <owl:object rdf:resource="&xsd;string"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyDomain(message Constraint)]*/</acetext:acetext>
+        <owl:object rdf:resource="#Constraint"/>
+        <owl:subject rdf:resource="#message"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
     </rdf:Description>
     
 
@@ -844,14 +821,6 @@
     <rdf:Description>
         <rdf:type rdf:resource="&owl;Axiom"/>
         <acetext:acetext rdf:datatype="&xsd;string"
-            >/*[FunctionalDataProperty(metaid)]*/</acetext:acetext>
-        <owl:subject rdf:resource="#metaid"/>
-        <owl:predicate rdf:resource="&rdf;type"/>
-        <owl:object rdf:resource="&owl;FunctionalProperty"/>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;Axiom"/>
-        <acetext:acetext rdf:datatype="&xsd;string"
             >/*[DataPropertyDomain(metaid Element)]*/</acetext:acetext>
         <owl:object rdf:resource="#Element"/>
         <owl:subject rdf:resource="#metaid"/>
@@ -864,6 +833,14 @@
         <owl:subject rdf:resource="#metaid"/>
         <owl:predicate rdf:resource="&rdfs;range"/>
         <owl:object rdf:resource="&xsd;ID"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[FunctionalDataProperty(metaid)]*/</acetext:acetext>
+        <owl:subject rdf:resource="#metaid"/>
+        <owl:predicate rdf:resource="&rdf;type"/>
+        <owl:object rdf:resource="&owl;FunctionalProperty"/>
     </rdf:Description>
     
 
@@ -887,40 +864,8 @@
     <rdf:Description>
         <rdf:type rdf:resource="&owl;Axiom"/>
         <acetext:acetext rdf:datatype="&xsd;string"
-            >/*[DataPropertyDomain(name Compartment)]*/</acetext:acetext>
-        <owl:object rdf:resource="#Compartment"/>
-        <owl:subject rdf:resource="#name"/>
-        <owl:predicate rdf:resource="&rdfs;domain"/>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;Axiom"/>
-        <acetext:acetext rdf:datatype="&xsd;string"
-            >/*[FunctionalDataProperty(name)]*/</acetext:acetext>
-        <owl:subject rdf:resource="#name"/>
-        <owl:predicate rdf:resource="&rdf;type"/>
-        <owl:object rdf:resource="&owl;FunctionalProperty"/>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;Axiom"/>
-        <acetext:acetext rdf:datatype="&xsd;string"
-            >/*[DataPropertyDomain(name SimpleSpeciesReference)]*/</acetext:acetext>
-        <owl:object rdf:resource="#SimpleSpeciesReference"/>
-        <owl:subject rdf:resource="#name"/>
-        <owl:predicate rdf:resource="&rdfs;domain"/>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;Axiom"/>
-        <acetext:acetext rdf:datatype="&xsd;string"
-            >/*[DataPropertyDomain(name Reaction)]*/</acetext:acetext>
-        <owl:object rdf:resource="#Reaction"/>
-        <owl:subject rdf:resource="#name"/>
-        <owl:predicate rdf:resource="&rdfs;domain"/>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;Axiom"/>
-        <acetext:acetext rdf:datatype="&xsd;string"
-            >/*[DataPropertyDomain(name Parameter)]*/</acetext:acetext>
-        <owl:object rdf:resource="#Parameter"/>
+            >/*[DataPropertyDomain(name FunctionDefinition)]*/</acetext:acetext>
+        <owl:object rdf:resource="#FunctionDefinition"/>
         <owl:subject rdf:resource="#name"/>
         <owl:predicate rdf:resource="&rdfs;domain"/>
     </rdf:Description>
@@ -935,6 +880,22 @@
     <rdf:Description>
         <rdf:type rdf:resource="&owl;Axiom"/>
         <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyDomain(name Compartment)]*/</acetext:acetext>
+        <owl:object rdf:resource="#Compartment"/>
+        <owl:subject rdf:resource="#name"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyDomain(name SimpleSpeciesReference)]*/</acetext:acetext>
+        <owl:object rdf:resource="#SimpleSpeciesReference"/>
+        <owl:subject rdf:resource="#name"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
             >/*[DataPropertyRange(name string)]*/</acetext:acetext>
         <owl:subject rdf:resource="#name"/>
         <owl:predicate rdf:resource="&rdfs;range"/>
@@ -943,8 +904,24 @@
     <rdf:Description>
         <rdf:type rdf:resource="&owl;Axiom"/>
         <acetext:acetext rdf:datatype="&xsd;string"
-            >/*[DataPropertyDomain(name FunctionDefinition)]*/</acetext:acetext>
-        <owl:object rdf:resource="#FunctionDefinition"/>
+            >/*[FunctionalDataProperty(name)]*/</acetext:acetext>
+        <owl:subject rdf:resource="#name"/>
+        <owl:predicate rdf:resource="&rdf;type"/>
+        <owl:object rdf:resource="&owl;FunctionalProperty"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyDomain(name Parameter)]*/</acetext:acetext>
+        <owl:object rdf:resource="#Parameter"/>
+        <owl:subject rdf:resource="#name"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyDomain(name Reaction)]*/</acetext:acetext>
+        <owl:object rdf:resource="#Reaction"/>
         <owl:subject rdf:resource="#name"/>
         <owl:predicate rdf:resource="&rdfs;domain"/>
     </rdf:Description>
@@ -972,18 +949,18 @@
     <rdf:Description>
         <rdf:type rdf:resource="&owl;Axiom"/>
         <acetext:acetext rdf:datatype="&xsd;string"
-            >/*[DataPropertyDomain(notes Element)]*/</acetext:acetext>
-        <owl:object rdf:resource="#Element"/>
-        <owl:subject rdf:resource="#notes"/>
-        <owl:predicate rdf:resource="&rdfs;domain"/>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;Axiom"/>
-        <acetext:acetext rdf:datatype="&xsd;string"
             >/*[DataPropertyRange(notes string)]*/</acetext:acetext>
         <owl:subject rdf:resource="#notes"/>
         <owl:predicate rdf:resource="&rdfs;range"/>
         <owl:object rdf:resource="&xsd;string"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyDomain(notes Element)]*/</acetext:acetext>
+        <owl:object rdf:resource="#Element"/>
+        <owl:subject rdf:resource="#notes"/>
+        <owl:predicate rdf:resource="&rdfs;domain"/>
     </rdf:Description>
     
 
@@ -1001,6 +978,14 @@
     <rdf:Description>
         <rdf:type rdf:resource="&owl;Axiom"/>
         <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[FunctionalDataProperty(reversible)]*/</acetext:acetext>
+        <owl:subject rdf:resource="#reversible"/>
+        <owl:predicate rdf:resource="&rdf;type"/>
+        <owl:object rdf:resource="&owl;FunctionalProperty"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
             >/*[DataPropertyRange(reversible boolean)]*/</acetext:acetext>
         <owl:subject rdf:resource="#reversible"/>
         <owl:predicate rdf:resource="&rdfs;range"/>
@@ -1013,14 +998,6 @@
         <owl:object rdf:resource="#Reaction"/>
         <owl:subject rdf:resource="#reversible"/>
         <owl:predicate rdf:resource="&rdfs;domain"/>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;Axiom"/>
-        <acetext:acetext rdf:datatype="&xsd;string"
-            >/*[FunctionalDataProperty(reversible)]*/</acetext:acetext>
-        <owl:subject rdf:resource="#reversible"/>
-        <owl:predicate rdf:resource="&rdf;type"/>
-        <owl:object rdf:resource="&owl;FunctionalProperty"/>
     </rdf:Description>
     
 
@@ -1089,6 +1066,18 @@ and units-of-size;</rdfs:comment>
     
 
 
+    <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#species -->
+
+    <owl:DatatypeProperty rdf:about="#species">
+        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
+        <rdfs:domain rdf:resource="#ModifierSpeciesReference"/>
+        <rdfs:domain rdf:resource="#SimpleSpeciesReference"/>
+        <rdfs:domain rdf:resource="#SpeciesReference"/>
+        <rdfs:range rdf:resource="&xsd;ID"/>
+    </owl:DatatypeProperty>
+    
+
+
     <!-- http://wikimodels.cnbc.pt/ontologies/sbml.owl#stoichiometry -->
 
     <owl:DatatypeProperty rdf:about="#stoichiometry">
@@ -1104,18 +1093,18 @@ and units-of-size;</rdfs:comment>
     <rdf:Description>
         <rdf:type rdf:resource="&owl;Axiom"/>
         <acetext:acetext rdf:datatype="&xsd;string"
-            >/*[DataPropertyRange(stoichiometry double)]*/</acetext:acetext>
-        <owl:subject rdf:resource="#stoichiometry"/>
-        <owl:predicate rdf:resource="&rdfs;range"/>
-        <owl:object rdf:resource="&xsd;double"/>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;Axiom"/>
-        <acetext:acetext rdf:datatype="&xsd;string"
             >/*[DataPropertyDomain(stoichiometry SpeciesReference)]*/</acetext:acetext>
         <owl:object rdf:resource="#SpeciesReference"/>
         <owl:subject rdf:resource="#stoichiometry"/>
         <owl:predicate rdf:resource="&rdfs;domain"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DataPropertyRange(stoichiometry double)]*/</acetext:acetext>
+        <owl:subject rdf:resource="#stoichiometry"/>
+        <owl:predicate rdf:resource="&rdfs;range"/>
+        <owl:object rdf:resource="&xsd;double"/>
     </rdf:Description>
     
 
@@ -1188,18 +1177,18 @@ and units-of-size;</rdfs:comment>
     <rdf:Description>
         <rdf:type rdf:resource="&owl;Axiom"/>
         <acetext:acetext rdf:datatype="&xsd;string"
-            >/*[DisjointClasses(Compartment Constraint FunctionDefinition InitialAssignment Parameter Reaction Species)]*/</acetext:acetext>
-        <owl:subject rdf:resource="#Compartment"/>
-        <owl:object rdf:resource="#Constraint"/>
-        <owl:predicate rdf:resource="&owl;disjointWith"/>
-    </rdf:Description>
-    <rdf:Description>
-        <rdf:type rdf:resource="&owl;Axiom"/>
-        <acetext:acetext rdf:datatype="&xsd;string"
             >Every Compartment is a Element.</acetext:acetext>
         <owl:subject rdf:resource="#Compartment"/>
         <owl:object rdf:resource="#Element"/>
         <owl:predicate rdf:resource="&rdfs;subClassOf"/>
+    </rdf:Description>
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;Axiom"/>
+        <acetext:acetext rdf:datatype="&xsd;string"
+            >/*[DisjointClasses(Compartment Constraint FunctionDefinition InitialAssignment Parameter Reaction Species)]*/</acetext:acetext>
+        <owl:subject rdf:resource="#Compartment"/>
+        <owl:object rdf:resource="#Constraint"/>
+        <owl:predicate rdf:resource="&owl;disjointWith"/>
     </rdf:Description>
     
 

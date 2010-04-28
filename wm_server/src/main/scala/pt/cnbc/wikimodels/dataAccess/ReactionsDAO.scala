@@ -28,11 +28,15 @@ import com.hp.hpl.jena.reasoner.ReasonerRegistry
 import thewebsemantic.Bean2RDF
 import thewebsemantic.RDF2Bean
 
+import scala.collection.JavaConversions._
 import scala.Collection
 
 import pt.cnbc.wikimodels.dataModel.Reaction
 import pt.cnbc.wikimodels.dataModel.Element
 import pt.cnbc.wikimodels.dataModel.SBMLModel
+import pt.cnbc.wikimodels.dataModel.SpeciesReference
+import pt.cnbc.wikimodels.dataModel.ModifierSpeciesReference
+import pt.cnbc.wikimodels.dataModel.KineticLaw
 import pt.cnbc.wikimodels.exceptions.NotImplementedException
 import pt.cnbc.wikimodels.ontology.ManipulatorWrapper
 import pt.cnbc.wikimodels.ontology.{Namespaces => NS}
@@ -77,14 +81,30 @@ class ReactionsDAO {
     val l:java.util.LinkedList[Reaction]
     = Sparql.exec(model, classOf[Reaction], queryString)
     Console.println("Found " + l.size + " Reactions with metaid " + reactionMetaid)
-    if(l.size > 0)
-      l.iterator.next
-    else null
+    if(l.size > 0){
+      val reaction = l.iterator.next
+
+      val specRefDAO = new SpeciesReferencesDAO()
+
+      reaction.listOfReactants = specRefDAO.loadReactantsInReaction(
+        reaction.metaid, model)
+
+      reaction.listOfProducts = specRefDAO.loadProductsInReaction(
+        reaction.metaid, model)
+
+      reaction.listOfModifiers = specRefDAO.loadModifiersInReaction(
+        reaction.metaid, model)
+
+      val kinLawDAO = new KineticLawsDAO()
+      reaction.kineticLaw = kinLawDAO.loadKineticLawInReaction(
+        reaction.metaid, model)
+
+      reaction
+    } else null
   }
 
   def loadReactionsInModel(modelMetaId:String,
                             model:Model):java.util.Collection[Reaction] = {
-    val c =
     Console.print("After loading Jena Model")
     Console.print("Jena Model content")
     val queryString =
@@ -100,7 +120,7 @@ class ReactionsDAO {
 
     val l:java.util.LinkedList[Reaction]
     = Sparql.exec(model, classOf[Reaction], queryString)
-    Console.println("Found " + l.size + " Compartments from model " + modelMetaId)
+    Console.println("Found " + l.size + " Reaction from model " + modelMetaId)
     if(l.size > 0)
       l
     else null
@@ -122,8 +142,6 @@ class ReactionsDAO {
         null
     }
   }
-
-
 
   /**
    * Saves an Reaction into the KnowledgeBase
@@ -157,7 +175,33 @@ class ReactionsDAO {
   def createReaction(reaction:Reaction, model:Model):Boolean = {
     try{
       val writer = new Bean2RDF(model)
-      writer.save(reaction)
+      writer.save(reaction,false)
+
+      //Code to keep save from saving the subelements since we need to check if their metaids already exist
+      val tmpreaction = new Reaction()
+      tmpreaction.listOfReactants = reaction.listOfReactants
+      reaction.listOfReactants = null
+      tmpreaction.listOfProducts = reaction.listOfProducts
+      reaction.listOfProducts = null
+      tmpreaction.listOfModifiers = reaction.listOfModifiers
+      reaction.listOfModifiers = null
+
+
+      val specRefDAO = new SpeciesReferencesDAO()
+      tmpreaction.listOfReactants.map(
+        specRefDAO.trytoCreateReactantInReaction(
+          reaction.metaid, _, model))
+      tmpreaction.listOfProducts.map(
+        specRefDAO.trytoCreateProductInReaction(
+          reaction.metaid, _, model))
+      tmpreaction.listOfModifiers.map(
+        specRefDAO.trytoCreateModifierInReaction(
+          reaction.metaid, _, model))
+
+      val kinLawDAO = new KineticLawsDAO()
+      kinLawDAO.trytoCreateKineticLawInReaction(
+        reaction.metaid, reaction.kineticLaw , model)
+
       true
     } catch {
       case ex:thewebsemantic.NotFoundException => {
@@ -272,10 +316,10 @@ class ReactionsDAO {
   }
 
   def reactionMetaidExists(metaid:String, model:Model):Boolean = {
-    val reasoner:Reasoner = ReasonerRegistry.getOWLReasoner
+    //val reasoner:Reasoner = ReasonerRegistry.getOWLReasoner
     //val ontModelSpec:OntModelSpec = null
     //val ont:OntModel = ModelFactory.createOntologyModel(ontModelSpec, model)
-    val ont:InfModel = ModelFactory.createInfModel(reasoner, model)
+    //val ont:InfModel = ModelFactory.createInfModel(reasoner, model)
     val queryString =
       """
         PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
@@ -285,7 +329,7 @@ class ReactionsDAO {
         """ +  "?s sbml:metaid \"" + metaid + "\"^^<http://www.w3.org/2001/XMLSchema#string> } "
 
     val query:Query = QueryFactory.create(queryString);
-    val qe:QueryExecution = QueryExecutionFactory.create(query, ont);
+    val qe:QueryExecution = QueryExecutionFactory.create(query, model);
     val results:Boolean = qe.execAsk;
 
     Console.println("SPARQL query \n" + queryString + "\nIs " + results)
@@ -325,6 +369,23 @@ class ReactionsDAO {
     if( sbmlModelsDAO.metaidExists(reaction.metaid ) ){
       val writer = new Bean2RDF(model)
       writer.save(reaction)
+
+      val specRefDAO = new SpeciesReferencesDAO()
+      reaction.listOfReactants.map(
+        specRefDAO.updateSpeciesReference(
+          _, model))
+
+      reaction.listOfProducts.map(
+        specRefDAO.updateSpeciesReference(
+          _, model))
+
+      reaction.listOfModifiers.map(
+        specRefDAO.updateModifierSpeciesReference(
+          _, model))
+
+      val kinLawDAO = new KineticLawsDAO()
+      kinLawDAO.updateKineticLaw(reaction.kineticLaw)
+
       true
     } else false
   }

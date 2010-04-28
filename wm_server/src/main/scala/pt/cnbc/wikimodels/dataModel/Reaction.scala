@@ -8,8 +8,9 @@
 
 package pt.cnbc.wikimodels.dataModel
 
-//import org.scala_tools.javautils.Imports._
+import scalaj.collection.Imports._
 
+import scala.collection.JavaConversions._
 import scala.xml.Group
 import scala.xml.Node
 import scala.xml.NodeSeq
@@ -26,64 +27,76 @@ import pt.cnbc.wikimodels.util.SBMLHandler
 @Namespace("http://wikimodels.cnbc.pt/ontologies/sbml.owl#")
 case class Reaction extends Element{
 
-    var id:String = null
-    var name:String = null
-    var reversible:Boolean = true
-    var fast:Boolean = false
+  var id:String = null
+  var name:String = null
+  var reversible:Boolean = true
+  var fast:Boolean = false
 
-    //TODO - MATH wiil be done in the DAO since it is very complicated to do it
-    //all here
-    var listOfReactants:Collection[SpeciesReference] = null
-    var listOfProducts:Collection[SpeciesReference] = null
-    var listOfModifiers:Collection[ModifierSpeciesReference] = null
+  //listOf definitions
+  @RdfProperty("http://wikimodels.cnbc.pt/ontologies/sbml.owl#hasReactant")
+  var listOfReactants:java.util.Collection[SpeciesReference] = null
+  @RdfProperty("http://wikimodels.cnbc.pt/ontologies/sbml.owl#hasProduct")
+  var listOfProducts:java.util.Collection[SpeciesReference] = null
+  @RdfProperty("http://wikimodels.cnbc.pt/ontologies/sbml.owl#hasModifier")
+  var listOfModifiers:java.util.Collection[ModifierSpeciesReference] = null
 
-    var kineticLaw:KineticLaw = null //optional
+  var kineticLaw:KineticLaw = null //optional
 
-    def this(metaid:String,
-             notes:NodeSeq,
-             id:String,
-             name:String,
-             reversible:Boolean,
-             fast:Boolean) = {
-        this()
-        this.metaid = metaid
-        this.setNotesFromXML(notes)
-        this.id = id
-        this.name = name
-        this.reversible = reversible
-        this.fast = fast
-     }
+  def this(metaid:String,
+           notes:NodeSeq,
+           id:String,
+           name:String,
+           reversible:Boolean,
+           fast:Boolean) = {
+    this()
+    this.metaid = metaid
+    this.setNotesFromXML(notes)
+    this.id = id
+    this.name = name
+    this.reversible = reversible
+    this.fast = fast
+  }
 
-    def this(xmlReaction:Elem) = {
-        this((new SBMLHandler).toStringOrNull((xmlReaction \ "@metaid").text),
-             (new SBMLHandler).checkCurrentLabelForNotes(xmlReaction),
-             (new SBMLHandler).toStringOrNull((xmlReaction \ "@id").text),
-             (new SBMLHandler).toStringOrNull((xmlReaction \ "@name").text),
-             (xmlReaction \ "@reversible").text.toBoolean ,
-             (xmlReaction \ "@fast").text.toBoolean)
-    }
+  def this(xmlReaction:Elem) = {
+    this((new SBMLHandler).toStringOrNull((xmlReaction \ "@metaid").text),
+         (new SBMLHandler).checkCurrentLabelForNotes(xmlReaction),
+         (new SBMLHandler).toStringOrNull((xmlReaction \ "@id").text),
+         (new SBMLHandler).toStringOrNull((xmlReaction \ "@name").text),
+         (xmlReaction \ "@reversible").text.toBoolean ,
+         (xmlReaction \ "@fast").text.toBoolean)
+    this.listOfReactants =
+      (xmlReaction \ "listOfReactants" \ "speciesReference")
+      .map(i => new SpeciesReference(i.asInstanceOf[scala.xml.Elem])).asJava
+    this.listOfProducts =
+      (xmlReaction \ "listOfProducts" \ "speciesReference")
+      .map(i => new SpeciesReference(i.asInstanceOf[scala.xml.Elem])).asJava
+    this.listOfModifiers =
+      (xmlReaction \ "listOfModifiers" \ "modifierSpeciesReference")
+      .map(i => new ModifierSpeciesReference(i.asInstanceOf[scala.xml.Elem])).asJava
+    this.kineticLaw = new KineticLaw((xmlReaction \ "KineticLaw").asInstanceOf[scala.xml.Elem])
+  }
 
-    override def toXML:Elem = {
-        <reaction metaid={metaid} id={id} name={name} >
-            {new SBMLHandler().genNotesFromHTML(notes)}
-            {if(listOfReactants != null && listOfReactants.size != 0)
-            <listOfReactants>
-                    {listOfReactants.map(i => i.toXML)}
-             </listOfReactants> else scala.xml.Null
-            }
-            {if(listOfProducts != null && listOfProducts.size != 0)
-            <listOfProducts>
-                    {listOfProducts.map(i => i.toXML)}
-             </listOfProducts> else scala.xml.Null
-            }
-            {if(listOfModifiers != null && listOfModifiers != 0)
-            <listOfModifiers>
-                    {listOfModifiers.map(i => i.toXML)}
-             </listOfModifiers> else scala.xml.Null
-            }
-            {if(this.kineticLaw != null) this.kineticLaw.toXML else null.asInstanceOf[Elem]}
-        </reaction>
-    }
-    override def theId = this.id
-    override def theName = this.name
+  override def toXML:Elem = {
+    <reaction metaid={metaid} id={id} name={name} >
+      {new SBMLHandler().genNotesFromHTML(notes)}
+      {if(listOfReactants != null && listOfReactants.size != 0)
+        <listOfReactants>
+          {listOfReactants.map(i => i.toXML)}
+        </listOfReactants> else scala.xml.Null
+      }
+      {if(listOfProducts != null && listOfProducts.size != 0)
+        <listOfProducts>
+          {listOfProducts.map(i => i.toXML)}
+        </listOfProducts> else scala.xml.Null
+      }
+      {if(listOfModifiers != null && listOfModifiers != 0)
+        <listOfModifiers>
+          {listOfModifiers.map(i => i.toXML)}
+        </listOfModifiers> else scala.xml.Null
+      }
+      {if(this.kineticLaw != null) this.kineticLaw.toXML else null.asInstanceOf[Elem]}
+    </reaction>
+  }
+  override def theId = this.id
+  override def theName = this.name
 }

@@ -273,8 +273,8 @@ class FunctionDefinitionsDAO {
   }
 
   def functionDefinitionMetaidExists(metaid:String, model:Model):Boolean = {
-    val reasoner:Reasoner = ReasonerRegistry.getOWLReasoner
-    val ont:InfModel = ModelFactory.createInfModel(reasoner, model)
+    //val reasoner:Reasoner = ReasonerRegistry.getOWLReasoner
+    //val ont:InfModel = ModelFactory.createInfModel(reasoner, model)
     val queryString =
       """
         PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
@@ -284,7 +284,7 @@ class FunctionDefinitionsDAO {
         """ +  "?s sbml:metaid \"" + metaid + "\"^^<http://www.w3.org/2001/XMLSchema#string> } "
 
     val query:Query = QueryFactory.create(queryString);
-    val qe:QueryExecution = QueryExecutionFactory.create(query, ont);
+    val qe:QueryExecution = QueryExecutionFactory.create(query, model);
     val results:Boolean = qe.execAsk;
 
     Console.println("SPARQL query \n" + queryString + "\nIs " + results)

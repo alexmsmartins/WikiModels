@@ -29,7 +29,7 @@ case class Compartment extends Element{
     var id:String = null
     var name:String = null
     var compartmentType:String = null //not implemented yet
-    var spacialDimensions:Int = 0
+    var spatialDimensions:Int = 0
     var size:java.lang.Double = 0
     var units:String = null  //not implemented yet
     var outside:String = null
@@ -42,7 +42,7 @@ case class Compartment extends Element{
              id:String,
              name:String,
              compartmentType:String, //not implemented yet
-             spacialDimensions:Int,
+             spatialDimensions:Int,
              size:java.lang.Double,
              units:String,  //not implemented yet
              outside:String,
@@ -52,7 +52,7 @@ case class Compartment extends Element{
         this.setNotesFromXML(notes)
         this.name = name
         this.compartmentType = compartmentType
-        this.spacialDimensions = spacialDimensions
+        this.spatialDimensions = spatialDimensions
         this.size = size
         this.units = units
         this.outside = outside
@@ -66,7 +66,7 @@ case class Compartment extends Element{
              (new SBMLHandler).toStringOrNull((xmlCompartment \ "@name").text),
              (xmlCompartment \ "@compartmentType").text,
              try{
-             (xmlCompartment \ "@spacialDimensions").text.toInt
+             (xmlCompartment \ "@spatialDimensions").text.toInt
              } catch {
                case _ => 3
              },
@@ -87,7 +87,7 @@ case class Compartment extends Element{
     override def toXML:Elem = {
         <compartment metaid={metaid} id={id} name={name}
             compartmentType={compartmentType}
-            spacialDimensions={spacialDimensions.toString}
+            spatialDimensions={spatialDimensions.toString}
             size={size.toString} units={units} outside={outside}
             constant={constant.toString}>
             {new SBMLHandler().genNotesFromHTML(notes)}
