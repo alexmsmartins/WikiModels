@@ -67,31 +67,21 @@ class Boot {
         LiftRules.passNotFoundToChain = true
 
         // redirects the pages, it is used for the bookmarks
-        /*LiftRules.rewrite.append {
-         case RewriteRequest(
-         ParsePath(List("models","browse",modelID),_,_,_),_,_) =>
-         RewriteResponse("models" :: "browse" :: Nil, Map("modelID" -> modelID))
-         }
-
-         LiftRules.rewrite.append {
-         case RewriteRequest(
-         ParsePath(List("account",acctName),_,_,_),_,_) =>
-         RewriteResponse("viewAcct" :: Nil, Map("name" -> acctName))
-         case RewriteRequest(
-         ParsePath(List("account",acctName, tag),_,_,_),_,_) =>
-         RewriteResponse("viewAcct" :: Nil, Map("name" -> acctName,
-         "tag" -> tag)))
-         }
-
-
-         */
-
         LiftRules.rewrite.append {
             case RewriteRequest(ParsePath(List("model",any),_,_,_),_,_) =>
-                RewriteResponse("models" :: "browse.xhtml" :: Nil, Map("" -> any))
+                RewriteResponse("models" :: "browse.xhtml" :: Nil)
             case RewriteRequest(ParsePath(List("model",any,"parameter",some),_,_,_),_,_) =>
-                RewriteResponse("models" :: "editModel.xhtml" :: Nil, Map("" -> any, "" -> some))
-
+                RewriteResponse("models" :: "editModel.xhtml" :: Nil)
+            case RewriteRequest(ParsePath(List("model",any,"species",some),_,_,_),_,_) =>
+                RewriteResponse("models" :: "editModel.xhtml" :: Nil)
+            case RewriteRequest(ParsePath(List("model",any,"functionDefinition",some),_,_,_),_,_) =>
+                RewriteResponse("models" :: "editModel.xhtml" :: Nil)
+            case RewriteRequest(ParsePath(List("model",any,"compartment",some),_,_,_),_,_) =>
+                RewriteResponse("models" :: "editModel.xhtml" :: Nil)
+            case RewriteRequest(ParsePath(List("model",any,"constraint",some),_,_,_),_,_) =>
+                RewriteResponse("models" :: "editModel.xhtml" :: Nil)
+            case RewriteRequest(ParsePath(List("model",any,"reaction",some),_,_,_),_,_) =>
+                RewriteResponse("models" :: "editModel.xhtml" :: Nil)
         }
                
     }

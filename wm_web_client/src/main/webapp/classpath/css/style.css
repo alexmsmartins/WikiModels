@@ -307,6 +307,11 @@ br.both{
 #content h8 a:hover {
     background-color:#3564a9;
 }
+
+#content h8 #delete:hover {
+    background-color:#3564a9;
+}
+
 #content h8 input:hover {
     background-color:#3564a9;
 }

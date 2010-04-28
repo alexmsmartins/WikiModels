@@ -1,6 +1,8 @@
 <lift:surround with="default_comment" at="comment_content">
     <head>
         <title>WikiModels Webpage - Edit</title>
+        <script src="../classpath/js/fckeditor/fckeditor.js" type="text/javascript"></script>
+        
         <script type="text/javascript">
             window.onload = function() {
                 var oFCKeditor02 = new FCKeditor( 'editArea' );
@@ -17,6 +19,12 @@
             };
         </script>
     </head>
+    <div id="error_msg">
+        <lift:snippet type="msgs">
+            <lift:error_msg></lift:error_msg>
+            <lift:error_class>errorBox</lift:error_class>
+        </lift:snippet>
+    </div>
     <div id="content">
         <br /><br />
     <h1>Edit Model</h1>
@@ -24,14 +32,15 @@
     <lift:EditModel.edit form="post" name="createForm" id_msgs="messages" >
         <h4><span id="required_field">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* required fields</span></h4><br />
 
-        <h3>Model ID: <span id="required_field">*</span><div id="messages"></div></h3><br />
+        <!--<h3>Model ID: <span id="required_field">*</span><div id="messages"></div></h3><br />
         <h3>Name of the model:
                     <editModel:name>
                         <text:model_id/>
             </editModel:name></h3><br />
             <span><h3>Description of the model:</h3></span>
                 <br />
-                <span><editModel:description /></span><br />
+                <span><editModel:description /></span><br />-->
+                <span><h3><editModel:editParameter /></h3></span>
                 <span><h3><editModel:save /></h3></span><br />
     </lift:EditModel.edit>
     </div>

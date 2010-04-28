@@ -121,7 +121,7 @@ class CreateModel {
                                                                 <math xmlns="http://www.w3.org/1998/Math/MathML">{function_def_math.get(i)}</math>
                                                             }
                                                             else {
-                                                                XML.loadString(function_def_math.get(i))
+                                                                XML.loadString(function_def_math.get(i).toString)
                                                             }
                                                         }
                                                         <notes>{function_def_note.get(i)}</notes>
@@ -178,8 +178,8 @@ class CreateModel {
                                         <listOfConstraints>
                                             {
                                                 for(i <- 0 to constraint_math.size-1) yield{
-                                                    <constraint metaid="metaid_0000001"><math xmlns="http://www.w3.org/1998/Math/MathML">{constraint_math.get(i)}
-                                                                                        </math>
+                                                    <constraint metaid="metaid_0000001">{XML.loadString(constraint_math.get(i).toString)}
+                                                                                        
                                                         <message>{constraint_message.get(i)}</message>
                                                         <notes>{constraint_note.get(i)}</notes>
                                                     </constraint>
@@ -210,7 +210,7 @@ class CreateModel {
                                                                                             {
                                                                                                 if(valor.get_reactant_stoic_math.length > 0){
                                                                                                     <stoichiometryMath>
-                                                                                                        {valor.get_reactant_stoic_math}
+                                                                                                        {XML.loadString(valor.get_reactant_stoic_math.toString)}
                                                                                                     </stoichiometryMath>
                                                                                                 } else scala.xml.Null}
                                                                                         </speciesReference>
@@ -237,7 +237,7 @@ class CreateModel {
                                                                                             {
                                                                                                 if(valor.get_product_stoic_math.length > 0){
                                                                                                     <stoichiometryMath>
-                                                                                                        {valor.get_product_stoic_math}
+                                                                                                        {XML.loadString(valor.get_product_stoic_math.toString)}
                                                                                                     </stoichiometryMath>
                                                                                                 } else scala.xml.Null}
                                                                                         </speciesReference>
@@ -264,7 +264,7 @@ class CreateModel {
                                                                                             {
                                                                                                 if(valor.get_modifier_stoic_math.length > 0){
                                                                                                     <stoichiometryMath>
-                                                                                                        {valor.get_modifier_stoic_math}
+                                                                                                        {XML.loadString(valor.get_modifier_stoic_math.toString)}
                                                                                                     </stoichiometryMath>
                                                                                                 } else scala.xml.Null}
                                                                                         </speciesReference>
@@ -277,7 +277,7 @@ class CreateModel {
                                                         <kineticLaw>{
                                                                 if((reaction_kinetic.size > 0)) {
                                                                     for(k <- 0 to reaction_kinetic.size-1) yield{
-                                                                        <math xmlns="http://www.w3.org/1998/Math/MathML">{reaction_kinetic.get(k)}</math>
+                                                                        {XML.loadString(reaction_kinetic.get(k).toString)}
                                                                     }
                                                                 } else scala.xml.Null
                                                                 <listOfParameters>{
