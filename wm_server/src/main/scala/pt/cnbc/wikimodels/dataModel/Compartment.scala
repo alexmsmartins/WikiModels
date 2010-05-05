@@ -64,16 +64,20 @@ case class Compartment extends Element{
              (new SBMLHandler).checkCurrentLabelForNotes(xmlCompartment),
              (new SBMLHandler).toStringOrNull((xmlCompartment \ "@id").text),
              (new SBMLHandler).toStringOrNull((xmlCompartment \ "@name").text),
-             (xmlCompartment \ "@compartmentType").text,
              try{
-             (xmlCompartment \ "@spatialDimensions").text.toInt
+             (xmlCompartment \ "@compartmentType").text
+             } catch {
+               case _ => null
+             },
+             try{
+               (xmlCompartment \ "@spatialDimensions").text.toInt
              } catch {
                case _ => 3
              },
              try{
               (xmlCompartment \ "@size").text.toDouble
              } catch {
-               case _ => null //TODO . check conditions by which size is optional
+               case _ => null
              },
              (new SBMLHandler).toStringOrNull((xmlCompartment \ "@units").text),
              (new SBMLHandler).toStringOrNull((xmlCompartment \ "@outside").text),
@@ -82,6 +86,14 @@ case class Compartment extends Element{
              } catch {
                case _ => true
              })
+      if( this.spatialDimensions <= 0|| spatialDimensions >= 3)
+        throw new BadFormatException("" + v +" is an invalid value for spatialDimensions");
+      if(spatialDimensions == 0 && size != null)
+        throw new BadFormatException("size should not exist when spacialDimensions is 0");
+      if(spatialDimensions > 0 && size == null)
+        throw new BadFormatException("size should exist when spacialDimensions is positive");
+      if(size < 0)
+        throw new BadFormatException("size should have a positive value");
     }
 
     override def toXML:Elem = {
@@ -95,5 +107,4 @@ case class Compartment extends Element{
     }
     override def theId = this.id
     override def theName = this.name
-
 }
