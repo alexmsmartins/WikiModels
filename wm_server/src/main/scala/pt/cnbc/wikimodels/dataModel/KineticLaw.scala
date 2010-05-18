@@ -39,7 +39,7 @@ case class KineticLaw extends Element{
         this()
         this.metaid = metaid
         this.setNotesFromXML(notes)
-        this.math = math.toString
+        this.math = new SBMLHandler().addNamespaceToMathML(math).toString
     }
 
     def this(xmlKineticLaw:Elem) = {
@@ -53,6 +53,7 @@ case class KineticLaw extends Element{
     }
 
     override def toXML:Elem = {
+      Console.println("«KineticLaw math element is " + this.math)
         <kineticLaw metaid={metaid}>
             <!--order is important according to SBML Specifications-->
             {new SBMLHandler().genNotesFromHTML(notes)}

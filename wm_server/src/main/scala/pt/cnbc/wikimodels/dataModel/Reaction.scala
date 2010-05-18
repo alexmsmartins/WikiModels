@@ -22,6 +22,7 @@ import scala.reflect.BeanInfo
 import scala.xml.Elem
 
 import pt.cnbc.wikimodels.util.SBMLHandler
+import pt.cnbc.wikimodels.exceptions.BadFormatException
 
 @BeanInfo
 @Namespace("http://wikimodels.cnbc.pt/ontologies/sbml.owl#")
@@ -74,6 +75,10 @@ case class Reaction extends Element{
       (xmlReaction \ "listOfModifiers" \ "modifierSpeciesReference")
       .map(i => new ModifierSpeciesReference(i.asInstanceOf[scala.xml.Elem])).asJava
     this.kineticLaw = new KineticLaw((xmlReaction \ "KineticLaw").asInstanceOf[scala.xml.Elem])
+    //if metaId does not exist it will be generated
+    if( this.theId == null || this.theId == "")
+      throw new BadFormatException("No Id in Reaction");
+
   }
 
   override def toXML:Elem = {

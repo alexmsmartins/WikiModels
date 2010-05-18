@@ -30,7 +30,7 @@ case class Compartment extends Element{
     var name:String = null
     var compartmentType:String = null //not implemented yet
     var spatialDimensions:Int = 0
-    var size:java.lang.Double = 0
+    var size:java.lang.Double = 0 //this can be null if spacialDimen
     var units:String = null  //not implemented yet
     var outside:String = null
     var constant:Boolean = false
@@ -86,13 +86,16 @@ case class Compartment extends Element{
              } catch {
                case _ => true
              })
+      //if metaId does not exist it will be generated
+      if( this.theId == null || this.theId == "")
+        throw new BadFormatException("No Id in Compartment");
       if( this.spatialDimensions <= 0|| spatialDimensions >= 3)
-        throw new BadFormatException("" + v +" is an invalid value for spatialDimensions");
+        throw new BadFormatException("" + spatialDimensions +" is an invalid value for spatialDimensions");
       if(spatialDimensions == 0 && size != null)
         throw new BadFormatException("size should not exist when spacialDimensions is 0");
       if(spatialDimensions > 0 && size == null)
         throw new BadFormatException("size should exist when spacialDimensions is positive");
-      if(size < 0)
+      if(size != null && size.compareTo(0) < 0)
         throw new BadFormatException("size should have a positive value");
     }
 

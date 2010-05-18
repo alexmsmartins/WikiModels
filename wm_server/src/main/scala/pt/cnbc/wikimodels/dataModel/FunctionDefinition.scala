@@ -7,6 +7,7 @@
  */
 
 package pt.cnbc.wikimodels.dataModel
+
 import pt.cnbc.wikimodels.util.SBMLHandler
 import scala.xml.Group
 import scala.xml.Node
@@ -18,6 +19,7 @@ import thewebsemantic.Namespace
 import thewebsemantic.RdfProperty
 import scala.reflect.BeanInfo
 import scala.xml.Elem
+import pt.cnbc.wikimodels.exceptions.BadFormatException
 
 
 @BeanInfo
@@ -48,6 +50,10 @@ case class FunctionDefinition extends Element{
              (new SBMLHandler).toStringOrNull((xmlFunctionDefinition \ "@id").text),
              (new SBMLHandler).toStringOrNull((xmlFunctionDefinition \ "@name").text),
              (xmlFunctionDefinition \ "math"))
+      //if metaId does not exist it will be generated
+      if( this.theId == null || this.theId == "")
+        throw new BadFormatException("No Id in FunctionDefinition");
+
     }
 
     override def toXML:Elem = {

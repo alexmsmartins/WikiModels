@@ -321,7 +321,7 @@ class SBMLModelsDAO {
 
   /**
    * checks if metaid exists in WikiModels KnowledgeBase
-   * the metaid is meant to be unique in all of the KB adn used as id for the
+   * the metaid is meant to be unique in all of the KB and used as id for the
    * entities created within it
    */
   def metaidExists(metaid:String):Boolean = {

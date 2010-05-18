@@ -31,14 +31,9 @@ import thewebsemantic.RDF2Bean
 import scala.collection.JavaConversions._
 import scala.Collection
 
-import pt.cnbc.wikimodels.dataModel.Reaction
-import pt.cnbc.wikimodels.dataModel.Element
-import pt.cnbc.wikimodels.dataModel.SBMLModel
-import pt.cnbc.wikimodels.dataModel.SpeciesReference
-import pt.cnbc.wikimodels.dataModel.ModifierSpeciesReference
-import pt.cnbc.wikimodels.dataModel.KineticLaw
-import pt.cnbc.wikimodels.exceptions.NotImplementedException
 import pt.cnbc.wikimodels.ontology.ManipulatorWrapper
+import pt.cnbc.wikimodels.dataModel._
+import pt.cnbc.wikimodels.exceptions.NotImplementedException
 import pt.cnbc.wikimodels.ontology.{Namespaces => NS}
 import thewebsemantic.Sparql
 

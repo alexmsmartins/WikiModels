@@ -8,10 +8,8 @@
 
 package pt.cnbc.wikimodels.dataModel
 
-import scala.xml.Node
 import scala.xml.NodeSeq
 import scala.xml.Elem
-import scala.reflect.BeanInfo
 import java.util.Date
 
 import thewebsemantic.Id
@@ -30,8 +28,7 @@ import pt.cnbc.wikimodels.exceptions.BadFormatException
  */
 @BeanInfo
 @Namespace("http://wikimodels.cnbc.pt/ontologies/sbml.owl#")
-case class Element extends DataModel {
-
+abstract class Element extends DataModel {
     @Id
     @RdfProperty("http://wikimodels.cnbc.pt/ontologies/sbml.owl#metaid")
     var metaid:java.lang.String = null

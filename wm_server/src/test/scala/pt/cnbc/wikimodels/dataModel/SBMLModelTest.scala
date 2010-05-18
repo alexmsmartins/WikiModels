@@ -11,6 +11,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.Assert._
+import pt.cnbc.wikimodels.exceptions.BadFormatException
 
 class SBMLModelTest {
 
@@ -254,7 +255,7 @@ class SBMLModelTest {
       }
   }*/
 
-  @Test
+  @Test( expected = classOf[BadFormatException] )
   def createModelWithoutId = {
       val sbml = new SBMLModel("any_metaid", <p>dasdfs</p>,
                                null, "any_name")
@@ -280,7 +281,8 @@ class SBMLModelTest {
 
   @Test
   def createModelWithParameters = {
-      val xmlModelWithParameters = <model  >
+      val xmlModelWithParameters =
+<model id="transcription">
   <listOfParameters>
     <parameter id="transcriptionDelay" value="10" units="time"/>
     <parameter id="transcriptionDelay2" value="102" units="time"/>

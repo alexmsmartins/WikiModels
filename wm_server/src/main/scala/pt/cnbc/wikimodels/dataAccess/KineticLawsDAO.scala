@@ -8,36 +8,19 @@
 
 package pt.cnbc.wikimodels.dataAccess
 
-import com.hp.hpl.jena.ontology.OntModel
-import com.hp.hpl.jena.ontology.OntModelSpec
-import com.hp.hpl.jena.ontology.OntClass;
-import com.hp.hpl.jena.ontology.OntModel;
-import com.hp.hpl.jena.ontology.impl.OntClassImpl;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QueryFactory;
-import com.hp.hpl.jena.query.QuerySolution;
-import com.hp.hpl.jena.query.ResultSet;
-import com.hp.hpl.jena.rdf.model.InfModel
 import com.hp.hpl.jena.rdf.model.Model
-import com.hp.hpl.jena.rdf.model.ModelFactory
-import com.hp.hpl.jena.reasoner.Reasoner
-import com.hp.hpl.jena.reasoner.ReasonerRegistry
 
 import thewebsemantic.Bean2RDF
 import thewebsemantic.RDF2Bean
-
-import scala.Collection
-
-import pt.cnbc.wikimodels.dataModel.KineticLaw
-import pt.cnbc.wikimodels.dataModel.Comment
-import pt.cnbc.wikimodels.dataModel.Element
-import pt.cnbc.wikimodels.dataModel.Reaction
-import pt.cnbc.wikimodels.exceptions.NotImplementedException
-import pt.cnbc.wikimodels.ontology.ManipulatorWrapper
-import pt.cnbc.wikimodels.ontology.{Namespaces => NS}
 import thewebsemantic.Sparql
+
+import pt.cnbc.wikimodels.ontology.ManipulatorWrapper
+import pt.cnbc.wikimodels.dataModel.KineticLaw
+import pt.cnbc.wikimodels.ontology.{Namespaces => NS}
 
 class KineticLawsDAO {
   /**

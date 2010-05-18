@@ -11,6 +11,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.Assert._
+import pt.cnbc.wikimodels.exceptions.BadFormatException
 
 class ParameterTest{
 
@@ -81,16 +82,15 @@ class ParameterTest{
         assertTrue(param == param2 )
     }
 
-    @Test
-    def createParameterWithoutId = {
-        val param = new SBMLModel("any_metaid", <p>dasdfs</p>,
-                                 null, "any_name")
+    @Test( expected = classOf[BadFormatException] )
+    def createParameterWithoutId =  {
+        val param = new Parameter("any_metaid", <p>dasdfs</p>,
+                                 null, "any_name", 0.2, null, true)
         Console.println("XML representation of the model is "
                         + param.toXML.toString)
-        val param2 = new SBMLModel(param.toXML)
+        val param2 = new Parameter(param.toXML)
         Console.println("XML representation of the reound tripped model is "
                         + param2.toXML.toString)
-        assertTrue(param == param2 )
     }
 
     @Test

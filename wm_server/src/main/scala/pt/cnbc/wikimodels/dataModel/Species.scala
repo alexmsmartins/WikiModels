@@ -19,6 +19,7 @@ import thewebsemantic.Namespace
 import thewebsemantic.RdfProperty
 
 import pt.cnbc.wikimodels.util.SBMLHandler
+import pt.cnbc.wikimodels.exceptions.BadFormatException
 
 @BeanInfo
 @Namespace("http://wikimodels.cnbc.pt/ontologies/sbml.owl#")
@@ -98,6 +99,9 @@ case class Species extends Element{
                            } catch {
                case _ => false
              })
+      //if metaId does not exist it will be generated
+      if (this.theId == null || this.theId == "")
+        throw new BadFormatException("No Id in Species");      
     }
 
     override def toXML:Elem = {

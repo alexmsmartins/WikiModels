@@ -40,7 +40,7 @@ class KineticLawTest{
    </kineticLaw>
 
 
-    val mathml =  <apply>
+    val mathml =  <math><apply>
          <times/>
          <ci>CaMKII</ci>
          <ci>kcat</ci>
@@ -53,7 +53,7 @@ class KineticLawTest{
              <ci>Km</ci>
            </apply>
          </apply>
-       </apply>
+       </apply>         </math>
 
     @Before
     def setUp: Unit = {
@@ -71,15 +71,27 @@ class KineticLawTest{
     }
 
     @Test
-    def createKineticLawWithoutNotes = {
+    def createKineticLaw = {
         val kl = new KineticLaw( """metaid""" ,
              <p>dasdfs</p> ,
              mathml  )
         Console.println("XML representation of the model is "
                         + kl.toXML.toString)
-        val kl2 = new SBMLModel(kl.toXML)
+        val kl2 = new KineticLaw(kl.toXML)
         Console.println("XML representation of the reound tripped model is "
                         + kl2.toXML.toString)
         assertTrue(true )
     }
+  @Test
+  def createKineticLawWithoutNotes = {
+      val kl = new KineticLaw( """metaid""" ,
+           Nil ,
+           mathml  )
+      Console.println("XML representation of the model is "
+                      + kl.toXML.toString)
+      val kl2 = new KineticLaw(kl.toXML)
+      Console.println("XML representation of the reound tripped model is "
+                      + kl2.toXML.toString)
+      assertTrue(true )
+  }
 }

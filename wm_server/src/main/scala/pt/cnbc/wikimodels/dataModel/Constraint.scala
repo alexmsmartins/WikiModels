@@ -10,16 +10,12 @@ package pt.cnbc.wikimodels.dataModel
 
 import scala.reflect.BeanInfo
 import scala.xml.Elem
-import scala.xml.Group
-import scala.xml.Node
 import scala.xml.NodeSeq
 import scala.xml.XML
 
-import thewebsemantic.Id
 import thewebsemantic.Namespace
-import thewebsemantic.RdfProperty
-
 import pt.cnbc.wikimodels.util.SBMLHandler
+import pt.cnbc.wikimodels.exceptions.BadFormatException
 
 
 @BeanInfo
@@ -55,7 +51,9 @@ case class Constraint extends Element{
              (new SBMLHandler).toStringOrNull((xmlConstraint \ "@name").text),
              (xmlConstraint \ "math"),
              (new SBMLHandler).checkCurrentLabelForMessage(xmlConstraint))
-        
+      //if metaId does not exist it will be generated
+      if( this.theId == null || this.theId == "")
+        throw new BadFormatException("No Id in Constraint");
     }
 
     override def toXML:Elem = {
