@@ -12,7 +12,7 @@ import scala.xml.Elem
 
 class SBMLModels extends DataModel {
 
-  var listOfModels:Collection[SBMLModel] = null
+  var listOfModels:Iterable[SBMLModel] = null
 
   def toXML:Elem =
     <models>

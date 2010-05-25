@@ -26,7 +26,7 @@ import pt.cnbc.wikimodels.util.SBMLHandler
 
 @BeanInfo
 @Namespace("http://wikimodels.cnbc.pt/ontologies/sbml.owl#")
-case class KineticLaw extends Element{
+case class KineticLaw() extends Element{
 
     var math:String = null
 

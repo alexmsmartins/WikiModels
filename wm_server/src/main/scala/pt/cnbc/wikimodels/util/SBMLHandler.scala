@@ -140,7 +140,7 @@ class SBMLHandler {
         val notes:NodeSeq = (xmlLabel \ "notes")
         if(notes.size == 0){
             Nil
-        } else notes.elements.next.child
+        } else notes.iterator.next.child
     }
 
 
@@ -158,7 +158,7 @@ class SBMLHandler {
         val message:NodeSeq = (xmlLabel \ "message")
         if(message.size == 0){
             Nil
-        } else message.elements.next.child
+        } else message.iterator.next.child
     }
 
     /**

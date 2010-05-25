@@ -24,7 +24,7 @@ import pt.cnbc.wikimodels.exceptions.BadFormatException
 
 @BeanInfo
 @Namespace("http://wikimodels.cnbc.pt/ontologies/sbml.owl#")
-case class FunctionDefinition extends Element{
+case class FunctionDefinition() extends Element{
 
     var id:String = null
     var name:String = null

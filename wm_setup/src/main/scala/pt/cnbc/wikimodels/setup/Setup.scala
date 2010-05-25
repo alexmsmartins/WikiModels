@@ -1,7 +1,6 @@
 package pt.cnbc.wikimodels.setup
 
 
-
 import org.apache.log4j.Logger
 import com.hp.hpl.jena.rdf.model.ModelFactory
 import com.hp.hpl.jena.rdf.model.Model
@@ -27,51 +26,48 @@ import pt.cnbc.wikimodels.ontology.ManipulatorWrapper
  *
  */
 object Setup {
-    ///Setup ontologies
-    def saveOntologiesOnKB = {
-        var homeDir = ""
-        var file:File = null
-
-
-        val modelFromKB = ManipulatorWrapper.loadModelfromDB
-
-        //Get the current directory
-        try {
-            file = new File(System.getProperty("user.dir") )
-            file.listFiles()
-            //select non hidden files
-            .filter(i => i.isFile && !i.isHidden)
-            //get the names of files
-            .map(i => i.getName)
-            //filter the ones which end with .rdf and owl
-            .filter(i => i.matches("""\S+(.rdf|.owl)""") )
-            //Merge Ontologies with KnowledgeBase
-            .map(i => modelFromKB.add(
-                    ManipulatorWrapper.loadModelfromfile(i) ) )
-
-        } catch {
-            case e:NullPointerException => {
-                    Console.println("""WikiModels setup failed:
+  ///Setup ontologies
+  def saveOntologiesOnKB = {
+    val modelFromKB = ManipulatorWrapper.loadModelfromDB
+    try {
+      saveOntologiesOn(modelFromKB)
+    } catch {
+      case e: NullPointerException => {
+        Console.println("""WikiModels setup failed:
 Error accessing ontologies directory.""" + e)
-                    System.exit(1)
-                }
-            case e => {
-                    Console.println("""WikiModels setup failed:
+        System.exit(1)
+      }
+      case e => {
+        Console.println("""WikiModels setup failed:
 Unexpected Error.""" + e)
-                }
-        }
+      }
     }
+  }
 
-    /**
-     * Setup user's passwords
-     */
-    def savePasswordsOnKB = {
-        ""
-    }
+  def saveOntologiesOn(model: Model): Model = {
+    var homeDir = ""
+    var file: File = null
+    //Get the current directory
+    file = new File(System.getProperty("user.dir"))
+    file.listFiles()
+            .filter(i => i.isFile && !i.isHidden) //select non hidden files
+            .map(i => i.getName) //get the names of files
+            .filter(i => i.matches("""\S+(.rdf|.owl)""")) //filter the ones which end with .rdf and owl
+            .map(i => model.add(
+      ManipulatorWrapper.loadModelfromfile(i))) //Merge Ontologies with KnowledgeBase
+    model
+  }
 
-    def main(args: Array[String]):Unit = {
-        ManipulatorWrapper.initializeDB
-        saveOntologiesOnKB
-        savePasswordsOnKB
-    }
+  /**
+   * Setup user's passwords
+   */
+  def savePasswordsOnKB = {
+    ""
+  }
+
+  def main(args: Array[String]): Unit = {
+    ManipulatorWrapper.initializeDB
+    saveOntologiesOnKB
+    savePasswordsOnKB
+  }
 }

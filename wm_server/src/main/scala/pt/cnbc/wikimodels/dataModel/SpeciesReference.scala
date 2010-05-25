@@ -22,7 +22,7 @@ import pt.cnbc.wikimodels.util.SBMLHandler
 
 @BeanInfo
 @Namespace("http://wikimodels.cnbc.pt/ontologies/sbml.owl#")
-case class SpeciesReference extends Element{
+case class SpeciesReference() extends Element{
   var id:String = null
   var name:String = null
 
@@ -88,7 +88,7 @@ case class SpeciesReference extends Element{
           null
         } else {
           <stoichiometryMath>
-            {this.stoichiometryMath.elements.next}
+            {this.stoichiometryMath.iterator.next}
           </stoichiometryMath>
         }
       }

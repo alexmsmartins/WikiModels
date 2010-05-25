@@ -1,0 +1,8 @@
+#ignore maven build directories in general
+target/
+
+#ignore IntelliJ IDEA project files
+*.iml
+*.ipr
+*.iws
+.idea/

@@ -42,13 +42,20 @@ object ManipulatorWrapper {
     protected var jenaModel:Model = null
 
     def initializeDB = {
-        val store = SDBFactory.connectStore("sdb.ttl")
-        store.getTableFormatter.create
-        store.close
+      /*Console.println(this.getClass.getResource("/sdb.ttl").getPath)
+      val sdbModel = ModelFactory.createDefaultModel()
+      sdbModel.read( this.getClass.getResourceAsStream("/sdb.ttl"),
+                                   "TTL")
+      Console.print(sdbModel)
+      val store = SDBFactory.connectStore( StoreDesc.read(sdbModel) )*/
+      val store = SDBFactory.connectStore("/home/alex/develop/estagio/workspace/wikimodels/wm_setup/sdb.ttl")
+
+      store.getTableFormatter.create
+      store.close
     }
 
     def cleanUpDB = {
-        val store = SDBFactory.connectStore("sdb.ttl")
+        val store = SDBFactory.connectStore("/home/alex/develop/estagio/workspace/wikimodels/wm_setup/sdb.ttl")
         store.getTableFormatter.truncate
         store.close
     }
@@ -91,7 +98,7 @@ object ManipulatorWrapper {
             //Console.println("current URL is " + myConfigFile)
 
             val store = SDBFactory.connectStore(System.getProperty("user.dir") + "/sdb.ttl")*/
-            val store = SDBFactory.connectStore("/home/alex/develop/estagio/workspace/wikimodels/wm_server/src/main/resources/sdb.ttl")
+            val store = SDBFactory.connectStore("/home/alex/develop/estagio/workspace/wikimodels/wm_setup/sdb.ttl")
             jenaModel = SDBFactory.connectDefaultModel(store)
             jenaModel
         } catch {

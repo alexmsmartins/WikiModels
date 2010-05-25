@@ -23,7 +23,7 @@ import pt.cnbc.wikimodels.exceptions.BadFormatException
 
 @BeanInfo
 @Namespace("http://wikimodels.cnbc.pt/ontologies/sbml.owl#")
-case class ModifierSpeciesReference extends Element{
+case class ModifierSpeciesReference() extends Element{
         var id:String = null
         var name:String = null
         

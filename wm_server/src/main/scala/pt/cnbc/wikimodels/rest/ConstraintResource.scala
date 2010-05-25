@@ -36,22 +36,21 @@ import pt.cnbc.wikimodels.security.SecurityContextFactory
 
 
 class ConstraintResource(sbmlModelResource:String) extends RESTResource {
-    
-    @Context
-    var security:SecurityContext = null
-    @Context
-    var uriInfo:UriInfo =null;
+  @Context
+  var security:SecurityContext = null
+  @Context
+  var uriInfo:UriInfo =null;
 
-    @GET
-    @Produces(Array("application/xml"))
-    @Path("{constraintid}")//: [a-zA-Z][a-zA-Z_0-9]}")
-    def get(@PathParam("constraintid") constraintResource:String
-    ):String = {
-        val username:String = security.getUserPrincipal().getName()
+  @GET
+  @Produces(Array("application/xml"))
+  @Path("{constraintid}")//: [a-zA-Z][a-zA-Z_0-9]}")
+  def get(@PathParam("constraintid") constraintResource:String
+          ):String = {
+    val username:String = security.getUserPrincipal().getName()
 
-        Console.print("GET verb was used in constraint " + constraintResource)
-        if(secContext.isAuthorizedTo(username,
-                                     "GET", "model/" + sbmlModelResource +
+    Console.print("GET verb was used in constraint " + constraintResource)
+    if(secContext.isAuthorizedTo(username,
+      "GET", "model/" + sbmlModelResource +
                                      "/constraint/" + constraintResource ) ){
             try{
                 val dao = new ConstraintsDAO
