@@ -29,13 +29,11 @@ import com.hp.hpl.jena.sdb.SDBFactory
 import com.hp.hpl.jena.shared.NotFoundException
 import com.hp.hpl.jena.vocabulary.VCARD
 
-import java.io.File
-import java.io.FileOutputStream
 import java.net.URL
 
 import scala.Array
 import scala.collection.mutable.ArrayBuffer
-
+import java.io.{OutputStream, InputStream, File, FileOutputStream}
 
 object ManipulatorWrapper {
 
@@ -112,8 +110,7 @@ object ManipulatorWrapper {
 
     def saveModelToFile(model:OntModel, fileName:String) ={
         try{
-            val out = new java.io.FileOutputStream(fileName)
-            model.write(out, "RDF/XML-ABBREV")
+            saveModelToOutputStream (model, new java.io.FileOutputStream(fileName))
         } catch {
             case ex:java.io.IOException => Console.print(
                     """Could not write to file.\n\
@@ -124,11 +121,14 @@ It resulted in the followning exception:""" + ex.printStackTrace)
         }
     }
 
+  def saveModelToOutputStream(model:OntModel, out:OutputStream) ={
+        model.write(out, "RDF/XML-ABBREV")
+  }
+
+
     def loadModelfromfile(fileName:String):OntModel = {
         try{
-            val in = new java.io.FileInputStream(fileName)
-            ModelFactory.createOntologyModel.read(in, null, null)
-            .asInstanceOf[OntModel]
+            loadModelFromInputStream(new java.io.FileInputStream(fileName))
         } catch {
             case ex:java.io.IOException =>
                 Console.print(
@@ -143,6 +143,11 @@ It resulted in the followning exception:""" + ex.printStackTrace)
                 null
         }
     }
+
+  def loadModelFromInputStream(in:InputStream):OntModel = {
+    ModelFactory.createOntologyModel.read(in, null, null)
+        .asInstanceOf[OntModel]
+  }
 
 
     def executeSPARQLQuery(queryString:String, model:OntModel):ResultSet = {

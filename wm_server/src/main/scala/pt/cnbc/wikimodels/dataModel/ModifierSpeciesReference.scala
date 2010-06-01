@@ -23,44 +23,43 @@ import pt.cnbc.wikimodels.exceptions.BadFormatException
 
 @BeanInfo
 @Namespace("http://wikimodels.cnbc.pt/ontologies/sbml.owl#")
-case class ModifierSpeciesReference() extends Element{
-        var id:String = null
-        var name:String = null
-        
-        var species:Species = null
+case class ModifierSpeciesReference() extends Element {
+  var id: String = null
+  var name: String = null
 
-        def this(metaid:String,
-             notes:NodeSeq,
-             id:String,
-             name:String,
-             species:Species) = {
-        this()
-        this.metaid = metaid
-        this.setNotesFromXML(notes)
-        this.id = id
-        this.name = name
-        this.species = species
-     }
+  var species: Species = null
 
-    def this(xmlReaction:Elem) = {
-        this((new SBMLHandler).toStringOrNull((xmlReaction \ "@metaid").text),
-             (new SBMLHandler).checkCurrentLabelForNotes(xmlReaction),
-             (new SBMLHandler).toStringOrNull((xmlReaction \ "@id").text),
-             (new SBMLHandler).toStringOrNull((xmlReaction \ "@name").text),
-             new Species(null, Nil, (xmlReaction \ "@species").text, null,
-                         null, null, null, null, null, false, false, false))
-      //if metaId does not exist it will be generated
-      if( this.theId == null || this.theId == "")
-        throw new BadFormatException("No Id in ModifierSpeciesReference");
+  def this(metaid: String,
+           notes: NodeSeq,
+           id: String,
+           name: String,
+           species: Species) = {
+    this ()
+    this.metaid = metaid
+    this.setNotesFromXML(notes)
+    this.id = id
+    this.name = name
+    this.species = species
+    (new SBMLHandler).idExistsAndIsValid(this.id)
+  }
 
-    }
+  def this(xmlReaction: Elem) = {
+    this ((new SBMLHandler).toStringOrNull((xmlReaction \ "@metaid").text),
+      (new SBMLHandler).checkCurrentLabelForNotes(xmlReaction),
+      (new SBMLHandler).toStringOrNull((xmlReaction \ "@id").text),
+      (new SBMLHandler).toStringOrNull((xmlReaction \ "@name").text),
+      new Species(null, Nil, (xmlReaction \ "@species").text, null,
+        null, null, null, null, null, false, false, false))
+  }
 
-    override def toXML:Elem = {
-        <modifierSpeciesReference metaid={metaid} id={id} name={name}
-            species={species.id}>
-            {new SBMLHandler().genNotesFromHTML(notes)}
-        </modifierSpeciesReference>
-    }
-    override def theId = this.id
-    override def theName = this.name
+  override def toXML: Elem = {
+    <modifierSpeciesReference metaid={metaid} id={id} name={name}
+                              species={species.id}>
+      {new SBMLHandler().genNotesFromHTML(notes)}
+    </modifierSpeciesReference>
+  }
+
+  override def theId = this.id
+
+  override def theName = this.name
 }

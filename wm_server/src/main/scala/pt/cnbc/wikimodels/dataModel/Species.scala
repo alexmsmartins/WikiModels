@@ -64,6 +64,7 @@ case class Species() extends Element{
         this.hasOnlySubstanceUnits = hasOnlySubstanceUnits
         this.boundaryCondition = boundaryCondition
         this.constant = constant
+      (new SBMLHandler).idExistsAndIsValid(this.id)
     }
 
     def this(xmlSpecies:Elem) = {
@@ -99,9 +100,6 @@ case class Species() extends Element{
                            } catch {
                case _ => false
              })
-      //if metaId does not exist it will be generated
-      if (this.theId == null || this.theId == "")
-        throw new BadFormatException("No Id in Species");      
     }
 
     override def toXML:Elem = {

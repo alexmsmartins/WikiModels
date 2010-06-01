@@ -6,3 +6,6 @@ target/
 *.ipr
 *.iws
 .idea/
+
+#Ignore copies of files used for testing only
+wm_server/sbml.owl

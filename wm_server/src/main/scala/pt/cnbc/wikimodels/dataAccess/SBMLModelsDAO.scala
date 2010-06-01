@@ -138,7 +138,14 @@ class SBMLModelsDAO {
       val myModel: Model = ManipulatorWrapper.loadModelfromDB
       createSBMLModel(sbmlmodel, myModel)
     } catch {
-      case ex: Exception => {
+      case ex: thewebsemantic.NotFoundException => {
+        Console.println("Bean of " + SBMLModel.getClass + "and " +
+                "id is not found")
+        ex.printStackTrace()
+        false
+      }
+      case ex => {
+        Console.println(ex.toString)
         Console.println("Saving model " + sbmlmodel +
                 "was not possible")
         ex.printStackTrace
@@ -152,80 +159,62 @@ class SBMLModelsDAO {
    * @return true if creating the new model was possible and false otherwise
    */
   def createSBMLModel(sbmlmodel: SBMLModel, model: Model): Boolean = {
-    try {
-      val writer = new Bean2RDF(model)
+    val writer = new Bean2RDF(model)
 
-      Console.println("SBML Model before removing lists")
-      Console.println(sbmlmodel.toXML.toString)
-      Console.println("")
+    Console.println("SBML Model before removing lists")
+    Console.println(sbmlmodel.toXML.toString)
+    Console.println("")
 
-      //Code to keep save from saving the subelements since we need to check if their metaids already exist
-      val tmpsbmlmodel = new SBMLModel()
-      tmpsbmlmodel.listOfFunctionDefinitions = sbmlmodel.listOfFunctionDefinitions
-      sbmlmodel.listOfFunctionDefinitions = null
-      tmpsbmlmodel.listOfCompartments = sbmlmodel.listOfCompartments
-      sbmlmodel.listOfCompartments = null
-      tmpsbmlmodel.listOfSpecies = sbmlmodel.listOfSpecies
-      sbmlmodel.listOfSpecies = null
-      tmpsbmlmodel.listOfParameters = sbmlmodel.listOfParameters
-      sbmlmodel.listOfParameters = null
-      tmpsbmlmodel.listOfConstraints = sbmlmodel.listOfConstraints
-      sbmlmodel.listOfConstraints = null
-      tmpsbmlmodel.listOfReactions = sbmlmodel.listOfReactions
-      sbmlmodel.listOfReactions = null
+    //Code to keep save from saving the subelements since we need to check if their metaids already exist
+    val tmpsbmlmodel = new SBMLModel()
+    tmpsbmlmodel.listOfFunctionDefinitions = sbmlmodel.listOfFunctionDefinitions
+    sbmlmodel.listOfFunctionDefinitions = null
+    tmpsbmlmodel.listOfCompartments = sbmlmodel.listOfCompartments
+    sbmlmodel.listOfCompartments = null
+    tmpsbmlmodel.listOfSpecies = sbmlmodel.listOfSpecies
+    sbmlmodel.listOfSpecies = null
+    tmpsbmlmodel.listOfParameters = sbmlmodel.listOfParameters
+    sbmlmodel.listOfParameters = null
+    tmpsbmlmodel.listOfConstraints = sbmlmodel.listOfConstraints
+    sbmlmodel.listOfConstraints = null
+    tmpsbmlmodel.listOfReactions = sbmlmodel.listOfReactions
+    sbmlmodel.listOfReactions = null
 
-      Console.println("Temp SBML Model after addomg lists")
-      Console.println(tmpsbmlmodel.toXML.toString)
-      Console.println("")
+    Console.println("Temp SBML Model after addomg lists")
+    Console.println(tmpsbmlmodel.toXML.toString)
+    Console.println("")
 
-      Console.println("SBML Model after removing lists")
-      Console.println(sbmlmodel.toXML.toString)
-      Console.println("")
+    writer.save(sbmlmodel)
+    val funcDefDAO = new FunctionDefinitionsDAO()
+    tmpsbmlmodel.listOfFunctionDefinitions.map(
+      funcDefDAO.trytoCreateFunctionDefinitionInModel(
+        sbmlmodel.metaid, _, model))
 
-      writer.save(sbmlmodel)
-      val funcDefDAO = new FunctionDefinitionsDAO()
-      tmpsbmlmodel.listOfFunctionDefinitions.map(
-        funcDefDAO.trytoCreateFunctionDefinitionInModel(
-          sbmlmodel.metaid, _, model))
+    val compDAO = new CompartmentsDAO()
+    tmpsbmlmodel.listOfCompartments.map(
+      compDAO.trytoCreateCompartmentInModel(
+        sbmlmodel.metaid, _, model))
 
-      val compDAO = new CompartmentsDAO()
-      tmpsbmlmodel.listOfCompartments.map(
-        compDAO.trytoCreateCompartmentInModel(
-          sbmlmodel.metaid, _, model))
+    val speciesDAO = new SpeciessDAO()
+    tmpsbmlmodel.listOfSpecies.map(
+      speciesDAO.trytoCreateSpeciesInModel(
+        sbmlmodel.metaid, _, model))
 
-      val speciesDAO = new SpeciessDAO()
-      tmpsbmlmodel.listOfSpecies.map(
-        speciesDAO.trytoCreateSpeciesInModel(
-          sbmlmodel.metaid, _, model))
+    val paramDAO = new ParametersDAO()
+    tmpsbmlmodel.listOfParameters.map(
+      paramDAO.trytoCreateParameterInModel(
+        sbmlmodel.metaid, _, model))
 
-      val paramDAO = new ParametersDAO()
-      tmpsbmlmodel.listOfParameters.map(
-        paramDAO.trytoCreateParameterInModel(
-          sbmlmodel.metaid, _, model))
+    val constDAO = new ConstraintsDAO()
+    tmpsbmlmodel.listOfConstraints.map(
+      constDAO.trytoCreateConstraintInModel(
+        sbmlmodel.metaid, _, model))
 
-      val constDAO = new ConstraintsDAO()
-      tmpsbmlmodel.listOfConstraints.map(
-        constDAO.trytoCreateConstraintInModel(
-          sbmlmodel.metaid, _, model))
-
-      val reactDAO = new ReactionsDAO()
-      tmpsbmlmodel.listOfReactions.map(
-        reactDAO.trytoCreateReactionInModel(
-          sbmlmodel.metaid, _, model))
-      true
-    } catch {
-      case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + SBMLModel.getClass + "and " +
-                "id is not found")
-        ex.printStackTrace()
-        false
-      }
-      case ex => {
-        Console.println(ex.toString)
-        ex.printStackTrace()
-        false
-      }
-    }
+    val reactDAO = new ReactionsDAO()
+    tmpsbmlmodel.listOfReactions.map(
+      reactDAO.trytoCreateReactionInModel(
+        sbmlmodel.metaid, _, model))
+    true
   }
 
   /**
@@ -253,14 +242,13 @@ class SBMLModelsDAO {
   }
 
   def trytoCreateSBMLModel(sbmlModel: SBMLModel, model: Model): String = {
-    if (if (metaidExists(sbmlModel.metaid) == false) {
-      createSBMLModel(sbmlModel, model)
-    } else {
-      sbmlModel.metaid = generateNewMetaIdFrom(sbmlModel,
-        model)
-      createSBMLModel(sbmlModel,
-        model)
-    } == true)
+    if (if (metaIdExists(sbmlModel.metaid, model) == false) {
+          createSBMLModel(sbmlModel, model)
+        } else {
+          sbmlModel.metaid = generateNewMetaIdFrom(sbmlModel,
+            model)
+          createSBMLModel(sbmlModel, model)
+        } == true)
       {
         sbmlModel.metaid
       } else null
@@ -274,14 +262,13 @@ class SBMLModelsDAO {
 
   /**
    * Generates a new metaid.
-   * It uses the metaid, id or name depending on which is not empty
+   * It uses the metaid or id depending on which is not empty
    * and using this exact order
    */
   def generateNewMetaIdFrom(sbmlentity: Element, model: Model): String = {
     if (sbmlentity.metaid == null || sbmlentity.metaid.trim == "") {
       if (sbmlentity.theId == null || sbmlentity.theId.trim == "") {
         throw new BadFormatException("ids are mandatory")
-        null
       } else {
         generateNewMetaIdFromString(sbmlentity.theId, model)
       }
@@ -290,14 +277,9 @@ class SBMLModelsDAO {
     }
   }
 
-  def generateNewMetaIdFromString(string: String): String = {
-    val myModel: Model = ManipulatorWrapper.loadModelfromDB
-    generateNewMetaIdFromString(string, myModel)
-  }
-
   def generateNewMetaIdFromString(string: String, model: Model): String = {
     var i = 0
-    while (metaidExists("" + string + i) == true) {
+    while (metaIdExists("" + string + i, model) == true) {
       i = i + 1
     }
     "" + string + i
@@ -308,25 +290,7 @@ class SBMLModelsDAO {
    * the metaid is meant to be unique in all of the KB and used as id for the
    * entities created within it
    */
-  def metaidExists(metaid: String): Boolean = {
-    try {
-      val myModel: Model = ManipulatorWrapper.loadModelfromDB
-      metaidExists(metaid, myModel)
-    } catch {
-      case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + SBMLModel.getClass + "and " +
-                "id is not found")
-        ex.printStackTrace()
-        false
-      }
-      case ex => {
-        ex.printStackTrace()
-        false
-      }
-    }
-  }
-
-  def metaidExists(metaid: String, model: Model): Boolean = {
+  def metaIdExists(metaid: String, model: Model): Boolean = {
     /*val reasoner:Reasoner = ReasonerRegistry.getOWLReasoner
      //val ontModelSpec:OntModelSpec = null
      //val ont:OntModel = ModelFactory.createOntologyModel(ontModelSpec, model)
@@ -348,25 +312,7 @@ class SBMLModelsDAO {
     result
   }
 
-  def modelMetaidExists(metaid: String): Boolean = {
-    try {
-      val myModel: Model = ManipulatorWrapper.loadModelfromDB
-      modelMetaidExists(metaid, myModel)
-    } catch {
-      case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + SBMLModel.getClass + "and " +
-                "id is not found")
-        ex.printStackTrace()
-        false
-      }
-      case ex => {
-        ex.printStackTrace()
-        false
-      }
-    }
-  }
-
-  def modelMetaidExists(metaid: String, model: Model): Boolean = {
+  def modelMetaIdExists(metaid: String, model: Model): Boolean = {
     //val reasoner:Reasoner = ReasonerRegistry.getOWLReasoner
     //val ontModelSpec:OntModelSpec = null
     //val ont:OntModel = ModelFactory.createOntologyModel(ontModelSpec, model)
@@ -452,7 +398,7 @@ class SBMLModelsDAO {
    */
   def updateSBMLModel(sbmlmodel: SBMLModel, model: Model): Boolean = {
     try {
-      if (metaidExists(sbmlmodel.metaid)) {
+      if (metaIdExists(sbmlmodel.metaid, model)) {
         val writer = new Bean2RDF(model)
         writer.save(sbmlmodel)
 
@@ -530,7 +476,7 @@ class SBMLModelsDAO {
    */
   def deleteSBMLModel(sbmlmodel: SBMLModel, model: Model): Boolean = {
     try {
-      if (modelMetaidExists(sbmlmodel.metaid)) {
+      if (modelMetaIdExists(sbmlmodel.metaid, model)) {
         //TODO This can and should be optinized to a SPARQL query that only gets the metaids of teh subelements
         //of the model using propery 'has[element]' or even 'hasPart'. Using hasPart depends on the existence of a
         //InfModel and might not be the best choice

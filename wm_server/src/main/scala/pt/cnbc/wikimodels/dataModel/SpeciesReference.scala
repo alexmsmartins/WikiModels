@@ -54,6 +54,7 @@ case class SpeciesReference() extends Element{
     this.species = species
     this.stoichiometry = stoichiometry
     this.stoichiometryMath = stoichiometryMath.toString
+    (new SBMLHandler).idExistsAndIsValid(this.id)
   }
 
   def this(xmlSpeciesRef:Elem) = {

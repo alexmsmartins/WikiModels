@@ -100,7 +100,7 @@ class SpeciessDAO {
 
     val l:java.util.LinkedList[Species]
     = Sparql.exec(model, classOf[Species], queryString)
-    Console.println("Found " + l.size + " Compartments from model " + modelMetaId)
+    Console.println("Found " + l.size + " Species from model " + modelMetaId)
     if(l.size > 0)
       l
     else null
@@ -130,19 +130,24 @@ class SpeciessDAO {
    */
   def createSpecies(species:Species):Boolean = {
     var ret = false
-    var myModel:Model = null
+    var myModel:Model= null
     try{
       myModel = ManipulatorWrapper.loadModelfromDB
       myModel.begin
       ret = createSpecies(species, myModel)
       myModel.commit
     } catch {
-      case ex:Exception => {
+      case ex:thewebsemantic.NotFoundException => {
+          Console.println("Bean of " + Species.getClass + "and " +
+                          "id is not found")
+          ex.printStackTrace()
+          ret = false
+        }
+      case ex => {
           Console.println("Saving model " + species +
                           "was not possible")
           ex.printStackTrace
-
-          false
+          ret =false
         }
     }
     ret
@@ -153,23 +158,9 @@ class SpeciessDAO {
    * @return true if creating the new model was possible and false otherwise
    */
   def createSpecies(species:Species, model:Model):Boolean = {
-    try{
-      val writer = new Bean2RDF(model)
-      writer.save(species)
-      true
-    } catch {
-      case ex:thewebsemantic.NotFoundException => {
-          Console.println("Bean of " + Species.getClass + "and " +
-                          "id is not found")
-          ex.printStackTrace()
-          false
-        }
-      case ex => {
-          Console.println(ex.toString)
-          ex.printStackTrace()
-          false
-        }
-    }
+    val writer = new Bean2RDF(model)
+    writer.save(species)
+    true
   }
 
   def trytoCreateSpeciesInModel(modelMetaid:String,
@@ -194,7 +185,7 @@ class SpeciessDAO {
   def trytoCreateSpeciesInModel(modelMetaid:String,
                                 species:Species,
                                 model:Model):String = {
-    if(sbmlModelsDAO.modelMetaidExists(modelMetaid)){
+    if(sbmlModelsDAO.modelMetaIdExists(modelMetaid, model)){
       val speciesMetaid = trytoCreateSpecies(species, model)
       if(speciesMetaid != null){
 
@@ -237,7 +228,7 @@ class SpeciessDAO {
   }
 
   def trytoCreateSpecies(species:Species, model:Model):String = {
-    if( if( sbmlModelsDAO.metaidExists(species.metaid ) == false ){
+    if( if( sbmlModelsDAO.metaIdExists(species.metaid, model) == false ){
         createSpecies(species, model)
       } else {
         species.metaid = sbmlModelsDAO.generateNewMetaIdFrom(species,
@@ -320,7 +311,7 @@ class SpeciessDAO {
    * @return true if creating the new model was possible and false otherwise
    */
   def updateSpecies(species:Species, model:Model):Boolean = {
-    if( sbmlModelsDAO.metaidExists(species.metaid ) ){
+    if( sbmlModelsDAO.metaIdExists(species.metaid, model) ){
       val writer = new Bean2RDF(model)
       writer.save(species)
       true
@@ -357,7 +348,7 @@ class SpeciessDAO {
       if( speciesMetaidExists(species.metaid ) ){
         val writer = new Bean2RDF(model)
         writer.delete(species)
-        //TODO delete subelements
+        //TODO delete sub-elements
         true
       } else false
     } catch {

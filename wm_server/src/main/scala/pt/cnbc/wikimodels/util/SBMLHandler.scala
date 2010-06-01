@@ -161,6 +161,13 @@ class SBMLHandler {
         } else message.iterator.next.child
     }
 
+  def idExistsAndIsValid(id:String):Boolean= {
+    //if metaId does not exist it will be generated
+    if( id == null || id == "")
+      throw new BadFormatException("Id is mandatory")
+    else true
+  }
+
     /**
      * Gives back the supplied string or null if that string if empty
      * or composed of spaces.

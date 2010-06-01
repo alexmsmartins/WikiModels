@@ -71,6 +71,7 @@ case class SBMLModel() extends Element {
     this.setNotesFromXML(notes)
     this.id = id
     this.name = name
+    (new SBMLHandler).idExistsAndIsValid(this.id)    
   }
 
   /**

@@ -11,8 +11,6 @@ package pt.cnbc.wikimodels.dataModel
 import scalaj.collection.Imports._
 
 import scala.collection.JavaConversions._
-import scala.xml.Group
-import scala.xml.Node
 import scala.xml.NodeSeq
 
 import thewebsemantic.Id
@@ -22,7 +20,6 @@ import scala.reflect.BeanInfo
 import scala.xml.Elem
 
 import pt.cnbc.wikimodels.util.SBMLHandler
-import pt.cnbc.wikimodels.exceptions.BadFormatException
 
 @BeanInfo
 @Namespace("http://wikimodels.cnbc.pt/ontologies/sbml.owl#")
@@ -40,7 +37,7 @@ case class Reaction() extends Element{
   var listOfProducts:java.util.Collection[SpeciesReference] = null
   @RdfProperty("http://wikimodels.cnbc.pt/ontologies/sbml.owl#hasModifier")
   var listOfModifiers:java.util.Collection[ModifierSpeciesReference] = null
-
+  @RdfProperty("http://wikimodels.cnbc.pt/ontologies/sbml.owl#kineticLaw")
   var kineticLaw:KineticLaw = null //optional
 
   def this(metaid:String,
@@ -56,6 +53,7 @@ case class Reaction() extends Element{
     this.name = name
     this.reversible = reversible
     this.fast = fast
+    (new SBMLHandler).idExistsAndIsValid(this.id)
   }
 
   def this(xmlReaction:Elem) = {
@@ -63,8 +61,8 @@ case class Reaction() extends Element{
          (new SBMLHandler).checkCurrentLabelForNotes(xmlReaction),
          (new SBMLHandler).toStringOrNull((xmlReaction \ "@id").text),
          (new SBMLHandler).toStringOrNull((xmlReaction \ "@name").text),
-         (xmlReaction \ "@reversible").text.toBoolean ,
-         (xmlReaction \ "@fast").text.toBoolean)
+         (new SBMLHandler).convertStringToBool( (xmlReaction \ "@reversible").text, true ),
+         (new SBMLHandler).convertStringToBool( (xmlReaction \ "@fast").text, false ))
     this.listOfReactants =
       (xmlReaction \ "listOfReactants" \ "speciesReference")
       .map(i => new SpeciesReference(i.asInstanceOf[scala.xml.Elem])).asJava
@@ -74,11 +72,8 @@ case class Reaction() extends Element{
     this.listOfModifiers =
       (xmlReaction \ "listOfModifiers" \ "modifierSpeciesReference")
       .map(i => new ModifierSpeciesReference(i.asInstanceOf[scala.xml.Elem])).asJava
-    this.kineticLaw = new KineticLaw((xmlReaction \ "KineticLaw").asInstanceOf[scala.xml.Elem])
-    //if metaId does not exist it will be generated
-    if( this.theId == null || this.theId == "")
-      throw new BadFormatException("No Id in Reaction");
-
+    if( (xmlReaction \ "kineticLaw").size<0 )
+      this.kineticLaw = new KineticLaw((xmlReaction \ "kineticLaw").first.asInstanceOf[scala.xml.Elem])
   }
 
   override def toXML:Elem = {

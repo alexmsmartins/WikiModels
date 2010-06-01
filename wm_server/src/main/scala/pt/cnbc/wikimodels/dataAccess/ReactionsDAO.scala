@@ -41,17 +41,17 @@ class ReactionsDAO {
   /**
    * Allows testing procedures. This is not to be used from outside this class
    */
-  var  kb:Model = null
+  var kb: Model = null
   val sbmlModelsDAO = new SBMLModelsDAO()
 
-  def loadReaction(reactionMetaid:String):Reaction = {
-    try{
-      val myModel:Model = ManipulatorWrapper.loadModelfromDB
+  def loadReaction(reactionMetaid: String): Reaction = {
+    try {
+      val myModel: Model = ManipulatorWrapper.loadModelfromDB
       loadReaction(reactionMetaid, myModel)
     } catch {
-      case ex:thewebsemantic.NotFoundException =>
+      case ex: thewebsemantic.NotFoundException =>
         Console.println("Bean of " + Reaction.getClass + "and " +
-                        "id is not found")
+                "id is not found")
         ex.printStackTrace()
         null
       case ex =>
@@ -60,23 +60,23 @@ class ReactionsDAO {
     }
   }
 
-  def loadReaction(reactionMetaid:String, model:Model):Reaction = {
-    var ret:Reaction = null
+  def loadReaction(reactionMetaid: String, model: Model): Reaction = {
+    var ret: Reaction = null
 
     Console.print("After loading Jena Model")
     Console.print("Jena Model content")
     val queryString =
-      """
-        PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
-        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-        SELECT ?s WHERE
-        { ?s rdf:type sbml:Reaction .
-        """ +  "?s sbml:metaid \"" + reactionMetaid + "\"^^<http://www.w3.org/2001/XMLSchema#string> } "
+    """
+    PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
+    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+    SELECT ?s WHERE
+    { ?s rdf:type sbml:Reaction .
+    """ + "?s sbml:metaid \"" + reactionMetaid + "\"^^<http://www.w3.org/2001/XMLSchema#string> } "
 
-    val l:java.util.LinkedList[Reaction]
+    val l: java.util.LinkedList[Reaction]
     = Sparql.exec(model, classOf[Reaction], queryString)
     Console.println("Found " + l.size + " Reactions with metaid " + reactionMetaid)
-    if(l.size > 0){
+    if (l.size > 0) {
       val reaction = l.iterator.next
 
       val specRefDAO = new SpeciesReferencesDAO()
@@ -98,40 +98,40 @@ class ReactionsDAO {
     } else null
   }
 
-  def loadReactionsInModel(modelMetaId:String,
-                            model:Model):java.util.Collection[Reaction] = {
+  def loadReactionsInModel(modelMetaId: String,
+                           model: Model): java.util.Collection[Reaction] = {
     Console.print("After loading Jena Model")
     Console.print("Jena Model content")
     val queryString =
-      """
-        PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
-        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-        SELECT ?s WHERE
-        { ?m rdf:type sbml:Model .
-          ?m sbml:metaid """" + modelMetaId + """"^^<http://www.w3.org/2001/XMLSchema#string> .
-          ?m sbml:hasReaction ?s .
-          ?s rdf:type sbml:Reaction .
-         } """
+    """
+    PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
+    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+    SELECT ?s WHERE
+    { ?m rdf:type sbml:Model .
+      ?m sbml:metaid """" + modelMetaId + """"^^<http://www.w3.org/2001/XMLSchema#string> .
+      ?m sbml:hasReaction ?s .
+      ?s rdf:type sbml:Reaction .
+     } """
 
-    val l:java.util.LinkedList[Reaction]
+    val l: java.util.LinkedList[Reaction]
     = Sparql.exec(model, classOf[Reaction], queryString)
-    Console.println("Found " + l.size + " Reaction from model " + modelMetaId)
-    if(l.size > 0)
+    Console.println("Found " + l.size + " Reactions from model " + modelMetaId)
+    if (l.size > 0)
       l
     else null
   }
 
-  def loadReaction():java.util.Collection[Reaction] = {
-    try{
-      val myModel:Model = ManipulatorWrapper.loadModelfromDB
+  def loadReaction(): java.util.Collection[Reaction] = {
+    try {
+      val myModel: Model = ManipulatorWrapper.loadModelfromDB
       Console.print("After loading Jena Model")
       var reader = new RDF2Bean(myModel)
       Console.print("After creating a new RDF2Bean")
-      val l:java.util.List[Reaction] = reader.load(new Reaction().getClass )
-      .asInstanceOf[java.util.List[Reaction]]
+      val l: java.util.List[Reaction] = reader.load(new Reaction().getClass)
+              .asInstanceOf[java.util.List[Reaction]]
       l
     } catch {
-      case ex:thewebsemantic.NotFoundException =>
+      case ex: thewebsemantic.NotFoundException =>
         Console.println("Bean of " + Reaction.getClass + "and id is not found")
         ex.printStackTrace()
         null
@@ -140,25 +140,25 @@ class ReactionsDAO {
 
   /**
    * Saves an Reaction into the KnowledgeBase
-   * @param  reaction to be created
+   * @param reaction to be created
    * @return true if
    */
-  def createReaction(reaction:Reaction):Boolean = {
+  def createReaction(reaction: Reaction): Boolean = {
     var ret = false
-    var myModel:Model = null
-    try{
+    var myModel: Model = null
+    try {
       myModel = ManipulatorWrapper.loadModelfromDB
       myModel.begin
       ret = createReaction(reaction, myModel)
       myModel.commit
     } catch {
-      case ex:Exception => {
-          Console.println("Saving model " + reaction +
-                          "was not possible")
-          ex.printStackTrace
+      case ex: Exception => {
+        Console.println("Saving model " + reaction +
+                "was not possible")
+        ex.printStackTrace
 
-          false
-        }
+        false
+      }
     }
     ret
   }
@@ -167,12 +167,12 @@ class ReactionsDAO {
    * Creates a new SBML model individual in the Knowledgebase
    * @return true if creating the new model was possible and false otherwise
    */
-  def createReaction(reaction:Reaction, model:Model):Boolean = {
-    try{
+  def createReaction(reaction: Reaction, model: Model): Boolean = {
+    try {
       val writer = new Bean2RDF(model)
-      writer.save(reaction,false)
+      writer.save(reaction, false)
 
-      //Code to keep save from saving the subelements since we need to check if their metaids already exist
+      //Code to keep save from saving the sub-elements since we need to check if their metaids already exist
       val tmpreaction = new Reaction()
       tmpreaction.listOfReactants = reaction.listOfReactants
       reaction.listOfReactants = null
@@ -195,49 +195,49 @@ class ReactionsDAO {
 
       val kinLawDAO = new KineticLawsDAO()
       kinLawDAO.trytoCreateKineticLawInReaction(
-        reaction.metaid, reaction.kineticLaw , model)
+        reaction.metaid, reaction.kineticLaw, model)
 
       true
     } catch {
-      case ex:thewebsemantic.NotFoundException => {
-          Console.println("Bean of " + Reaction.getClass + "and " +
-                          "id is not found")
-          ex.printStackTrace()
-          false
-        }
+      case ex: thewebsemantic.NotFoundException => {
+        Console.println("Bean of " + Reaction.getClass + "and " +
+                "id is not found")
+        ex.printStackTrace()
+        false
+      }
       case ex => {
-          Console.println(ex.toString)
-          ex.printStackTrace()
-          false
-        }
+        Console.println(ex.toString)
+        ex.printStackTrace()
+        false
+      }
     }
   }
 
-  def trytoCreateReactionInModel(modelMetaid:String,
-                                 reaction:Reaction):String = {
-    try{
-      val myModel:Model = ManipulatorWrapper.loadModelfromDB
+  def trytoCreateReactionInModel(modelMetaid: String,
+                                 reaction: Reaction): String = {
+    try {
+      val myModel: Model = ManipulatorWrapper.loadModelfromDB
       trytoCreateReactionInModel(modelMetaid, reaction, myModel)
     } catch {
-      case ex:thewebsemantic.NotFoundException => {
-          Console.println("Bean of " + Reaction.getClass + "and " +
-                          "id is not found")
-          ex.printStackTrace()
-          null
-        }
+      case ex: thewebsemantic.NotFoundException => {
+        Console.println("Bean of " + Reaction.getClass + "and " +
+                "id is not found")
+        ex.printStackTrace()
+        null
+      }
       case ex => {
-          ex.printStackTrace()
-          null
-        }
+        ex.printStackTrace()
+        null
+      }
     }
   }
 
-  def trytoCreateReactionInModel(modelMetaid:String,
-                                 reaction:Reaction,
-                                 model:Model):String = {
-    if(sbmlModelsDAO.modelMetaidExists(modelMetaid)){
+  def trytoCreateReactionInModel(modelMetaid: String,
+                                 reaction: Reaction,
+                                 model: Model): String = {
+    if (sbmlModelsDAO.modelMetaIdExists(modelMetaid, model)) {
       val reactionMetaid = trytoCreateReaction(reaction, model)
-      if(reactionMetaid != null){
+      if (reactionMetaid != null) {
 
         //Jena API used directly
         val sbmlModelRes = model.createResource(
@@ -246,8 +246,8 @@ class ReactionsDAO {
           NS.sbml + "Reaction/" + reactionMetaid)
 
         sbmlModelRes.addProperty(model
-                                 .getProperty(NS.sbml + "hasReaction"),
-                                 reactionRes)
+                .getProperty(NS.sbml + "hasReaction"),
+          reactionRes)
         reactionMetaid
       } else null
     } else null
@@ -259,100 +259,100 @@ class ReactionsDAO {
    * This method also issues an available metaid
    *
    */
-  def trytoCreateReaction(reaction:Reaction):String = {
-    try{
-      val myModel:Model = ManipulatorWrapper.loadModelfromDB
+  def trytoCreateReaction(reaction: Reaction): String = {
+    try {
+      val myModel: Model = ManipulatorWrapper.loadModelfromDB
       trytoCreateReaction(reaction, myModel)
     } catch {
-      case ex:thewebsemantic.NotFoundException => {
-          Console.println("Bean of " + Reaction.getClass + "and " +
-                          "id is not found")
-          ex.printStackTrace()
-          null
-        }
+      case ex: thewebsemantic.NotFoundException => {
+        Console.println("Bean of " + Reaction.getClass + "and " +
+                "id is not found")
+        ex.printStackTrace()
+        null
+      }
       case ex => {
-          ex.printStackTrace()
-          null
-        }
+        ex.printStackTrace()
+        null
+      }
     }
   }
 
-  def trytoCreateReaction(reaction:Reaction, model:Model):String = {
-    if( if( sbmlModelsDAO.metaidExists(reaction.metaid ) == false ){
-        createReaction(reaction, model)
-      } else {
-        reaction.metaid = sbmlModelsDAO.generateNewMetaIdFrom(reaction,
-                                                              model)
-        createReaction(reaction,
-                       model)
-      } == true)
-    {
-      reaction.metaid
-    } else null
+  def trytoCreateReaction(reaction: Reaction, model: Model): String = {
+    if (if (sbmlModelsDAO.metaIdExists(reaction.metaid, model) == false) {
+      createReaction(reaction, model)
+    } else {
+      reaction.metaid = sbmlModelsDAO.generateNewMetaIdFrom(reaction,
+        model)
+      createReaction(reaction,
+        model)
+    } == true)
+      {
+        reaction.metaid
+      } else null
 
   }
 
-  def reactionMetaidExists(metaid:String):Boolean = {
-    try{
-      val myModel:Model = ManipulatorWrapper.loadModelfromDB
+  def reactionMetaidExists(metaid: String): Boolean = {
+    try {
+      val myModel: Model = ManipulatorWrapper.loadModelfromDB
       reactionMetaidExists(metaid, myModel)
     } catch {
-      case ex:thewebsemantic.NotFoundException => {
-          Console.println("Bean of " + Reaction.getClass + "and " +
-                          "id is not found")
-          ex.printStackTrace()
-          false
-        }
+      case ex: thewebsemantic.NotFoundException => {
+        Console.println("Bean of " + Reaction.getClass + "and " +
+                "id is not found")
+        ex.printStackTrace()
+        false
+      }
       case ex => {
-          ex.printStackTrace()
-          false
-        }
+        ex.printStackTrace()
+        false
+      }
     }
   }
 
-  def reactionMetaidExists(metaid:String, model:Model):Boolean = {
+  def reactionMetaidExists(metaid: String, model: Model): Boolean = {
     //val reasoner:Reasoner = ReasonerRegistry.getOWLReasoner
     //val ontModelSpec:OntModelSpec = null
     //val ont:OntModel = ModelFactory.createOntologyModel(ontModelSpec, model)
     //val ont:InfModel = ModelFactory.createInfModel(reasoner, model)
     val queryString =
-      """
-        PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
-        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-        ASK
-        { ?s rdf:type sbml:Reaction .
-        """ +  "?s sbml:metaid \"" + metaid + "\"^^<http://www.w3.org/2001/XMLSchema#string> } "
+    """
+    PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
+    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+    ASK
+    { ?s rdf:type sbml:Reaction .
+    """ + "?s sbml:metaid \"" + metaid + "\"^^<http://www.w3.org/2001/XMLSchema#string> } "
 
-    val query:Query = QueryFactory.create(queryString);
-    val qe:QueryExecution = QueryExecutionFactory.create(query, model);
-    val results:Boolean = qe.execAsk;
+    val query: Query = QueryFactory.create(queryString);
+    val qe: QueryExecution = QueryExecutionFactory.create(query, model);
+    val results: Boolean = qe.execAsk;
 
     Console.println("SPARQL query \n" + queryString + "\nIs " + results)
 
     results
   }
-    
+
   /**
    * Updates a Reaction into the KnowledgeBase
-   * @param  true if
+   * @param true if
    * @return true if
    */
-  def updateReaction(reaction:Reaction):Boolean = {
-    try{
-      val myModel:Model = ManipulatorWrapper.loadModelfromDB
+  def updateReaction(reaction: Reaction): Boolean = {
+    try {
+      val myModel: Model = ManipulatorWrapper.loadModelfromDB
       updateReaction(reaction, myModel)
     } catch {
-      case ex:thewebsemantic.NotFoundException => {
-          Console.println("Bean of " + Reaction.getClass + "and " +
-                          "id is not found")
-          ex.printStackTrace()
-          false
-        }
+      case ex: thewebsemantic.NotFoundException => {
+        Console.println("Bean of " + Reaction.getClass + "and " +
+                "id is not found")
+        ex.printStackTrace()
+        false
+      }
       case ex => {
-          Console.println(ex.toString)
-          ex.printStackTrace()
-          false
-        }
+        Console.println(ex.toString)
+        ex.printStackTrace()
+        false
+      }
     }
   }
 
@@ -360,8 +360,8 @@ class ReactionsDAO {
    * Updates a Reaction individual in the Knowledgebase
    * @return true if creating the new model was possible and false otherwise
    */
-  def updateReaction(reaction:Reaction, model:Model):Boolean = {
-    if( sbmlModelsDAO.metaidExists(reaction.metaid ) ){
+  def updateReaction(reaction: Reaction, model: Model): Boolean = {
+    if (sbmlModelsDAO.metaIdExists(reaction.metaid, model)) {
       val writer = new Bean2RDF(model)
       writer.save(reaction)
 
@@ -388,21 +388,21 @@ class ReactionsDAO {
 
   /**
    * Deletes an Reaction in the KnowledgeBase
-   * @param  true if
+   * @param true if
    * @return true if
    */
-  def deleteReaction(reaction:Reaction):Boolean = {
-    try{
-      val myModel:Model = ManipulatorWrapper.loadModelfromDB
+  def deleteReaction(reaction: Reaction): Boolean = {
+    try {
+      val myModel: Model = ManipulatorWrapper.loadModelfromDB
       deleteReaction(reaction, myModel)
     } catch {
-      case ex:Exception => {
-          Console.println("Deleting model " + reaction +
-                          "was not possible")
-          ex.printStackTrace
+      case ex: Exception => {
+        Console.println("Deleting model " + reaction +
+                "was not possible")
+        ex.printStackTrace
 
-          false
-        }
+        false
+      }
     }
   }
 
@@ -410,26 +410,26 @@ class ReactionsDAO {
    * Deletes an Reaction in the KnowledgeBase
    * @return true if creating the new model was possible and false otherwise
    */
-  def deleteReaction(reaction:Reaction, model:Model):Boolean = {
-    try{
-      if( reactionMetaidExists(reaction.metaid ) ){
+  def deleteReaction(reaction: Reaction, model: Model): Boolean = {
+    try {
+      if (reactionMetaidExists(reaction.metaid)) {
         val writer = new Bean2RDF(model)
         writer.delete(reaction)
         //TODO delete subelements
         true
       } else false
     } catch {
-      case ex:thewebsemantic.NotFoundException => {
-          Console.println("Bean of " + Reaction.getClass + "and " +
-                          "id is not found")
-          ex.printStackTrace()
-          false
-        }
+      case ex: thewebsemantic.NotFoundException => {
+        Console.println("Bean of " + Reaction.getClass + "and " +
+                "id is not found")
+        ex.printStackTrace()
+        false
+      }
       case ex => {
-          Console.println(ex.toString)
-          ex.printStackTrace()
-          false
-        }
+        Console.println(ex.toString)
+        ex.printStackTrace()
+        false
+      }
     }
   }
 }

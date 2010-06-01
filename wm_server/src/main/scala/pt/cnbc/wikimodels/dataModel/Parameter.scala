@@ -63,6 +63,7 @@ case class Parameter() extends Element {
     this.value = value
     this.units = units
     this.constant = constant
+    (new SBMLHandler).idExistsAndIsValid(this.id)
   }
 
   def this(xmlParameter: Elem) = {

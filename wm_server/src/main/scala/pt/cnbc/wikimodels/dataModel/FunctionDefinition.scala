@@ -42,6 +42,7 @@ case class FunctionDefinition() extends Element{
         this.id = id
         this.name = name
         this.math = math.toString
+      (new SBMLHandler).idExistsAndIsValid(this.id)
     }
 
     def this(xmlFunctionDefinition:Elem) = {

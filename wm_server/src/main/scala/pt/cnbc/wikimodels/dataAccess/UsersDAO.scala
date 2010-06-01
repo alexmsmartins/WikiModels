@@ -24,8 +24,6 @@ import thewebsemantic.RDF2Bean
  */
 object UsersDAO {
 
-    implicit def toNiceObject[T <: AnyRef](x : T) = new NiceObject(x)
-
     def saveUser(u:User) = {
         try{
             val myModel:Model = ManipulatorWrapper.loadModelfromDB
@@ -99,7 +97,4 @@ object UsersDAO {
                 null
         }
     }
-}
-class NiceObject[T <: AnyRef](x : T) {
-  def niceClass : Class[_ <: T] = x.getClass.asInstanceOf[Class[T]]
 }

@@ -49,7 +49,7 @@ abstract class Element extends DataModel{
         //metaid stays mandatory for now
         if(metaid == null){
             //Note: It might be deleted from here to make the data model
-            //Note: independent frm the data validation -> we 'll see.
+            //Note: independent from the data validation -> we 'll see.
             throw new BadFormatException(
                 "Element constructor should never receive a null metaid.")
         }
