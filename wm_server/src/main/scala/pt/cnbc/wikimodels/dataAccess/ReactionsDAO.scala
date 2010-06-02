@@ -152,11 +152,16 @@ class ReactionsDAO {
       ret = createReaction(reaction, myModel)
       myModel.commit
     } catch {
-      case ex: Exception => {
+      case ex: thewebsemantic.NotFoundException => {
+        Console.println("Bean of " + Reaction.getClass + "and " +
+                "id is not found")
+        ex.printStackTrace()
+        false
+      }
+      case ex => {
         Console.println("Saving model " + reaction +
                 "was not possible")
         ex.printStackTrace
-
         false
       }
     }
@@ -168,49 +173,34 @@ class ReactionsDAO {
    * @return true if creating the new model was possible and false otherwise
    */
   def createReaction(reaction: Reaction, model: Model): Boolean = {
-    try {
-      val writer = new Bean2RDF(model)
-      writer.save(reaction, false)
+    val writer = new Bean2RDF(model)
 
-      //Code to keep save from saving the sub-elements since we need to check if their metaids already exist
-      val tmpreaction = new Reaction()
-      tmpreaction.listOfReactants = reaction.listOfReactants
-      reaction.listOfReactants = null
-      tmpreaction.listOfProducts = reaction.listOfProducts
-      reaction.listOfProducts = null
-      tmpreaction.listOfModifiers = reaction.listOfModifiers
-      reaction.listOfModifiers = null
+    //Code to keep save from saving the sub-elements since we need to check if their metaids already exist
+    val tmpreaction = new Reaction()
+    tmpreaction.listOfReactants = reaction.listOfReactants
+    reaction.listOfReactants = null
+    tmpreaction.listOfProducts = reaction.listOfProducts
+    reaction.listOfProducts = null
+    tmpreaction.listOfModifiers = reaction.listOfModifiers
+    reaction.listOfModifiers = null
 
+    writer.save(reaction)
+    val specRefDAO = new SpeciesReferencesDAO()
+    tmpreaction.listOfReactants.map(
+      specRefDAO.tryToCreateReactantInReaction(
+        reaction.metaid, _, model))
+    tmpreaction.listOfProducts.map(
+      specRefDAO.tryToCreateProductInReaction(
+        reaction.metaid, _, model))
+    tmpreaction.listOfModifiers.map(
+      specRefDAO.tryToCreateModifierInReaction(
+        reaction.metaid, _, model))
 
-      val specRefDAO = new SpeciesReferencesDAO()
-      tmpreaction.listOfReactants.map(
-        specRefDAO.tryToCreateReactantInReaction(
-          reaction.metaid, _, model))
-      tmpreaction.listOfProducts.map(
-        specRefDAO.tryToCreateProductInReaction(
-          reaction.metaid, _, model))
-      tmpreaction.listOfModifiers.map(
-        specRefDAO.tryToCreateModifierInReaction(
-          reaction.metaid, _, model))
+    val kinLawDAO = new KineticLawsDAO()
+    kinLawDAO.tryToCreateKineticLawInReaction(
+      reaction.metaid, reaction.kineticLaw, model)
 
-      val kinLawDAO = new KineticLawsDAO()
-      kinLawDAO.tryToCreateKineticLawInReaction(
-        reaction.metaid, reaction.kineticLaw, model)
-
-      true
-    } catch {
-      case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + Reaction.getClass + "and " +
-                "id is not found")
-        ex.printStackTrace()
-        false
-      }
-      case ex => {
-        Console.println(ex.toString)
-        ex.printStackTrace()
-        false
-      }
-    }
+    true
   }
 
   def tryToCreateReactionInModel(modelMetaid: String,

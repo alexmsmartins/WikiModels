@@ -8,17 +8,13 @@
 
 package pt.cnbc.wikimodels.dataModel
 
-import scala.xml.Group
-import scala.xml.Node
-import scala.xml.NodeSeq
-
 import thewebsemantic.Id
 import thewebsemantic.Namespace
 import thewebsemantic.RdfProperty
 import scala.reflect.BeanInfo
-import scala.xml.Elem
-
 import pt.cnbc.wikimodels.util.SBMLHandler
+import pt.cnbc.wikimodels.exceptions.BadFormatException
+import xml._
 
 @BeanInfo
 @Namespace("http://wikimodels.cnbc.pt/ontologies/sbml.owl#")
@@ -55,6 +51,10 @@ case class SpeciesReference() extends Element{
     this.stoichiometry = stoichiometry
     this.stoichiometryMath = stoichiometryMath.toString
     (new SBMLHandler).idExistsAndIsValid(this.id)
+    if(this.stoichiometry != null)
+      if(this.stoichiometry.compareTo(0) <= 0 ) throw new BadFormatException("Stoichiometry in SpeciesReference should be greater than 0.")
+    if(this.stoichiometry == null && (this.stoichiometryMath == null || this.stoichiometryMath.trim == ""))
+      throw new BadFormatException("A value should be issued to Stoichiometry or stoichiometryMath. Neither has it")
   }
 
   def this(xmlSpeciesRef:Elem) = {
@@ -65,17 +65,19 @@ case class SpeciesReference() extends Element{
          (xmlSpeciesRef \ "@species").text,
          try{
           (xmlSpeciesRef \ "@stoichiometry").text.toDouble
-        } catch {case _ => 1 },
+         } catch {case _ => 1 },
          (xmlSpeciesRef \ "stoichiometryMath" \ "math"))
     //if there is a stoichiometryMath 
     if( (xmlSpeciesRef \ "@speciesReference" \ "stoichiometryMath" ).size == 0 ){
+      if(this.stoichiometry == null)
+        this.stoichiometry = 1
     } else {
       this.stoichiometry = null
     }
   }
 
   override def toXML:Elem = {
-    val mathExists = this.stoichiometryMath.size == 0
+    val mathExists = this.stoichiometryMath.size > 0
     
     <speciesReference metaid={metaid} id={id} name={name}
       species={species} stoichiometry=
@@ -84,13 +86,12 @@ case class SpeciesReference() extends Element{
       }>
       <!--order is important according to SBML Specifications-->
       {new SBMLHandler().genNotesFromHTML(notes)}
-      {
-        if(!mathExists){
-          null
-        } else {
+      {if(mathExists){
           <stoichiometryMath>
-            {this.stoichiometryMath.iterator.next}
+            {XML.loadString(this.stoichiometryMath)}
           </stoichiometryMath>
+        } else {
+          scala.xml.Null          
         }
       }
     </speciesReference>
