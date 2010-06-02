@@ -45,7 +45,8 @@ class Boot {
              Menu(Loc("createM", List("models","create"), "Create Model", loggedIn)),
              Menu(Loc("browseM", List("models","index"), "Browse Model", loggedIn)),
              Menu(Loc("browseMm", List("models","browse.xhtml"), "Browse Model", Hidden, loggedIn)),
-             Menu(Loc("editM", List("models","editModel.xhtml"), "Edit Model", Hidden, loggedIn))) ::
+             Menu(Loc("editM", List("models","editModel.xhtml"), "Edit Model", Hidden, loggedIn)),
+             Menu(Loc("addM", List("models","addModel.xhtml"), "Add Model", Hidden, loggedIn))) ::
         //Menu(Loc("listM", List("models","list"), "List of Models"))) ::
         Menu(Loc("tags", List("tags"), "Tags")) ::
         Menu(Loc("create_user", List("create_user"), "Create User", Hidden)) ::
@@ -68,6 +69,10 @@ class Boot {
 
         // redirects the pages, it is used for the bookmarks
         LiftRules.rewrite.append {
+            case RewriteRequest(ParsePath(List("model",any,"edit"),_,_,_),_,_) =>
+                RewriteResponse("models" :: "editModel.xhtml" :: Nil)
+            case RewriteRequest(ParsePath(List("model",any,"add",some),_,_,_),_,_) =>
+                RewriteResponse("models" :: "addModel.xhtml" :: Nil)
             case RewriteRequest(ParsePath(List("model",any),_,_,_),_,_) =>
                 RewriteResponse("models" :: "browse.xhtml" :: Nil)
             case RewriteRequest(ParsePath(List("model",any,"parameter",some),_,_,_),_,_) =>

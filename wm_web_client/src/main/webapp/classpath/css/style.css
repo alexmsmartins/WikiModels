@@ -336,6 +336,9 @@ br.both{
 #content #required_field {
     font:bold; color:red;
 }
+#content #lateralSlice {
+    border-left:2px solid #bbb; list-style:none;
+}
 
 #content a.dsphead{
     text-decoration:none; margin-left:1.5em;
