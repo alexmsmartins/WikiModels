@@ -21,7 +21,7 @@
     </head>
     <lift:HomePage.logInfo>
         <div id="login">
-        	<h1><lift:HomePage.profile /></h1>
+            <h1><lift:HomePage.profile /></h1>
             <h1><lift:Menu.item name="Logout" /></h1>
         </div>
     </lift:HomePage.logInfo>
@@ -35,67 +35,92 @@
         <h1>Create Model</h1>
         <hr />
         <lift:CreateModel.createDescription form="post" name="createForm" id_msgs="messages" >
-            <h4><span id="required_field">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* required fields</span></h4><br />
-            <lift:ModelTree.render />
-            <ul id="model_tree" class="treeview-gray">
-                <li><h3>Model ID: <span id="required_field">*</span><div id="messages"></div></h3><br /></li>
-                <li><h3>Name of the model:
-                <createDescription:name>
-                    <text:model_id/>
-                </createDescription:name></h3><br /></li>
-                <li><span><h3>Description of the model:</h3></span>
-                    <br />
-                    <ul>
-                        <li><span><createDescription:description /></span><br /></li>
+            <lift:ModelTab.render />
+            <div id="model_tab">
+                <ul>
+                    <li><a href="#tab-1">Model Description</a></li>
+                    <li><a href="#tab-2">Reactions</a></li>
+                    <li><a href="#tab-3">Compartments</a></li>
+                    <li><a href="#tab-4">Species</a></li>
+                    <li><a href="#tab-5">Function Definitions</a></li>
+                    <li><a href="#tab-6">Parameters</a></li>
+                    <li><a href="#tab-7">Constraints</a></li>
+                </ul>
+                <div id="tab-1">
+
+                    <h4><span id="required_field">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* required fields</span></h4><br />
+                    <lift:ModelTree.render />
+                    <ul id="model_tree" class="treeview-gray">
+                        <li><span><h3>Model ID: <span id="required_field">*</span><div id="messages"></div></h3><br /></span></li>
+                        <li><h3>Name of the model:
+                                <createDescription:name>
+                                    <text:model_id/>
+                        </createDescription:name></h3><br /></li>
+                        <li><span><h3>Description of the model:</h3></span>
+                            <br />
+                            <ul>
+                                <li><span><createDescription:description /></span><br /></li>
+                            </ul>
+                        </li>
                     </ul>
-                </li>
-                
-                <li class="closed"><span><h3>List of function definitions:</h3></span>
-                    <br />
-                    <ul id="function_def"></ul>
-                    <ul>
-                        <li><createDescription:buttonFunDef /></li>
-        			</ul>
-                </li>
-                <li class="closed"><span><h3>List of compartments:</h3></span>
+                </div>
+                <div id="tab-2">
+                    <h4><span id="required_field">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* required fields</span></h4><br />
+                    <div><h3>Insert reactions of the model:</h3></div>
+                    <div id="react"></div>
+                    <ul style="list-style:none;">
+                        <li><createDescription:buttonReactions /></li>
+                    </ul>
+                </div>
+                <div id="tab-3">
+                    <h4><span id="required_field">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* required fields</span></h4><br />
+                    <div><h3>Insert compartments of the model:</h3></div>
                     <br />
                     <ul id="compart"></ul>
-                    <ul>
+                    <ul style="list-style:none;">
                         <li><createDescription:buttonCompartment /></li>
                     </ul>
-                </li>
-                <li class="closed"><span><h3>Insert species of the model:</h3></span>
+                </div>
+                <div id="tab-4">
+                    <h4><span id="required_field">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* required fields</span></h4><br />
+                    <div><h3>Insert species of the model:</h3></div>
                     <br />
                     <ul id="specie"></ul>
-                    <ul>
+                    <ul style="list-style:none;">
                         <li><createDescription:buttonSpecies /></li>
-        			</ul>
-                </li>
-                <li class="closed"><span><h3>Insert parameters of the model:</h3></span>
+                    </ul>
+                </div>
+                <div id="tab-5">
+                    <h4><span id="required_field">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* required fields</span></h4><br />
+                    <div><h3>List of function definitions:</h3></div>
+                    <br />
+                    <div id="function_def"></div>
+                    <ul style="list-style:none;">
+                        <li><createDescription:buttonFunDef /></li>
+                    </ul>
+                </div>
+                <div id="tab-6">
+                    <h4><span id="required_field">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* required fields</span></h4><br />
+                    <div><h3>Insert parameters of the model:</h3></div>
                     <br />
                     <ul id="paramet"></ul>
-                    <ul>
+                    <ul style="list-style:none;">
                         <li><createDescription:buttonParam /></li>
-                	</ul>
-                </li>
-                <li class="closed"><span><h3>Insert constraints of the model:</h3></span>
+                    </ul>
+                </div>
+                <div id="tab-7">
+                    <h4><span id="required_field">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* required fields</span></h4><br />
+                    <div><h3>Insert constraints of the model:</h3></div>
                     <br />
                     <ul id="const"></ul>
-                    <ul>
+                    <ul style="list-style:none;">
                         <li><createDescription:buttonConstraint /></li>
-                	</ul>
-                </li>
-                <li class="closed"><span><h3>Insert reactions of the model:</h3></span>
-                    <br />
-                    <ul id="react"></ul>
-                    <ul>
-                        <li><createDescription:buttonReactions /></li>
-                	</ul>
-                </li>
-            </ul>
-            <br />
-            <hr />
-            <h3><createDescription:save /></h3>
+                    </ul>
+                </div>
+                <br />
+                <hr />
+                <h3><createDescription:save /></h3>
+            </div>
         </lift:CreateModel.createDescription>
     </div>
 </lift:surround>

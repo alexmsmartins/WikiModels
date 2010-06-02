@@ -1,20 +1,14 @@
 <lift:surround with="default" at="content">
     <head>
-        <lift:EditModel.script />
         <script type="text/javascript">
             window.onload = function() {
-                var urlLoc = window.location.href;
                 var oFCKeditor02 = new FCKeditor( 'editNotesArea' );
-                if (urlLoc.indexOf("/edit") != -1){
-                    oFCKeditor02.BasePath = '../../classpath/js/fckeditor/';
-                } else {
-                    oFCKeditor02.BasePath = '../../../classpath/js/fckeditor/';
-                }
+                oFCKeditor02.BasePath = '../../../classpath/js/fckeditor/';
                 oFCKeditor02.ToolbarSet = 'MyTool' ;
                 oFCKeditor02.ReplaceTextarea();
             };
         </script>
-        <title>WikiModels Webpage - Edit</title>
+        <title>WikiModels Webpage - Add</title>
     </head>
     <lift:HomePage.logInfo>
         <div id="login">
@@ -30,15 +24,15 @@
     </div>
     <div id="content">
         <br /><br />
-        <lift:EditModel.editWhat>
-            <h1>Edit <editSome:editWhat /></h1>
-        </lift:EditModel.editWhat>
+        
+            <h1>Add</h1>
+        
         <hr />
-        <lift:EditModel.edit form="post" name="createForm" id_msgs="messages" >
+        <lift:EditModel.add form="post" name="createForm" id_msgs="messages" >
             <h4><span id="required_field">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* required fields</span></h4><br />
-            <editModel:editAttribute />
-            <span><h3><editModel:save /></h3></span>
-            <span><h3><editModel:cancel /></h3></span><br />
-        </lift:EditModel.edit>
+            <addModel:addAttribute />
+            <span><h3><addModel:save /></h3></span>
+            <span><h3><addModel:cancel /></h3></span><br />
+        </lift:EditModel.add>
     </div>
 </lift:surround>

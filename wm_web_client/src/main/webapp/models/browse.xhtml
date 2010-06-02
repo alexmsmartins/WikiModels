@@ -1,5 +1,7 @@
 <lift:surround with="default" at="content">
     <head>
+        
+        <script type="text/javascript" src="/classpath/js/jquery.blockUI.js"></script>
         <script type="text/javascript">
             /*window.onload = function() {
                 var oFCKeditor01 = new FCKeditor( 'commentArea' );
@@ -42,9 +44,9 @@
             document.getElementById('myinputarea').value = source;
         }
         ]]>*/
-        $(function() {
-            $('#model_tab').tabs({ fxSlide: true, fxFade: true, fxSpeed: 'normal' });
-        });
+            $(function() {
+                $('#model_tab').tabs({ fxSlide: true, fxFade: true, fxSpeed: 'normal' });
+            });
         </script>
     </head>
     <lift:HomePage.logInfo>
@@ -88,6 +90,7 @@ Rendered:<br/>
             <modelInformation:downloadSBML />
             <br />
             <br />
+
             <lift:ModelTab.render />
             <div id="model_tab">
                 <ul>
@@ -100,7 +103,7 @@ Rendered:<br/>
                 <div id="tabs-1">
                     <lift:ModelTree.render2 />
                     <ul id="model_tree_model" class="treeview-gray">
-                        <li><span><h2>&nbsp;&nbsp;&nbsp;Model <h9><modelInformation:editlink />
+                        <li><span><h2>&nbsp;&nbsp;&nbsp;Model <h9><modelInformation:delete /> <modelInformation:edit />
                                         <a onclick="window.open('../models/new_model_comment.html','New Comment','width=600,height=320');">Make Comment</a>
                             <a onclick="window.open('../models/view_comments.html','View Comments','width=600,height=600');">View Comments</a></h9></h2></span>
                             <ul>
@@ -196,7 +199,7 @@ Rendered:<br/>
                 <div id="tabs-3">
                     <lift:ModelTree.render4 />
                     <ul id="model_tree_math" class="treeview-gray">
-                        <li><span><h2>&nbsp;&nbsp;&nbsp;Reactions</h2></span>
+                        <li><span><h2>&nbsp;&nbsp;&nbsp;Reactions<h9><modelInformation:addReaction /></h9></h2></span>
                             <ul>
                                 <li class="open"><span>
                                         <table class="browseModelTable" id="modelTable_Overview">
@@ -208,7 +211,7 @@ Rendered:<br/>
                                 </span></li>
                             </ul>
                         </li>
-                        <li><span><h2>&nbsp;&nbsp;&nbsp;Functions</h2></span>
+                        <li><span><h2>&nbsp;&nbsp;&nbsp;Functions<h9><modelInformation:addFunctions /></h9></h2></span>
                             <ul>
                                 <li class="open">
                                     <table class="browseModelTable" id="modelTable_Overview">
@@ -227,7 +230,7 @@ Rendered:<br/>
                 <div id="tabs-4">
                     <lift:ModelTree.render5 />
                     <ul id="model_tree_physical" class="treeview-gray">
-                        <li><span><h2>&nbsp;&nbsp;&nbsp;Compartment</h2></span>
+                        <li><span><h2>&nbsp;&nbsp;&nbsp;Compartment<h9><modelInformation:addCompartment /></h9></h2></span>
                             <ul>
                                 <li class="open"><span>
                                         <table class="browseModelTable" id="modelTable_Overview">
@@ -236,7 +239,7 @@ Rendered:<br/>
                                 </span></li>
                             </ul>
                         </li>
-                        <li><span><h2>&nbsp;&nbsp;&nbsp;Species</h2></span>
+                        <li><span><h2>&nbsp;&nbsp;&nbsp;Species<h9><modelInformation:addSpecies /></h9></h2></span>
                             <ul>
                                 <li class="open">
                                     <table class="browseModelTable" id="modelTable_Overview">
@@ -250,7 +253,7 @@ Rendered:<br/>
                 <div id="tabs-5">
                     <lift:ModelTree.render6 />
                     <ul id="model_tree_parameter" class="treeview-gray">
-                        <li><span><h2>&nbsp;&nbsp;&nbsp;Global Parameters</h2></span>
+                        <li><span><h2>&nbsp;&nbsp;&nbsp;Global Parameters<h9><modelInformation:addParameter /></h9></h2></span>
                             <ul>
                                 <li class="open"><span>
                                         <table class="browseModelTable" id="modelTable_Overview">
