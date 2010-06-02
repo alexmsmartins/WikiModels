@@ -106,7 +106,7 @@ class ReactionResource(sbmlModelResource:String) extends RESTResource {
                     }
             }
             if(reactionMetaId == null){
-                throw new BadFormatException("Creating reaction did not went according to plan.");
+                new BadFormatException("Creating reaction did not went according to plan.");
             }else {
                 val uri:URI = uriInfo.getAbsolutePathBuilder()
                 .path(reactionMetaId)

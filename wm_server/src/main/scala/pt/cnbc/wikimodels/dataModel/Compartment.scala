@@ -57,7 +57,7 @@ case class Compartment() extends Element {
     this.outside = outside
     this.constant = constant
     (new SBMLHandler).idExistsAndIsValid(this.id)
-    if (this.spatialDimensions <= 0 || spatialDimensions >= 3)
+    if (this.spatialDimensions < 0 || spatialDimensions > 3)
       throw new BadFormatException("" + spatialDimensions + " is an invalid value for spatialDimensions");
     if (spatialDimensions == 0 && size != null)
       throw new BadFormatException("size should not exist when spacialDimensions is 0");
