@@ -163,11 +163,11 @@ class SpeciessDAO {
     true
   }
 
-  def trytoCreateSpeciesInModel(modelMetaid:String,
+  def tryToCreateSpeciesInModel(modelMetaid:String,
                                 species:Species):String = {
     try{
       val myModel:Model = ManipulatorWrapper.loadModelfromDB
-      trytoCreateSpeciesInModel(modelMetaid, species, myModel)
+      tryToCreateSpeciesInModel(modelMetaid, species, myModel)
     } catch {
       case ex:thewebsemantic.NotFoundException => {
           Console.println("Bean of " + Species.getClass + "and " +
@@ -182,11 +182,11 @@ class SpeciessDAO {
     }
   }
 
-  def trytoCreateSpeciesInModel(modelMetaid:String,
+  def tryToCreateSpeciesInModel(modelMetaid:String,
                                 species:Species,
                                 model:Model):String = {
     if(sbmlModelsDAO.modelMetaIdExists(modelMetaid, model)){
-      val speciesMetaid = trytoCreateSpecies(species, model)
+      val speciesMetaid = tryToCreateSpecies(species, model)
       if(speciesMetaid != null){
 
         //Jena API used directly
@@ -209,10 +209,10 @@ class SpeciessDAO {
    * This method also issues an available metaid
    *
    */
-  def trytoCreateSpecies(species:Species):String = {
+  def tryToCreateSpecies(species:Species):String = {
     try{
       val myModel:Model = ManipulatorWrapper.loadModelfromDB
-      trytoCreateSpecies(species, myModel)
+      tryToCreateSpecies(species, myModel)
     } catch {
       case ex:thewebsemantic.NotFoundException => {
           Console.println("Bean of " + Species.getClass + "and " +
@@ -227,19 +227,19 @@ class SpeciessDAO {
     }
   }
 
-  def trytoCreateSpecies(species:Species, model:Model):String = {
-    if( if( sbmlModelsDAO.metaIdExists(species.metaid, model) == false ){
-        createSpecies(species, model)
-      } else {
-        species.metaid = sbmlModelsDAO.generateNewMetaIdFrom(species,
+  def tryToCreateSpecies(species:Species, model:Model):String = {
+    if( if(species.metaid != null &&
+           species.metaid.trim != "" &&
+           sbmlModelsDAO.metaIdExists(species.metaid, model) == false ){
+          createSpecies(species, model)
+        } else {
+          species.metaid = sbmlModelsDAO.generateNewMetaIdFrom(species,
                                                              model)
-        createSpecies(species,
+          createSpecies(species,
                       model)
-      } == true)
-    {
+        } == true){
       species.metaid
     } else null
-
   }
 
   def speciesMetaidExists(metaid:String):Boolean = {

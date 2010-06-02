@@ -160,11 +160,11 @@ SELECT ?s WHERE
     true
   }
 
-  def trytoCreateParameterInModel(modelMetaid: String,
+  def tryToCreateParameterInModel(modelMetaid: String,
                                   parameter: Parameter): String = {
     try {
       val myModel: Model = ManipulatorWrapper.loadModelfromDB
-      trytoCreateParameterInModel(modelMetaid, parameter, myModel)
+      tryToCreateParameterInModel(modelMetaid, parameter, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
         Console.println("Bean of " + Parameter.getClass + "and " +
@@ -179,11 +179,11 @@ SELECT ?s WHERE
     }
   }
 
-  def trytoCreateParameterInModel(modelMetaid: String,
+  def tryToCreateParameterInModel(modelMetaid: String,
                                   parameter: Parameter,
                                   model: Model): String = {
     if (sbmlModelsDAO.modelMetaIdExists(modelMetaid, model)) {
-      val parameterMetaid = trytoCreateParameter(parameter, model)
+      val parameterMetaid = tryToCreateParameter(parameter, model)
       if (parameterMetaid != null) {
         //Jena API used directly
         val sbmlModelRes = model.createResource(
@@ -205,10 +205,10 @@ SELECT ?s WHERE
    * This method also issues an available metaid
    *
    */
-  def trytoCreateParameter(parameter: Parameter): String = {
+  def tryToCreateParameter(parameter: Parameter): String = {
     try {
       val myModel: Model = ManipulatorWrapper.loadModelfromDB
-      trytoCreateParameter(parameter, myModel)
+      tryToCreateParameter(parameter, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
         Console.println("Bean of " + Parameter.getClass + "and " +
@@ -223,8 +223,10 @@ SELECT ?s WHERE
     }
   }
 
-  def trytoCreateParameter(parameter: Parameter, model: Model): String = {
-    if (if (sbmlModelsDAO.metaIdExists(parameter.metaid, model) == false) {
+  def tryToCreateParameter(parameter: Parameter, model: Model): String = {
+    if (if (parameter.metaid != null &&
+            parameter.metaid.trim != "" &&
+            sbmlModelsDAO.metaIdExists(parameter.metaid, model) == false) {
       createParameter(parameter, model)
     } else {
       parameter.metaid = sbmlModelsDAO.generateNewMetaIdFrom(parameter,

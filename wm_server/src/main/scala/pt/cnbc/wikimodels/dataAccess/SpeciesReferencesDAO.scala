@@ -251,11 +251,11 @@ SELECT ?s WHERE
     true
   }
 
-  def trytoCreateReactantInReaction(reactionMetaid: String,
+  def tryToCreateReactantInReaction(reactionMetaid: String,
                                     speciesReference: SpeciesReference,
                                     model: Model): String = {
     if (reactionsDAO.reactionMetaidExists(reactionMetaid)) {
-      val speciesReferenceMetaid = trytoCreateSpeciesReference(speciesReference, model)
+      val speciesReferenceMetaid = tryToCreateSpeciesReference(speciesReference, model)
       if (speciesReferenceMetaid != null) {
         //Jena API used directly
         val reactionRes = model.createResource(
@@ -271,11 +271,11 @@ SELECT ?s WHERE
     } else null
   }
 
-  def trytoCreateProductInReaction(reactionMetaid: String,
+  def tryToCreateProductInReaction(reactionMetaid: String,
                                    speciesReference: SpeciesReference,
                                    model: Model): String = {
     if (reactionsDAO.reactionMetaidExists(reactionMetaid)) {
-      val speciesReferenceMetaid = trytoCreateSpeciesReference(speciesReference, model)
+      val speciesReferenceMetaid = tryToCreateSpeciesReference(speciesReference, model)
       if (speciesReferenceMetaid != null) {
         //Jena API used directly
         val reactionRes = model.createResource(
@@ -291,11 +291,11 @@ SELECT ?s WHERE
     } else null
   }
 
-  def trytoCreateModifierInReaction(reactionMetaid: String,
+  def tryToCreateModifierInReaction(reactionMetaid: String,
                                     speciesReference: ModifierSpeciesReference,
                                     model: Model): String = {
     if (reactionsDAO.reactionMetaidExists(reactionMetaid)) {
-      val speciesReferenceMetaid = trytoCreateModifierSpeciesReference(speciesReference, model)
+      val speciesReferenceMetaid = tryToCreateModifierSpeciesReference(speciesReference, model)
       if (speciesReferenceMetaid != null) {
         //Jena API used directly
         val reactionRes = model.createResource(
@@ -318,10 +318,10 @@ SELECT ?s WHERE
    * This method also issues an available metaid
    *
    */
-  def trytoCreateSpeciesReference(speciesReference: SpeciesReference): String = {
+  def tryToCreateSpeciesReference(speciesReference: SpeciesReference): String = {
     try {
       val myModel: Model = ManipulatorWrapper.loadModelfromDB
-      trytoCreateSpeciesReference(speciesReference, myModel)
+      tryToCreateSpeciesReference(speciesReference, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
         Console.println("Bean of " + SpeciesReference.getClass + "and " +
@@ -336,8 +336,10 @@ SELECT ?s WHERE
     }
   }
 
-  def trytoCreateSpeciesReference(speciesReference: SpeciesReference, model: Model): String = {
-    if (if (sbmlModelsDAO.metaIdExists(speciesReference.metaid, model) == false) {
+  def tryToCreateSpeciesReference(speciesReference: SpeciesReference, model: Model): String = {
+    if (if (speciesReference.metaid != null &&
+            speciesReference.metaid.trim != "" &&
+            sbmlModelsDAO.metaIdExists(speciesReference.metaid, model) == false) {
       createSpeciesReference(speciesReference, model)
     } else {
       speciesReference.metaid = sbmlModelsDAO.generateNewMetaIdFrom(speciesReference,
@@ -357,10 +359,10 @@ SELECT ?s WHERE
    * This method also issues an available metaid
    *
    */
-  def trytoCreateModifierSpeciesReference(speciesReference: ModifierSpeciesReference): String = {
+  def tryToCreateModifierSpeciesReference(speciesReference: ModifierSpeciesReference): String = {
     try {
       val myModel: Model = ManipulatorWrapper.loadModelfromDB
-      trytoCreateModifierSpeciesReference(speciesReference, myModel)
+      tryToCreateModifierSpeciesReference(speciesReference, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
         Console.println("Bean of " + ModifierSpeciesReference.getClass + "and " +
@@ -375,8 +377,10 @@ SELECT ?s WHERE
     }
   }
 
-  def trytoCreateModifierSpeciesReference(speciesReference: ModifierSpeciesReference, model: Model): String = {
-    if (if (sbmlModelsDAO.metaIdExists(speciesReference.metaid, model) == false) {
+  def tryToCreateModifierSpeciesReference(speciesReference: ModifierSpeciesReference, model: Model): String = {
+    if (if (speciesReference.metaid != null &&
+            speciesReference.metaid.trim != "" &&
+            sbmlModelsDAO.metaIdExists(speciesReference.metaid, model) == false) {
       createModifierSpeciesReference(speciesReference, model)
     } else {
       speciesReference.metaid = sbmlModelsDAO.generateNewMetaIdFrom(speciesReference,

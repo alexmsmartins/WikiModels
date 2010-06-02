@@ -8,6 +8,13 @@
 
 package pt.cnbc.wikimodels.rest
 
+import javax.ws.rs.core.{UriInfo, SecurityContext, Context}
+
 class CommentsResource {
-    
+
+  @Context
+  var security:SecurityContext = null
+  @Context
+  var uriInfo:UriInfo =null;
+
 }

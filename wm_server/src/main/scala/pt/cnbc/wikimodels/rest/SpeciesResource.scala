@@ -40,7 +40,7 @@ class SpeciesResource(sbmlModelResource:String) extends RESTResource {
     @Context
     var security:SecurityContext = null
     @Context
-    var uriInfo:UriInfo =null;
+    var uriInfo:UriInfo = null;
 
     @GET
     @Produces(Array("application/xml"))
@@ -94,7 +94,7 @@ class SpeciesResource(sbmlModelResource:String) extends RESTResource {
             val speciesMetaId =
             try{
                 val dao = new SpeciessDAO
-                dao.trytoCreateSpeciesInModel(sbmlModelResource,
+                dao.tryToCreateSpeciesInModel(sbmlModelResource,
                     new Species(
                         scala.xml.XML.load(requestContent)))
             } catch {

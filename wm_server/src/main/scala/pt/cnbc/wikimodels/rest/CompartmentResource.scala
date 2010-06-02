@@ -97,7 +97,7 @@ class CompartmentResource(sbmlModelResource:String) extends RESTResource {
             val compartmentMetaId =
             try{
                 val dao = new CompartmentsDAO
-                dao.trytoCreateCompartmentInModel(sbmlModelResource,
+                dao.tryToCreateCompartmentInModel(sbmlModelResource,
                     new Compartment(
                         scala.xml.XML.load(requestContent)))
             } catch {

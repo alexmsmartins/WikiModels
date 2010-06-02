@@ -143,11 +143,11 @@ SELECT ?s WHERE
     true
   }
 
-  def trytoCreateKineticLawInReaction(reactionMetaid: String,
+  def tryToCreateKineticLawInReaction(reactionMetaid: String,
                                       kineticLaw: KineticLaw): String = {
     try {
       val myModel: Model = ManipulatorWrapper.loadModelfromDB
-      trytoCreateKineticLawInReaction(reactionMetaid, kineticLaw, myModel)
+      tryToCreateKineticLawInReaction(reactionMetaid, kineticLaw, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
         Console.println("Bean of " + KineticLaw.getClass + "and " +
@@ -162,11 +162,11 @@ SELECT ?s WHERE
     }
   }
 
-  def trytoCreateKineticLawInReaction(reactionMetaid: String,
+  def tryToCreateKineticLawInReaction(reactionMetaid: String,
                                       kineticLaw: KineticLaw,
                                       model: Model): String = {
     if (reactionsDAO.reactionMetaidExists(reactionMetaid)) {
-      val kineticLawMetaid = trytoCreateKineticLaw(kineticLaw, model)
+      val kineticLawMetaid = tryToCreateKineticLaw(kineticLaw, model)
       if (kineticLawMetaid != null) {
         //Jena API used directly
         val reactionRes = model.createResource(
@@ -188,10 +188,10 @@ SELECT ?s WHERE
    * This method also issues an available metaid
    *
    */
-  def trytoCreateKineticLaw(kineticLaw: KineticLaw): String = {
+  def tryToCreateKineticLaw(kineticLaw: KineticLaw): String = {
     try {
       val myModel: Model = ManipulatorWrapper.loadModelfromDB
-      trytoCreateKineticLaw(kineticLaw, myModel)
+      tryToCreateKineticLaw(kineticLaw, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
         Console.println("Bean of " + KineticLaw.getClass + "and " +
@@ -206,8 +206,10 @@ SELECT ?s WHERE
     }
   }
 
-  def trytoCreateKineticLaw(kineticLaw: KineticLaw, model: Model): String = {
-    if (if (sbmlModelsDAO.metaIdExists(kineticLaw.metaid, model) == false) {
+  def tryToCreateKineticLaw(kineticLaw: KineticLaw, model: Model): String = {
+    if (if (kineticLaw.metaid != null &&
+            kineticLaw.metaid.trim != "" &&
+            sbmlModelsDAO.metaIdExists(kineticLaw.metaid, model) == false) {
       createKineticLaw(kineticLaw, model)
     } else {
       kineticLaw.metaid = sbmlModelsDAO.generateNewMetaIdFrom(kineticLaw,

@@ -180,39 +180,39 @@ class SBMLModelsDAO {
     tmpsbmlmodel.listOfReactions = sbmlmodel.listOfReactions
     sbmlmodel.listOfReactions = null
 
-    Console.println("Temp SBML Model after addomg lists")
+    Console.println("Temp SBML Model after addimg lists")
     Console.println(tmpsbmlmodel.toXML.toString)
     Console.println("")
 
     writer.save(sbmlmodel)
     val funcDefDAO = new FunctionDefinitionsDAO()
     tmpsbmlmodel.listOfFunctionDefinitions.map(
-      funcDefDAO.trytoCreateFunctionDefinitionInModel(
+      funcDefDAO.tryToCreateFunctionDefinitionInModel(
         sbmlmodel.metaid, _, model))
 
     val compDAO = new CompartmentsDAO()
     tmpsbmlmodel.listOfCompartments.map(
-      compDAO.trytoCreateCompartmentInModel(
+      compDAO.tryToCreateCompartmentInModel(
         sbmlmodel.metaid, _, model))
 
     val speciesDAO = new SpeciessDAO()
     tmpsbmlmodel.listOfSpecies.map(
-      speciesDAO.trytoCreateSpeciesInModel(
+      speciesDAO.tryToCreateSpeciesInModel(
         sbmlmodel.metaid, _, model))
 
     val paramDAO = new ParametersDAO()
     tmpsbmlmodel.listOfParameters.map(
-      paramDAO.trytoCreateParameterInModel(
+      paramDAO.tryToCreateParameterInModel(
         sbmlmodel.metaid, _, model))
 
     val constDAO = new ConstraintsDAO()
     tmpsbmlmodel.listOfConstraints.map(
-      constDAO.trytoCreateConstraintInModel(
+      constDAO.tryToCreateConstraintInModel(
         sbmlmodel.metaid, _, model))
 
     val reactDAO = new ReactionsDAO()
     tmpsbmlmodel.listOfReactions.map(
-      reactDAO.trytoCreateReactionInModel(
+      reactDAO.tryToCreateReactionInModel(
         sbmlmodel.metaid, _, model))
     true
   }
@@ -223,10 +223,10 @@ class SBMLModelsDAO {
    * This method also issues an available metaid
    *
    */
-  def trytoCreateSBMLModel(sbmlModel: SBMLModel): String = {
+  def tryToCreateSBMLModel(sbmlModel: SBMLModel): String = {
     try {
       val myModel: Model = ManipulatorWrapper.loadModelfromDB
-      trytoCreateSBMLModel(sbmlModel, myModel)
+      tryToCreateSBMLModel(sbmlModel, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
         Console.println("Bean of " + SBMLModel.getClass + "and " +
@@ -241,8 +241,10 @@ class SBMLModelsDAO {
     }
   }
 
-  def trytoCreateSBMLModel(sbmlModel: SBMLModel, model: Model): String = {
-    if (if (metaIdExists(sbmlModel.metaid, model) == false) {
+  def tryToCreateSBMLModel(sbmlModel: SBMLModel, model: Model): String = {
+    if (if (sbmlModel.metaid != null &&
+            sbmlModel.metaid.trim != "" &&
+            metaIdExists(sbmlModel.metaid, model) == false) {
           createSBMLModel(sbmlModel, model)
         } else {
           sbmlModel.metaid = generateNewMetaIdFrom(sbmlModel,
@@ -250,6 +252,7 @@ class SBMLModelsDAO {
           createSBMLModel(sbmlModel, model)
         } == true)
       {
+        if(sbmlModel.metaid == null || sbmlModel.metaid.trim == "") throw new BadFormatException("asdads")
         sbmlModel.metaid
       } else null
 
@@ -286,7 +289,7 @@ class SBMLModelsDAO {
   }
 
   /**
-   * checks if metaid exists in WikiModels KnowledgeBase
+   * checks if metaid exists in WikiModels KnowlasooosledgeBase
    * the metaid is meant to be unique in all of the KB and used as id for the
    * entities created within it
    */

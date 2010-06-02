@@ -184,17 +184,17 @@ class ReactionsDAO {
 
       val specRefDAO = new SpeciesReferencesDAO()
       tmpreaction.listOfReactants.map(
-        specRefDAO.trytoCreateReactantInReaction(
+        specRefDAO.tryToCreateReactantInReaction(
           reaction.metaid, _, model))
       tmpreaction.listOfProducts.map(
-        specRefDAO.trytoCreateProductInReaction(
+        specRefDAO.tryToCreateProductInReaction(
           reaction.metaid, _, model))
       tmpreaction.listOfModifiers.map(
-        specRefDAO.trytoCreateModifierInReaction(
+        specRefDAO.tryToCreateModifierInReaction(
           reaction.metaid, _, model))
 
       val kinLawDAO = new KineticLawsDAO()
-      kinLawDAO.trytoCreateKineticLawInReaction(
+      kinLawDAO.tryToCreateKineticLawInReaction(
         reaction.metaid, reaction.kineticLaw, model)
 
       true
@@ -213,11 +213,11 @@ class ReactionsDAO {
     }
   }
 
-  def trytoCreateReactionInModel(modelMetaid: String,
+  def tryToCreateReactionInModel(modelMetaid: String,
                                  reaction: Reaction): String = {
     try {
       val myModel: Model = ManipulatorWrapper.loadModelfromDB
-      trytoCreateReactionInModel(modelMetaid, reaction, myModel)
+      tryToCreateReactionInModel(modelMetaid, reaction, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
         Console.println("Bean of " + Reaction.getClass + "and " +
@@ -232,11 +232,11 @@ class ReactionsDAO {
     }
   }
 
-  def trytoCreateReactionInModel(modelMetaid: String,
+  def tryToCreateReactionInModel(modelMetaid: String,
                                  reaction: Reaction,
                                  model: Model): String = {
     if (sbmlModelsDAO.modelMetaIdExists(modelMetaid, model)) {
-      val reactionMetaid = trytoCreateReaction(reaction, model)
+      val reactionMetaid = tryToCreateReaction(reaction, model)
       if (reactionMetaid != null) {
 
         //Jena API used directly
@@ -259,10 +259,10 @@ class ReactionsDAO {
    * This method also issues an available metaid
    *
    */
-  def trytoCreateReaction(reaction: Reaction): String = {
+  def tryToCreateReaction(reaction: Reaction): String = {
     try {
       val myModel: Model = ManipulatorWrapper.loadModelfromDB
-      trytoCreateReaction(reaction, myModel)
+      tryToCreateReaction(reaction, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
         Console.println("Bean of " + Reaction.getClass + "and " +
@@ -277,8 +277,10 @@ class ReactionsDAO {
     }
   }
 
-  def trytoCreateReaction(reaction: Reaction, model: Model): String = {
-    if (if (sbmlModelsDAO.metaIdExists(reaction.metaid, model) == false) {
+  def tryToCreateReaction(reaction: Reaction, model: Model): String = {
+    if (if (reaction.metaid != null &&
+            reaction.metaid.trim != "" &&
+            sbmlModelsDAO.metaIdExists(reaction.metaid, model) == false) {
       createReaction(reaction, model)
     } else {
       reaction.metaid = sbmlModelsDAO.generateNewMetaIdFrom(reaction,
@@ -311,10 +313,6 @@ class ReactionsDAO {
   }
 
   def reactionMetaidExists(metaid: String, model: Model): Boolean = {
-    //val reasoner:Reasoner = ReasonerRegistry.getOWLReasoner
-    //val ontModelSpec:OntModelSpec = null
-    //val ont:OntModel = ModelFactory.createOntologyModel(ontModelSpec, model)
-    //val ont:InfModel = ModelFactory.createInfModel(reasoner, model)
     val queryString =
     """
     PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>

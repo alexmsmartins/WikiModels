@@ -108,7 +108,7 @@ class ReactionsDAOTest {
   def reactionRoundTrip = {
     //create reaction
     val daoModel = new SBMLModelsDAO()
-    daoModel.trytoCreateSBMLModel(
+    daoModel.tryToCreateSBMLModel(
       new SBMLModel(modelWReaction),
       this.model)
     //load reaction
@@ -121,14 +121,17 @@ class ReactionsDAOTest {
     Console.println("New model is " + newSBMLModel.toXML )
     //check local parameter list
     assertEquals(newSBMLModel.metaid, "metaid_01")
-    assertEquals( (newSBMLModel.toXML \\ "listOfReactions" \ "reaction").length, 1)
+    assertEquals( newSBMLModel.toXML \\ "listOfSpecies" \ "species" length,
+                   modelWReaction \\ "listOfSpecies" \ "species" length )
+    assertEquals( newSBMLModel.toXML \\ "listOfReactions" \ "reaction" length,
+                   modelWReaction \\ "listOfReactions" \ "reaction" length )
   }
 
   @Test
   def reactionRoundTripNoKineticLaw = {
     //create reaction
     val daoModel = new SBMLModelsDAO()
-    daoModel.trytoCreateSBMLModel(
+    daoModel.tryToCreateSBMLModel(
       new SBMLModel(modelWithReactionNoKineticLaw),
       this.model)
     //load reaction
@@ -138,7 +141,10 @@ class ReactionsDAOTest {
     Console.println("Old model is " + modelWithReactionNoKineticLaw )
     Console.println("New model is " + newSBMLModel.toXML )
     //check local parameter list
-    assertEquals(newSBMLModel.metaid, "metaid_02")
-    assertEquals( (newSBMLModel.toXML \\ "listOfReactions" \ "reaction").length, 1)
+    assertEquals( newSBMLModel.metaid, "metaid_02")
+    assertEquals( newSBMLModel.toXML \\ "listOfSpecies" \ "species" length,
+                   modelWithReactionNoKineticLaw \\ "listOfSpecies" \ "species" length )
+    assertEquals( newSBMLModel.toXML \\ "listOfReactions" \ "reaction" length,
+                   modelWithReactionNoKineticLaw \\ "listOfReactions" \ "reaction" length )
   }
 }

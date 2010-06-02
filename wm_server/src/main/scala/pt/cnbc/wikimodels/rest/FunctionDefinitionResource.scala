@@ -94,7 +94,7 @@ class FunctionDefinitionResource(sbmlModelResource:String) extends RESTResource 
             val functionDefinitionMetaId =
             try{
                 val dao = new FunctionDefinitionsDAO
-                dao.trytoCreateFunctionDefinitionInModel(sbmlModelResource,
+                dao.tryToCreateFunctionDefinitionInModel(sbmlModelResource,
                     new FunctionDefinition(
                         scala.xml.XML.load(requestContent)))
             } catch {

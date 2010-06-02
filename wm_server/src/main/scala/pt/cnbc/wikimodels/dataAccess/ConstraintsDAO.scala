@@ -151,11 +151,11 @@ SELECT ?s WHERE
     true
   }
 
-  def trytoCreateConstraintInModel(modelMetaid: String,
+  def tryToCreateConstraintInModel(modelMetaid: String,
                                    constraint: Constraint): String = {
     try {
       val myModel: Model = ManipulatorWrapper.loadModelfromDB
-      trytoCreateConstraintInModel(modelMetaid, constraint, myModel)
+      tryToCreateConstraintInModel(modelMetaid, constraint, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
         Console.println("Bean of " + Constraint.getClass + "and " +
@@ -170,11 +170,11 @@ SELECT ?s WHERE
     }
   }
 
-  def trytoCreateConstraintInModel(modelMetaid: String,
+  def tryToCreateConstraintInModel(modelMetaid: String,
                                    constraint: Constraint,
                                    model: Model): String = {
     if (sbmlModelsDAO.modelMetaIdExists(modelMetaid, model)) {
-      val constraintMetaid = trytoCreateConstraint(constraint, model)
+      val constraintMetaid = tryToCreateConstraint(constraint, model)
       if (constraintMetaid != null) {
 
         //Jena API used directly
@@ -197,10 +197,10 @@ SELECT ?s WHERE
    * This method also issues an available metaid
    *
    */
-  def trytoCreateConstraint(constraint: Constraint): String = {
+  def tryToCreateConstraint(constraint: Constraint): String = {
     try {
       val myModel: Model = ManipulatorWrapper.loadModelfromDB
-      trytoCreateConstraint(constraint, myModel)
+      tryToCreateConstraint(constraint, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
         Console.println("Bean of " + Constraint.getClass + "and " +
@@ -215,8 +215,10 @@ SELECT ?s WHERE
     }
   }
 
-  def trytoCreateConstraint(constraint: Constraint, model: Model): String = {
-    if (if (sbmlModelsDAO.metaIdExists(constraint.metaid, model) == false) {
+  def tryToCreateConstraint(constraint: Constraint, model: Model): String = {
+    if (if (constraint.metaid != null &&
+            constraint.metaid.trim != "" &&
+            sbmlModelsDAO.metaIdExists(constraint.metaid, model) == false) {
       createConstraint(constraint, model)
     } else {
       constraint.metaid = sbmlModelsDAO.generateNewMetaIdFrom(constraint,

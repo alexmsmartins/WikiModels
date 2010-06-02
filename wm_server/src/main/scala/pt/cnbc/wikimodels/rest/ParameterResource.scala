@@ -95,7 +95,7 @@ class ParameterResource(sbmlModelResource:String) extends RESTResource {
             val parameterMetaId =
             try{
                 val dao = new ParametersDAO
-                dao.trytoCreateParameterInModel(sbmlModelResource,
+                dao.tryToCreateParameterInModel(sbmlModelResource,
                     new Parameter(
                         scala.xml.XML.load(requestContent)))
             } catch {

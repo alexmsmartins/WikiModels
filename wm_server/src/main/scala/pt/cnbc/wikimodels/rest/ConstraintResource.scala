@@ -93,7 +93,7 @@ class ConstraintResource(sbmlModelResource:String) extends RESTResource {
             val constraintMetaId =
             try{
                 val dao = new ConstraintsDAO
-                dao.trytoCreateConstraintInModel(sbmlModelResource,
+                dao.tryToCreateConstraintInModel(sbmlModelResource,
                     new Constraint(
                         scala.xml.XML.load(requestContent)))
             } catch {

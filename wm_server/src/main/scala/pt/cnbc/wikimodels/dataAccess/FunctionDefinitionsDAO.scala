@@ -165,11 +165,11 @@ SELECT ?s WHERE
     true
   }
 
-  def trytoCreateFunctionDefinitionInModel(modelMetaid: String,
+  def tryToCreateFunctionDefinitionInModel(modelMetaid: String,
                                            functionDefinition: FunctionDefinition): String = {
     try {
       val myModel: Model = ManipulatorWrapper.loadModelfromDB
-      trytoCreateFunctionDefinitionInModel(modelMetaid, functionDefinition, myModel)
+      tryToCreateFunctionDefinitionInModel(modelMetaid, functionDefinition, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
         Console.println("Bean of " + FunctionDefinition.getClass + "and " +
@@ -184,11 +184,11 @@ SELECT ?s WHERE
     }
   }
 
-  def trytoCreateFunctionDefinitionInModel(modelMetaid: String,
+  def tryToCreateFunctionDefinitionInModel(modelMetaid: String,
                                            functionDefinition: FunctionDefinition,
                                            model: Model): String = {
     if (sbmlModelsDAO.modelMetaIdExists(modelMetaid, model)) {
-      val functionDefinitionMetaid = trytoCreateFunctionDefinition(functionDefinition, model)
+      val functionDefinitionMetaid = tryToCreateFunctionDefinition(functionDefinition, model)
       if (functionDefinitionMetaid != null) {
 
 
@@ -212,10 +212,10 @@ SELECT ?s WHERE
    * This method also issues an available metaid
    *
    */
-  def trytoCreateFunctionDefinition(functionDefinition: FunctionDefinition): String = {
+  def tryToCreateFunctionDefinition(functionDefinition: FunctionDefinition): String = {
     try {
       val myModel: Model = ManipulatorWrapper.loadModelfromDB
-      trytoCreateFunctionDefinition(functionDefinition, myModel)
+      tryToCreateFunctionDefinition(functionDefinition, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
         Console.println("Bean of " + FunctionDefinition.getClass + "and " +
@@ -230,8 +230,10 @@ SELECT ?s WHERE
     }
   }
 
-  def trytoCreateFunctionDefinition(functionDefinition: FunctionDefinition, model: Model): String = {
-    if (if (sbmlModelsDAO.metaIdExists(functionDefinition.metaid, model) == false) {
+  def tryToCreateFunctionDefinition(functionDefinition: FunctionDefinition, model: Model): String = {
+    if (if (functionDefinition.metaid != null &&
+            functionDefinition.metaid.trim != "" &&
+            sbmlModelsDAO.metaIdExists(functionDefinition.metaid, model) == false) {
       createFunctionDefinition(functionDefinition, model)
     } else {
       functionDefinition.metaid = sbmlModelsDAO.generateNewMetaIdFrom(functionDefinition,

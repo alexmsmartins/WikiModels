@@ -171,11 +171,11 @@ SELECT ?s WHERE
     true
   }
 
-  def trytoCreateCompartmentInModel(modelMetaid: String,
+  def tryToCreateCompartmentInModel(modelMetaid: String,
                                     compartment: Compartment): String = {
     try {
       val myModel: Model = ManipulatorWrapper.loadModelfromDB
-      trytoCreateCompartmentInModel(modelMetaid, compartment, myModel)
+      tryToCreateCompartmentInModel(modelMetaid, compartment, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
         Console.println("Bean of " + Compartment.getClass + "and " +
@@ -190,11 +190,11 @@ SELECT ?s WHERE
     }
   }
 
-  def trytoCreateCompartmentInModel(modelMetaid: String,
+  def tryToCreateCompartmentInModel(modelMetaid: String,
                                     compartment: Compartment,
                                     model: Model): String = {
     if (sbmlModelsDAO.modelMetaIdExists(modelMetaid, model)) {
-      val compartmentMetaid = trytoCreateCompartment(compartment, model)
+      val compartmentMetaid = tryToCreateCompartment(compartment, model)
       if (compartmentMetaid != null) {
         //Jena API used directly
         val sbmlModelRes = model.createResource(
@@ -216,10 +216,10 @@ SELECT ?s WHERE
    * This method also issues an available metaid
    *
    */
-  def trytoCreateCompartment(compartment: Compartment): String = {
+  def tryToCreateCompartment(compartment: Compartment): String = {
     try {
       val myModel: Model = ManipulatorWrapper.loadModelfromDB
-      trytoCreateCompartment(compartment, myModel)
+      tryToCreateCompartment(compartment, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
         Console.println("Bean of " + Compartment.getClass + "and " +
@@ -234,8 +234,10 @@ SELECT ?s WHERE
     }
   }
 
-  def trytoCreateCompartment(compartment: Compartment, model: Model): String = {
-    if (if (sbmlModelsDAO.metaIdExists(compartment.metaid, model) == false) {
+  def tryToCreateCompartment(compartment: Compartment, model: Model): String = {
+    if (if (compartment.metaid != null &&
+            compartment.metaid.trim != "" &&
+            sbmlModelsDAO.metaIdExists(compartment.metaid, model) == false) {
       createCompartment(compartment, model)
     } else {
       compartment.metaid = sbmlModelsDAO.generateNewMetaIdFrom(compartment,

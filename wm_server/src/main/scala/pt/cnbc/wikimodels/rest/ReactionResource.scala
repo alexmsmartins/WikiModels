@@ -95,7 +95,7 @@ class ReactionResource(sbmlModelResource:String) extends RESTResource {
             val reactionMetaId =
             try{
                 val dao = new ReactionsDAO
-                dao.trytoCreateReactionInModel(sbmlModelResource,
+                dao.tryToCreateReactionInModel(sbmlModelResource,
                     new Reaction(
                         scala.xml.XML.load(requestContent)))
             } catch {
