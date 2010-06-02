@@ -100,7 +100,6 @@ case class SBMLModel() extends Element {
     this.listOfReactions =
             (xmlModel \ "listOfReactions" \ "reaction")
                     .map(i => new Reaction(i.asInstanceOf[scala.xml.Elem])).asJava
-
   }
 
   /**

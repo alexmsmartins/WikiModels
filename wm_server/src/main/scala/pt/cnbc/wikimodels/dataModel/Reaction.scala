@@ -72,7 +72,7 @@ case class Reaction() extends Element{
     this.listOfModifiers =
       (xmlReaction \ "listOfModifiers" \ "modifierSpeciesReference")
       .map(i => new ModifierSpeciesReference(i.asInstanceOf[scala.xml.Elem])).asJava
-    if( (xmlReaction \ "kineticLaw").size<0 )
+    if( (xmlReaction \ "kineticLaw").size>0 )
       this.kineticLaw = new KineticLaw((xmlReaction \ "kineticLaw").first.asInstanceOf[scala.xml.Elem])
   }
 
@@ -89,12 +89,15 @@ case class Reaction() extends Element{
           {listOfProducts.map(i => i.toXML)}
         </listOfProducts> else scala.xml.Null
       }
-      {if(listOfModifiers != null && listOfModifiers != 0)
+      {if(listOfModifiers != null && listOfModifiers.size != 0)
         <listOfModifiers>
           {listOfModifiers.map(i => i.toXML)}
         </listOfModifiers> else scala.xml.Null
       }
-      {if(this.kineticLaw != null) this.kineticLaw.toXML else null.asInstanceOf[Elem]}
+      {if(this.kineticLaw != null)
+        this.kineticLaw.toXML
+      else
+        null.asInstanceOf[Elem]}
     </reaction>
   }
   override def theId = this.id

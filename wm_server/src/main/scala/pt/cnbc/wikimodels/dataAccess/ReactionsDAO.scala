@@ -8,11 +8,6 @@
 
 package pt.cnbc.wikimodels.dataAccess
 
-import com.hp.hpl.jena.ontology.OntModel
-import com.hp.hpl.jena.ontology.OntModelSpec
-import com.hp.hpl.jena.ontology.OntClass;
-import com.hp.hpl.jena.ontology.OntModel;
-import com.hp.hpl.jena.ontology.impl.OntClassImpl;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
@@ -183,6 +178,8 @@ class ReactionsDAO {
     reaction.listOfProducts = null
     tmpreaction.listOfModifiers = reaction.listOfModifiers
     reaction.listOfModifiers = null
+    tmpreaction.kineticLaw = reaction.kineticLaw
+    reaction.kineticLaw = null
 
     writer.save(reaction)
     val specRefDAO = new SpeciesReferencesDAO()
@@ -198,7 +195,7 @@ class ReactionsDAO {
 
     val kinLawDAO = new KineticLawsDAO()
     kinLawDAO.tryToCreateKineticLawInReaction(
-      reaction.metaid, reaction.kineticLaw, model)
+      reaction.metaid, tmpreaction.kineticLaw, model)
 
     true
   }

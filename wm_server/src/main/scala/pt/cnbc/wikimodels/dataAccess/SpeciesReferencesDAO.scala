@@ -91,11 +91,11 @@ class SpeciesReferencesDAO {
     Console.print("Jena Model content")
     val queryString =
     """
-PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
-PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-SELECT ?s WHERE
-{ ?m rdf:type sbml:Reaction .
-  ?m sbml:metaid """" + reactionMetaId + """"^^<http://www.w3.org/2001/XMLSchema#string> .
+    PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
+    PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+    SELECT ?s WHERE
+    { ?m rdf:type sbml:Reaction .
+    ?m sbml:metaid """" + reactionMetaId + """"^^<http://www.w3.org/2001/XMLSchema#string> .
           ?m sbml:hasReactant ?s .
           ?s rdf:type sbml:SpeciesReference .
          } """

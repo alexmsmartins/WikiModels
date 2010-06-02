@@ -212,7 +212,7 @@ SELECT ?s WHERE
             sbmlModelsDAO.metaIdExists(kineticLaw.metaid, model) == false) {
       createKineticLaw(kineticLaw, model)
     } else {
-      kineticLaw.metaid = sbmlModelsDAO.generateNewMetaIdFrom(kineticLaw,
+      kineticLaw.metaid = sbmlModelsDAO.generateNewMetaIdFromString("kineticLaw_",
         model)
       createKineticLaw(kineticLaw,
         model)
@@ -220,7 +220,6 @@ SELECT ?s WHERE
       {
         kineticLaw.metaid
       } else null
-
   }
 
   def kineticLawMetaidExists(metaid: String): Boolean = {
@@ -242,10 +241,6 @@ SELECT ?s WHERE
   }
 
   def kineticLawMetaidExists(metaid: String, model: Model): Boolean = {
-    //val reasoner:Reasoner = ReasonerRegistry.getOWLReasoner
-    //val ontModelSpec:OntModelSpec = null
-    //val ont:OntModel = ModelFactory.createOntologyModel(ontModelSpec, model)
-    //val ont:InfModel = ModelFactory.createInfModel(reasoner, model)
     val queryString =
     """
     PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>

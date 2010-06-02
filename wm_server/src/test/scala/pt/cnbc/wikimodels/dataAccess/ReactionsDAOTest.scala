@@ -125,6 +125,8 @@ class ReactionsDAOTest {
                    modelWReaction \\ "listOfSpecies" \ "species" length )
     assertEquals( newSBMLModel.toXML \\ "listOfReactions" \ "reaction" length,
                    modelWReaction \\ "listOfReactions" \ "reaction" length )
+    assertEquals( newSBMLModel.toXML \\ "listOfReactions" \ "reaction" \ "kineticLaw" length,
+                   modelWReaction \\ "listOfReactions" \ "reaction" \ "kineticLaw" length )
   }
 
   @Test
@@ -141,10 +143,14 @@ class ReactionsDAOTest {
     Console.println("Old model is " + modelWithReactionNoKineticLaw )
     Console.println("New model is " + newSBMLModel.toXML )
     //check local parameter list
+
+
     assertEquals( newSBMLModel.metaid, "metaid_02")
     assertEquals( newSBMLModel.toXML \\ "listOfSpecies" \ "species" length,
                    modelWithReactionNoKineticLaw \\ "listOfSpecies" \ "species" length )
     assertEquals( newSBMLModel.toXML \\ "listOfReactions" \ "reaction" length,
                    modelWithReactionNoKineticLaw \\ "listOfReactions" \ "reaction" length )
+    assertEquals( newSBMLModel.toXML \\ "listOfReactions" \ "reaction" \ "kineticLaw" length,
+                  0 )
   }
 }

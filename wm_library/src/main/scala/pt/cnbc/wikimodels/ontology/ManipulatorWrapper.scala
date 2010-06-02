@@ -68,8 +68,8 @@ object ManipulatorWrapper {
             var predicate = stmt.getPredicate   // get the predicate
             var objct     = stmt.getObject      // get the object
 
-            System.out.print(subject)
-            System.out.print(" " + predicate + " ");
+            Console.print(subject)
+            Console.print(" " + predicate + " ");
             if (objct.isInstanceOf[Resource]) {
                 System.out.print(objct);
             } else {
