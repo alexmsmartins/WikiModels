@@ -48,6 +48,7 @@ case class Compartment() extends Element {
     this ()
     this.metaid = metaid
     this.setNotesFromXML(notes)
+    this.id = id
     this.name = name
     this.compartmentType = compartmentType
     this.spatialDimensions = spatialDimensions
