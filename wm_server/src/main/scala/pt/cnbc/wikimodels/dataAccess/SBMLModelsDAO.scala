@@ -97,6 +97,8 @@ class SBMLModelsDAO {
       val reactDAO = new ReactionsDAO()
       sbmlmodel.listOfReactions = reactDAO.loadReactionsInModel(
         sbmlmodel.metaid, model)
+      Console.println("SBMLModel after loading")
+      Console.println(sbmlmodel.toXML)
       sbmlmodel
     } else null
   }
@@ -185,6 +187,8 @@ class SBMLModelsDAO {
     Console.println("")
 
     writer.save(sbmlmodel)
+
+    val thisModel = writer.getModel()
     val funcDefDAO = new FunctionDefinitionsDAO()
     tmpsbmlmodel.listOfFunctionDefinitions.map(
       funcDefDAO.tryToCreateFunctionDefinitionInModel(
@@ -244,18 +248,19 @@ class SBMLModelsDAO {
   def tryToCreateSBMLModel(sbmlModel: SBMLModel, model: Model): String = {
     if (if (sbmlModel.metaid != null &&
             sbmlModel.metaid.trim != "" &&
-            metaIdExists(sbmlModel.metaid, model) == false) {
+            !metaIdExists(sbmlModel.metaid, model)) {
           createSBMLModel(sbmlModel, model)
         } else {
           sbmlModel.metaid = generateNewMetaIdFrom(sbmlModel,
             model)
           createSBMLModel(sbmlModel, model)
         } == true)
-      {
-        if(sbmlModel.metaid == null || sbmlModel.metaid.trim == "") throw new BadFormatException("asdads")
-        sbmlModel.metaid
-      } else null
-
+    {
+      if (sbmlModel.metaid == null || sbmlModel.metaid.trim == "") {
+        throw new BadFormatException("SBMLModelDAO.tryTocreateSBMLModel error")
+      }
+      sbmlModel.metaid
+    } else null
   }
 
   def generateNewMetaIdFrom(sbmlentity: Element): String = {
@@ -273,7 +278,10 @@ class SBMLModelsDAO {
       if (sbmlentity.theId == null || sbmlentity.theId.trim == "") {
         throw new BadFormatException("ids are mandatory")
       } else {
-        generateNewMetaIdFromString(sbmlentity.theId, model)
+        if(metaIdExists(sbmlentity.theId, model))
+          generateNewMetaIdFromString(sbmlentity.theId, model)
+        else
+          sbmlentity.theId
       }
     } else {
       generateNewMetaIdFromString(sbmlentity.metaid, model)

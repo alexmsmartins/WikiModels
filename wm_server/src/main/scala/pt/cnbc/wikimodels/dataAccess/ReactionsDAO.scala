@@ -8,7 +8,8 @@
 
 package pt.cnbc.wikimodels.dataAccess
 
-import com.hp.hpl.jena.query.Query;
+import com.hp.hpl.jena.query.Query
+import pt.cnbc.wikimodels.exceptions.{BadFormatException, NotImplementedException};
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QueryFactory;
@@ -28,7 +29,6 @@ import scala.Collection
 
 import pt.cnbc.wikimodels.ontology.ManipulatorWrapper
 import pt.cnbc.wikimodels.dataModel._
-import pt.cnbc.wikimodels.exceptions.NotImplementedException
 import pt.cnbc.wikimodels.ontology.{Namespaces => NS}
 import thewebsemantic.Sparql
 
@@ -73,7 +73,6 @@ class ReactionsDAO {
     Console.println("Found " + l.size + " Reactions with metaid " + reactionMetaid)
     if (l.size > 0) {
       val reaction = l.iterator.next
-
       val specRefDAO = new SpeciesReferencesDAO()
 
       reaction.listOfReactants = specRefDAO.loadReactantsInReaction(
@@ -111,8 +110,9 @@ class ReactionsDAO {
     val l: java.util.LinkedList[Reaction]
     = Sparql.exec(model, classOf[Reaction], queryString)
     Console.println("Found " + l.size + " Reactions from model " + modelMetaId)
-    if (l.size > 0)
-      l
+    if (l.size > 0){
+      l.map(i => loadReaction(i.metaid, model))
+    }
     else null
   }
 
@@ -168,6 +168,7 @@ class ReactionsDAO {
    * @return true if creating the new model was possible and false otherwise
    */
   def createReaction(reaction: Reaction, model: Model): Boolean = {
+    Console.println("CreateReaction(" + reaction.metaid + ", model)")    
     val writer = new Bean2RDF(model)
 
     //Code to keep save from saving the sub-elements since we need to check if their metaids already exist
@@ -182,6 +183,7 @@ class ReactionsDAO {
     reaction.kineticLaw = null
 
     writer.save(reaction)
+
     val specRefDAO = new SpeciesReferencesDAO()
     tmpreaction.listOfReactants.map(
       specRefDAO.tryToCreateReactantInReaction(
@@ -193,10 +195,11 @@ class ReactionsDAO {
       specRefDAO.tryToCreateModifierInReaction(
         reaction.metaid, _, model))
 
-    val kinLawDAO = new KineticLawsDAO()
-    kinLawDAO.tryToCreateKineticLawInReaction(
-      reaction.metaid, tmpreaction.kineticLaw, model)
-
+    if(tmpreaction.kineticLaw != null){
+      val kinLawDAO = new KineticLawsDAO()
+      kinLawDAO.tryToCreateKineticLawInReaction(
+        reaction.metaid, tmpreaction.kineticLaw, model)
+    }
     true
   }
 
@@ -267,18 +270,19 @@ class ReactionsDAO {
   def tryToCreateReaction(reaction: Reaction, model: Model): String = {
     if (if (reaction.metaid != null &&
             reaction.metaid.trim != "" &&
-            sbmlModelsDAO.metaIdExists(reaction.metaid, model) == false) {
-      createReaction(reaction, model)
-    } else {
-      reaction.metaid = sbmlModelsDAO.generateNewMetaIdFrom(reaction,
-        model)
-      createReaction(reaction,
-        model)
-    } == true)
-      {
-        reaction.metaid
-      } else null
-
+            !sbmlModelsDAO.metaIdExists(reaction.metaid, model)) {
+          createReaction(reaction, model)
+        } else {
+          reaction.metaid = sbmlModelsDAO.generateNewMetaIdFrom(reaction,
+            model)
+          createReaction(reaction, model)
+        } == true)
+    {
+      if (reaction.metaid == null || reaction.metaid.trim == "") {
+        throw new BadFormatException("ReactionDAO.tryTocreateReaction error")
+      }
+      reaction.metaid
+    } else null
   }
 
   def reactionMetaidExists(metaid: String): Boolean = {

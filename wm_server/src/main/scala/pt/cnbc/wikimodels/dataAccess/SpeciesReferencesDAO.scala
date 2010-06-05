@@ -254,7 +254,7 @@ SELECT ?s WHERE
   def tryToCreateReactantInReaction(reactionMetaid: String,
                                     speciesReference: SpeciesReference,
                                     model: Model): String = {
-    if (reactionsDAO.reactionMetaidExists(reactionMetaid)) {
+    if (reactionsDAO.reactionMetaidExists(reactionMetaid, model)) {
       val speciesReferenceMetaid = tryToCreateSpeciesReference(speciesReference, model)
       if (speciesReferenceMetaid != null) {
         //Jena API used directly
@@ -274,7 +274,7 @@ SELECT ?s WHERE
   def tryToCreateProductInReaction(reactionMetaid: String,
                                    speciesReference: SpeciesReference,
                                    model: Model): String = {
-    if (reactionsDAO.reactionMetaidExists(reactionMetaid)) {
+    if (reactionsDAO.reactionMetaidExists(reactionMetaid, model)) {
       val speciesReferenceMetaid = tryToCreateSpeciesReference(speciesReference, model)
       if (speciesReferenceMetaid != null) {
         //Jena API used directly
@@ -294,7 +294,7 @@ SELECT ?s WHERE
   def tryToCreateModifierInReaction(reactionMetaid: String,
                                     speciesReference: ModifierSpeciesReference,
                                     model: Model): String = {
-    if (reactionsDAO.reactionMetaidExists(reactionMetaid)) {
+    if (reactionsDAO.reactionMetaidExists(reactionMetaid, model)) {
       val speciesReferenceMetaid = tryToCreateModifierSpeciesReference(speciesReference, model)
       if (speciesReferenceMetaid != null) {
         //Jena API used directly
@@ -339,18 +339,16 @@ SELECT ?s WHERE
   def tryToCreateSpeciesReference(speciesReference: SpeciesReference, model: Model): String = {
     if (if (speciesReference.metaid != null &&
             speciesReference.metaid.trim != "" &&
-            sbmlModelsDAO.metaIdExists(speciesReference.metaid, model) == false) {
+            !sbmlModelsDAO.metaIdExists(speciesReference.metaid, model)) {
       createSpeciesReference(speciesReference, model)
     } else {
       speciesReference.metaid = sbmlModelsDAO.generateNewMetaIdFrom(speciesReference,
         model)
-      createSpeciesReference(speciesReference,
-        model)
+      createSpeciesReference(speciesReference, model)
     } == true)
       {
         speciesReference.metaid
       } else null
-
   }
 
   /**
@@ -380,18 +378,17 @@ SELECT ?s WHERE
   def tryToCreateModifierSpeciesReference(speciesReference: ModifierSpeciesReference, model: Model): String = {
     if (if (speciesReference.metaid != null &&
             speciesReference.metaid.trim != "" &&
-            sbmlModelsDAO.metaIdExists(speciesReference.metaid, model) == false) {
+            !sbmlModelsDAO.metaIdExists(speciesReference.metaid, model)) {
       createModifierSpeciesReference(speciesReference, model)
     } else {
       speciesReference.metaid = sbmlModelsDAO.generateNewMetaIdFrom(speciesReference,
         model)
-      createModifierSpeciesReference(speciesReference,
-        model)
+      assert(speciesReference.metaid != null)
+      createModifierSpeciesReference(speciesReference, model)
     } == true)
       {
         speciesReference.metaid
       } else null
-
   }
 
 

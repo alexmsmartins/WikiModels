@@ -27,13 +27,13 @@ case class ModifierSpeciesReference() extends Element {
   var id: String = null
   var name: String = null
 
-  var species: Species = null
+  var species:String = null
 
   def this(metaid: String,
            notes: NodeSeq,
            id: String,
            name: String,
-           species: Species) = {
+           species: String) = {
     this ()
     this.metaid = metaid
     this.setNotesFromXML(notes)
@@ -41,20 +41,21 @@ case class ModifierSpeciesReference() extends Element {
     this.name = name
     this.species = species
     (new SBMLHandler).idExistsAndIsValid(this.id)
+    if(this.species == null||this.species.trim == "")
+      throw new BadFormatException("A Species id must be included in the creation of a new Speciesreference")
   }
 
   def this(xmlReaction: Elem) = {
     this ((new SBMLHandler).toStringOrNull((xmlReaction \ "@metaid").text),
-      (new SBMLHandler).checkCurrentLabelForNotes(xmlReaction),
-      (new SBMLHandler).toStringOrNull((xmlReaction \ "@id").text),
-      (new SBMLHandler).toStringOrNull((xmlReaction \ "@name").text),
-      new Species(null, Nil, (xmlReaction \ "@species").text, null,
-        null, null, null, null, null, false, false, false))
+          (new SBMLHandler).checkCurrentLabelForNotes(xmlReaction),
+          (new SBMLHandler).toStringOrNull((xmlReaction \ "@id").text),
+          (new SBMLHandler).toStringOrNull((xmlReaction \ "@name").text),
+          (new SBMLHandler).toStringOrNull((xmlReaction \ "@species").text))
   }
 
   override def toXML: Elem = {
     <modifierSpeciesReference metaid={metaid} id={id} name={name}
-                              species={species.id}>
+                              species={species}>
       {new SBMLHandler().genNotesFromHTML(notes)}
     </modifierSpeciesReference>
   }

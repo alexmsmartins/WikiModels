@@ -199,6 +199,45 @@ SELECT ?s WHERE
     } else null
   }
 
+  def tryToCreateParameterInKineticLaw(kineticLawMetaId: String,
+                                  parameter: Parameter): String = {
+    try {
+      val myModel: Model = ManipulatorWrapper.loadModelfromDB
+      tryToCreateParameterInKineticLaw(kineticLawMetaId, parameter, myModel)
+    } catch {
+      case ex: thewebsemantic.NotFoundException => {
+        Console.println("Bean of " + Parameter.getClass + "and " +
+                "id is not found")
+        ex.printStackTrace()
+        null
+      }
+      case ex => {
+        ex.printStackTrace()
+        null
+      }
+    }
+  }
+
+  def tryToCreateParameterInKineticLaw(kineticLawMetaId: String,
+                                  parameter: Parameter,
+                                  model: Model): String = {
+    if(new ReactionsDAO().reactionMetaidExists(kineticLawMetaId, model)) {
+      val parameterMetaid = tryToCreateParameter(parameter, model)
+      if (parameterMetaid != null) {
+        //Jena API used directly
+        val kineticLawRes = model.createResource(
+          NS.sbml + "Reaction/" + kineticLawMetaId)
+        val parameterRes = model.createResource(
+          NS.sbml + "Parameter/" + parameterMetaid)
+
+        kineticLawRes.addProperty(model
+                .getProperty(NS.sbml + "hasParameter"),
+          parameterRes)
+        parameterMetaid
+      } else null
+    } else null
+  }
+
   /**
    * Method that creates a new Model in the KnowledgeBase after checking
    * if everything is valid with the model that is being created
@@ -226,14 +265,14 @@ SELECT ?s WHERE
   def tryToCreateParameter(parameter: Parameter, model: Model): String = {
     if (if (parameter.metaid != null &&
             parameter.metaid.trim != "" &&
-            sbmlModelsDAO.metaIdExists(parameter.metaid, model) == false) {
-      createParameter(parameter, model)
-    } else {
-      parameter.metaid = sbmlModelsDAO.generateNewMetaIdFrom(parameter,
-        model)
-      createParameter(parameter,
-        model)
-    } == true)
+            !sbmlModelsDAO.metaIdExists(parameter.metaid, model)) {
+          createParameter(parameter, model)
+        } else {
+          parameter.metaid = sbmlModelsDAO.generateNewMetaIdFrom(parameter,
+            model)
+          createParameter(parameter,
+            model)
+        } == true)
       {
         parameter.metaid
       } else null

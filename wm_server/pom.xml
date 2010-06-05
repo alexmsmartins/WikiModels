@@ -228,7 +228,7 @@
                       you can add between <target> and </target> in a
                       build.xml.
                     -->
-                    <echo message="Ant copy task is going to be executed"/>
+                    <echo message="Ant copy task is going to be executed${user.dir}"/>
                     <copy file="../wm_setup/sbml.owl" tofile="./sbml.owl"/>
                   </tasks>
                 </configuration>

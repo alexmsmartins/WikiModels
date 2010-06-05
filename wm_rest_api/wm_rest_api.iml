@@ -3,7 +3,6 @@
   <component name="FacetManager">
     <facet type="Scala" name="Scala">
       <configuration>
-        <option name="takeFromSettings" value="true" />
         <option name="myScalaCompilerJarPaths">
           <array>
             <option value="$MAVEN_REPOSITORY$/org/scala-lang/scala-compiler/2.7.5/scala-compiler-2.7.5.jar" />

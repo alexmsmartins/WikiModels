@@ -8,11 +8,15 @@
 
 package pt.cnbc.wikimodels.dataAccess
 
-import com.hp.hpl.jena.query.Query;
+import com.hp.hpl.jena.query.Query
+import pt.cnbc.wikimodels.exceptions.BadFormatException
+import pt.cnbc.wikimodels.util.SBMLHandler;
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.rdf.model.Model
+
+import scala.collection.JavaConversions._
 
 import thewebsemantic.Bean2RDF
 import thewebsemantic.RDF2Bean
@@ -78,7 +82,7 @@ PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 SELECT ?s WHERE
 { ?m rdf:type sbml:Reaction .
   ?m sbml:metaid """" + reactionMetaId + """"^^<http://www.w3.org/2001/XMLSchema#string> .
-          ?m sbml:kineticLaw ?s .
+          ?m sbml:hasOneKineticLaw ?s .
           ?s rdf:type sbml:KineticLaw .
          } """
 
@@ -139,7 +143,16 @@ SELECT ?s WHERE
    */
   def createKineticLaw(kineticLaw: KineticLaw, model: Model): Boolean = {
     val writer = new Bean2RDF(model)
+
+    var tmpKinLaw = new KineticLaw()
+    tmpKinLaw.listOfParameters =  kineticLaw.listOfParameters
+    kineticLaw.listOfParameters = null
     writer.save(kineticLaw)
+
+    val parameterDAO = new ParametersDAO
+    tmpKinLaw.listOfParameters.map(
+      parameterDAO.tryToCreateParameterInKineticLaw(
+        kineticLaw.metaid,_, model ) )
     true
   }
 
@@ -165,7 +178,7 @@ SELECT ?s WHERE
   def tryToCreateKineticLawInReaction(reactionMetaid: String,
                                       kineticLaw: KineticLaw,
                                       model: Model): String = {
-    if (reactionsDAO.reactionMetaidExists(reactionMetaid)) {
+    if (reactionsDAO.reactionMetaidExists(reactionMetaid, model)) {
       val kineticLawMetaid = tryToCreateKineticLaw(kineticLaw, model)
       if (kineticLawMetaid != null) {
         //Jena API used directly
@@ -175,7 +188,7 @@ SELECT ?s WHERE
           NS.sbml + "KineticLaw/" + kineticLawMetaid)
 
         reactionRes.addProperty(model
-                .getProperty(NS.sbml + "kineticLaw"),
+                .getProperty(NS.sbml + "hasOneKineticLaw"),
           kineticLawRes)
         kineticLawMetaid
       } else null
@@ -209,15 +222,17 @@ SELECT ?s WHERE
   def tryToCreateKineticLaw(kineticLaw: KineticLaw, model: Model): String = {
     if (if (kineticLaw.metaid != null &&
             kineticLaw.metaid.trim != "" &&
-            sbmlModelsDAO.metaIdExists(kineticLaw.metaid, model) == false) {
-      createKineticLaw(kineticLaw, model)
-    } else {
-      kineticLaw.metaid = sbmlModelsDAO.generateNewMetaIdFromString("kineticLaw_",
-        model)
-      createKineticLaw(kineticLaw,
-        model)
-    } == true)
+            !sbmlModelsDAO.metaIdExists(kineticLaw.metaid, model)) {
+          createKineticLaw(kineticLaw, model)
+        } else {
+          kineticLaw.metaid = sbmlModelsDAO.generateNewMetaIdFromString("kineticLaw_",
+            model)
+          createKineticLaw(kineticLaw, model)
+        } == true)
       {
+        if (kineticLaw.metaid == null || kineticLaw.metaid.trim == "") {
+          throw new BadFormatException("kineticLawDAO.tryTocreatekineticLaw error")
+        }
         kineticLaw.metaid
       } else null
   }

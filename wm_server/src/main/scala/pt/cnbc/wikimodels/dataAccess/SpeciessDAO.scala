@@ -230,13 +230,12 @@ class SpeciessDAO {
   def tryToCreateSpecies(species:Species, model:Model):String = {
     if( if(species.metaid != null &&
            species.metaid.trim != "" &&
-           sbmlModelsDAO.metaIdExists(species.metaid, model) == false ){
+           !sbmlModelsDAO.metaIdExists(species.metaid, model)){
           createSpecies(species, model)
         } else {
           species.metaid = sbmlModelsDAO.generateNewMetaIdFrom(species,
                                                              model)
-          createSpecies(species,
-                      model)
+          createSpecies(species, model)
         } == true){
       species.metaid
     } else null

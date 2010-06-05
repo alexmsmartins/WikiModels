@@ -75,9 +75,6 @@ case class Parameter() extends Element {
       (new SBMLHandler).toStringOrNull((xmlParameter \ "@units").text),
       true
       )
-    //if metaId does not exist it will be generated
-    if (this.theId == null || this.theId == "")
-      throw new BadFormatException("No Id in Parameter");
     this.value = try {
       java.lang.Double.parseDouble((xmlParameter \ "@value").text)
     } catch {

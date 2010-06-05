@@ -9,13 +9,12 @@ package pt.cnbc.wikimodels.dataAccess
  */
 
 import org.junit._
-import Assert._
-import pt.cnbc.wikimodels.setup.Setup
+import org.junit.Assert._
 import com.hp.hpl.jena.rdf.model.{Model, ModelFactory}
-import xml.Elem
+import scala.xml.Elem
 import pt.cnbc.wikimodels.dataModel.{SBMLModel, Reaction}
-import java.io.File
 import pt.cnbc.wikimodels.ontology.ManipulatorWrapper
+import pt.cnbc.wikimodels.setup.Setup
 
 class ReactionsDAOTest {
 
@@ -91,34 +90,37 @@ class ReactionsDAOTest {
     </listOfReactions>
   </model>
 
-  var model:Model  = null
 
   @Before
   def setUp: Unit = {
-    model = ModelFactory.createDefaultModel
-    model = Setup.saveOntologiesOn(model)
   }
 
   @After
   def tearDown: Unit = {
-    model.close
   }
 
   @Test
   def reactionRoundTrip = {
+    var model = ModelFactory.createDefaultModel
+    model = Setup.saveOntologiesOn(model)
+
     //create reaction
     val daoModel = new SBMLModelsDAO()
-    daoModel.tryToCreateSBMLModel(
-      new SBMLModel(modelWReaction),
-      this.model)
+    if(model==null)
+      throw new Exception("3 - Model is null")
+    daoModel.tryToCreateSBMLModel(new SBMLModel(modelWReaction),
+                                  model)
+
     //load reaction
-    Console.println("---Pretty Printing Jena Model---")
-    ManipulatorWrapper.iterateAndPrintModel(model)
-    Console.println("-----------------================================================================================================================================---------------")
+    //Console.println("---Pretty Printing Jena Model---")
+    //ManipulatorWrapper.iterateAndPrintModel(model)
+    //Console.println("-----------------================================================================================================================================---------------")
     val newSBMLModel = daoModel.deepLoadSBMLModel("metaid_01", model)
+
     //check XML
     Console.println("Old model is " + modelWReaction )
     Console.println("New model is " + newSBMLModel.toXML )
+
     //check local parameter list
     assertEquals(newSBMLModel.metaid, "metaid_01")
     assertEquals( newSBMLModel.toXML \\ "listOfSpecies" \ "species" length,
@@ -131,20 +133,23 @@ class ReactionsDAOTest {
 
   @Test
   def reactionRoundTripNoKineticLaw = {
+    var model = ModelFactory.createDefaultModel
+    model = Setup.saveOntologiesOn(model)
+
     //create reaction
     val daoModel = new SBMLModelsDAO()
-    daoModel.tryToCreateSBMLModel(
-      new SBMLModel(modelWithReactionNoKineticLaw),
-      this.model)
+    if(model==null)
+      throw new Exception("4 - Model is null")
+    daoModel.tryToCreateSBMLModel(new SBMLModel(modelWithReactionNoKineticLaw),
+                                  model)
     //load reaction
-
     val newSBMLModel = daoModel.deepLoadSBMLModel("metaid_02", model)
+
     //check XML
     Console.println("Old model is " + modelWithReactionNoKineticLaw )
     Console.println("New model is " + newSBMLModel.toXML )
+
     //check local parameter list
-
-
     assertEquals( newSBMLModel.metaid, "metaid_02")
     assertEquals( newSBMLModel.toXML \\ "listOfSpecies" \ "species" length,
                    modelWithReactionNoKineticLaw \\ "listOfSpecies" \ "species" length )

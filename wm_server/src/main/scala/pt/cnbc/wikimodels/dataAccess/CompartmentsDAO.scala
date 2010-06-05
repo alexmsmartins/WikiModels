@@ -237,7 +237,7 @@ SELECT ?s WHERE
   def tryToCreateCompartment(compartment: Compartment, model: Model): String = {
     if (if (compartment.metaid != null &&
             compartment.metaid.trim != "" &&
-            sbmlModelsDAO.metaIdExists(compartment.metaid, model) == false) {
+            !sbmlModelsDAO.metaIdExists(compartment.metaid, model)) {
       createCompartment(compartment, model)
     } else {
       compartment.metaid = sbmlModelsDAO.generateNewMetaIdFrom(compartment,

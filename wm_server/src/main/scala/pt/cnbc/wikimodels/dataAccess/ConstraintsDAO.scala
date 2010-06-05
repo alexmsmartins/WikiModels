@@ -218,7 +218,7 @@ SELECT ?s WHERE
   def tryToCreateConstraint(constraint: Constraint, model: Model): String = {
     if (if (constraint.metaid != null &&
             constraint.metaid.trim != "" &&
-            sbmlModelsDAO.metaIdExists(constraint.metaid, model) == false) {
+            !sbmlModelsDAO.metaIdExists(constraint.metaid, model)) {
       createConstraint(constraint, model)
     } else {
       constraint.metaid = sbmlModelsDAO.generateNewMetaIdFrom(constraint,

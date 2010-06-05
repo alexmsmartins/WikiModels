@@ -51,10 +51,6 @@ case class FunctionDefinition() extends Element{
              (new SBMLHandler).toStringOrNull((xmlFunctionDefinition \ "@id").text),
              (new SBMLHandler).toStringOrNull((xmlFunctionDefinition \ "@name").text),
              (xmlFunctionDefinition \ "math"))
-      //if metaId does not exist it will be generated
-      if( this.theId == null || this.theId == "")
-        throw new BadFormatException("No Id in FunctionDefinition");
-
     }
 
     override def toXML:Elem = {

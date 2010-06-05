@@ -13,7 +13,6 @@ import scalaj.collection.Imports._
 import scala.collection.JavaConversions._
 import scala.xml.NodeSeq
 
-import thewebsemantic.Id
 import thewebsemantic.Namespace
 import thewebsemantic.RdfProperty
 import scala.reflect.BeanInfo
@@ -37,7 +36,7 @@ case class Reaction() extends Element{
   var listOfProducts:java.util.Collection[SpeciesReference] = null
   @RdfProperty("http://wikimodels.cnbc.pt/ontologies/sbml.owl#hasModifier")
   var listOfModifiers:java.util.Collection[ModifierSpeciesReference] = null
-  @RdfProperty("http://wikimodels.cnbc.pt/ontologies/sbml.owl#kineticLaw")
+  @RdfProperty("http://wikimodels.cnbc.pt/ontologies/sbml.owl#hasOneKineticLaw")
   var kineticLaw:KineticLaw = null //optional
 
   def this(metaid:String,
@@ -72,8 +71,8 @@ case class Reaction() extends Element{
     this.listOfModifiers =
       (xmlReaction \ "listOfModifiers" \ "modifierSpeciesReference")
       .map(i => new ModifierSpeciesReference(i.asInstanceOf[scala.xml.Elem])).asJava
-    if( (xmlReaction \ "kineticLaw").size>0 )
-      this.kineticLaw = new KineticLaw((xmlReaction \ "kineticLaw").first.asInstanceOf[scala.xml.Elem])
+    if( (xmlReaction \ "kineticLaw").length > 0 )
+        this.kineticLaw = new KineticLaw((xmlReaction \ "kineticLaw").first.asInstanceOf[scala.xml.Elem])
   }
 
   override def toXML:Elem = {
@@ -95,7 +94,7 @@ case class Reaction() extends Element{
         </listOfModifiers> else scala.xml.Null
       }
       {if(this.kineticLaw != null)
-        this.kineticLaw.toXML
+          this.kineticLaw.toXML
       else
         null.asInstanceOf[Elem]}
     </reaction>

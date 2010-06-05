@@ -44,7 +44,7 @@ Unexpected Error.""" + e)
     }
   }
 
-  def saveOntologiesOn(model: Model): Model = {
+  def saveOntologiesOn(model:Model): Model = {
     var homeDir = ""
     var file: File = null
     //Get the current directory
@@ -57,6 +57,9 @@ Unexpected Error.""" + e)
                         model.add(
                           ManipulatorWrapper.loadModelfromfile(i))
               }) //Merge Ontologies with KnowledgeBase
+    if(model==null)
+      throw new Exception("saveOntologiesOn - Model is null")
+
     model
   }
 

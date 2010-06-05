@@ -233,14 +233,14 @@ SELECT ?s WHERE
   def tryToCreateFunctionDefinition(functionDefinition: FunctionDefinition, model: Model): String = {
     if (if (functionDefinition.metaid != null &&
             functionDefinition.metaid.trim != "" &&
-            sbmlModelsDAO.metaIdExists(functionDefinition.metaid, model) == false) {
-      createFunctionDefinition(functionDefinition, model)
-    } else {
-      functionDefinition.metaid = sbmlModelsDAO.generateNewMetaIdFrom(functionDefinition,
-        model)
-      createFunctionDefinition(functionDefinition,
-        model)
-    } == true)
+            !sbmlModelsDAO.metaIdExists(functionDefinition.metaid, model)) {
+          createFunctionDefinition(functionDefinition, model)
+        } else {
+          functionDefinition.metaid = sbmlModelsDAO.generateNewMetaIdFrom(functionDefinition,
+            model)
+          createFunctionDefinition(functionDefinition,
+            model)
+        } == true)
       {
         functionDefinition.metaid
       } else null

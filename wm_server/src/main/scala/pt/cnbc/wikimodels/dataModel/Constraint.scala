@@ -52,14 +52,14 @@ case class Constraint() extends Element {
       (new SBMLHandler).toStringOrNull((xmlConstraint \ "@name").text),
       (xmlConstraint \ "math"),
       (new SBMLHandler).checkCurrentLabelForMessage(xmlConstraint))
-    //if metaId does not exist it will be generated
-    if (this.theId == null || this.theId == "")
-      throw new BadFormatException("No Id in Constraint");
   }
 
   override def toXML: Elem = {
     <constraint metaid={metaid} id={id} name={name}>
-      <!--order is important according to SBML Specifications-->{new SBMLHandler().genNotesFromHTML(notes)}{XML.loadString(this.math)}{new SBMLHandler().genMessageFromHTML(message)}
+      <!--order is important according to SBML Specifications-->
+      {new SBMLHandler().genNotesFromHTML(notes)}
+      {XML.loadString(this.math)}
+      {new SBMLHandler().genMessageFromHTML(message)}
     </constraint>
   }
 
