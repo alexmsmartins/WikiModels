@@ -78,7 +78,7 @@ class HomePage {
     }
     
     def profile = User.currentUserName match {
-        case Full(user) => {<h1><a title="See profile" href="profile_user">{user}'s profile</a></h1>}
+        case Full(user) => {<h1><a title="See profile" href="./profile_user">{user}'s profile</a></h1>}
         case _ => Nil
     }
 

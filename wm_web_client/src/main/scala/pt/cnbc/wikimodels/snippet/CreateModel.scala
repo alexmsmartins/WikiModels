@@ -70,6 +70,7 @@ class CreateModel {
                 var parameter_value = new LinkedList[String]()
                 var parameter_constant = new LinkedList[String]()
                 var parameter_note = new LinkedList[String]()
+                var constraint_id = new LinkedList[String]()
                 var constraint_math = new LinkedList[String]()
                 var constraint_message = new LinkedList[String]()
                 var constraint_note = new LinkedList[String]()
@@ -88,6 +89,7 @@ class CreateModel {
                 var kineticParameter = new Parameter();
                 
                 val msgName: String = S.attr("id_msgs") openOr "messages"
+                val msgParamName: String = S.attr("id_msgs") openOr "paramMessage"
                 //val fdefinit = new FunctionDefinition
 
                 /**
@@ -110,7 +112,7 @@ class CreateModel {
                             }
                         }
                     }
-
+                    Console.println("aqui------>"+XML.loadString(description))
                     model_id = model_name.replace(" ", "").toLowerCase
                     if (model_id.length == 0 && model_name.length == 0) {
                         S.error("Invalid Content in the model")
@@ -122,16 +124,15 @@ class CreateModel {
                                     </body>
                                 </notes>
                                 {
-                                    if(function_def_id.peek != ""){
+                                    if(function_def_id.peekFirst != ""){
                                         <listOfFunctionDefinitions>
                                             {
                                                 for(val i <- 0 to (function_def_id.size-1)) yield{
                                                     <functionDefinition name={function_def_name.get(i)} id={function_def_id.get(i)} metaid="metaid_0000001">
                                                         {
-                                                            if((function_def_math.size > 0) && (function_def_math.get(i-1).contains("<math"))){
-                                                                for(i <- 0 to function_def_math.size-1) yield{
-                                                                    XML.loadString(function_def_math.get(i).toString)}
-                                                            }
+                                                            if((function_def_math.peek != "") && (function_def_math.get(i).contains("<math"))){
+                                                                    XML.loadString(function_def_math.get(i).toString)
+                                                            } else scala.xml.Null
                                                         }
                                                         <notes>{function_def_note.get(i)}</notes>
                                                     </functionDefinition>
@@ -186,15 +187,17 @@ class CreateModel {
                                     if(constraint_math.peekFirst != ""){
                                         <listOfConstraints>
                                             {
-                                                    if((constraint_math.size > 0) && (constraint_math.peekFirst.contains("<math"))){
-                                                        for(i <- 0 to constraint_math.size-1) yield{
-                                                            <constraint metaid="metaid_0000001">{XML.loadString(constraint_math.get(i).toString)}
+                                                
+                                                for(i <- 0 to constraint_math.size-1) yield{
+                                                    if((constraint_math.peek != "") && (constraint_math.get(i).contains("<math"))){
+                                                        <constraint id={constraint_id.get(i)} metaid="metaid_0000001">{XML.loadString(constraint_math.get(i).toString)}
                                                                                         
-                                                                <message>{constraint_message.get(i)}</message>
-                                                                <notes>{constraint_note.get(i)}</notes>
-                                                            </constraint>
-                                                        }
+                                                            <message>{constraint_message.get(i)}</message>
+                                                            <notes>{constraint_note.get(i)}</notes>
+                                                        </constraint>
                                                     } else scala.xml.Null
+                                                }
+                                                    
                                             }
                                         </listOfConstraints>
                                     } else scala.xml.Null
@@ -346,16 +349,22 @@ class CreateModel {
                         Console.println(modelSBML)
 
                         var restful:RestfulAccess = User.getRestful
-                        val uriModel:URI = restful.postRequest("/model", modelSBML)
-                        
-                        if((restful.getStatusCode >= 200) || (restful.getStatusCode < 300)){
-                            var link = uriModel.getPath
-                            var loc = link.indexOf("/metaid")
-                            var final_link = link.substring(loc)
-                            S.redirectTo("/model"+final_link)
-                        } else {
-                            S.error("Error creating model!")
+                        try {
+                            val uriModel:URI = restful.postRequest("/model", modelSBML)
+                            if((restful.getStatusCode >= 200) || (restful.getStatusCode < 300)){
+                                var link = uriModel.getPath
+                                var loc = link.indexOf("/metaid")
+                                var final_link = link.substring(loc)
+                                S.redirectTo("/model"+final_link)
+                            } else {
+                                S.error("Error creating model!")
+                            }
+                        } catch {
+                            case e: pt.cnbc.wikimodels.exceptions.BadFormatException => S.error("Bad format error in creating the model on the server side!")
+                            case nullPoint: NullPointerException => S.error("Null - Error in creating the model on the server side!")
                         }
+                        
+                        
                         //XML.save("file.xml", modelSBML)
                         
                     }
@@ -396,6 +405,14 @@ class CreateModel {
                                                               300000 seconds, 1 second)}, ("id", "name_model"), ("size", "40"), ("maxlength", "1000"))
                 }
 
+                def createNameAndIdCompartment(nameml: NodeSeq) = {
+                    SHtml.ajaxText("", ref => { parameter_name.add(ref);
+                                               DisplayMessage(msgName,
+                                                              bind("text", nameml, "param_id" ->
+                                                                   SHtml.text(Text(ref.replace(" ", "").toLowerCase).toString, refer2 => parameter_id.add(refer2), ("id", "model_id"), ("name", "model_id"), ("size", "40"))),
+                                                              300000 seconds, 1 second)}, ("id", "parameter_name"), ("size", "40"), ("maxlength", "1000"))
+                }
+
                 description = "<div>"
 
                 bind("createDescription", xhtml,
@@ -416,8 +433,8 @@ class CreateModel {
                                         {
                                             Jx(<li>Reaction ID <span id="required_field">*</span>:
                                                {SHtml.text("", v => {reaction_id.add(v.replace(" ", "").toLowerCase)},("id", "reactionID"), ("size", "40"), ("maxlength", "10000"))}</li>
-                                                <li>Reaction Name <span id="required_field">*</span>:
-                                               {SHtml.text("", v => {reaction_name.add(v)},("id", "reactionName"), ("size", "40"), ("maxlength", "10000"))}</li>
+                                               <li>Reaction Name <span id="required_field">*</span>:
+                                                    {SHtml.text("", v => {reaction_name.add(v)},("id", "reactionName"), ("size", "40"), ("maxlength", "10000"))}</li>
                                                <li>Reaction Reversible:  <i>(default="false")</i>
                                                     {SHtml.select(listaNova.map(v => (v, v)), Empty, setReactionR _)}</li>
                                                <li>Reaction Fast:  <i>(default="false")</i>
@@ -431,9 +448,9 @@ class CreateModel {
                                                                 JsCrVar("reactionNewReactant", Jx(<hr /><ul id="reactantStyle" style="list-style:none;">{
                                                                             Jx(<li><font style="font-weight:bold; font-size:110%;">New Reactant</font></li><br />
                                                                                <li>Reactant ID <span id="required_field">*</span>:
-                                               {SHtml.text("", v => {reactant.set_reactant_id(v.replace(" ","").toLowerCase)},("id", "reactantID"), ("size", "40"), ("maxlength", "10000"))}</li>
+                                                                                    {SHtml.text("", v => {reactant.set_reactant_id(v.replace(" ","").toLowerCase)},("id", "reactantID"), ("size", "40"), ("maxlength", "10000"))}</li>
                                                                                <li>Reactant Name <span id="required_field">*</span>:
-                                                                               {SHtml.text("", v => {reactant.set_reactant_name(v)},("id", "reactantName"), ("size", "40"), ("maxlength", "10000"))}</li>
+                                                                                    {SHtml.text("", v => {reactant.set_reactant_name(v)},("id", "reactantName"), ("size", "40"), ("maxlength", "10000"))}</li>
                                                                                <li>Reactant Specie <span id="required_field">*</span>:
                                                                                     {SHtml.text("", v => {reactant.set_reactant_specie(v)
                                                                                             },("id", "reactantSpecie"), ("size", "40"), ("maxlength", "10000"))}</li>
@@ -463,10 +480,10 @@ class CreateModel {
                                                                             Jx(<li><font style="font-weight:bold; font-size:110%;">New Product</font>
                                                                                </li><br />
                                                                                <li>Product ID <span id="required_field">*</span>:
-                                               {SHtml.text("", v => {product.set_product_id(v.replace(" ","").toLowerCase)},("id", "productID"), ("size", "40"), ("maxlength", "10000"))}</li>
+                                                                                    {SHtml.text("", v => {product.set_product_id(v.replace(" ","").toLowerCase)},("id", "productID"), ("size", "40"), ("maxlength", "10000"))}</li>
                                                                                <li>Product Name <span id="required_field">*</span>:
-                                                                               {SHtml.text("", v => {product.set_product_name(v)}
-                                                                                           ,("id", "productName"), ("size", "40"), ("maxlength", "10000"))}</li>
+                                                                                    {SHtml.text("", v => {product.set_product_name(v)}
+                                                                                                ,("id", "productName"), ("size", "40"), ("maxlength", "10000"))}</li>
                                                                                <li>Product Specie <span id="required_field">*</span>:
                                                                                     {SHtml.text("", v => {product.set_product_specie(v)
                                                                                             },("id", "productSpecie"), ("size", "40"), ("maxlength", "10000"))}</li>
@@ -496,10 +513,10 @@ class CreateModel {
                                                                             Jx(<li><font style="font-weight:bold; font-size:110%;">New Modifier</font>
                                                                                </li><br />
                                                                                <li>Modifier ID <span id="required_field">*</span>:
-                                               {SHtml.text("", v => {modifier.set_modifier_id(v.replace(" ","").toLowerCase)},("id", "modifierID"), ("size", "40"), ("maxlength", "10000"))}</li>
+                                                                                    {SHtml.text("", v => {modifier.set_modifier_id(v.replace(" ","").toLowerCase)},("id", "modifierID"), ("size", "40"), ("maxlength", "10000"))}</li>
                                                                                <li>Modifier Name <span id="required_field">*</span>:
-                                                                               {SHtml.text("", v => {modifier.set_modifier_name(v)
-                                                                                        },("id", "modifierName"), ("size", "40"), ("maxlength", "10000"))}</li>
+                                                                                    {SHtml.text("", v => {modifier.set_modifier_name(v)
+                                                                                            },("id", "modifierName"), ("size", "40"), ("maxlength", "10000"))}</li>
                                                                                <li>Modifier Specie <span id="required_field">*</span>:
                                                                                     {SHtml.text("", v => {modifier.set_modifier_specie(v)
                                                                                             },("id", "modifierSpecie"), ("size", "40"), ("maxlength", "10000"))}</li>
@@ -563,8 +580,8 @@ class CreateModel {
                                         {
                                             Jx(<li>Function Definition ID <span id="required_field">*</span>:
                                                {SHtml.text("", v => {function_def_id.add(v.replace(" ", "").toLowerCase)},("id", "functionDefinitionID"), ("size", "40"), ("maxlength", "10000"))}</li>
-                                                <li>Function Definition Name <span id="required_field">*</span>:
-                                               {SHtml.text("", v => {function_def_name.add(v)},("id", "functionDefinitionName"), ("size", "40"), ("maxlength", "10000"))}</li>
+                                               <li>Function Definition Name <span id="required_field">*</span>:
+                                                    {SHtml.text("", v => {function_def_name.add(v)},("id", "functionDefinitionName"), ("size", "40"), ("maxlength", "10000"))}</li>
                                                <li>Function Definition Math: <i><span id="required_field">(Format: Content MathML [Mathematical Markup Language])</span></i><img src="../classpath/images/question.png" width="20px" height="20px" /><br />
                                                     <!--<a value="Help on Mathematical Formulas" href="" onclick="window.open('../help/helpMath','Help','width=500,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=400,top=300,screenX=400,screenY=300');">Help on Mathematical Formula for ASCIIMathML-->
                                                     <!--</a>-->
@@ -581,9 +598,9 @@ class CreateModel {
                             JsCrVar("comp", Jx(<ul style="list-style:none;">
                                                {
                                         Jx(<li>Compartment ID <span id="required_field">*</span>:
-                                               {SHtml.text("", v => {compartment_id.add(v.replace(" ", "").toLowerCase)},("id", "compartmentID"), ("size", "40"), ("maxlength", "10000"))}</li>
-                                            <li>Compartment Name: <span id="required_field">*</span>&nbsp;
-                                           {SHtml.text("", v => {compartment_name.add(v)},("id", "compartmentName"), ("size", "40"), ("maxlength", "10000"))}</li>
+                                           {SHtml.text("", v => {compartment_id.add(v.replace(" ", "").toLowerCase)},("id", "compartmentID"), ("size", "40"), ("maxlength", "10000"))}</li>
+                                           <li>Compartment Name: <span id="required_field">*</span>&nbsp;
+                                                {SHtml.text("", v => {compartment_name.add(v)},("id", "compartmentName"), ("size", "40"), ("maxlength", "10000"))}</li>
                                            <li>Compartment Spatial Dimension:&nbsp;
                                                 {SHtml.select((0 to 3).toList.reverse.map(v => (v.toString, v.toString)), Empty, selectValue _)}</li>
                                            <li>Compartment Size: &nbsp;
@@ -602,9 +619,9 @@ class CreateModel {
                             JsCrVar("spec", Jx(<ul style="list-style:none;">
                                                {
                                         Jx(<li>Species ID <span id="required_field">*</span>:
-                                               {SHtml.text("", v => {species_id.add(v.replace(" ", "").toLowerCase)},("id", "speciesID"), ("size", "40"), ("maxlength", "10000"))}</li>
-                                            <li>Species Name <span id="required_field">*</span>: &nbsp;
-                                           {SHtml.text("", v => {species_name.add(v)},("id", "speciesName"), ("size", "40"), ("maxlength", "10000"))}</li>
+                                           {SHtml.text("", v => {species_id.add(v.replace(" ", "").toLowerCase)},("id", "speciesID"), ("size", "40"), ("maxlength", "10000"))}</li>
+                                           <li>Species Name <span id="required_field">*</span>: &nbsp;
+                                                {SHtml.text("", v => {species_name.add(v)},("id", "speciesName"), ("size", "40"), ("maxlength", "10000"))}</li>
                                            <li>Species Compartment <span id="required_field">*</span>: &nbsp;
                                                 {SHtml.text("", v => species_compartment.add(v),("id", "speciesCompartment"), ("size", "40"), ("maxlength", "1000"))}</li>
                                            <li>Species Initial Amount: &nbsp;
@@ -624,10 +641,11 @@ class CreateModel {
                      "buttonParam" -> SHtml.ajaxButton(Text("Add Parameter"), () => {
                             JsCrVar("param", Jx(<ul style="list-style:none;">
                                                 {
-                                        Jx(<li>Parameter ID <span id="required_field">*</span>:
-                                               {SHtml.text("", v => {parameter_id.add(v.replace(" ", "").toLowerCase)},("id", "parameterID"), ("size", "40"), ("maxlength", "10000"))}</li>
-                                            <li>Parameter Name <span id="required_field">*</span>: &nbsp;
-                                           {SHtml.text("", v => {parameter_name.add(v)},("id", "parameterName"), ("size", "40"), ("maxlength", "10000"))}</li>
+                                        Jx( <li>Parameter ID <span id="required_field">*</span>:
+                                           {SHtml.text("", v => {parameter_id.add(v.replace(" ", "").toLowerCase)},("id", "parameterID"), ("size", "40"), ("maxlength", "10000"))}</li>
+                                           <li>Parameter Name <span id="required_field">*</span>: &nbsp;
+                                                {SHtml.text("", v => {parameter_name.add(v)},("id", "parameterName"), ("size", "40"), ("maxlength", "10000"))}</li>
+                                           
                                            <li>Parameter Value : &nbsp;
                                                 {SHtml.text("", v => parameter_value.add(v),("id", "parameterValue"), ("size", "10"), ("maxlength", "100"))}</li>
                                            <li>Parameter Constant: &nbsp;<i>(default="true")</i> &nbsp;
@@ -638,10 +656,17 @@ class CreateModel {
                                                 </ul><hr /><br /><br />).toJs) &
                             (ElemById("paramet") ~> JsFunc("appendChild", Call("param", "")))
                         }),
+                     /*<li>Parameter Name: <span id="required_field">*</span> &nbsp;{SHtml.ajaxText("", ref => { parameter_name.add(ref);
+                                               DisplayMessage(msgParamName,
+                                                              bind("text", xhtml, "param_id" ->
+                                                                   SHtml.text(Text(ref.replace(" ", "").toLowerCase).toString, refer2 => parameter_id.add(refer2), ("id", "model_id"), ("name", "model_id"), ("size", "40"))),
+                                                              300000 seconds, 1 second)}, ("id", "parameter_name"), ("size", "40"), ("maxlength", "1000"))}</li>*/
                      "buttonConstraint" -> SHtml.ajaxButton(Text("Add Constraint"), () => {
                             JsCrVar("constr", Jx(<ul style="list-style:none;">
                                                  {
-                                        Jx(<li>Constraint Math: <i><span id="required_field">(Format: Content MathML [Mathematical Markup Language])</span></i><img src="../classpath/images/question.png" width="20px" height="20px" /><br />
+                                        Jx(<li>Constraint ID <span id="required_field">*</span>:
+                                           {SHtml.text("", v => {constraint_id.add(v.replace(" ", "").toLowerCase)},("id", "constraintID"), ("size", "40"), ("maxlength", "10000"))}</li>
+                                            <li>Constraint Math: <i><span id="required_field">(Format: Content MathML [Mathematical Markup Language])</span></i><img src="../classpath/images/question.png" width="20px" height="20px" /><br />
                                            <!--<a value="Help on Mathematical Formulas" href="" onclick="window.open('../help/helpMath','Help','width=500,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=400,top=300,screenX=400,screenY=300');">Help on Mathematical Formula for ASCIIMathML-->
                                            <!--</a>-->
                                            <br /><a style="color:blue" name="Copy and paste the Content MathML code to the box down" href="" onclick="window.open('http://cnx.org/math-editor/popup','Help','width=900,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=200,top=200,screenX=200,screenY=300');"><b>MathML Editor</b> (only for Mozilla Firefox users)</a><br /><br />
@@ -655,9 +680,9 @@ class CreateModel {
                             (ElemById("const") ~> JsFunc("appendChild", Call("constr", "")))
                         }),
                      "save" -> SHtml.submit("Save Model", createNewModel,("id","buttonSave"),("onclick" -> {
-                                                                                              JsIf(JsEq(ValById("name_model"), ""), Alert("You must provide a name to the model!") & JsReturn(false))
-                                                                                              /*JsIf(!ValById("reactantStoicMath").contains("<math"), Alert("Error in the mathematical formula in: 'Reactant Stoichiometry Math'.") & JsReturn(false))
-                                                                                              JsIf(!ValById("functionDefinitionMath").contains("<math"), Alert("Error in the mathematical formula in: 'Function Definition Math'.") & JsReturn(false))*/})))
+                                JsIf(JsEq(ValById("name_model"), ""), Alert("You must provide a name to the model!") & JsReturn(false))
+                                /*JsIf(!ValById("reactantStoicMath").contains("<math"), Alert("Error in the mathematical formula in: 'Reactant Stoichiometry Math'.") & JsReturn(false))
+                            JsIf(!ValById("functionDefinitionMath").contains("<math"), Alert("Error in the mathematical formula in: 'Function Definition Math'.") & JsReturn(false))*/})))
             }
         case _ => Text("")
     }

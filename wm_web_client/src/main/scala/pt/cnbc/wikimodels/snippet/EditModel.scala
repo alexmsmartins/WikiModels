@@ -205,7 +205,7 @@ class EditModel {
                                     <parameter id={param_id} name={param_name} value={param_value} constant={param_constant} metaid={param_metaid}>
                                         {if(param_notes.length > 0){
                                                 <notes>
-                                                    <body>{param_notes}
+                                                    <body>{XML.loadString(param_notes.toString)}
                                                     </body>
                                                 </notes>
                                             }}
@@ -231,7 +231,7 @@ class EditModel {
                                         initialConcentration={spec_init_concent} boundaryCondition={spec_bc} constant={spec_c} metaid={spec_metaid}>
                                         {if(spec_notes.length > 0){
                                                 <notes>
-                                                    <body>{spec_notes}
+                                                    <body>{XML.loadString(spec_notes.toString)}
                                                     </body>
                                                 </notes>
                                             }}
@@ -259,7 +259,7 @@ class EditModel {
                                         name={comp_name} id={comp_id} constant={comp_c} metaid={comp_metaid}>
                                         {if(comp_notes.length > 0){
                                                 <notes>
-                                                    <body>{comp_notes}
+                                                    <body>{XML.loadString(comp_notes.toString)}
                                                     </body>
                                                 </notes>
                                             }
@@ -284,7 +284,7 @@ class EditModel {
                             val modelConstUpdate = {
                                 <constraint metaid={const_metaid}>{XML.loadString(const_math.toString)}
                                     <message>{const_message}</message>
-                                    <notes>{const_notes}</notes>
+                                    <notes>{XML.loadString(const_notes.toString)}</notes>
                                 </constraint>
                             }
 
@@ -310,7 +310,7 @@ class EditModel {
                                                 XML.loadString(funDef_math.toString)
                                             }
                                         }
-                                        <notes>{funDef_notes}</notes>
+                                        <notes>{XML.loadString(funDef_notes.toString)}</notes>
                                     </functionDefinition>
 
                                 }
@@ -332,7 +332,7 @@ class EditModel {
                             } else {
                                 val modelUpdate = {
                                     <model name={model_name} id={model_id} metaid={model_metaid}>
-                                        <notes>{model_notes}</notes>
+                                        <notes>{XML.loadString(model_notes.toString)}</notes>
                                     </model>
 
                                 }
@@ -401,6 +401,8 @@ class EditModel {
                     def setReactionF(va :String){
                         reac_f = va
                     }
+
+
                     //Console.println("EDIT...----->>>> "+modelAtribute)
                     bind("editModel", xhtml,
                          "editAttribute" -> {
@@ -805,6 +807,7 @@ class EditModel {
                 var comp_metaid:String = null
 
                 var const_bool:Boolean = false
+                var const_id:String = null
                 var const_math:String = null
                 var const_message:String = null
                 var const_notes:String = null
@@ -897,7 +900,7 @@ class EditModel {
                                     <parameter id={param_id} name={param_name} value={param_value} constant={param_constant} metaid="metaid_0000001">
                                         {if(param_notes.length > 0){
                                                 <notes>
-                                                    <body>{param_notes}
+                                                    <body>{XML.loadString(param_notes.toString)}
                                                     </body>
                                                 </notes>
                                             }}
@@ -923,7 +926,7 @@ class EditModel {
                                         initialConcentration={spec_init_concent} boundaryCondition={spec_bc} constant={spec_c} metaid="metaid_0000001">
                                         {if(spec_notes.length > 0){
                                                 <notes>
-                                                    <body>{spec_notes}
+                                                    <body>{XML.loadString(spec_notes.toString)}
                                                     </body>
                                                 </notes>
                                             }}
@@ -951,7 +954,7 @@ class EditModel {
                                         name={comp_name} id={comp_id} constant={comp_c} metaid="metaid_0000001">
                                         {if(comp_notes.length > 0){
                                                 <notes>
-                                                    <body>{comp_notes}
+                                                    <body>{XML.loadString(comp_notes.toString)}
                                                     </body>
                                                 </notes>
                                             }
@@ -976,7 +979,7 @@ class EditModel {
                             val modelConstUpdate = {
                                 <constraint metaid="metaid_0000001">{XML.loadString(const_math.toString)}
                                     <message>{const_message}</message>
-                                    <notes>{const_notes}</notes>
+                                    <notes>{XML.loadString(const_notes.toString)}</notes>
                                 </constraint>
                             }
 
@@ -1002,7 +1005,7 @@ class EditModel {
                                                 XML.loadString(funDef_math.toString)
                                             }
                                         }
-                                        <notes>{funDef_notes}</notes>
+                                        <notes>{XML.loadString(funDef_notes.toString)}</notes>
                                     </functionDefinition>
 
                                 }
@@ -1182,6 +1185,11 @@ class EditModel {
                                         </li>
                                     } else if(uriLink.contains("constraint")){
                                         const_bool = true
+                                        <li>Constraint ID <span id="required_field">*</span>:
+                                           {
+                                               SHtml.text("", v => {const_id = (v.replace(" ", "").toLowerCase)},("id", "constraintID"), ("size", "40"), ("maxlength", "10000"))
+                                           }
+                                       </li>
                                         <li>Constraint Math: <i><span id="required_field">(Format: Content MathML [Mathematical Markup Language])</span></i><img src="../classpath/images/question.png" width="20px" height="20px" /><br />
                                             <br /><a style="color:blue" name="Copy and paste the Content MathML code to the box down" href="" onclick="window.open('http://cnx.org/math-editor/popup','Help','width=900,height=300,resizable=no,toolbar=no,location=no,directories=no,status=no,menubar=no,left=200,top=200,screenX=200,screenY=300');"><b>MathML Editor</b> (only for Mozilla Firefox users)</a><br /><br />
                                             {
