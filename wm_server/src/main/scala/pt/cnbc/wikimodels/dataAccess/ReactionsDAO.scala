@@ -367,9 +367,10 @@ class ReactionsDAO {
         specRefDAO.updateModifierSpeciesReference(
           _, model))
 
-      val kinLawDAO = new KineticLawsDAO()
-      kinLawDAO.updateKineticLaw(reaction.kineticLaw)
-
+      if(reaction.kineticLaw != null){
+        val kinLawDAO = new KineticLawsDAO()
+        kinLawDAO.updateKineticLaw(reaction.kineticLaw)
+      }
       true
     } else false
   }
@@ -385,11 +386,16 @@ class ReactionsDAO {
       val myModel: Model = ManipulatorWrapper.loadModelfromDB
       deleteReaction(reaction, myModel)
     } catch {
-      case ex: Exception => {
+      case ex: thewebsemantic.NotFoundException => {
+        Console.println("Bean of " + Reaction.getClass + "and " +
+                "id is not found")
+        ex.printStackTrace()
+        false
+      }
+      case ex => {
         Console.println("Deleting model " + reaction +
                 "was not possible")
         ex.printStackTrace
-
         false
       }
     }
@@ -400,25 +406,11 @@ class ReactionsDAO {
    * @return true if creating the new model was possible and false otherwise
    */
   def deleteReaction(reaction: Reaction, model: Model): Boolean = {
-    try {
-      if (reactionMetaidExists(reaction.metaid)) {
-        val writer = new Bean2RDF(model)
-        writer.delete(reaction)
-        //TODO delete subelements
-        true
-      } else false
-    } catch {
-      case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + Reaction.getClass + "and " +
-                "id is not found")
-        ex.printStackTrace()
-        false
-      }
-      case ex => {
-        Console.println(ex.toString)
-        ex.printStackTrace()
-        false
-      }
-    }
+    if (reactionMetaidExists(reaction.metaid)) {
+      val writer = new Bean2RDF(model)
+      writer.delete(reaction)
+      //TODO delete subelements
+      true
+    } else false
   }
 }

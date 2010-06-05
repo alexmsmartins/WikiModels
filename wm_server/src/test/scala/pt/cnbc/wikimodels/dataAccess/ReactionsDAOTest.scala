@@ -106,15 +106,10 @@ class ReactionsDAOTest {
 
     //create reaction
     val daoModel = new SBMLModelsDAO()
-    if(model==null)
-      throw new Exception("3 - Model is null")
     daoModel.tryToCreateSBMLModel(new SBMLModel(modelWReaction),
                                   model)
 
     //load reaction
-    //Console.println("---Pretty Printing Jena Model---")
-    //ManipulatorWrapper.iterateAndPrintModel(model)
-    //Console.println("-----------------================================================================================================================================---------------")
     val newSBMLModel = daoModel.deepLoadSBMLModel("metaid_01", model)
 
     //check XML
@@ -129,6 +124,9 @@ class ReactionsDAOTest {
                    modelWReaction \\ "listOfReactions" \ "reaction" length )
     assertEquals( newSBMLModel.toXML \\ "listOfReactions" \ "reaction" \ "kineticLaw" length,
                    modelWReaction \\ "listOfReactions" \ "reaction" \ "kineticLaw" length )
+    assertEquals( newSBMLModel.toXML \\ "listOfReactions" \ "reaction" \ "kineticLaw" \ "listOfaramters" \ "paramter" length,
+                   modelWReaction \\ "listOfReactions" \ "reaction" \ "kineticLaw" \ "listOfaramters" \ "paramter" length)
+
   }
 
   @Test
@@ -158,4 +156,64 @@ class ReactionsDAOTest {
     assertEquals( newSBMLModel.toXML \\ "listOfReactions" \ "reaction" \ "kineticLaw" length,
                   0 )
   }
+
+  val modelWithReactionNoLocalParameters:Elem =
+  <model metaid="metaid_03" id="simpleModel">
+    <listOfUnitDefinitions>
+      <unitDefinition id="per_concent_per_time">
+        <listOfUnits>
+            <unit kind="litre"/>
+            <unit kind="mole" exponent="-1"/>
+            <unit kind="second" exponent="-1"/>
+        </listOfUnits>
+      </unitDefinition>
+    </listOfUnitDefinitions>
+    <listOfSpecies>
+        <species id="S1" compartment="c1" initialConcentration="2.0"/>
+        <species id="S2" compartment="c1" initialConcentration="0.5"/>
+        <species id="X0" compartment="c1" initialConcentration="1.0"/>
+    </listOfSpecies>
+    <listOfReactions>
+      <reaction id="J1">
+        <listOfReactants>
+            <speciesReference id="RefX0" species="X0"/>
+        </listOfReactants>
+        <listOfProducts>
+            <speciesReference id="RefS1" species="S1"/>
+        </listOfProducts>
+        <listOfModifiers>
+            <modifierSpeciesReference id="RefS2" species="S2"/>
+        </listOfModifiers>
+      </reaction>
+    </listOfReactions>
+  </model>
+
+
+  @Test
+  def reactionRoundTripNoLocalParameters = {
+    var model = ModelFactory.createDefaultModel
+    model = Setup.saveOntologiesOn(model)
+
+    //create reaction
+    val daoModel = new SBMLModelsDAO()
+    daoModel.tryToCreateSBMLModel(new SBMLModel(modelWithReactionNoLocalParameters),
+                                  model)
+
+    //load reaction
+    val newSBMLModel = daoModel.deepLoadSBMLModel("metaid_03", model)
+
+    //check XML
+    Console.println("Old model is " + modelWithReactionNoLocalParameters )
+    Console.println("New model is " + newSBMLModel.toXML )
+
+    //check local parameter list
+    assertEquals(newSBMLModel.metaid, "metaid_03")
+    assertEquals( newSBMLModel.toXML \\ "listOfSpecies" \ "species" length,
+                   modelWithReactionNoLocalParameters \\ "listOfSpecies" \ "species" length )
+    assertEquals( newSBMLModel.toXML \\ "listOfReactions" \ "reaction" length,
+                   modelWithReactionNoLocalParameters \\ "listOfReactions" \ "reaction" length )
+    assertEquals( newSBMLModel.toXML \\ "listOfReactions" \ "reaction" \ "kineticLaw" \ "listOfaramters" \ "paramter" length,
+                   0)
+  }
+
 }
