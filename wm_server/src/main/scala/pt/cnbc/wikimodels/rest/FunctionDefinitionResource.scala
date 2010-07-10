@@ -188,7 +188,7 @@ class FunctionDefinitionResource(sbmlModelResource:String) extends RESTResource 
 
                 if(dao.deleteFunctionDefinition(
                         new FunctionDefinition(
-                            functionDefinitionResource, Nil, null, null, Nil)) ){
+                            functionDefinitionResource, Nil, functionDefinitionResource, null, Nil)) ){
                 } else {
                     throw new WebApplicationException(
                         Response.Status.NOT_FOUND)

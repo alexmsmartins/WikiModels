@@ -187,7 +187,7 @@ class SpeciesResource(sbmlModelResource:String) extends RESTResource {
 
                 if(dao.deleteSpecies(
                         new Species(
-                            speciesResource, Nil, null, null, null, null, null,
+                            speciesResource, Nil, speciesResource, null, null, null, null,
                               null, null, false, false, false)) ){
                 } else {
                     throw new WebApplicationException(

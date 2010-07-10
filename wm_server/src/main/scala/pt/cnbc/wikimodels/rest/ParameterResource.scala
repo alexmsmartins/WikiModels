@@ -189,7 +189,7 @@ class ParameterResource(sbmlModelResource:String) extends RESTResource {
 
                 if(dao.deleteParameter(
                         new Parameter(
-                            parameterResource, Nil, null, null, 0.0, null, true)) ){
+                            parameterResource, Nil, parameterResource, null, 0.0, null, true)) ){
                 } else {
                     throw new WebApplicationException(
                         Response.Status.NOT_FOUND)

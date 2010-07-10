@@ -73,7 +73,6 @@ class SBMLHandler {
                                            (sbmlDoc.checkInternalConsistency == 0)*/
     }
 
-
     /**
      * Produces the XML of the <notes section of any SBase
      * @returns a <notes> sections with the content of notesContent

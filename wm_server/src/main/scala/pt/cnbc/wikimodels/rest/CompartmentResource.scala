@@ -191,7 +191,7 @@ class CompartmentResource(sbmlModelResource:String) extends RESTResource {
 
                 if(dao.deleteCompartment(
                         new Compartment(
-                            compartmentResource, Nil, null, null, null, 0, 0.0, null, null, false)) ){
+                            compartmentResource, Nil, compartmentResource, null, null, 0, null, null, null, false)) ){
                 } else {
                     throw new WebApplicationException(
                         Response.Status.NOT_FOUND)

@@ -13,14 +13,6 @@ import Assert._
 
 class ReactionTest {
 
-  @Before    
-  def setUp: Unit = {
-    }
-
-  @After
-  def tearDown: Unit = {
-    }
-
   val reaction1 =
     <reaction id="J1">
       <listOfReactants>
@@ -44,6 +36,14 @@ class ReactionTest {
         </listOfParameters>
       </kineticLaw>
     </reaction>
+  
+  @Before    
+  def setUp: Unit = {
+    }
+
+  @After
+  def tearDown: Unit = {
+    }
 
 
   @Test

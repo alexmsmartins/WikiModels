@@ -32,7 +32,7 @@ import com.hp.hpl.jena.vocabulary.VCARD
 import java.io.{OutputStream, InputStream}
 
 object ManipulatorWrapper {
-  protected var jenaModel: Model = null
+  protected var jenaModel:Model = null
 
   def initializeDB = {
     /*Console.println(this.getClass.getResource("/sdb.ttl").getPath)

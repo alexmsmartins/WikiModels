@@ -187,7 +187,7 @@ class ConstraintResource(sbmlModelResource:String) extends RESTResource {
 
                 if(dao.deleteConstraint(
                         new Constraint(
-                            constraintResource, Nil, null, null, Nil, null)) ){
+                            constraintResource, Nil, constraintResource, null, Nil, null)) ){
                 } else {
                     throw new WebApplicationException(
                         Response.Status.NOT_FOUND)

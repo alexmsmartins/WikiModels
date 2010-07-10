@@ -170,7 +170,7 @@ class SBMLModelResource extends RESTResource {
             try{
                 val dao = new SBMLModelsDAO
                 if(dao.deleteSBMLModel(
-                        new SBMLModel(sbmlModelResource, Nil, null , null))){
+                        new SBMLModel(sbmlModelResource, Nil, sbmlModelResource , null))){
                 } else {
                     throw new WebApplicationException(
                         Response.Status.NOT_FOUND)
