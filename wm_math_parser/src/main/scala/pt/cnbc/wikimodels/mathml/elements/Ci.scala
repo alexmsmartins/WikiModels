@@ -8,6 +8,6 @@ package pt.cnbc.wikimodels.mathml.elements
  * MathML 2.0 spec but not by an ASCIIMathML representation. As such content is a string
  */
 
-case class Ci(override val content:String,
+case class Ci(content:String,
               mtype:String = "real",
               definitionURL:String="") extends Token

@@ -8,4 +8,4 @@ package pt.cnbc.wikimodels.mathml.elements
  * To change this template use File | Settings | File Templates.
  */
 
-case class Container( elem:List[MathMLElem] ) extends MathMLElem
+class Container( elem:List[MathMLElem] ) extends MathMLElem

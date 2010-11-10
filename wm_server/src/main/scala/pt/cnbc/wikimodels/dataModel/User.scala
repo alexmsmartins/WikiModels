@@ -38,31 +38,47 @@ case class User(
     var emailAddress:String
 ) extends DataModel {
 
+  var title:String                    = null
+  var optionalEmail:String      = null
+  var institution:String    = null
+  var country:String = null
 
+  def this() = {
+      this(null, null, null, null, null)
+  }
 
-    def this() = {
-        this(null, null, null, null, null)
-    }
+  def this(xmlUser:Elem) = {
+      this((xmlUser \ "userName").text,
+           null,
+           (xmlUser \ "firstName").text,
+           (xmlUser \ "surName").text,
+           (xmlUser \ "emailAddress").text)
+  }
 
-    def this(xmlUser:Elem) = {
-        this((xmlUser \ "userName").text,
-             null,
-             (xmlUser \ "firstName").text,
-             (xmlUser \ "surName").text,
-             (xmlUser \ "emailAddress").text)
-    }
-    
-    /**
-     * generates a XML representation of the user, excluding password
-     * @return the XML representing the user
-     */
-    def toXML:Elem =
-        <user>
-            <userName>{this.userName}</userName>
-            <!--<password>{password}</password>-->
-            <firstName>{this.firstName}</firstName>
-            <surName>{this.surName}</surName>
-            <emailAddress>{this.emailAddress}</emailAddress>
-        </user>
+  /**
+   * generates a XML representation of the user, excluding password
+   * @return the XML representing the user
+   */
+  def toXML:Elem =
+    <user>
+      <userName>{userName}</userName>
+      <password>{password}</password>
+      <firstName>{firstName}</firstName>
+      <surName>{surName}</surName>
+      <title>{title}</title>
+      <email>{emailAddress}</email>
+      <alternativeEmail>{optionalEmail}</alternativeEmail>
+      <!--<listOfContacts>{
+              for(val i <- 0 to (contacts.size-1)) yield {
+                  <contact typeContact={typeContacts.get(i)}>
+                      {
+                          contacts.get(i)
+                      }
+                  </contact>
+              }
+          }
+      </listOfContacts>-->
+      <institution>{institution}</institution>
+      <country>{country}</country>
+    </user>
 }
-

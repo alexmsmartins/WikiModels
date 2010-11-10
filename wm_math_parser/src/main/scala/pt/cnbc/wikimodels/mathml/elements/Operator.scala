@@ -17,9 +17,28 @@ case object NegativeInfiniteInt extends InfInt(-1,true)
  * Time: 22:17:34
  * To change this template use File | Settings | File Templates.
  */
-case class Operator(op:String, maxArgs:InfInt) extends Token(op)
+case class Operator(op:String, minArgs:InfInt, maxArgs:InfInt) extends Token(op)
 
-case class Cos extends Operator("cos", 1)
+case object Cos extends Operator("cos",1,1)
+
+case object Plus extends Operator("plus", 2, PositiveInfiniteInt)
+
+case object Minus extends Operator("minus", 1, PositiveInfiniteInt)
+
+/*case class Quotient extends Operator("quotient", PositiveInfiniteInt)
+case class Minus extends Operator("plus", PositiveInfiniteInt)
+case class Minus extends Operator("plus", 1, PositiveInfiniteInt)
+case class Quotient extends Pquotient)
+            4.4.3.2 Factorial (factorial)
+            4.4.3.3 Division (divide)
+            4.4.3.4 Maximum and minimum (max, min)
+            4.4.3.5 Subtraction (minus)
+            4.4.3.6 Addition (plus)
+            4.4.3.7 Exponentiation (power)
+            4.4.3.8 Remainder (rem)
+            4.4.3.9 Multiplication (times)
+            4.4.3.10 Root (root)*/
+
 
 /*
 token: cn, ci, csymbol, sep

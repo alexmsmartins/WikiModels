@@ -41,27 +41,29 @@ object App {
     log.info("WikiModels access API Integration testing.")
     var testNumber = 0
     try {
+      val startTime = 
+
       setUp
-      /*log.info("======================" )
-       testNumber+=1
-       log.info("TEST " + testNumber + " - Login" )
-       loginTest
-       log.info("SUCCESS" )
-       log.info("======================" )
-       testNumber+=1
-       log.info("TEST " + testNumber + " - LoginFailed" )
-       loginFailedTest
-       log.info("SUCCESS" )
-       log.info("======================" )
-       testNumber+=1
-       log.info("TEST " + testNumber + " - deleteNonExistantModel" )
-       deleteNonExistantModelTest
-       log.info("SUCCESS" )
-       log.info("======================" )
-       testNumber+=1
-       log.info("TEST " + testNumber + " - editModelBeforeCreation" )
-       editModelBeforeCreationTest
-       log.info("SUCCESS" )*/
+      log.info("======================")
+      testNumber += 1
+      log.info("TEST " + testNumber + " - Login")
+      loginTest
+      log.info("SUCCESS")
+      log.info("======================")
+      testNumber += 1
+      log.info("TEST " + testNumber + " - LoginFailed")
+      loginFailedTest
+      log.info("SUCCESS")
+      log.info("======================")
+      testNumber += 1
+      log.info("TEST " + testNumber + " - deleteNonExistantModel")
+      deleteNonExistantModelTest
+      log.info("SUCCESS")
+      log.info("======================")
+      testNumber += 1
+      log.info("TEST " + testNumber + " - editModelBeforeCreation")
+      editModelBeforeCreationTest
+      log.info("SUCCESS")
       log.info("======================")
       testNumber += 1
       log.info("TEST " + testNumber + " - CreateModel")
@@ -141,48 +143,48 @@ object App {
       deleteParameterTest
       log.info("SUCCESS")
 
-      /*//------------- Species integration tests -------------
+      //------------- Species integration tests -------------
 
-      log.info("======================" )
-      testNumber+=1
-      log.info("TEST " + testNumber + " - deleteNonExistantSpecies" )
+      log.info("======================")
+      testNumber += 1
+      log.info("TEST " + testNumber + " - deleteNonExistantSpecies")
       deleteNonExistantSpeciesTest
-      log.info("SUCCESS" )
-      log.info("======================" )
-      testNumber+=1
-      log.info("TEST " + testNumber + " - editSpeciesBeforeCreation" )
+      log.info("SUCCESS")
+      log.info("======================")
+      testNumber += 1
+      log.info("TEST " + testNumber + " - editSpeciesBeforeCreation")
       editSpeciesBeforeCreationTest
-      log.info("SUCCESS" )
-      log.info("======================" )
-      testNumber+=1
-      log.info("TEST " + testNumber + " - CreateSpecies" )
+      log.info("SUCCESS")
+      log.info("======================")
+      testNumber += 1
+      log.info("TEST " + testNumber + " - CreateSpecies")
       createSpeciesTest
-      log.info("SUCCESS" )
-      log.info("======================" )
-      testNumber+=1
-      log.info("TEST " + testNumber + " - CreateAnotherSpecies" )
+      log.info("SUCCESS")
+      log.info("======================")
+      testNumber += 1
+      log.info("TEST " + testNumber + " - CreateAnotherSpecies")
       createAnotherSpeciesTest
-      log.info("SUCCESS" )
-      log.info("======================" )
-      testNumber+=1
-      log.info("TEST " + testNumber + " - BrowseSpecies" )
+      log.info("SUCCESS")
+      log.info("======================")
+      testNumber += 1
+      log.info("TEST " + testNumber + " - BrowseSpecies")
       browseSpeciesTest
-      log.info("SUCCESS" )
-      log.info("======================" )
-      testNumber+=1
-      log.info("TEST " + testNumber + " - BrowseNonExistantSpecies" )
-s      browseNonExistantSpeciesTest
-      log.info("SUCCESS" )
-      log.info("======================" )
-      testNumber+=1
-      log.info("TEST " + testNumber + " - EditSpecies" )
+      log.info("SUCCESS")
+      log.info("======================")
+      testNumber += 1
+      log.info("TEST " + testNumber + " - BrowseNonExistantSpecies")
+      browseNonExistantSpeciesTest
+              log.info("SUCCESS")
+      log.info("======================")
+      testNumber += 1
+      log.info("TEST " + testNumber + " - EditSpecies")
       editSpeciesTest
-      log.info("SUCCESS" )
-      log.info("======================" )
-      testNumber+=1
-      log.info("TEST " + testNumber + " - DeleteSpecies2" )
+      log.info("SUCCESS")
+      log.info("======================")
+      testNumber += 1
+      log.info("TEST " + testNumber + " - DeleteSpecies2")
       deleteSpeciesTest
-      log.info("SUCCESS" )*/
+      log.info("SUCCESS")
 
       //------------- Compartment integration tests -------------
 
@@ -358,6 +360,8 @@ s      browseNonExistantSpeciesTest
       log.info("SUCCESS" )*/
 
       log.info("=========== INTEGRATION TESTING SUCCEDED ===========")
+      log.info("= It took " + 20 + " seconds to run the tests              =")
+      log.info("====================================================")
       //basicAuthentication
       //digestAuthentication
     } catch {

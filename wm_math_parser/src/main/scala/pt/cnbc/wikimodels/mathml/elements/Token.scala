@@ -8,4 +8,6 @@ package pt.cnbc.wikimodels.mathml.elements
  * Class that represents leaf elements in a  MathML 2.0 document
  */
 
-case class Token(content:String="") extends MathMLElem  
+class Token(content:String="") extends MathMLElem
+
+

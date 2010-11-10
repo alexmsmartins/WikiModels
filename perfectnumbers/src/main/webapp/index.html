@@ -1,0 +1,21 @@
+<lift:surround with="default" at="content">
+
+    <div  name="some-div" id="some-div">    
+    <applet id="clientEngine" name="clientEngine" code="egal/Client.class" archive="/applet/egal.jar"  width="200" height="50" />
+    <applet id="clientEngine2" name="clientEngine2" code="pt/cnbc/wikimodels/DrawingLines.class" archive="/applet/wm_mathml_applet.jar" height="300" width="300"></applet>    
+	</div>
+  
+  	<h2>Welcome to your project!</h2>
+	<p>
+	
+	<lift:PerfectNumberCom/> 
+    <h2>Perfect Numbers</h2>
+    <lift:comet type="PerfectNumberStatus" name="Other">
+	  Found: <pfn:perfectNumbers>UNDEFINED</pfn:perfectNumbers>	    
+      <table>
+       <tr><td>Last Perfect Number</td> <td><pfn:lastPerfect>UNDEFINED</pfn:lastPerfect></td></tr>
+       <tr><td>Session Calculations</td><td><pfn:myDonation>UNDEFINED</pfn:myDonation></td></tr>
+      </table> 
+    </lift:comet>
+    </p>
+</lift:surround>

@@ -1,26 +1,24 @@
 package pt.cnbc.wikimodels.mathparser
 
+import pt.cnbc.wikimodels.mathml.elements._
 import scala.util.parsing.combinator._
-import scala.util.parsing.combinator.lexical._
-import scala.util.parsing.combinator.syntactical._
-import scala.util.parsing.syntax._
-
 /**
  */
 
-class MathParser extends JavaTokenParsers
+class MathParserBack extends JavaTokenParsers
 {
   //check http://rwiki.sciviews.org/doku.php?id=wiki:asciimathml#standard_functions to handle certain cases
   def LambdaExpr  :Parser[Any]= Function~"="~Expr
 
   //TODO def SimpleExpr  :Parser[Any]= Atom |   
 
-  def Expr        :Parser[Any]= Term~rep( "+"~Term | "-"~Term ) | Term 
+  def Expr        :Parser[Any]=
+          Term~rep( "+"~Term) |/*^^ {new Apply("plus", Term :: Term :: Nil) }*/
+          Term~rep( "-"~Term ) |/*^^ { new Apply("minus", _1 :: _2 :: Nil) }*/
+          Term/*^^
+                    {List(_)}  */
 
-  def Term        :Parser[Any]={
-    val parse = Factor~rep( "*"~Factor | "/"~Factor )
-    parse
-  }
+  def Term        :Parser[Any]= Factor~rep( "*"~Factor | "/"~Factor )
 
   def Factor      :Parser[Any]= Power | Function | Atom | "("~Expr~")"
 

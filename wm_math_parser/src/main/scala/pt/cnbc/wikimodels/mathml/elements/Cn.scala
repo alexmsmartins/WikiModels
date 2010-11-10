@@ -8,7 +8,7 @@ package pt.cnbc.wikimodels.mathml.elements
  * To change this template use File | Settings | File Templates.
  */
 
-case class Cn(override val content:String,
+case class Cn(content:String,
               mtype:String = "real",
               base:Int = 10,
               definitionURL:String="",

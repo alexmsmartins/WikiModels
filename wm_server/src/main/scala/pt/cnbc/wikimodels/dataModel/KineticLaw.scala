@@ -12,17 +12,12 @@ import scalaj.collection.Imports._
 
 import scala.collection.JavaConversions._
 import scala.reflect.BeanInfo
-import scala.xml.Elem
-import scala.xml.Group
-import scala.xml.Node
-import scala.xml.NodeSeq
-import scala.xml.XML
-
 import thewebsemantic.Id
 import thewebsemantic.Namespace
 import thewebsemantic.RdfProperty
 
 import pt.cnbc.wikimodels.util.SBMLHandler
+import xml.{NodeSeq, Elem, XML}
 
 @BeanInfo
 @Namespace("http://wikimodels.cnbc.pt/ontologies/sbml.owl#")

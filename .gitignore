@@ -1,5 +1,7 @@
 #ignore maven build directories in general
 target/
+project/
+lib_managed/
 
 #ignore IntelliJ IDEA project files
 *.iml
@@ -9,3 +11,4 @@ target/
 
 #Ignore copies of files used for testing only
 wm_server/sbml.owl
+
