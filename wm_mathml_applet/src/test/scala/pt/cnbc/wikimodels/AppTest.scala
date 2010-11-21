@@ -7,7 +7,11 @@ import Assert._
 class AppTest {
 
     @Test
-    def testOK() = assertTrue(true)
+    def testOK() = {
+      Console println "Before asertTrue()"
+      assertTrue(true)
+      Console println "Before asertTrue()"
+    }
 
 //    @Test
 //    def testKO() = assertTrue(false)

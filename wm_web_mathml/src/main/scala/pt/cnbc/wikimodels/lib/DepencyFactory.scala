@@ -1,5 +1,4 @@
-package pt.cnbc.wikimodels {
-package lib {
+package pt.cnbc.wikimodels.lib
 
 import net.liftweb._
 import http._
@@ -53,5 +52,3 @@ sealed abstract class Changer {
   }
 }
 */
-}
-}

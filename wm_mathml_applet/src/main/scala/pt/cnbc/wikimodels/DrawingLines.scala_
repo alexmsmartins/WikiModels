@@ -16,9 +16,9 @@ class DrawingLines extends Applet {
 
    override def paint( g:Graphics ):Unit = {
      g.setColor( Color.green )
-     /*for ( i <- 0 to 10 ) {
+     for ( i <- 0 to 10 ) {
        g.drawLine( _width, _height, i * _width / 10, 0 );
-     }*/
-g.drawLine( _width, _height, 1 * _width / 10, 0 );
+     }
+//g.drawLine( _width, _height, 1 * _width / 10, 0 );
    }
 }

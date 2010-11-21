@@ -9,8 +9,8 @@ import _root_.net.liftweb.sitemap.Loc._
 import Helpers._
 import _root_.net.liftweb.mapper.{DB, ConnectionManager, Schemifier, DefaultConnectionIdentifier, StandardDBVendor}
 import _root_.java.sql.{Connection, DriverManager}
-import _root_.pt.cnbc.wikimodels.model._
-
+import _root_.egal.model._
+import _root_.egal.snippet.PerfectNumberCom
 
 /**
  * A class that's instantiated early and run.  It allows the application
@@ -19,9 +19,9 @@ import _root_.pt.cnbc.wikimodels.model._
 class Boot {
   def boot {
     if (!DB.jndiJdbcConnAvailable_?) {
-      val vendor = 
+      val vendor =
 	new StandardDBVendor(Props.get("db.driver") openOr "org.h2.Driver",
-			     Props.get("db.url") openOr 
+			     Props.get("db.url") openOr
 			     "jdbc:h2:lift_proto.db;AUTO_SERVER=TRUE",
 			     Props.get("db.user"), Props.get("db.password"))
 
@@ -40,50 +40,37 @@ class Boot {
       // Menu with special Link
       Menu(Loc("Static", Link(List("static"), true, "/static/index"), 
 	       "Static Content")) ::
-      Menu(Loc("MathMLApplet", new Link(List("applet"), true),
-        "MathML Applet" , Hidden) ) ::
       // Menu entries for the User management stuff
       User.sitemap :_*)
 
     LiftRules.setSiteMapFunc(sitemap)
 
-    /*
-     * Show the spinny image when an Ajax call starts
-     */
-    LiftRules.ajaxStart =
-      Full(() => LiftRules.jsArtifacts.show("ajax-loader").cmd)
-
-    /*
-     * Make the spinny image go away when it ends
-     */
-    LiftRules.ajaxEnd =
-      Full(() => LiftRules.jsArtifacts.hide("ajax-loader").cmd)
+    
+//    /*
+//     * Show the spinny image when an Ajax call starts
+//     */
+//    LiftRules.ajaxStart =
+//      Full(() => LiftRules.jsArtifacts.show("ajax-loader").cmd)
+//
+//    /*
+//     * Make the spinny image go away when it ends
+//     */
+//    LiftRules.ajaxEnd =
+//      Full(() => LiftRules.jsArtifacts.hide("ajax-loader").cmd)
 
     LiftRules.early.append(makeUtf8)
 
     LiftRules.loggedInTest = Full(() => User.loggedIn_?)
 
     S.addAround(DB.buildLoanWrapper)
-
-    /// the following lines make content in static/ really static
-    /// taken from http://scala-programming-language.1934581.n4.nabble.com/How-to-make-static-a-really-static-content-td1979339.html
-
-    /**
-     * pass a request that's not associated with Lift on to the
-     * next filter (and ultimately the Servlet container),
-     */
-    LiftRules.passNotFoundToChain = true
-
-    /**
-     * identify any request that starts with /static/... as something not handled by Lift.
-     */
-    /*LiftRules.liftRequest.append{
-      case Req("static" :: _, _, _) => false
-    } */
+    
+    LiftRules.snippetDispatch.append((Map("PerfectNumberCom" -> PerfectNumberCom)))
+    
+    LiftRules.jsArtifacts = net.liftweb.http.js.jquery.JQuery14Artifacts
   }
 
   /**
-   *   Force the request to be UTF-8  
+   * Force the request to be UTF-8
    */
   private def makeUtf8(req: HTTPRequest) {
     req.setCharacterEncoding("UTF-8")
