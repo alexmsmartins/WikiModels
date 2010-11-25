@@ -11,7 +11,7 @@ class MathParser extends JavaTokenParsers
 
   //TODO def SimpleExpr  :Parser[Any]= Atom |   
 
-  def Expr        :Parser[Any]= Term~rep( "+"~Term) | rep( "-"~Term ) | Term 
+  def Expr        :Parser[Any]= Term~rep( "+"~Term | "-"~Term ) 
 
   def Term        :Parser[Any]= Factor~rep( "*"~Factor | "/"~Factor )
 

@@ -1,7 +1,40 @@
 <lift:surround with="default" at="content">
 
-    <div  name="some-div" id="some-div">    
-    <applet id="clientEngine2" name="clientEngine2" code="pt/cnbc/wikimodels/DrawingLines.class" archive="/applet/wm_mathml_applet.jar" height="300" width="300"></applet>
+    <div  name="some-div" id="some-div">
+        <script id="mathjax" src="/MathJax/MathJax.js" type="text/javascript" defer="defer">
+        /* <![CDATA[ */            
+            MathJax.Hub.Config({
+                config: ["MMLorHTML.js"],
+                extensions: ["tex2jax.js", "mml2jax.js"],
+                jax: ["input/TeX", "input/MathML"]
+            });
+        /* ]]> */            
+        </script>        
+        When <math><mi>a</mi><mo>&#x2260;</mo><mn>0</mn></math>,
+        there are two solutions to <math>
+          <mi>a</mi><msup><mi>x</mi><mn>2</mn></msup>
+          <mo>+</mo> <mi>b</mi><mi>x</mi>
+          <mo>+</mo> <mi>c</mi> <mo>=</mo> <mn>0</mn>
+        </math> and they are
+        <math mode="display">
+          <mi>x</mi> <mo>=</mo>
+          <mrow>
+            <mfrac>
+              <mrow>
+                <mo>&#x2212;</mo>
+                <mi>b</mi>
+                <mo>&#x00B1;</mo>
+                <msqrt>
+                  <msup><mi>b</mi><mn>2</mn></msup>
+                  <mo>&#x2212;</mo>
+                  <mn>4</mn><mi>a</mi><mi>c</mi>
+                </msqrt>
+              </mrow>
+              <mrow> <mn>2</mn><mi>a</mi> </mrow>
+            </mfrac>
+          </mrow>
+          <mtext>.</mtext>
+        </math>    
 	</div>
   
   	<h2>Welcome to your project!</h2>

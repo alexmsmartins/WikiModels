@@ -1,7 +1,9 @@
 #ignore maven build directories in general
 target/
-project/
+project/ 
 lib_managed/
+MathJax/
+
 
 #ignore IntelliJ IDEA project files
 *.iml
