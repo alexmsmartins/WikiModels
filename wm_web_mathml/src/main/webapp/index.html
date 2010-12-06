@@ -2,14 +2,53 @@
 
     <div  name="some-div" id="some-div">
         <script id="mathjax" src="/MathJax/MathJax.js" type="text/javascript" defer="defer">
-        /* <![CDATA[ */            
+        /* <![CDATA[ */
             MathJax.Hub.Config({
                 config: ["MMLorHTML.js"],
                 extensions: ["tex2jax.js", "mml2jax.js"],
                 jax: ["input/TeX", "input/MathML"]
             });
-        /* ]]> */            
-        </script>        
+        /* ]]> */
+        </script>
+        <script>
+        /* <![CDATA[ */
+          function loadXMLDoc(dname)
+            {
+            alert("Executando loadXMLDoc(dname)")
+            if (window.XMLHttpRequest)
+              {
+              xhttp=new XMLHttpRequest();
+              }
+            else
+              {
+              xhttp=new ActiveXObject("Microsoft.XMLHTTP");
+              }
+            xhttp.open("GET",dname,false);
+            xhttp.send("");
+            return xhttp.responseXML;
+            }
+
+          function displayResult()
+            {
+            xml=loadXMLDoc("static/mathml_content.xml");
+            xsl=loadXMLDoc("xsltc/mathmlc2p.xsl");
+            // code for IE
+            if (window.ActiveXObject)
+              {
+              ex=xml.transformNode(xsl);
+              document.getElementById("formula").innerHTML=ex;
+              }
+            // code for Mozilla, Firefox, Opera, etc.
+            else if (document.implementation && document.implementation.createDocument)
+              {
+              xsltProcessor=new XSLTProcessor();
+              xsltProcessor.importStylesheet(xsl);
+              resultDocument = xsltProcessor.transformToFragment(xml,document);
+              document.getElementById("formula").appendChild(resultDocument);
+              }
+            }
+        /* ]]> */
+	</script>
         When <math><mi>a</mi><mo>&#x2260;</mo><mn>0</mn></math>,
         there are two solutions to <math>
           <mi>a</mi><msup><mi>x</mi><mn>2</mn></msup>
@@ -34,10 +73,18 @@
             </mfrac>
           </mrow>
           <mtext>.</mtext>
-        </math>    
+        </math>
+        <div id="ondivload" >
+            <div id="formula">
+                <apply> <minus/>
+                  <ci> x </ci>
+                  <ci> y </ci>
+                </apply>
+            </div> <!-- formula -->
+        </div> <!-- ondivload -->
 	</div>
-  
+
   	<h2>Welcome to your project!</h2>
-	
+
     <lift:comet type="Chat"/>
 </lift:surround>

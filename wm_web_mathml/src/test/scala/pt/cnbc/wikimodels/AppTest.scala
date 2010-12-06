@@ -45,7 +45,7 @@ class AppTest extends TestCase("app") {
       file.endsWith(".html") || file.endsWith(".htm") || file.endsWith(".xhtml")
 
     def wellFormed(file: File) {
-      if (file.isDirectory)
+      if (file.isDirectory && !file.toString.contains("MathJax") )
         for (f <- file.listFiles) wellFormed(f)
 
       if (file.isFile && handledXml(file.getName)) {

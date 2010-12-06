@@ -40,12 +40,17 @@ class Boot {
       // Menu with special Link
       Menu(Loc("Static", Link(List("static"), true, "/static/index"), 
 	       "Static Content")) ::
+
       // Menu entries for the User management stuff
       User.sitemap :_*)
 
     LiftRules.setSiteMapFunc(sitemap)
 
-    
+/*    LiftRules.liftRequest.append( {
+      case Req("static"::"mathml_content"::Nil, "xml", _) => false
+    } )*/
+
+    LiftRules.li
 //    /*
 //     * Show the spinny image when an Ajax call starts
 //     */
