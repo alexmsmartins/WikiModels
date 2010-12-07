@@ -30,8 +30,22 @@
 
           function displayResult()
             {
-            xml=loadXMLDoc("static/mathml_content.xml");
-            xsl=loadXMLDoc("xsltc/mathmlc2p.xsl");
+            xml=loadXMLDoc("mathml_content.xml");
+            if(xml == null)
+	      {
+	      alert("xml is null");
+	      } else {
+	      alert("xml not null");
+	      }
+
+            xsl=loadXMLDoc("/xslt/mathmlc2p.xsl");
+            if(xsl == null)
+	        {
+              alert("xslt is null");
+              } else {
+              alert("xslt not null")
+              }
+
             // code for IE
             if (window.ActiveXObject)
               {
@@ -76,13 +90,9 @@
         </math>
         <div id="ondivload" >
             <div id="formula">
-                <apply> <minus/>
-                  <ci> x </ci>
-                  <ci> y </ci>
-                </apply>
             </div> <!-- formula -->
         </div> <!-- ondivload -->
-	</div>
+	</div> <!-- some-div -->
 
   	<h2>Welcome to your project!</h2>
 

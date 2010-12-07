@@ -50,8 +50,8 @@
     <dependencies>
         <dependency>
             <groupId>net.liftweb</groupId>
-            <artifactId>lift-mapper_2.7.7</artifactId>
-            <version>2.1</version>
+            <artifactId>lift-mapper</artifactId>
+            <version>2.0-M4</version>
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>
@@ -89,11 +89,6 @@
             <artifactId>scala-compiler</artifactId>
             <version>${scala.version}</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.sourceforge.jeuclid</groupId>
-            <artifactId>jeuclid-core</artifactId>
-            <version>3.1.9</version>
         </dependency>
         <dependency>
             <groupId>pt.cnbc.wikimodels</groupId>

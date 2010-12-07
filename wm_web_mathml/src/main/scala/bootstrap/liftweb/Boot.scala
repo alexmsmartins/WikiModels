@@ -36,7 +36,7 @@ class Boot {
 
     // Build SiteMap
     def sitemap() = SiteMap(
-      Menu("Home") / "index" :: // Simple menu form
+      Menu( Loc("Home", List("index") , "Home") )  :: // Simple menu form
       // Menu with special Link
       Menu(Loc("Static", Link(List("static"), true, "/static/index"), 
 	       "Static Content")) ::
@@ -46,11 +46,10 @@ class Boot {
 
     LiftRules.setSiteMapFunc(sitemap)
 
-/*    LiftRules.liftRequest.append( {
-      case Req("static"::"mathml_content"::Nil, "xml", _) => false
-    } )*/
+    LiftRules.liftRequest.append( {
+      case Req("mathml_content"::Nil, "xml", _) => false
+    } )
 
-    LiftRules.li
 //    /*
 //     * Show the spinny image when an Ajax call starts
 //     */
