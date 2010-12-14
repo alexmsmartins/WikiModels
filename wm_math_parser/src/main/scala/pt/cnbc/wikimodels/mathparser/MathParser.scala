@@ -1,37 +1,46 @@
 package pt.cnbc.wikimodels.mathparser
 
 import pt.cnbc.wikimodels.mathml.elements._
-import scala.util.parsing.combinator._
+import util.parsing.combinator.{JavaTokenParsers, PackratParsers}
+
 /**
  */
 
-class MathParserBack extends JavaTokenParsers
-{
+class MathParserBack extends JavaTokenParsers with PackratParsers with MathParserHandlers {
+/*
+  type MME = MathMLElem
+
   //check http://rwiki.sciviews.org/doku.php?id=wiki:asciimathml#standard_functions to handle certain cases
-  def LambdaExpr  :Parser[Any]= Function~"="~Expr
+  lazy val LambdaExpr  :PackratParser[Any]= Function~"="~Expr
 
   //TODO def SimpleExpr  :Parser[Any]= Atom |   
+  lazy val Expr        :PackratParser[MME]= Expr~("+"~>Term)^^( case e~(t) => new Apply(Adition, List(e, t)  )) |
+                                            Expr~("-"~>Term)^^( case e~(t) => new Apply(Subtraction, List(e, t)  )) |
+                                            Term^^(x => new MathMLStub(x))
 
-  def Expr        :Parser[Any]=
-          Term~rep( "+"~Term) |/*^^ {new Apply("plus", Term :: Term :: Nil) }*/
-          Term~rep( "-"~Term ) |/*^^ { new Apply("minus", _1 :: _2 :: Nil) }*/
-          Term/*^^
-                    {List(_)}  */
+  lazy val Term        :PackratParser[MME]= Term~"*"~>Factor | Term~"/"~>Factor | Factor
 
-  def Term        :Parser[Any]= Factor~rep( "*"~Factor | "/"~Factor )
+  lazy val Factor      :PackratParser[MME]= Power | Function | Atom | "("~Expr~")"
 
-  def Factor      :Parser[Any]= Power | Function | Atom | "("~Expr~")"
+  lazy val Function    :PackratParser[MME]= ident~"("~Parameters~")"^^{ case i~"("~par~")" => {handleFunction(i, par)}}
 
-  def Function    :Parser[Any]= ident~"("~Parameters~")"
+  lazy val Parameters  :PackratParser[List]= repsep(Expr,",")^^{ List("1"."2","TODO") }
 
-  def Parameters  :Parser[Any]= Expr~rep(","~Expr)
+  lazy val Power       :PackratParser[MME]= Base~"^"~Exponent^^( case b~"^"~e => new Apply(Exponent :: b :: e))
 
-  def Power       :Parser[Any]= Base~"^"~Exponent
+  lazy val Base        :PackratParser[MME]= Function^^(x => new MathMLStub(x)) |
+                                            Atom^^(x => new MathMLStub(x)) |
+                                             "("~Expr~")"^^(case "("~e~")" => new MathMLStub(e) )
 
-  def Base        :Parser[Any]= Function | Atom | "("~Expr~")"
+  lazy val Exponent    :PackratParser[MME]= Function^^(x => new MathMLStub(x)) |
+                                            Atom^^(x => new MathMLStub(x)) |
+                                             "("~Expr~")"^^{case "("~e~")" => new MathMLStub(e) }
 
-  def Exponent    :Parser[Any]= Function | Atom | "("~Expr~")"
+  lazy val Atom        :PackratParser[MME]= decimalNumber^^{x => new Cn(x::Nil)} |
+                                            wholeNumber^^(x => new Cn(x::Nil)) |
+                                            ident^^(x => new Ci(x))                   */
+}
 
-  def Atom        :Parser[Any]= decimalNumber | wholeNumber | ident
-  
+trait MathParserHandlers{
+  //def handleFunction(ident:String, params:List[String] ):MathMLElem = new MathMLStub()
 }

@@ -59,7 +59,7 @@ class MathParserTest extends MathParser {
 
   @Test
   def simpleSum {
-    val expr = "1+2+3-4"
+    val expr = "1+2+3+4"
     val result = this.parseAll(Expr, expr)
     assertTrue(parsingWasSuccessful(result))
     println(result)
@@ -68,6 +68,22 @@ class MathParserTest extends MathParser {
   @Test
   def sum {
     val expr = "1+2+x"
+    val result = this.parseAll(Expr, expr)
+    assertTrue(parsingWasSuccessful(result))
+    println(result)
+  }
+
+  @Test
+  def simpleSubtraction {
+    val expr = "1-2-3-4"
+    val result = this.parseAll(Expr, expr)
+    assertTrue(parsingWasSuccessful(result))
+    println(result)
+  }
+
+  @Test
+  def simpleSumAndSubtraction {
+    val expr = "1+2+3-4"
     val result = this.parseAll(Expr, expr)
     assertTrue(parsingWasSuccessful(result))
     println(result)

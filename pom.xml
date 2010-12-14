@@ -28,7 +28,6 @@
     <module>wm_web_client</module>
     <module>wm_auth_realm</module>
     <module>wm_web_mathml</module>
-    <module>wm_mathml_applet</module>
   </modules>
 
   <repositories>

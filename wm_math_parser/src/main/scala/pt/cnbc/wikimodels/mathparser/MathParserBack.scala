@@ -1,32 +1,29 @@
 package pt.cnbc.wikimodels.mathparser
 
-import scala.util.parsing.combinator._
+import util.parsing.combinator.{JavaTokenParsers, PackratParsers}
+import util.parsing.combinator.syntactical.StandardTokenParsers
+
 /**
  */
 
-class MathParser extends JavaTokenParsers
-{
-  //check http://rwiki.sciviews.org/doku.php?id=wiki:asciimathml#standard_functions to handle certain cases
-  def LambdaExpr  :Parser[Any]= Function~"="~Expr
+class MathParser extends JavaTokenParsers with PackratParsers {
+  lazy val LambdaExpr  :PackratParser[Any]= Function~"="~Expr
 
-  //TODO def SimpleExpr  :Parser[Any]= Atom |   
+  lazy val Expr        :PackratParser[Any]= Expr~"+"~Term | Expr~"-"~Term | Term
 
-  def Expr        :Parser[Any]= Term~rep( "+"~Term | "-"~Term ) 
+  lazy val Term        :PackratParser[Any]= Term~"*"~Factor | Term~"/"~Factor | Factor
 
-  def Term        :Parser[Any]= Factor~rep( "*"~Factor | "/"~Factor )
+  lazy val Factor      :PackratParser[Any]= Power | Function | Atom | "("~Expr~")"
 
-  def Factor      :Parser[Any]= Power | Function | Atom | "("~Expr~")"
+  lazy val Function    :PackratParser[Any]= ident~"("~Parameters~")"
 
-  def Function    :Parser[Any]= ident~"("~Parameters~")"
+  lazy val Parameters  :PackratParser[Any]= repsep(Expr,",") //*arameters~","~Expr
 
-  def Parameters  :Parser[Any]= Expr~rep(","~Expr)
+  lazy val Power       :PackratParser[Any]= Base~"^"~Exponent
 
-  def Power       :Parser[Any]= Base~"^"~Exponent
+  lazy val Base        :PackratParser[Any]= Function | Atom | "("~Expr~")"
 
-  def Base        :Parser[Any]= Function | Atom | "("~Expr~")"
+  lazy val Exponent    :PackratParser[Any]= Function | Atom | "("~Expr~")"
 
-  def Exponent    :Parser[Any]= Function | Atom | "("~Expr~")"
-
-  def Atom        :Parser[Any]= decimalNumber | wholeNumber | ident
-  
+  lazy val Atom        :PackratParser[Any]= decimalNumber | wholeNumber | ident
 }

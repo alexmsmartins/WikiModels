@@ -1,5 +1,8 @@
 package pt.cnbc.wikimodels.mathml.elements
 
+import scala.xml.Node
+import scala.xml.Elem
+
 /**
  * Created by IntelliJ IDEA.
  * User: alex
@@ -19,4 +22,6 @@ object MathMLString{
   }
   implicit def mathStr2Str(str:MathMLString): String = str.value
 }
+
+class MathMLStub(sub:MathMLElem) extends MathMLElem
 

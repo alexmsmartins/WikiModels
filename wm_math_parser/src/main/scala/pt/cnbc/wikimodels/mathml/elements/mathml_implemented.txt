@@ -1,0 +1,28 @@
+----------------------------------------------------------------------------------------------------------------------
+This file contains the various content mathml constructs and distinguishes the ones that are (below the cathegory) and
+are not (in front of the cathegory) implemented in wm_mathml_parser.
+Note that these are the symbols that are allowed in the MathML subset included in the SBML level 2 version 4.
+----------------------------------------------------------------------------------------------------------------------
+
+
+token:
+cn, ci, csymbol, sep
+
+general:  piecewise, piece, otherwise,
+apply, lambda (the last is restricted to use in FunctionDefinition)
+
+relational operators: eq, neq, gt, lt, geq, leq
+
+arithmetic operators:
+plus, minus, times, divide, power, root, abs, exp, ln, log, floor, ceiling, factorial
+
+logical operators: and, or, xor, not
+
+qualifiers: degree, bvar, logbase
+
+trigonometric operators:
+sin, cos, tan, sec, csc, cot, sinh, cosh, tanh, sech, csch, coth, arcsin, arccos, arctan, arcsec, arccsc, arccot, arcsinh, arccosh, arctanh, arcsech, arccsch, arccoth
+
+constants: true, false, notanumber, pi, infinity, exponentiale
+
+annotation: semantics, annotation, annotation-xml
