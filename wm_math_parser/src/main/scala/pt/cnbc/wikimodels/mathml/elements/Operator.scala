@@ -15,13 +15,21 @@ case object NegativeInfiniteInt extends InfInt(-1,true)
  * Time: 22:17:34
  * To change this template use File | Settings | File Templates.
  */
-class Operator(val name:String, minArgs:InfInt, maxArgs:InfInt, definitionURL:String="", encoding:String="real") extends Token(name){
+class Operator(val name:String, val minArgs:InfInt, val maxArgs:InfInt, val definitionURL:Option[String]=None, val encoding:String="real") extends Token(name)
+
+object Operator{
+  def apply(name:String, minArgs:InfInt, maxArgs:InfInt, definitionURL:String, encoding:String):Operator = {
+    Operator(name, minArgs, maxArgs, definitionURL, encoding)
+  }
+
+  def unapply(oscm: Operator):Option[(String, InfInt, InfInt, Option[String], String)] = Some((oscm.name, oscm.maxArgs, oscm.maxArgs, oscm.definitionURL, oscm.encoding))
+
   /**
    * Map that contains the valid MathML operators that can appear io an SBML document
    */
   var validOps = Map.empty[String, Operator]
   var validOpsList = List.empty[Operator]
-            103
+
   //------------ trugonometric operators ------------//
   case object Sin extends Operator("sin",1,1)
   case object Cos extends Operator("cos",1,1)
@@ -57,7 +65,7 @@ class Operator(val name:String, minArgs:InfInt, maxArgs:InfInt, definitionURL:St
   //------------ Arithmetic operators ------------//
 
   //plus, minus, times, divide, power, root, abs, exp, ln, log, floor, ceiling, factorial
-  case object Adition extends Operator("plus", 2, PositiveInfiniteInt)
+  case object Addition extends Operator("plus", 2, PositiveInfiniteInt)
   case object Subtraction extends Operator("minus",1,2)
   case object Multiplication extends Operator("times", 2, PositiveInfiniteInt)
   case object Division  extends Operator("divide", 2, 2)
@@ -71,7 +79,7 @@ class Operator(val name:String, minArgs:InfInt, maxArgs:InfInt, definitionURL:St
   case object Ceiling extends Operator("ceiling",1,1)
   case object Factorial extends Operator("factorial",1,1)
 
-  validOpsList :::= List(Adition, Subtraction, Multiplication, Division, Exponentiation, Root, Abs, Exp, Ln, Log, Floor, Ceiling, Factorial)
+  validOpsList :::= List(Addition, Subtraction, Multiplication, Division, Exponentiation, Root, Abs, Exp, Ln, Log, Floor, Ceiling, Factorial)
 
   validOps ++= validOpsList.map(op => (op.name, op))
 }

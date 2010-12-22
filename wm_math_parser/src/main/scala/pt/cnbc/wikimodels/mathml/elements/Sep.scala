@@ -8,4 +8,4 @@ package pt.cnbc.wikimodels.mathml.elements
  * To change this template use File | Settings | File Templates.
  */
 
-class Sep extends Token
+case class Sep() extends Token

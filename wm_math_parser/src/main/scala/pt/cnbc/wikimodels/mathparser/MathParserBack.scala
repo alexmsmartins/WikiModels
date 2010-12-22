@@ -6,24 +6,38 @@ import util.parsing.combinator.syntactical.StandardTokenParsers
 /**
  */
 
-class MathParser extends JavaTokenParsers with PackratParsers {
-  lazy val LambdaExpr  :PackratParser[Any]= Function~"="~Expr
+class MathParserBack extends JavaTokenParsers with PackratParsers {
+  type MME = Any
 
-  lazy val Expr        :PackratParser[Any]= Expr~"+"~Term | Expr~"-"~Term | Term
+  //check http://rwiki.sciviews.org/doku.php?id=wiki:asciimathml#standard_functions to handle certain cases
+  lazy val LambdaExpr :PackratParser[Any]= Function ~ "=" ~ Expr
 
-  lazy val Term        :PackratParser[Any]= Term~"*"~Factor | Term~"/"~Factor | Factor
+  //TODO def SimpleExpr  :Parser[Any]= Atom |
+  lazy val Expr       :PackratParser[MME]= Expr~"+" ~ Term |
+                                           Expr~"-"~Term |
+                                           Term
 
-  lazy val Factor      :PackratParser[Any]= Power | Function | Atom | "("~Expr~")"
+  lazy val Term       :PackratParser[MME]= Term~"*"~Factor | Term~"/"~Factor | Factor
 
-  lazy val Function    :PackratParser[Any]= ident~"("~Parameters~")"
+  lazy val Factor     :PackratParser[MME]= Power | Function | Atom | "("~>Expr<~")"
 
-  lazy val Parameters  :PackratParser[Any]= repsep(Expr,",") //*arameters~","~Expr
+  lazy val Function   :PackratParser[MME]= ident~"("~Parameters~")"
 
-  lazy val Power       :PackratParser[Any]= Base~"^"~Exponent
+  lazy val Parameters :PackratParser[List[MME]]= repsep(Expr,",") //no need to put anythin else here
 
-  lazy val Base        :PackratParser[Any]= Function | Atom | "("~Expr~")"
+  lazy val Power      :PackratParser[MME]= Base~"^"~Exponent
 
-  lazy val Exponent    :PackratParser[Any]= Function | Atom | "("~Expr~")"
+  lazy val Base       :PackratParser[MME]= Function |
+                                           Atom |
+                                            "("~Expr~")"
 
-  lazy val Atom        :PackratParser[Any]= decimalNumber | wholeNumber | ident
+  lazy val Exponent   :PackratParser[MME]= Function |
+                                           Atom |
+                                           "("~Expr~")"
+
+  lazy val Atom       :PackratParser[MME]= decimalNumber |
+                                           wholeNumber |
+                                           ident
+
+
 }
