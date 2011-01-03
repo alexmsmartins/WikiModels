@@ -13,7 +13,7 @@ import xml.Elem
 
 @BeanInfo
 @Namespace("http://rdfs.org/sioc/types#")
-class Comment() extends DataModel {
+class Comment() extends DataModel {/*
   @Id
   var metaid:String = null
 
@@ -26,8 +26,8 @@ class Comment() extends DataModel {
   @RdfProperty("http://rdfs.org/sioc/ns#content")
   var content:String = null
 
-  @RdfProperty("http://rdfs.org/sioc/ns#has_reply")
-  var replies:List[Comment] = new java.util.ArrayList()
+  //@RdfProperty("http://rdfs.org/sioc/ns#has_reply")
+  //var replies:List[Comment] = new java.util.ArrayList()
 
   @RdfProperty("http://rdfs.org/sioc/ns#reply_of")
   var replyOf:Comment = null
@@ -59,5 +59,7 @@ class Comment() extends DataModel {
         }
       </content>
     </comment>
-  }
+  }*/
+  def toXML:Elem = <comment/>
+
 }

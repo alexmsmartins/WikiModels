@@ -43,7 +43,16 @@ class MathParserTest extends MathParser {
 
   @Test
   def decimalNumberTest {
-    val expr = "1.03"
+    val expr = "-1.03"
+    val result = parseAll(Expr, expr)
+    assertTrue(parsingWasSuccessful(result))
+    println(result)
+  }
+
+  @Test
+  def scientificNotationTest {
+    //TODO add scientific notaiton options to the grammar
+    val expr = "1.03" //"1.03E-23"
     val result = parseAll(Expr, expr)
     assertTrue(parsingWasSuccessful(result))
     println(result)
@@ -64,6 +73,15 @@ class MathParserTest extends MathParser {
     assertTrue(parsingWasSuccessful(result))
     println(result)
   }
+
+    @Test
+    def severalNotationsSum {
+      //TODO COMPLETE SCIENTIFIC NOTAITON
+      val expr = "1+2.1+3.1"//+4e2"
+      val result = this.parseAll(Expr, expr)
+      assertTrue(parsingWasSuccessful(result))
+      println(result)
+    }
 
   @Test
   def sum {

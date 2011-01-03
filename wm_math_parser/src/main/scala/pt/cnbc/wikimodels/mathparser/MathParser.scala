@@ -1,13 +1,14 @@
 package pt.cnbc.wikimodels.mathparser
 
-import scala.util.parsing.combinator.{PackratParsers, JavaTokenParsers}
+import combinator.PackratRegexParsers
 import pt.cnbc.wikimodels.mathml.elements._
 import pt.cnbc.wikimodels.mathml.elements.Operator._
+import util.parsing.combinator.{RegexParsers, PackratParsers, JavaTokenParsers}
 
 /**
  */
 
-class MathParser extends JavaTokenParsers with PackratParsers with MathParserHandlers {
+class MathParser extends PackratRegexParsers with PackratParsers with MathParserHandlers {
 
   type MME = MathMLElem
 
@@ -37,9 +38,24 @@ class MathParser extends JavaTokenParsers with PackratParsers with MathParserHan
                                            Atom |
                                            "("~>Expr<~")"
 
-  lazy val Atom       :PackratParser[MME]= wholeNumber^^(x => new Cn(x::Nil, "integer")) |
-                                           decimalNumber^^{x => new Cn(x::Nil, "real")} |
+  //in this rule, parser order is importatnt
+  lazy val Atom       :PackratParser[MME]= decimalNumber~"e"~decimalNumber^^{case x~"E"~y => new Cn(x::y::Nil, "e-notation")} |
+                                           decimalNumber^^(x => new Cn(x::Nil, "real")) |
+                                           wholeNumber^^{x => new Cn(x::Nil, "integer")} |
                                            ident^^(x => new Ci(x))
+
+  //-- these methods where taken from JAvaTokenParser and adapted to this grammars needs
+
+  def ident: Parser[String] =
+    """[a-zA-Z_]\w*""".r
+  def wholeNumber: Parser[String] =
+    """-?\d+""".r
+  def decimalNumber: Parser[String] =
+    """-?\d+\.\d+""".r
+
+  def floatingPointNumber: Parser[String] =
+    """-?(\d+(\.\d*)?|\d*\.\d+)([eE][+-]?\d+)?[fFdD]?""".r
+
 
 
 }

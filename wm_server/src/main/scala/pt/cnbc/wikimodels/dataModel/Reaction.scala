@@ -72,7 +72,7 @@ case class Reaction() extends Element{
       (xmlReaction \ "listOfModifiers" \ "modifierSpeciesReference")
       .map(i => new ModifierSpeciesReference(i.asInstanceOf[scala.xml.Elem])).asJava
     if( (xmlReaction \ "kineticLaw").length > 0 )
-        this.kineticLaw = new KineticLaw((xmlReaction \ "kineticLaw").first.asInstanceOf[scala.xml.Elem])
+        this.kineticLaw = new KineticLaw((xmlReaction \ "kineticLaw").head.asInstanceOf[scala.xml.Elem])
   }
 
   override def toXML:Elem = {

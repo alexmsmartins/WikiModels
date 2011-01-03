@@ -51,6 +51,15 @@ class MathMLPrettyPrinterTest extends MathParser{
   }
 
   @Test
+  def scientificNotationTest {
+    //TODO add scientific notaiton options to the grammar
+    val expr = "1.03" //"1.03e-23"
+    val result = parseAll(Expr, expr)
+    assertTrue(parsingWasSuccessful(result))
+    println("the expression " + expr + " results in " + MathMLPrettyPrinter.toXML(result.get))
+  }
+
+  @Test
   def variable {
     val expr = "teta"
     val result = parseAll(Expr, expr)
@@ -61,6 +70,15 @@ class MathMLPrettyPrinterTest extends MathParser{
   @Test
   def simpleSum {
     val expr = "1+2+3+4"
+    val result = this.parseAll(Expr, expr)
+    assertTrue(parsingWasSuccessful(result))
+    println("the expression " + expr + " results in " + MathMLPrettyPrinter.toXML(result.get))
+  }
+
+  @Test
+  def severalNotationsSum {
+    //TODO COMPLETE SCIENTIFIC NOTAITON
+    val expr = "1+2.1+3.1"//+4e2"
     val result = this.parseAll(Expr, expr)
     assertTrue(parsingWasSuccessful(result))
     println("the expression " + expr + " results in " + MathMLPrettyPrinter.toXML(result.get))
