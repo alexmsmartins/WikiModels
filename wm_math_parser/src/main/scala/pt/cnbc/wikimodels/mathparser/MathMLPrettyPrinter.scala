@@ -13,7 +13,7 @@ import pt.cnbc.wikimodels.mathml.elements.{Cn, Ci, Apply, MathMLElem, Operator, 
 
 object MathMLPrettyPrinter{
   def toXML(elem:MathMLElem):Elem = {
-    elem match{
+    <math xmlns="http://www.w3.org/1998/Math/MathML">{elem match{
       case Apply(op,params) => { <apply>{(op :: params).map(toXML(_))}</apply>
       }
       case Ci(x,"real",_) => <ci type="real">{x}</ci>
@@ -28,6 +28,6 @@ object MathMLPrettyPrinter{
       case CSymbol(content, definitionURL, encoding) => <csymbol content={content} definitionURL={definitionURL} >{content}</csymbol>
       case Sep() => <sep/>
       case default => throw new RuntimeException( "XML conversion of " + default + " is not implemented")
-    }
+    }}</math>
   }
 }

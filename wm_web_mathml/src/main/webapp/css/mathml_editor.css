@@ -5,17 +5,27 @@
 }
 
 .asciimath_input{
-    display:inline-block;
+    float: left;
+    /*display:inline;*/
+    width: 40%;
+	height: 10em;
 	margin: 0px;
 	padding: 0px;
-	width: 50%;
-	height = 4em;
-    float: left;
 }
 .mathml_output{
-    height: 4em;
-    display:inline-block;
+    float: right;
+    /*display:inline;*/
+    height: 10em;
+    width: 59%;
 	margin: 0px;
 	padding: 0px;
+}
+.left_aligned{
+    display:inline-block;
+    float: left;
+}
+
+.right_aligned{
+    display:inline-block;
     float: right;
 }

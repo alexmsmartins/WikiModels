@@ -7,6 +7,8 @@ import _root_.net.liftweb.util._
 import Helpers._
 import _root_.net.liftweb.common._
 import _root_.scala.xml._
+import pt.cnbc.wikimodels.mathparser.{MathParser, MathMLPrettyPrinter}
+
 //--Standard imports --
 
 import _root_.net.liftweb.http._
@@ -20,9 +22,7 @@ import _root_.net.liftweb.util.Helpers._
 import _root_.net.liftweb.util.BindPlus._
 
 import _root_.scala.util.parsing.combinator.Parsers
-
-import _root_.pt.cnbc.wikimodels.mathparser.MathMLPrettyPrinter
-import _root_.pt.cnbc.wikimodels.mathparser.MathParser
+import pt.cnbc.wikimodels.mathml.elements.{Cn, Ci, Apply, MathMLElem, Operator, CSymbol, Sep}
 
 /**
  * Created by IntelliJ IDEA.
@@ -38,6 +38,7 @@ class MathMLEdit extends DispatchSnippet {
   object asciiFormula extends SessionVar[String]("")
   object mathmlFormula extends SessionVar[Elem](<math/>)
 
+
   def dispatch: DispatchIt = {
     case "render" => render _
     case "sample" => sample _
@@ -48,15 +49,17 @@ class MathMLEdit extends DispatchSnippet {
     def processTextArea() {
       val parser = MathParser()
       log.info("MathMLEdit.render().processTextArea() with formula = " + asciiFormula.is)
+      log.info("MathMLEdit.render() processTextArea() with MathML = " + mathmlFormula.is)
       val result = parser.parseAll(parser.Expr, asciiFormula.is)
       mathmlFormula.set( MathMLPrettyPrinter.toXML(result.get) )
     }
     log.info("MathMLEdit.render() before bind() with formula = " + asciiFormula.is)
+    log.info("MathMLEdit.render() before bind() with MathML = " + mathmlFormula.is)
     xhtml.bind("editor",
       "formula" -> SHtml.textarea(asciiFormula.is, {asciiFormula set _}, "class" -> "asciimath_input" ),
-      "submit" -> SHtml.submit("Send Formula", processTextArea))
+      "submit" -> SHtml.submit("Send Formula", processTextArea, "class" -> "left_aligned"))
       .bind("visualizer",
-      "formulaViz" -> <div class="mathml_output">{mathmlFormula}</div> )
+      "formulaViz" -> <div class="mathml_output">{mathmlFormula.is}</div> )
   }
 
   def defaultMethodCall(node: NodeSeq): NodeSeq = {

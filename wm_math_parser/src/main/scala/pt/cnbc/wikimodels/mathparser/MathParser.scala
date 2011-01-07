@@ -8,7 +8,7 @@ import util.parsing.combinator.{RegexParsers, PackratParsers, JavaTokenParsers}
 /**
  */
 
-class MathParser extends RegexParsers with PackratParsers with MathParserHandlers {
+class MathParser extends PackratRegexParsers with PackratParsers with MathParserHandlers {
 
   type MME = MathMLElem
 
