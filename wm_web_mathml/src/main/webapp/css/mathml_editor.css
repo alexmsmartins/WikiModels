@@ -1,0 +1,21 @@
+
+.math_container{
+    margin: 0px;
+    padding: 0px;
+}
+
+.asciimath_input{
+    display:inline-block;
+	margin: 0px;
+	padding: 0px;
+	width: 50%;
+	height = 4em;
+    float: left;
+}
+.mathml_output{
+    height: 4em;
+    display:inline-block;
+	margin: 0px;
+	padding: 0px;
+    float: right;
+}

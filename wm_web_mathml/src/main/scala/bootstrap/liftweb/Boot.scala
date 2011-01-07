@@ -9,8 +9,7 @@ import _root_.net.liftweb.sitemap.Loc._
 import Helpers._
 import _root_.net.liftweb.mapper.{DB, ConnectionManager, Schemifier, DefaultConnectionIdentifier, StandardDBVendor}
 import _root_.java.sql.{Connection, DriverManager}
-import _root_.egal.model._
-import _root_.egal.snippet.PerfectNumberCom
+import _root_.pt.cnbc.wikimodels.model._
 
 /**
  * A class that's instantiated early and run.  It allows the application
@@ -40,7 +39,7 @@ class Boot {
       // Menu with special Link
       Menu(Loc("Static", Link(List("static"), true, "/static/index"), 
 	       "Static Content")) ::
-
+      Menu(Loc("MathML", List("mathml"), "MathML") ) ::
       // Menu entries for the User management stuff
       User.sitemap :_*)
 
@@ -67,9 +66,7 @@ class Boot {
     LiftRules.loggedInTest = Full(() => User.loggedIn_?)
 
     S.addAround(DB.buildLoanWrapper)
-    
-    LiftRules.snippetDispatch.append((Map("PerfectNumberCom" -> PerfectNumberCom)))
-    
+
     LiftRules.jsArtifacts = net.liftweb.http.js.jquery.JQuery14Artifacts
   }
 

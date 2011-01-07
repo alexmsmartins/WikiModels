@@ -8,7 +8,7 @@ import util.parsing.combinator.{RegexParsers, PackratParsers, JavaTokenParsers}
 /**
  */
 
-class MathParser extends PackratRegexParsers with PackratParsers with MathParserHandlers {
+class MathParser extends RegexParsers with PackratParsers with MathParserHandlers {
 
   type MME = MathMLElem
 
@@ -58,6 +58,9 @@ class MathParser extends PackratRegexParsers with PackratParsers with MathParser
 
 
 
+}
+object MathParser{
+  def apply() = new MathParser()
 }
 
 trait MathParserHandlers{

@@ -1,11 +1,17 @@
 <math xmlns="http://www.w3.org/1998/Math/MathML">
-<!--   <apply>
+<apply>
        <plus/>
        <ci> S1 </ci>
        <ci> S2 </ci>
+   <apply>
+       <divide/>
+       <ci> S3 </ci>
+       <ci> S4 </ci>
    </apply>
-</math>-->
-<matrix>
+
+   </apply>
+</math>
+<!--<matrix>
   <matrixrow>
     <cn> 0 </cn> <cn> 1 </cn> <cn> 0 </cn>
   </matrixrow>
@@ -16,4 +22,4 @@
     <cn> 1 </cn> <cn> 0 </cn> <cn> 0 </cn>
   </matrixrow>
 </matrix>
-</math>
+</math>         -->

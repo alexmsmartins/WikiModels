@@ -1,4 +1,4 @@
-package pt.cnbc.wikimodels {
+/*package pt.cnbc.wikimodels {
 package snippet {
 
 import org.specs._
@@ -44,3 +44,4 @@ object HelloWorldTestSpecs extends Specification {
 
 }
 }
+  */
