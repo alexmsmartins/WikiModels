@@ -68,6 +68,10 @@ class Boot {
     S.addAround(DB.buildLoanWrapper)
 
     LiftRules.jsArtifacts = net.liftweb.http.js.jquery.JQuery14Artifacts
+
+    //Alex: this rule disables XHTML validation so that MathML can be
+    //accepted within a page. 
+    LiftRules.xhtmlValidator = Empty
   }
 
   /**

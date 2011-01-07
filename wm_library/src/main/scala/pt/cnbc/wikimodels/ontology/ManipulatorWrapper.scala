@@ -34,6 +34,8 @@ import java.io.{OutputStream, InputStream}
 object ManipulatorWrapper {
   protected var jenaModel:Model = null
 
+  val sdbTtlLocation = "/home/alex/develop/Projects/WikiModels/workspace/wikimodels/wm_setup/sdb.ttl"
+
   def initializeDB = {
     /*Console.println(this.getClass.getResource("/sdb.ttl").getPath)
 val sdbModel = ModelFactory.createDefaultModel()
@@ -41,14 +43,14 @@ sdbModel.read( this.getClass.getResourceAsStream("/sdb.ttl"),
                             "TTL")
 Console.print(sdbModel)
 val store = SDBFactory.connectStore( StoreDesc.read(sdbModel) )*/
-    val store = SDBFactory.connectStore("/home/alex/develop/estagio/workspace/wikimodels/wm_setup/sdb.ttl")
+    val store = SDBFactory.connectStore(sdbTtlLocation)
 
     store.getTableFormatter.create
     store.close
   }
 
   def cleanUpDB = {
-    val store = SDBFactory.connectStore("/home/alex/develop/estagio/workspace/wikimodels/wm_setup/sdb.ttl")
+    val store = SDBFactory.connectStore(sdbTtlLocation)
     store.getTableFormatter.truncate
     store.close
   }
@@ -99,7 +101,7 @@ val store = SDBFactory.connectStore( StoreDesc.read(sdbModel) )*/
    //Console.println("current URL is " + myConfigFile)
 
    val store = SDBFactory.connectStore(System.getProperty("user.dir") + "/sdb.ttl")*/
-        val store = SDBFactory.connectStore("/home/alex/develop/estagio/workspace/wikimodels/wm_setup/sdb.ttl")
+        val store = SDBFactory.connectStore(sdbTtlLocation)
         jenaModel = SDBFactory.connectDefaultModel(store)
         jenaModel
       } catch {

@@ -74,8 +74,10 @@
                 <lift:msgs id="parsing_error"/>
 
                 <link rel="stylesheet" type="text/css" href="css/mathml_editor.css"/>
-                <p class="success">Parsing succeded</p>
-                <p class="error"> Error parsing AsciiMathML</p>
+                <a href="http://www1.chapman.edu/~jipsen/asciimath.html">Help with AsciiMathML</a>
+
+                <p id="parse_success" class="success">Parsing succeded</p>
+                <p id="parse_failed" class="error"> Error parsing AsciiMathML</p>
                 <div>
                     <visualizer:formulaViz>
                         <span id="form_viz"></span>

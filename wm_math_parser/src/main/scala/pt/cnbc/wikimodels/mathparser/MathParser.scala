@@ -1,6 +1,5 @@
 package pt.cnbc.wikimodels.mathparser
 
-import combinator.PackratRegexParsers
 import pt.cnbc.wikimodels.mathml.elements._
 import pt.cnbc.wikimodels.mathml.elements.Operator._
 import util.parsing.combinator.{RegexParsers, PackratParsers, JavaTokenParsers}
@@ -8,7 +7,7 @@ import util.parsing.combinator.{RegexParsers, PackratParsers, JavaTokenParsers}
 /**
  */
 
-class MathParser extends PackratRegexParsers with PackratParsers with MathParserHandlers {
+class MathParser extends RegexParsers with PackratParsers with MathParserHandlers {
 
   type MME = MathMLElem
 
