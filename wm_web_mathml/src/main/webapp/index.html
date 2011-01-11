@@ -1,78 +1,70 @@
 <lift:surround with="default" at="content">
   <div  name="some-div" id="some-div">
-    <head>
-      <script id="xslttransform" type="text/javascript">
+      <head>
+        <script id="xslttransform" type="text/javascript">
+        /* <![CDATA[ */
+         //TODO - COPY THIS CODE TO A FILE
+          function loadXMLDoc(dname)
+          {
+          $.log("Executando loadXMLDoc(dname)")
+          if (window.XMLHttpRequest)
+            {
+            xhttp=new XMLHttpRequest();
+            }
+          else
+            {
+            xhttp=new ActiveXObject("Microsoft.XMLHTTP");
+            }
+          xhttp.open("GET",dname,false);
+          xhttp.send("");
+          return xhttp.responseXML;
+          }
+
+          function displayResult()
+          {
+          xml=loadXMLDoc("mathml_content.xml");
+
+          xsl=loadXMLDoc("/xslt/mathmlc2p.xsl");
+
+          $.log("Content mathml in page is " + $("#ondivload2").html() );
+
+        //TODO - change xslt conversion to the jQeury plugin from http://www.jongma.org/webtools/jquery/xslt/
+        // code for IE
+        if (window.ActiveXObject)
+          {
+          ex=xml.transformNode(xsl);
+          document.getElementById("formula").innerHTML=$("#ondivload2").html();
+          }
+        // code for Mozilla, Firefox, Opera, etc.
+        else if (document.implementation && document.implementation.createDocument)
+          {
+          xsltProcessor=new XSLTProcessor();
+          xsltProcessor.importStylesheet(xsl);
+          resultDocument = xsltProcessor.transformToFragment(xml,document);
+          document.getElementById("formula").appendChild(resultDocument);
+          }
+         }
+        /* ]]> */
+        </script>
+      </head>
+      <script id="mathjax" src="/MathJax/MathJax.js" type="text/javascript" >
       /* <![CDATA[ */
-         function loadXMLDoc(dname)
-         {
-      $.log("Executando loadXMLDoc(dname)")
-      if (window.XMLHttpRequest)
-        {
-        xhttp=new XMLHttpRequest();
-        }
-      else
-        {
-        xhttp=new ActiveXObject("Microsoft.XMLHTTP");
-        }
-      xhttp.open("GET",dname,false);
-      xhttp.send("");
-      return xhttp.responseXML;
-      }
-
-       function displayResult()
-      {
-      xml=loadXMLDoc("mathml_content.xml");
-
-      xsl=loadXMLDoc("/xslt/mathmlc2p.xsl");
-
-      var content_math = $("#ondivload2");
-      if(content_math == null)
-        {
-        $.log("content_math is null");
-      } else {
-        $.log("content_math not null");
-        $.log(content_math);
-        $.log("After content_math");
-      }
-
-      $.log("Content mathml in page is " + $("#ondivload2").html() );
-
-      // code for IE
-      if (window.ActiveXObject)
-        {
-        ex=xml.transformNode(xsl);
-        document.getElementById("formula").innerHTML=$("#ondivload2").html();
-        }
-      // code for Mozilla, Firefox, Opera, etc.
-      else if (document.implementation && document.implementation.createDocument)
-        {
-        xsltProcessor=new XSLTProcessor();
-        xsltProcessor.importStylesheet(xsl);
-        resultDocument = xsltProcessor.transformToFragment(xml,document);
-        document.getElementById("formula").appendChild(resultDocument);
-        }
-       }
+      $(document).ready(function() {
+      MathJax.Hub.Config({
+     config: ["MMLorHTML.js"],
+     extensions: ["tex2jax.js", "mml2jax.js"],
+     jax: ["input/TeX", "input/MathML"]
+       });
+     });
       /* ]]> */
       </script>
-    </head>
-    <script id="mathjax" src="/MathJax/MathJax.js" type="text/javascript" >
-    /* <![CDATA[ */
-    $(document).ready(function() {
-    MathJax.Hub.Config({
-   config: ["MMLorHTML.js"],
-   extensions: ["tex2jax.js", "mml2jax.js"],
-   jax: ["input/TeX", "input/MathML"]
+      <script type="text/javascript">
+       /* <![CDATA[ */
+     $(document).ready(function(){
+       displayResult();
      });
-   });
-    /* ]]> */
-    </script>
-    <script type="text/javascript">
-     /* <![CDATA[ */
-   $(document).ready(function(){
-     displayResult();
-   });
-     /* ]]> */
-    </script>
+       /* ]]> */
+      </script>
      When <math><mi>a</mi><mo>&#x2260;</mo><mn>0</mn></math>,
      there are two solutions to <math>
     <mi>a</mi><msup><mi>x</mi><mn>2</mn></msup>
@@ -120,7 +112,4 @@
      </div> <!-- ondivload -->
    </div> <!-- some-div -->
 
-   <h2>Welcome to your project!</h2>
-
-  <lift:comet type="Chat"/>
 </lift:surround>

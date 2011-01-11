@@ -55,11 +55,14 @@ class MathMLEdit extends DispatchSnippet {
     }
     log.info("MathMLEdit.render() before bind() with formula = " + asciiFormula.is)
     log.info("MathMLEdit.render() before bind() with MathML = " + mathmlFormula.is)
+
+    val mathml = bind("math", mathmlFormula.is, "mode" -> "display")
+
     xhtml.bind("editor",
       "formula" -> SHtml.textarea(asciiFormula.is, {asciiFormula set _}, "class" -> "asciimath_input" ),
       "submit" -> SHtml.submit("Send Formula", processTextArea, "class" -> "left_aligned"))
       .bind("visualizer",
-      "formulaViz" -> <div class="mathml_output">{mathmlFormula.is}</div> )
+      "formulaViz" -> <div class="mathml_output" id="ondivload2"  >{mathmlFormula.is}</div> )
   }
 
   def defaultMethodCall(node: NodeSeq): NodeSeq = {

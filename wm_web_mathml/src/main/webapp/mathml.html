@@ -1,28 +1,23 @@
 <lift:surround with="default" at="content">
 
     <div id="some-div">
-        <script id="mathjax" src="/MathJax/MathJax.js" type="text/javascript" defer="defer">
-            /* <![CDATA[ */
-            MathJax.Hub.Config({
-            config: ["MMLorHTML.js"],
-            extensions: ["tex2jax.js", "mml2jax.js"],
-            jax: ["input/TeX", "input/MathML"]
-            });
-            /* ]]> */
-        </script>
-        <script id="xslttransform" type="text/javascript" defer="defer">s
-            /* <![CDATA[ */
+        <h2>MahtML Editor is below this.</h2>
+
+        <head>
+          <script id="xslttransform" type="text/javascript">
+          /* <![CDATA[ */
+           //TODO - COPY THIS CODE TO A FILE
             function loadXMLDoc(dname)
             {
             $.log("Executando loadXMLDoc(dname)")
             if (window.XMLHttpRequest)
-            {
-            xhttp=new XMLHttpRequest();
-            }
+              {
+              xhttp=new XMLHttpRequest();
+              }
             else
-            {
-            xhttp=new ActiveXObject("Microsoft.XMLHTTP");
-            }
+              {
+              xhttp=new ActiveXObject("Microsoft.XMLHTTP");
+              }
             xhttp.open("GET",dname,false);
             xhttp.send("");
             return xhttp.responseXML;
@@ -30,41 +25,49 @@
 
             function displayResult()
             {
-            xml=loadXMLDoc("mathml_content.xml");
-            if(xml == null)
-            {
-            $.log("xml is null");
-            } else {
-            $.log("xml not null");
-            }
+            xml=$("#ondivload2").html();
 
             xsl=loadXMLDoc("/xslt/mathmlc2p.xsl");
-            if(xsl == null)
-            {
-            $.log("xslt is null");
-            } else {
-            $.log("xslt not null")
-            }
 
-            // code for IE
-            if (window.ActiveXObject)
+            $.log("Content mathml in page is " + $("#ondivload2").html() );
+
+          //TODO - change xslt conversion to the jQeury plugin from http://www.jongma.org/webtools/jquery/xslt/
+          // code for IE
+          if (window.ActiveXObject)
             {
             ex=xml.transformNode(xsl);
-            document.getElementById("formula").innerHTML=ex;
+            document.getElementById("ondivload2").innerHTML=ex;
             }
-            // code for Mozilla, Firefox, Opera, etc.
-            else if (document.implementation && document.implementation.createDocument)
+          // code for Mozilla, Firefox, Opera, etc.
+          else if (document.implementation && document.implementation.createDocument)
             {
             xsltProcessor=new XSLTProcessor();
             xsltProcessor.importStylesheet(xsl);
             resultDocument = xsltProcessor.transformToFragment(xml,document);
-            document.getElementById("formula").appendChild(resultDocument);
+            document.getElementById("ondivload2").appendChild(resultDocument);
             }
-            }
-            /* ]]> */
+           }
+          /* ]]> */
+          </script>
+        </head>
+        <script id="mathjax" src="/MathJax/MathJax.js" type="text/javascript" >
+        /* <![CDATA[ */
+        $(document).ready(function() {
+        MathJax.Hub.Config({
+       config: ["MMLorHTML.js"],
+       extensions: ["tex2jax.js", "mml2jax.js"],
+       jax: ["input/TeX", "input/MathML"]
+         });
+       });
+        /* ]]> */
         </script>
-
-        <h2>MathML Editor is bellow this</h2>
+        <script type="text/javascript">
+         /* <![CDATA[ */
+       $(document).ready(function(){
+         displayResult();
+       });
+         /* ]]> */
+        </script>
 
         <div>
             <lift:MathMLEdit form="POST">
