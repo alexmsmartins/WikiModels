@@ -37,9 +37,9 @@ class MathMLEdit extends DispatchSnippet {
 
   val log = Logger(this getClass)
 
-  object asciiFormula extends SessionVar[String]("2+3")
-  object mathmlFormula extends SessionVar[Elem](<math/>)
-  object mathmlFormulaToSave extends SessionVar[Elem](<math/>)
+  object asciiFormula extends SessionVar[String]("")
+  object mathmlFormula extends SessionVar[Elem](<math mode="display" id="formula2" xmlns="http://www.w3.org/1998/Math/MathML"><apply><math xmlns="http://www.w3.org/1998/Math/MathML"><plus definitionURL="" encoding="real"/></math><math xmlns="http://www.w3.org/1998/Math/MathML"><cn base="10" type="integer">2</cn></math><math xmlns="http://www.w3.org/1998/Math/MathML"><apply><math xmlns="http://www.w3.org/1998/Math/MathML"><divide definitionURL="" encoding="real"/></math><math xmlns="http://www.w3.org/1998/Math/MathML"><cn base="10" type="integer">3</cn></math><math xmlns="http://www.w3.org/1998/Math/MathML"><apply><math xmlns="http://www.w3.org/1998/Math/MathML"><power definitionURL="" encoding="real"/></math><math xmlns="http://www.w3.org/1998/Math/MathML"><cn base="10" type="integer">2</cn></math><math xmlns="http://www.w3.org/1998/Math/MathML"><cn base="10" type="integer">5</cn></math></apply></math></apply></math></apply></math>)
+  object mathmlFormulaToSave extends SessionVar[Elem](<math mode="display" id="formula2" xmlns="http://www.w3.org/1998/Math/MathML"><apply><math xmlns="http://www.w3.org/1998/Math/MathML"><plus definitionURL="" encoding="real"/></math><math xmlns="http://www.w3.org/1998/Math/MathML"><cn base="10" type="integer">2</cn></math><math xmlns="http://www.w3.org/1998/Math/MathML"><apply><math xmlns="http://www.w3.org/1998/Math/MathML"><divide definitionURL="" encoding="real"/></math><math xmlns="http://www.w3.org/1998/Math/MathML"><cn base="10" type="integer">3</cn></math><math xmlns="http://www.w3.org/1998/Math/MathML"><apply><math xmlns="http://www.w3.org/1998/Math/MathML"><power definitionURL="" encoding="real"/></math><math xmlns="http://www.w3.org/1998/Math/MathML"><cn base="10" type="integer">2</cn></math><math xmlns="http://www.w3.org/1998/Math/MathML"><cn base="10" type="integer">5</cn></math></apply></math></apply></math></apply></math>)
   object successfulPerse extends SessionVar[Boolean](true)
   object errorMessage extends SessionVar[String]("")
 

@@ -51,26 +51,27 @@
           /* ]]> */
           </script>
         </head>
-        <script type="text/javascript">
-         /* <![CDATA[ */
-       $(document).ready(function(){
-         displayResult();
-       });
-         /* ]]> */
-        </script>
-        <script id="mathjax" src="/MathJax/MathJax.js" type="text/javascript" >
-        /* <![CDATA[ */
-        $(document).ready(function() {
-          MathJax.Hub.Config({
-            config: ["MMLorHTML.js"],
-            extensions: ["tex2jax.js", "mml2jax.js"],
-          jax: ["input/TeX", "input/MathML"]
-         });
-       });
-        /* ]]> */
-        </script>
         <div>
             <lift:MathMLEdit form="POST">
+                <script type="text/javascript">
+                    /* <![CDATA[ */
+                    $(document).ready(function(){
+                      displayResult();
+                    });
+                    /* ]]> */
+                </script>
+                <script id="mathjax" src="/MathJax/MathJax.js" type="text/javascript">
+                    /* <![CDATA[ */
+                    $(document).ready(function() {
+                      MathJax.Hub.Config({
+                        config: ["MMLorHTML.js"],
+                        extensions: ["tex2jax.js", "mml2jax.js"],
+                        jax: ["input/TeX", "input/MathML"]
+                      });
+                    });
+                    /* ]]> */
+                </script>
+
                 <lift:ignore>
                     <!-- TODO LEARN error messages from the framework -->
                 </lift:ignore>
