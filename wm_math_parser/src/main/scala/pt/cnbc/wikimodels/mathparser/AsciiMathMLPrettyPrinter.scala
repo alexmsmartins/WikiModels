@@ -1,7 +1,7 @@
 package pt.cnbc.wikimodels.mathparser
 
-import pt.cnbc.wikimodels.mathml.elements.{Operator, Apply, Ci, Cn, CSymbol, MathMLElem}
-import Operator._
+import pt.cnbc.wikimodels.mathml.elements._
+import pt.cnbc.wikimodels.mathml.elements.KnownOperators._
 
 /**
  * Created by IntelliJ IDEA.

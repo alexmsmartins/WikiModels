@@ -18,17 +18,20 @@ case object NegativeInfiniteInt extends InfInt(-1,true)
 class Operator(val name:String, val minArgs:InfInt, val maxArgs:InfInt, val definitionURL:Option[String]=None, val encoding:String="real") extends Token(name)
 
 object Operator{
-  def apply(name:String, minArgs:InfInt, maxArgs:InfInt, definitionURL:Option[String], encoding:String):Operator = {
-    Operator(name, minArgs, maxArgs, definitionURL, encoding)
-  }
-
   def unapply(oscm: Operator):Option[(String, InfInt, InfInt, Option[String], String)] = Some((oscm.name, oscm.maxArgs, oscm.maxArgs, oscm.definitionURL, oscm.encoding))
 
+  def apply(name:String, minArgs:InfInt, maxArgs:InfInt, definitionURL:Option[String]=None, encoding:String="real"):Operator = {
+    new Operator(name, minArgs, maxArgs, definitionURL, encoding)
+  }
+}
+
+object KnownOperators{
   /**
    * Map that contains the valid MathML operators that can appear io an SBML document
    */
   var validOps = Map.empty[String, Operator]
   var validOpsList = List.empty[Operator]
+
 
   //------------ trugonometric operators ------------//
   case object Sin extends Operator("sin",1,1)
@@ -45,6 +48,7 @@ object Operator{
   case object Coth extends Operator("coth",1,1)
 
   validOpsList :::= List(Sin, Cos, Tan, Sec, Csc, Cot, Sinh, Cosh, Tanh, Sech, Csch, Coth)
+
 
   //arccos, arctan, arcsec, arccsc, arccot, arcsinh, arccosh, arctanh, arcsech, arccsch, arccoth
   case object ArcSin extends Operator("arcsin",1,1)
@@ -81,12 +85,10 @@ object Operator{
 
   validOpsList :::= List(Addition, Subtraction, Multiplication, Division, Exponentiation, Root, Abs, Exp, Ln, Log, Floor, Ceiling, Factorial)
   if(validOpsList == null){
-    Console.println("validOps is null")
+    Console.println("validOpsList is null")
   }else{
-    Console.println("validOps is "+validOps)
+    Console.println("validOpsLsit is "+validOpsList)
   }
-
-
   validOps ++= validOpsList.map(op => {
     if(op == null){
       Console.println("op is null")
@@ -105,5 +107,4 @@ object Operator{
   }else{
     Console.println("validOps is "+validOps)
   }
-
 }

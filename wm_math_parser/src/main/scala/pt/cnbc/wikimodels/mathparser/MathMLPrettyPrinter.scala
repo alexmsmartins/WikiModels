@@ -1,7 +1,7 @@
 package pt.cnbc.wikimodels.mathparser
 
 import scala.xml._
-import pt.cnbc.wikimodels.mathml.elements.{Cn, Ci, Apply, MathMLElem, Operator, CSymbol, Sep}
+import pt.cnbc.wikimodels.mathml.elements._
 import pt.cnbc.wikimodels.mathml.elements.Operator._
 /**
  * Created by IntelliJ IDEA.

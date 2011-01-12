@@ -76,6 +76,14 @@ class MathMLPrettyPrinterTest extends MathParser{
   }
 
   @Test
+  def simpleSum2 {
+    val expr = "2+2"
+    val result = this.parseAll(Expr, expr)
+    assertTrue(parsingWasSuccessful(result))
+    println("the expression " + expr + " results in " + MathMLPrettyPrinter.toXML(result.get))
+  }
+
+  @Test
   def severalNotationsSum {
     //TODO COMPLETE SCIENTIFIC NOTAITON
     val expr = "1+2.1+3.1"//+4e2"

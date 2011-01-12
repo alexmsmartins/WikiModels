@@ -1,7 +1,7 @@
 package pt.cnbc.wikimodels.mathparser
 
 import pt.cnbc.wikimodels.mathml.elements._
-import pt.cnbc.wikimodels.mathml.elements.Operator._
+import KnownOperators._
 import util.parsing.combinator.{RegexParsers, PackratParsers, JavaTokenParsers}
 
 /**
@@ -15,12 +15,12 @@ class MathParser extends RegexParsers with PackratParsers with MathParserHandler
   lazy val LambdaExpr :PackratParser[Any]= Function ~ "=" ~ Expr
 
   //TODO def SimpleExpr  :Parser[Any]= Atom |   
-  lazy val Expr       :PackratParser[MathMLElem]= Expr~"+"~Term^^{ case e~"+"~t => new Apply(Operator.Addition, List(e, t))  } |
+  lazy val Expr       :PackratParser[MathMLElem]= Expr~"+"~Term^^{ case e~"+"~t => new Apply(Addition, List(e, t))  } |
                                            Expr~"-"~Term^^{ case e~"-"~t => new Apply(Subtraction, List(e, t)  ) } |
                                            Term
 
-  lazy val Term       :PackratParser[MME]= Term~"*"~Factor^^{ case t~"*"~f => new Apply(Operator.Multiplication, List(t, f))  } |
-                                           Term~"/"~Factor^^{ case t~"/"~f => new Apply(Operator.Division, List(t, f))  } |
+  lazy val Term       :PackratParser[MME]= Term~"*"~Factor^^{ case t~"*"~f => new Apply(Multiplication, List(t, f))  } |
+                                           Term~"/"~Factor^^{ case t~"/"~f => new Apply(Division, List(t, f))  } |
                                            Factor
 
   lazy val Factor     :PackratParser[MME]= Power | Function | Atom | "("~>Expr<~")"
@@ -64,7 +64,7 @@ object MathParser{
 
 trait MathParserHandlers{
   def handleFunction(ident:String, params:List[MathMLElem] ):MathMLElem = {
-    println("Operator.validOps contains " + Operator.validOps.size + " predefined operators")
-    Operator.validOps.getOrElse(ident, new Apply(new CSymbol(ident), params ))
+    println("Operator.validOps contains " + KnownOperators.validOps.size + " predefined operators")
+    KnownOperators.validOps.getOrElse(ident, new Apply(new CSymbol(ident), params ))
   }
 }

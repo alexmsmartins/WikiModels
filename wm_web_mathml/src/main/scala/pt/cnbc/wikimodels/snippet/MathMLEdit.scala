@@ -22,8 +22,6 @@ import _root_.scala.xml.{Text, NodeSeq, Elem}
 import _root_.net.liftweb.util.Helpers._
 import _root_.net.liftweb.util.BindPlus._
 
-import _root_.scala.util.parsing.combinator.Parsers
-import pt.cnbc.wikimodels.mathml.elements.{Cn, Ci, Apply, MathMLElem, Operator, CSymbol, Sep}
 
 /**
  * Created by IntelliJ IDEA.
@@ -33,6 +31,7 @@ import pt.cnbc.wikimodels.mathml.elements.{Cn, Ci, Apply, MathMLElem, Operator, 
  * To change this template use File | Settings | File Templates.
  */
 class MathMLEdit extends DispatchSnippet {
+  import _root_.scala.util.parsing.combinator.Parsers
   import pt.cnbc.wikimodels.mathml.elements.{Cn, Ci, Apply, MathMLElem, Operator, CSymbol, Sep}
   import pt.cnbc.wikimodels.mathml.elements.Operator._
 
@@ -41,6 +40,8 @@ class MathMLEdit extends DispatchSnippet {
   object asciiFormula extends SessionVar[String]("2+3")
   object mathmlFormula extends SessionVar[Elem](<math/>)
   object mathmlFormulaToSave extends SessionVar[Elem](<math/>)
+  object successfulPerse extends SessionVar[Boolean](true)
+  object errorMessage extends SessionVar[String]("")
 
 
   def dispatch: DispatchIt = {
@@ -51,10 +52,27 @@ class MathMLEdit extends DispatchSnippet {
 
   def render(xhtml: NodeSeq): NodeSeq = {
     def processTextArea() {
+      import scala.util.parsing.combinator._
+      import net.liftweb.common.{Failure => _}
       val parser = MathParser()
       log.info("MathMLEdit.render().processTextArea() with formula = " + asciiFormula.is)
       log.info("MathMLEdit.render() processTextArea() with MathML = " + mathmlFormula.is)
       val result = parser.parseAll(parser.Expr, asciiFormula.is)
+      result match {
+        case parser.Success(_,_) => {
+          mathmlFormulaToSave.set( MathMLPrettyPrinter.toXML(result.get))
+          successfulPerse.set(true)
+        }
+        case parser.Failure(_,_) => {
+          errorMessage.set(result.toString)
+          successfulPerse.set(false)
+        }
+        case parser.Error(_,_) => {
+          log.error(result)
+          errorMessage.set("There was a fatal error. No useful error messages are available.")
+          successfulPerse.set(false)
+        }
+      }
       //save
       mathmlFormulaToSave.set( MathMLPrettyPrinter.toXML(result.get))
       //add necessary parameters for javascript binding
