@@ -16,9 +16,14 @@ object MathMLPrettyPrinter extends MathParser{
   def exprToMathML(expr:String) = toXML(parseAll(Expr, expr).get)
 
   def toXML(elem:MathMLElem):scala.xml.Elem = {
-    <math xmlns="http://www.w3.org/1998/Math/MathML">{
+    <math xmlns="http://www.w3.org/1998/Math/MathML">
+      {toXMLMatch(elem)}
+    </math>
+  }
+
+  def toXMLMatch(elem:MathMLElem):scala.xml.Elem = {
       elem match{
-        case Apply(op,params) => { <apply>{(op :: params).map(toXML(_))}</apply>
+        case Apply(op,params) => { <apply>{(op :: params).map(toXMLMatch(_))}</apply>
         }
         case Ci(x,"real",_) => <ci type="real">{x}</ci>
         case Cn(content, "real", 10, definitionURL, encoding ) => <cn type="real" base="10">{content}</cn>
@@ -33,6 +38,5 @@ object MathMLPrettyPrinter extends MathParser{
         case Sep() => <sep/>
         case default => throw new RuntimeException( "XML conversion of " + default + " is not implemented")
       }
-    }</math>
   }
 }
