@@ -15,7 +15,7 @@ class MathParser extends RegexParsers with PackratParsers with MathParserHandler
   lazy val LambdaExpr :PackratParser[Any]= Function ~ "=" ~ Expr
 
   //TODO def SimpleExpr  :Parser[Any]= Atom |   
-  lazy val Expr       :PackratParser[MME]= Expr~"+"~Term^^{ case e~"+"~t => new Apply(Operator.Addition, List(e, t))  } |
+  lazy val Expr       :PackratParser[MathMLElem]= Expr~"+"~Term^^{ case e~"+"~t => new Apply(Operator.Addition, List(e, t))  } |
                                            Expr~"-"~Term^^{ case e~"-"~t => new Apply(Subtraction, List(e, t)  ) } |
                                            Term
 

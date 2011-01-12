@@ -8,6 +8,7 @@ import Helpers._
 import _root_.net.liftweb.common._
 import _root_.scala.xml._
 import pt.cnbc.wikimodels.mathparser.{MathParser, MathMLPrettyPrinter}
+import pt.cnbc.wikimodels.util.XMLHandler
 
 //--Standard imports --
 
@@ -32,11 +33,14 @@ import pt.cnbc.wikimodels.mathml.elements.{Cn, Ci, Apply, MathMLElem, Operator, 
  * To change this template use File | Settings | File Templates.
  */
 class MathMLEdit extends DispatchSnippet {
+  import pt.cnbc.wikimodels.mathml.elements.{Cn, Ci, Apply, MathMLElem, Operator, CSymbol, Sep}
+  import pt.cnbc.wikimodels.mathml.elements.Operator._
 
   val log = Logger(this getClass)
 
-  object asciiFormula extends SessionVar[String]("")
+  object asciiFormula extends SessionVar[String]("2+3")
   object mathmlFormula extends SessionVar[Elem](<math/>)
+  object mathmlFormulaToSave extends SessionVar[Elem](<math/>)
 
 
   def dispatch: DispatchIt = {
@@ -51,7 +55,12 @@ class MathMLEdit extends DispatchSnippet {
       log.info("MathMLEdit.render().processTextArea() with formula = " + asciiFormula.is)
       log.info("MathMLEdit.render() processTextArea() with MathML = " + mathmlFormula.is)
       val result = parser.parseAll(parser.Expr, asciiFormula.is)
-      mathmlFormula.set( MathMLPrettyPrinter.toXML(result.get) )
+      //save
+      mathmlFormulaToSave.set( MathMLPrettyPrinter.toXML(result.get))
+      //add necessary parameters for javascript binding
+      mathmlFormula.set( XMLHandler.addAttributes(
+        mathmlFormulaToSave.is,
+        "id" -> "formula2", "mode" -> "display") )
     }
     log.info("MathMLEdit.render() before bind() with formula = " + asciiFormula.is)
     log.info("MathMLEdit.render() before bind() with MathML = " + mathmlFormula.is)

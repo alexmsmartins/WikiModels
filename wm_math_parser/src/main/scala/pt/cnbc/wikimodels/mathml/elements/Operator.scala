@@ -18,7 +18,7 @@ case object NegativeInfiniteInt extends InfInt(-1,true)
 class Operator(val name:String, val minArgs:InfInt, val maxArgs:InfInt, val definitionURL:Option[String]=None, val encoding:String="real") extends Token(name)
 
 object Operator{
-  def apply(name:String, minArgs:InfInt, maxArgs:InfInt, definitionURL:String, encoding:String):Operator = {
+  def apply(name:String, minArgs:InfInt, maxArgs:InfInt, definitionURL:Option[String], encoding:String):Operator = {
     Operator(name, minArgs, maxArgs, definitionURL, encoding)
   }
 
@@ -60,7 +60,7 @@ object Operator{
   case object ArcCsch extends Operator("arccsch",1,1)
   case object ArcCoth extends Operator("arccoth",1,1)
 
-  validOpsList :::= List(ArcSin, ArcCos, ArcTan, ArcSec, ArcCsc, ArcCot, ArcSinh, ArcCosh, ArcTanh, ArcSech, ArcCsch, ArcCoth)  
+  validOpsList :::= List(ArcSin, ArcCos, ArcTan, ArcSec, ArcCsc, ArcCot, ArcSinh, ArcCosh, ArcTanh, ArcSech, ArcCsch, ArcCoth)
 
   //------------ Arithmetic operators ------------//
 
@@ -80,6 +80,30 @@ object Operator{
   case object Factorial extends Operator("factorial",1,1)
 
   validOpsList :::= List(Addition, Subtraction, Multiplication, Division, Exponentiation, Root, Abs, Exp, Ln, Log, Floor, Ceiling, Factorial)
+  if(validOpsList == null){
+    Console.println("validOps is null")
+  }else{
+    Console.println("validOps is "+validOps)
+  }
 
-  validOps ++= validOpsList.map(op => (op.name, op))
+
+  validOps ++= validOpsList.map(op => {
+    if(op == null){
+      Console.println("op is null")
+    }else{
+      Console.println("op is "+op.name)
+    }
+    if(op.name == null){
+      Console.println("op.name is null")
+    }else{
+      Console.println("op.name is "+op.name)
+    }
+    (op.name, op)
+  })
+  if(validOps == null){
+    Console.println("validOps is null")
+  }else{
+    Console.println("validOps is "+validOps)
+  }
+
 }

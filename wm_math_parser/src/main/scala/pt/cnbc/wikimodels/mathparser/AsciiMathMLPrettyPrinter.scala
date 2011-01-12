@@ -11,7 +11,7 @@ import Operator._
  * To change this template use File | Settings | File Templates.
  */
 
-object AsciiMathMLPrettyPrinter {
+object AsciiMathMLPrettyPrinter{
 
   def toAsciiMathML(elem:MathMLElem):String = {
     elem match{

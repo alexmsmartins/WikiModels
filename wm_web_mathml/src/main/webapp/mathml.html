@@ -44,23 +44,13 @@
             xsltProcessor=new XSLTProcessor();
             xsltProcessor.importStylesheet(xsl);
             resultDocument = xsltProcessor.transformToFragment(xml,document);
+            $.log("Content mathml in page is " + resultDocument.html() );
             document.getElementById("ondivload2").appendChild(resultDocument);
             }
            }
           /* ]]> */
           </script>
         </head>
-        <script id="mathjax" src="/MathJax/MathJax.js" type="text/javascript" >
-        /* <![CDATA[ */
-        $(document).ready(function() {
-        MathJax.Hub.Config({
-       config: ["MMLorHTML.js"],
-       extensions: ["tex2jax.js", "mml2jax.js"],
-       jax: ["input/TeX", "input/MathML"]
-         });
-       });
-        /* ]]> */
-        </script>
         <script type="text/javascript">
          /* <![CDATA[ */
        $(document).ready(function(){
@@ -68,7 +58,17 @@
        });
          /* ]]> */
         </script>
-
+        <script id="mathjax" src="/MathJax/MathJax.js" type="text/javascript" >
+        /* <![CDATA[ */
+        $(document).ready(function() {
+          MathJax.Hub.Config({
+            config: ["MMLorHTML.js"],
+            extensions: ["tex2jax.js", "mml2jax.js"],
+          jax: ["input/TeX", "input/MathML"]
+         });
+       });
+        /* ]]> */
+        </script>
         <div>
             <lift:MathMLEdit form="POST">
                 <lift:ignore>

@@ -11,7 +11,6 @@ import org.junit._
 import Assert._
 import scala.util.parsing.combinator._
 
-
 class MathParserTest extends MathParser {
 
   @Before
@@ -69,6 +68,14 @@ class MathParserTest extends MathParser {
   @Test
   def simpleSum {
     val expr = "1+2+3+4"
+    val result = this.parseAll(Expr, expr)
+    assertTrue(parsingWasSuccessful(result))
+    println(result)
+  }
+
+  @Test
+  def simpleSum2 {
+    val expr = "2+2"
     val result = this.parseAll(Expr, expr)
     assertTrue(parsingWasSuccessful(result))
     println(result)

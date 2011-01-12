@@ -22,7 +22,7 @@ object ExampleParser extends RegexParsers with PackratParsers{
     if(parsingWasSuccessful(result))
       println("Parsing went OK!")
     else
-      println("Parsing fialed!")
+      println("Parsing failed!")
   }
 }
 //ExampleParser.main(args)
