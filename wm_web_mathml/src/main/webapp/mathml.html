@@ -24,41 +24,86 @@
                     return xhttp.responseXML;
                     }
 
-                function displayResult()
-                    {
-                    alert("displayResult is executing");
-                    $.log("displayResult is executing");
-                    xml=loadXMLDoc("mathml_content.xml");
-                    if(xml == null)
+               function displayResult()
                   {
-                  $.log("xml is null");
-                  } else {
-                  $.log("xml not null");
-                  }
+                  alert("displayResult is executing");
+                  $.log("displayResult is executing");
 
-                    var xsl=loadXMLDoc("/xslt/mathmlc2p.xsl");
-                    if(xsl == null)
+                  var xml = null;
+                  // code for IE
+                  if (window.ActiveXObject)
                     {
-                      $.log("xslt is null");
-                      } else {
-                      $.log("xslt not null")
-                      }
-
-                    // code for IE
-                    if (window.ActiveXObject)
-                      {
-                      ex=xml.transformNode(xsl);
-                      document.getElementById("formula").innerHTML=ex;
-                      }
-                    // code for Mozilla, Firefox, Opera, etc.
-                    else if (document.implementation && document.implementation.createDocument)
-                      {
-                      xsltProcessor=new XSLTProcessor();
-                      xsltProcessor.importStylesheet(xsl);
-                      resultDocument = xsltProcessor.transformToFragment(xml,document);
-                      document.getElementById("formula").appendChild(resultDocument);
-                      }
+                    xml = $("#formula").xml;
                     }
+                  else if (document.implementation && document.implementation.createDocument)
+                    {
+                    var node = $("#formula");
+                    alert("node = "+node);
+                    alert("node.html() = "+node.html());
+                    //xml = (new XMLSerializer()).serializeToString( node.children()[0] ); // [0] avoids "Security error"
+                    xml = node.children()[0];
+                    alert("xml = " + xml);
+                    }
+
+                  alert("Type of xml is " + typeof xml);
+                  alert(xml);
+                  var xsl2=loadXMLDoc("mathml_content.xml");
+                  alert("Type of xml loaded from a file is " + typeof xml2);
+                  alert(xsl2);
+                  
+                  var xsl=loadXMLDoc("/xslt/mathmlc2p.xsl");
+                  
+                  // code for IE
+                  if (window.ActiveXObject)
+                    {
+                    ex=xml.transformNode(xsl);
+                    document.getElementById("formula").innerHTML=ex;
+                    }
+                  // code for Mozilla, Firefox, Opera, etc.
+                  else if (document.implementation && document.implementation.createDocument)
+                    {
+                    xsltProcessor=new XSLTProcessor();
+                    xsltProcessor.importStylesheet(xsl);
+                    resultDocument = xsltProcessor.transformToFragment(xml,document);
+                    document.getElementById("formula").appendChild(resultDocument);
+                    }
+                  }
+                  
+                function displayResult2()
+                  {
+                  alert("displayResult2 is executing");
+                  $.log("displayResult2 is executing");
+                  var xml=loadXMLDoc("mathml_content.xml");
+                  if(xml == null)
+                    {
+                      $.log("xml is null");
+                    } else {
+                      $.log("xml not null");
+                    }
+
+                  var xsl=loadXMLDoc("/xslt/mathmlc2p.xsl");
+                  if(xsl == null)
+                    {
+                    $.log("xslt is null");
+                    } else {
+                    $.log("xslt not null")
+                    }
+
+                  // code for IE
+                  if (window.ActiveXObject)
+                    {
+                    ex=xml.transformNode(xsl);
+                    document.getElementById("formula").innerHTML=ex;
+                    }
+                  // code for Mozilla, Firefox, Opera, etc.
+                  else if (document.implementation && document.implementation.createDocument)
+                    {
+                    xsltProcessor=new XSLTProcessor();
+                    xsltProcessor.importStylesheet(xsl);
+                    resultDocument = xsltProcessor.transformToFragment(xml,document);
+                    document.getElementById("formula").appendChild(resultDocument);
+                    }
+                  }
                 /* ]]> */
             </script>
                 </head>
@@ -87,9 +132,7 @@
                 <p id="parse_success" class="success">Parsing succeded</p>
                 <p id="parse_failed" class="error"> Error parsing AsciiMathML</p>
                 <div>
-                    <div id="formula"></div>
                     <visualizer:formulaViz>
-
                         <span id="form_viz"></span>
                     </visualizer:formulaViz>
                     <editor:formula/>

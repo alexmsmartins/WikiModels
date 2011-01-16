@@ -91,7 +91,7 @@ class MathMLEdit extends DispatchSnippet {
       "formula" -> SHtml.textarea(asciiFormula.is, {asciiFormula set _}, "class" -> "asciimath_input" ),
       "submit" -> SHtml.submit("Send Formula", processTextArea, "class" -> "left_aligned"))
       .bind("visualizer",
-      "formulaViz" -> <div class="mathml_output" id="ondivload"  >{mathmlFormula.is}</div> )
+      "formulaViz" -> <div class="mathml_output" id="formula"  >{mathmlFormula.is}</div> )
   }
 
   def defaultMethodCall(node: NodeSeq): NodeSeq = {
