@@ -23,10 +23,8 @@
                     xhttp.send("");
                     return xhttp.responseXML;
                     }
-
                function displayResult()
                   {
-                  alert("displayResult is executing");
                   $.log("displayResult is executing");
 
                   var xml = null;
@@ -38,18 +36,8 @@
                   else if (document.implementation && document.implementation.createDocument)
                     {
                     var node = $("#formula");
-                    alert("node = "+node);
-                    alert("node.html() = "+node.html());
-                    //xml = (new XMLSerializer()).serializeToString( node.children()[0] ); // [0] avoids "Security error"
                     xml = node.children()[0];
-                    alert("xml = " + xml);
                     }
-
-                  alert("Type of xml is " + typeof xml);
-                  alert(xml);
-                  var xsl2=loadXMLDoc("mathml_content.xml");
-                  alert("Type of xml loaded from a file is " + typeof xml2);
-                  alert(xsl2);
                   
                   var xsl=loadXMLDoc("/xslt/mathmlc2p.xsl");
                   
@@ -62,48 +50,13 @@
                   // code for Mozilla, Firefox, Opera, etc.
                   else if (document.implementation && document.implementation.createDocument)
                     {
-                    xsltProcessor=new XSLTProcessor();
+                    var xsltProcessor=new XSLTProcessor();
                     xsltProcessor.importStylesheet(xsl);
-                    resultDocument = xsltProcessor.transformToFragment(xml,document);
-                    document.getElementById("formula").appendChild(resultDocument);
+                    var resultDocument = xsltProcessor.transformToFragment(xml,document);
+                    var div = document.getElementById("formula");
+                    div.replaceChild(resultDocument, div.firstChild );
                     }
-                  }
-                  
-                function displayResult2()
-                  {
-                  alert("displayResult2 is executing");
-                  $.log("displayResult2 is executing");
-                  var xml=loadXMLDoc("mathml_content.xml");
-                  if(xml == null)
-                    {
-                      $.log("xml is null");
-                    } else {
-                      $.log("xml not null");
-                    }
-
-                  var xsl=loadXMLDoc("/xslt/mathmlc2p.xsl");
-                  if(xsl == null)
-                    {
-                    $.log("xslt is null");
-                    } else {
-                    $.log("xslt not null")
-                    }
-
-                  // code for IE
-                  if (window.ActiveXObject)
-                    {
-                    ex=xml.transformNode(xsl);
-                    document.getElementById("formula").innerHTML=ex;
-                    }
-                  // code for Mozilla, Firefox, Opera, etc.
-                  else if (document.implementation && document.implementation.createDocument)
-                    {
-                    xsltProcessor=new XSLTProcessor();
-                    xsltProcessor.importStylesheet(xsl);
-                    resultDocument = xsltProcessor.transformToFragment(xml,document);
-                    document.getElementById("formula").appendChild(resultDocument);
-                    }
-                  }
+                  }                  
                 /* ]]> */
             </script>
                 </head>
@@ -111,7 +64,6 @@
             /* <![CDATA[ */
             $(document).ready(function() {
                 displayResult();
-                alert("MathJax is executing");
                 $.log("MathJax is executing");
                 MathJax.Hub.Config({
                     config: ["MMLorHTML.js"],

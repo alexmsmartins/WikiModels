@@ -31,7 +31,7 @@ import _root_.net.liftweb.util.BindPlus._
  * To change this template use File | Settings | File Templates.
  */
 
-object Del{ val toDelete = <math xmlns="http://www.w3.org/1998/Math/MathML"><apply><plus definitionURL="" encoding="real"/><cn base="10" type="integer">2</cn><apply><divide definitionURL="" encoding="real"/><cn base="10" type="integer">3</cn><apply><power definitionURL="" encoding="real"/><cn base="10" type="integer">2</cn><cn base="10" type="integer">5</cn></apply></apply></apply></math> }
+object Del{ val toDelete = <math xmlns="http://www.w3.org/1998/Math/MathML"></math> }
 
 object asciiFormula extends SessionVar[String]("")
 object mathmlFormula extends SessionVar[Elem](Del.toDelete)
