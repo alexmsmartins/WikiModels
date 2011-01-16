@@ -29,14 +29,28 @@ class MathMLEditTest extends MathMLEdit {
   @Test
   def processTextAreaGivesExceptionInInitializerError() {
     val parser = MathParser()
-    log.info("MathMLEdit.render().processTextArea() with formula = " + asciiFormula.is)
+    var formula = "2+2"
+    log.info("MathMLEdit with asciiFormula = " + asciiFormula.is)
+    log.info("MathMLEdit with formula = " + formula)
     log.info("MathMLEdit.render() processTextArea() with MathML = " + mathmlFormula.is)
-    val result = parser.parseAll(parser.Expr, asciiFormula.is)
-    //save
-    mathmlFormulaToSave.set(MathMLPrettyPrinter.toXML(result.get))
-    //add necessary parameters for javascript binding
-    mathmlFormula.set(XMLHandler.addAttributes(
-      mathmlFormulaToSave.is,
-      "id" -> "formula2", "mode" -> "display"))
+    val result = parser.parseAll(parser.Expr, formula)
+    result match {
+      case parser.Success(_,_) => {
+        mathmlFormulaToSave.set(MathMLPrettyPrinter.toXML(result.get))
+        //add necessary parameters for javascript binding
+        mathmlFormula.set(XMLHandler.addAttributes(
+          mathmlFormulaToSave.is,
+          "id" -> "formula2", "mode" -> "display"))
+        successfulPerse.set(true)
+      }
+      case parser.Failure(_,_) => {
+        fail("Parser failed!")
+      }
+      case parser.Error(_,_) => {
+        log.error(result)
+        fail("Parser failed with strange error!")
+      }
+    }
+
   }
 }

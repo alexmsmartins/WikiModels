@@ -10,6 +10,8 @@ MathJax/
 *.ipr
 *.iws
 .idea/
+*.db
+*~
 
 #Ignore copies of files used for testing only
 wm_server/sbml.owl

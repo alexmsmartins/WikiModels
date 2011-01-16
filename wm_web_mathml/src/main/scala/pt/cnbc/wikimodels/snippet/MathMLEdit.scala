@@ -7,8 +7,8 @@ import _root_.net.liftweb.util._
 import Helpers._
 import _root_.net.liftweb.common._
 import _root_.scala.xml._
-import pt.cnbc.wikimodels.mathparser.{MathParser, MathMLPrettyPrinter}
-import pt.cnbc.wikimodels.util.XMLHandler
+import _root_.pt.cnbc.wikimodels.mathparser.{MathParser, MathMLPrettyPrinter}
+import _root_.pt.cnbc.wikimodels.util.XMLHandler
 
 //--Standard imports --
 
@@ -30,19 +30,21 @@ import _root_.net.liftweb.util.BindPlus._
  * Time: 14:37
  * To change this template use File | Settings | File Templates.
  */
+
+object Del{ val toDelete = <math xmlns="http://www.w3.org/1998/Math/MathML"><apply><plus definitionURL="" encoding="real"/><cn base="10" type="integer">2</cn><apply><divide definitionURL="" encoding="real"/><cn base="10" type="integer">3</cn><apply><power definitionURL="" encoding="real"/><cn base="10" type="integer">2</cn><cn base="10" type="integer">5</cn></apply></apply></apply></math> }
+
+object asciiFormula extends SessionVar[String]("")
+object mathmlFormula extends SessionVar[Elem](Del.toDelete)
+object mathmlFormulaToSave extends SessionVar[Elem](Del.toDelete)
+object successfulPerse extends SessionVar[Boolean](true)
+object errorMessage extends SessionVar[String]("")
+
 class MathMLEdit extends DispatchSnippet {
   import _root_.scala.util.parsing.combinator.Parsers
   import pt.cnbc.wikimodels.mathml.elements.{Cn, Ci, Apply, MathMLElem, Operator, CSymbol, Sep}
   import pt.cnbc.wikimodels.mathml.elements.Operator._
 
   val log = Logger(this getClass)
-
-  object asciiFormula extends SessionVar[String]("")
-  object mathmlFormula extends SessionVar[Elem](<math mode="display" id="formula2" xmlns="http://www.w3.org/1998/Math/MathML"><apply><math xmlns="http://www.w3.org/1998/Math/MathML"><plus definitionURL="" encoding="real"/></math><math xmlns="http://www.w3.org/1998/Math/MathML"><cn base="10" type="integer">2</cn></math><math xmlns="http://www.w3.org/1998/Math/MathML"><apply><math xmlns="http://www.w3.org/1998/Math/MathML"><divide definitionURL="" encoding="real"/></math><math xmlns="http://www.w3.org/1998/Math/MathML"><cn base="10" type="integer">3</cn></math><math xmlns="http://www.w3.org/1998/Math/MathML"><apply><math xmlns="http://www.w3.org/1998/Math/MathML"><power definitionURL="" encoding="real"/></math><math xmlns="http://www.w3.org/1998/Math/MathML"><cn base="10" type="integer">2</cn></math><math xmlns="http://www.w3.org/1998/Math/MathML"><cn base="10" type="integer">5</cn></math></apply></math></apply></math></apply></math>)
-  object mathmlFormulaToSave extends SessionVar[Elem](<math mode="display" id="formula2" xmlns="http://www.w3.org/1998/Math/MathML"><apply><math xmlns="http://www.w3.org/1998/Math/MathML"><plus definitionURL="" encoding="real"/></math><math xmlns="http://www.w3.org/1998/Math/MathML"><cn base="10" type="integer">2</cn></math><math xmlns="http://www.w3.org/1998/Math/MathML"><apply><math xmlns="http://www.w3.org/1998/Math/MathML"><divide definitionURL="" encoding="real"/></math><math xmlns="http://www.w3.org/1998/Math/MathML"><cn base="10" type="integer">3</cn></math><math xmlns="http://www.w3.org/1998/Math/MathML"><apply><math xmlns="http://www.w3.org/1998/Math/MathML"><power definitionURL="" encoding="real"/></math><math xmlns="http://www.w3.org/1998/Math/MathML"><cn base="10" type="integer">2</cn></math><math xmlns="http://www.w3.org/1998/Math/MathML"><cn base="10" type="integer">5</cn></math></apply></math></apply></math></apply></math>)
-  object successfulPerse extends SessionVar[Boolean](true)
-  object errorMessage extends SessionVar[String]("")
-
 
   def dispatch: DispatchIt = {
     case "render" => render _
@@ -89,7 +91,7 @@ class MathMLEdit extends DispatchSnippet {
       "formula" -> SHtml.textarea(asciiFormula.is, {asciiFormula set _}, "class" -> "asciimath_input" ),
       "submit" -> SHtml.submit("Send Formula", processTextArea, "class" -> "left_aligned"))
       .bind("visualizer",
-      "formulaViz" -> <div class="mathml_output" id="ondivload2"  >{mathmlFormula.is}</div> )
+      "formulaViz" -> <div class="mathml_output" id="ondivload"  >{mathmlFormula.is}</div> )
   }
 
   def defaultMethodCall(node: NodeSeq): NodeSeq = {
