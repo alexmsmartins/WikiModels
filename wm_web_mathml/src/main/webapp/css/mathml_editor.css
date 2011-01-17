@@ -29,3 +29,14 @@
     display:inline-block;
     float: right;
 }
+
+.monospaced {
+font-family: Monaco,
+             "Lucida Console",
+             Consolas,
+             "Andale Mono",
+             "Bitstream Vera Sans Mono",
+             "Lucida Sans Typewriter",
+             "DejaVu Sans Mono",
+             monospace;
+}

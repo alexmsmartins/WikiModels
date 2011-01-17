@@ -7,7 +7,7 @@ import _root_.net.liftweb.util._
 import Helpers._
 import _root_.net.liftweb.common._
 import _root_.scala.xml._
-import _root_.pt.cnbc.wikimodels.mathparser.{MathParser, MathMLPrettyPrinter}
+import _root_.pt.cnbc.wikimodels.mathparser._
 import pt.cnbc.wikimodels.util.{HTMLHandler, XMLHandler}
 
 //--Standard imports --
@@ -35,15 +35,16 @@ import _root_.net.liftweb.util.BindPlus._
  * Those are used in a particular context.
  */
 object Default{
-  val xml = <math xmlns="http://www.w3.org/1998/Math/MathML"/>
+  val mathmlFormula = <math xmlns="http://www.w3.org/1998/Math/MathML"/>
   val editMessHtml = <p id="parse_success" >Please insert new formula</p>
   val errorMess = "No error"
-  val errorHtml = <p id="parse_success" >Please insert new formula</p>
+  val errorHtml = <p id="parse_success" >To start working please edit the AsciiMathML formula below</p>
+  val asciiFormula = "x1+(x2^2/(3*x3))"
 }
 
-object asciiFormula extends SessionVar[String]("")
-object mathmlFormula extends SessionVar[Elem](Default.xml)
-object mathmlFormulaToSave extends SessionVar[Elem](Default.xml)
+object asciiFormula extends SessionVar[String](Default.asciiFormula)
+object mathmlFormula extends SessionVar[Elem](Default.mathmlFormula)
+object mathmlFormulaToSave extends SessionVar[Elem](Default.mathmlFormula)
 object successfulPerse extends SessionVar[Boolean](true)
 object errorMessage extends SessionVar[String](Default.errorMess)
 object errorHtml extends SessionVar[scala.xml.Elem](Default.errorHtml)
@@ -84,7 +85,14 @@ class MathMLEdit extends DispatchSnippet {
           log.info("Error parsing " + asciiFormula.is + "\n" + result)
           errorMessage.set(result.toString)
           successfulPerse.set(false)
-          errorHtml.set(<p id="parse_failed" class="error"> Error parsing AsciiMathML due to {HTMLHandler.string2html(result.toString)} </p>)
+          def errorBeautifier(f:parser.Failure) = {
+            ("Error in line "+f.next.pos.line+" column "+f.next.pos.column+" failure: \n"
+              +f.msg+"\n\n"+f.next.pos.longString)
+              .replace("string matching regex `\\z'", "End of expression")
+          }
+          errorHtml.set(<p id="parse_failed" class="error"> Error parsing AsciiMathML.<div class="monospaced">{
+            HTMLHandler.string2html(errorBeautifier(result.asInstanceOf[parser.Failure]))
+          }</div> </p>)
         }
         case parser.Error(_,_) => {
           log.error(result)
@@ -108,6 +116,6 @@ class MathMLEdit extends DispatchSnippet {
 
   def defaultMethodCall(node: NodeSeq): NodeSeq = {
     //TODO replace this with a proper error handling routines
-    <p class="error"> Error calling {node}in MathML Editor</p>
+    <p class="error"> Error calling {node} in MathML Editor</p>
   }
 }
