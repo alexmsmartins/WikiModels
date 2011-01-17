@@ -8,7 +8,7 @@ import Helpers._
 import _root_.net.liftweb.common._
 import _root_.scala.xml._
 import _root_.pt.cnbc.wikimodels.mathparser.{MathParser, MathMLPrettyPrinter}
-import _root_.pt.cnbc.wikimodels.util.XMLHandler
+import pt.cnbc.wikimodels.util.{HTMLHandler, XMLHandler}
 
 //--Standard imports --
 
@@ -22,7 +22,6 @@ import _root_.scala.xml.{Text, NodeSeq, Elem}
 import _root_.net.liftweb.util.Helpers._
 import _root_.net.liftweb.util.BindPlus._
 
-
 /**
  * Created by IntelliJ IDEA.
  * User: alex
@@ -31,13 +30,23 @@ import _root_.net.liftweb.util.BindPlus._
  * To change this template use File | Settings | File Templates.
  */
 
-object Del{ val toDelete = <math xmlns="http://www.w3.org/1998/Math/MathML"></math> }
+/**
+ * Contains default values for Session Variables.
+ * Those are used in a particular context.
+ */
+object Default{
+  val xml = <math xmlns="http://www.w3.org/1998/Math/MathML"/>
+  val editMessHtml = <p id="parse_success" >Please insert new formula</p>
+  val errorMess = "No error"
+  val errorHtml = <p id="parse_success" >Please insert new formula</p>
+}
 
 object asciiFormula extends SessionVar[String]("")
-object mathmlFormula extends SessionVar[Elem](Del.toDelete)
-object mathmlFormulaToSave extends SessionVar[Elem](Del.toDelete)
+object mathmlFormula extends SessionVar[Elem](Default.xml)
+object mathmlFormulaToSave extends SessionVar[Elem](Default.xml)
 object successfulPerse extends SessionVar[Boolean](true)
-object errorMessage extends SessionVar[String]("")
+object errorMessage extends SessionVar[String](Default.errorMess)
+object errorHtml extends SessionVar[scala.xml.Elem](Default.errorHtml)
 
 class MathMLEdit extends DispatchSnippet {
   import _root_.scala.util.parsing.combinator.Parsers
@@ -48,7 +57,6 @@ class MathMLEdit extends DispatchSnippet {
 
   def dispatch: DispatchIt = {
     case "render" => render _
-    case "sample" => sample _
     case _ => defaultMethodCall _
   }
 
@@ -64,10 +72,19 @@ class MathMLEdit extends DispatchSnippet {
         case parser.Success(_,_) => {
           mathmlFormulaToSave.set( MathMLPrettyPrinter.toXML(result.get))
           successfulPerse.set(true)
+          errorHtml.set(<p id="parse_success" class="success">Parsing succeded</p>)
+          //save
+          mathmlFormulaToSave.set( MathMLPrettyPrinter.toXML(result.get))
+          //add necessary parameters for javascript binding
+          mathmlFormula.set( XMLHandler.addAttributes(
+            mathmlFormulaToSave.is,
+            "id" -> "formula2", "mode" -> "display") )
         }
         case parser.Failure(_,_) => {
+          log.info("Error parsing " + asciiFormula.is + "\n" + result)
           errorMessage.set(result.toString)
           successfulPerse.set(false)
+          errorHtml.set(<p id="parse_failed" class="error"> Error parsing AsciiMathML due to {HTMLHandler.string2html(result.toString)} </p>)
         }
         case parser.Error(_,_) => {
           log.error(result)
@@ -75,21 +92,16 @@ class MathMLEdit extends DispatchSnippet {
           successfulPerse.set(false)
         }
       }
-      //save
-      mathmlFormulaToSave.set( MathMLPrettyPrinter.toXML(result.get))
-      //add necessary parameters for javascript binding
-      mathmlFormula.set( XMLHandler.addAttributes(
-        mathmlFormulaToSave.is,
-        "id" -> "formula2", "mode" -> "display") )
     }
     log.info("MathMLEdit.render() before bind() with formula = " + asciiFormula.is)
     log.info("MathMLEdit.render() before bind() with MathML = " + mathmlFormula.is)
-
-    val mathml = bind("math", mathmlFormula.is, "mode" -> "display")
+    log.info("MathMLEdit.render() before bind() with ErroBoxL = " + errorHtml.is)
 
     xhtml.bind("editor",
       "formula" -> SHtml.textarea(asciiFormula.is, {asciiFormula set _}, "class" -> "asciimath_input" ),
       "submit" -> SHtml.submit("Send Formula", processTextArea, "class" -> "left_aligned"))
+      .bind("error",
+      "box" -> errorHtml.is )
       .bind("visualizer",
       "formulaViz" -> <div class="mathml_output" id="formula"  >{mathmlFormula.is}</div> )
   }
@@ -98,50 +110,4 @@ class MathMLEdit extends DispatchSnippet {
     //TODO replace this with a proper error handling routines
     <p class="error"> Error calling {node}in MathML Editor</p>
   }
-
-  //-- from Ajax.scala
-
-  // local state for the counter
-  var cnt = 0
-
-  // get the id of some elements to update
-  val spanName: String = S.attr("id_name") openOr "cnt_id"
-  val msgName: String = S.attr("id_msgs") openOr "messages"
-
-  def sample(xhtml: NodeSeq): NodeSeq = {
-    // local state for the counter
-    var cnt = 0
-
-    // get the id of some elements to update
-    val spanName: String = S.attr("id_name") openOr "cnt_id"
-    val msgName: String = S.attr("id_msgs") openOr "messages"
-
-
-    // create an ajax select box
-    def doSelect(msg: NodeSeq) =
-      ajaxSelect((1 to 50).toList.map(i => (i.toString, i.toString)),
-        Full(1.toString),
-        v => DisplayMessage(msgName,
-          bind("sel", msg, "number" -> Text(v)),
-          5 seconds, 1 second))
-
-    // build up an ajax text box
-    def doText(msg: NodeSeq) =
-      ajaxText("", v => DisplayMessage(msgName,
-        bind("text", msg, "value" -> Text(v)),
-        0 seconds, 1 second))
-
-
-
-    // bind the view to the functionality
-    bind("ajax", xhtml,
-      "select" -> doSelect _,
-      "text" -> doText _)
-  }
-
-  private def buildQuery(current: String, limit: Int): Seq[String] = {
-    (1 to limit).map(n => current + "" + n)
-  }
-
-  def time = Text(timeNow.toString)
 }

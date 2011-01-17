@@ -81,9 +81,11 @@
                 <link rel="stylesheet" type="text/css" href="css/mathml_editor.css"/>
                 <a href="http://www1.chapman.edu/~jipsen/asciimath.html">Help with AsciiMathML</a>
 
-                <p id="parse_success" class="success">Parsing succeded</p>
-                <p id="parse_failed" class="error"> Error parsing AsciiMathML</p>
-                <div>
+                <error:box>
+                  <span id="box_error_message"></span>
+                </error:box>
+
+                   <div>
                     <visualizer:formulaViz>
                         <span id="form_viz"></span>
                     </visualizer:formulaViz>
