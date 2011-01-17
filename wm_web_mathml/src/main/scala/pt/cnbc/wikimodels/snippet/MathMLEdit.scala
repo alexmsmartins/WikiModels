@@ -86,9 +86,9 @@ class MathMLEdit extends DispatchSnippet {
           errorMessage.set(result.toString)
           successfulPerse.set(false)
           def errorBeautifier(f:parser.Failure) = {
-            ("Error in line "+f.next.pos.line+" column "+f.next.pos.column+" failure: \n"
+            ("Line "+f.next.pos.line+" column "+f.next.pos.column+" failure: \n"
               +f.msg+"\n\n"+f.next.pos.longString)
-              .replace("string matching regex `\\z'", "End of expression")
+              .replace("string matching regex `\\z'", "End of expression").replace("\n\n","\n")
           }
           errorHtml.set(<p id="parse_failed" class="error"> Error parsing AsciiMathML.<div class="monospaced">{
             HTMLHandler.string2html(errorBeautifier(result.asInstanceOf[parser.Failure]))
