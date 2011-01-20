@@ -20,6 +20,7 @@ import scala.xml.XML
 
 import pt.cnbc.wikimodels.rest.client.BasicAuth
 import pt.cnbc.wikimodels.rest.client.RestfulAccess
+import scala.xml
 
 
 object App {
@@ -784,8 +785,8 @@ object App {
   def editParameterTest = {
     val xml = ra.getRequest("/model/metaid_0000002/parameter/metaid_0000002")
     if (ra.getStatusCode == 200) {
-      assertTrue((xml \ "@metaid") == "metaid_0000002")
-      assertTrue((xml \ "@id") == "k11")
+      assertTrue((xml \ "@metaid").text == "metaid_0000002")
+      assertTrue((xml \ "@id").text == "k11")
     } else throw new Exception("Wrong StatusCode. Should be 200 Ok")
 
 
@@ -796,8 +797,8 @@ object App {
 
     val xmlAfter = ra.getRequest("/model/metaid_0000002/parameter/metaid_0000002")
     if (ra.getStatusCode == 200) {
-      assertTrue((xmlAfter \ "@metaid") == "metaid_0000002")
-      assertTrue((xmlAfter \ "@id") == "k2")
+      assertTrue((xmlAfter \ "@metaid").text == "metaid_0000002")
+      assertTrue((xmlAfter \ "@id").text == "k2")
     } else throw new Exception("Wrong StatusCode. Should be 200 Ok")
   }
 
@@ -819,7 +820,7 @@ object App {
   def browseParameterTest = {
     val xml = ra.getRequest("/model/metaid_00000020/parameter/metaid_00000021")
     if (ra.getStatusCode == 200) {
-      assertTrue((xml \ "@metaid") == "metaid_00000021")
+      assertTrue( (xml \ "@metaid").text == "metaid_00000021")
     } else throw new Exception("Wrong StatusCode. Should be 200 Ok")
   }
 
@@ -885,7 +886,7 @@ object App {
   def browseSpeciesTest = {
     val xml = ra.getRequest("/model/metaid_00000020/species/species_00000030")
     if (ra.getStatusCode == 200) {
-      assertTrue((xml \ "@metaid") == "species_00000030")
+      assertTrue((xml \ "@metaid").text == "species_00000030")
     } else throw new Exception("Wrong StatusCode. Should be 200 Ok")
   }
 
@@ -950,7 +951,7 @@ object App {
   def browseCompartmentTest = {
     val xml = ra.getRequest("/model/metaid_00000020/compartment/compartment_00000040")
     if (ra.getStatusCode == 200) {
-      assertTrue((xml \ "@metaid") == "compartment_00000040")
+      assertTrue((xml \ "@metaid").text == "compartment_00000040")
     } else throw new Exception("Wrong StatusCode. Should be 200 Ok")
   }
 
@@ -1020,7 +1021,7 @@ object App {
   def browseFunctionDefinitionTest = {
     val xml = ra.getRequest("/model/metaid_00000020/functiondefinition/functiondefinition_00000060")
     if (ra.getStatusCode == 200) {
-      assertTrue((xml \ "@metaid") == "functiondefinition_00000060")
+      assertTrue((xml \ "@metaid").text == "functiondefinition_00000060")
     } else throw new Exception("Wrong StatusCode. Should be 200 Ok")
   }
 }
