@@ -14,7 +14,6 @@ import net.liftweb.http.js.jquery.JqJsCmds._
 import java.util.TreeMap
 import java.util.LinkedList
 import java.util.Enumeration
-import scala.collection.jcl.Collection
 import net.liftweb.common._
 import pt.cnbc.wikimodels.model._
 

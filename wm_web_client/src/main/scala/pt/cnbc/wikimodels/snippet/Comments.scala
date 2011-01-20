@@ -36,7 +36,7 @@ class Comments {
         case Full(user) => {
                 var comment:String = null
                 var title:String = null
-                var count:int = 0
+                var count:Int = 0
                 var existingComments:NodeSeq = null
                 var commentCreated:NodeSeq = null
                 var finalComment:NodeSeq = null
@@ -87,7 +87,7 @@ class Comments {
         case Full(user) => {
                 var comment:String = null
                 var title:String = null
-                var count:int = 0
+                var count:Int = 0
                 var existingComments:NodeSeq = null
                 var commentCreated:NodeSeq = null
                 var finalComment:NodeSeq = null
