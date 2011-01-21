@@ -12,7 +12,7 @@
         [WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
     -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <scala.version>2.8.0</scala.version>
+    <scala.version>2.8.1</scala.version>
     <jenabeans.version>1.0.6</jenabeans.version>
     <jdbc.postgresql.version>8.3-603.jdbc4</jdbc.postgresql.version>
   </properties>

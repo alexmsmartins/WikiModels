@@ -679,7 +679,7 @@ class CreateModel {
                             (ElemById("const") ~> JsFunc("appendChild", Call("constr", "")))
                         }),
                      "save" -> SHtml.submit("Save Model", createNewModel,("id","buttonSave"),("onclick" -> {
-                                JsIf(JsEq(ValById("name_model"), ""), Alert("You must provide a name to the model!") & JsReturn(false))
+                                JsIf(JsEq(ValById("name_model"), ""), Alert("You must provide a name to the model!") & JsReturn(false)).toJsCmd
                                 /*JsIf(!ValById("reactantStoicMath").contains("<math"), Alert("Error in the mathematical formula in: 'Reactant Stoichiometry Math'.") & JsReturn(false))
                             JsIf(!ValById("functionDefinitionMath").contains("<math"), Alert("Error in the mathematical formula in: 'Function Definition Math'.") & JsReturn(false))*/})))
             }
