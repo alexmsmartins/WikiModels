@@ -126,7 +126,7 @@ class CreateModel {
                                     if(function_def_id.peekFirst != ""){
                                         <listOfFunctionDefinitions>
                                             {
-                                                for(val i <- 0 to (function_def_id.size-1)) yield{
+                                                for( i <- 0 to (function_def_id.size-1)) yield{
                                                     <functionDefinition name={function_def_name.get(i)} id={function_def_id.get(i)} metaid="metaid_0000001">
                                                         {
                                                             if((function_def_math.peek != "") && (function_def_math.get(i).contains("<math"))){
@@ -143,7 +143,7 @@ class CreateModel {
                                 {
                                     if(compartment_id.peekFirst != ""){
                                         <listOfCompartments>
-                                            {for(val i <- 0 to (compartment_id.size-1)) yield{
+                                            {for( i <- 0 to (compartment_id.size-1)) yield{
                                                     <compartment outside={compartment_outside.get(i)} spatialDimensions={compartment_sd.get(i)} size={compartment_size.get(i)}
                                                         name={compartment_name.get(i)} id={compartment_id.get(i)} constant={compartment_constant.get(i)} metaid="metaid_0000001">
                                                         <notes>{compartment_note.get(i)}</notes>

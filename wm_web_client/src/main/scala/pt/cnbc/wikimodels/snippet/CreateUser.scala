@@ -135,7 +135,7 @@ class CreateUser {
                                 <email>{firstEmail}</email>
                                 <alternativeEmail>{optionalEmail}</alternativeEmail>
                                 <listOfContacts>{
-                                        for(val i <- 0 to (contacts.size-1)) yield {
+                                        for( i <- 0 to (contacts.size-1)) yield {
                                             <contact typeContact={typeContacts.get(i)}>
                                                 {
                                                     contacts.get(i)

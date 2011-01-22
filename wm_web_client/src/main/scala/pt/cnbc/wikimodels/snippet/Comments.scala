@@ -157,12 +157,12 @@ class Comments {
                         } else {
                             <div id="view_box">
                                 <ul id="model_tree_comment" class="treeview-gray">{
-                                        for(val com <- readComment \ "comment";
-                                            val sub <- com \\ "@subject";
-                                            val date <- com \\ "@date";
-                                            val name <- (com \\ "@userName");
-                                            val note = (com \\ "notes")) yield{
-                                            var noteCom = note.toString
+                                        for(com <- readComment \ "comment";
+                                            sub <- com \\ "@subject";
+                                            date <- com \\ "@date";
+                                            name <- (com \\ "@userName");
+                                            note = (com \\ "notes")) yield{
+                                            val noteCom = note.toString
                                             if(noteCom.contains("notes")){
                                                 var1 = noteCom.replaceAll("notes", "div")
                                             }
@@ -226,12 +226,12 @@ class Comments {
                         } else {
                             <div id="view_box">
                                 <ul id="model_tree_comment" class="treeview-gray">{
-                                        for(val com <- readComment \ "comment";
-                                            val sub <- com \\ "@subject";
-                                            val date <- com \\ "@date";
-                                            val name <- (com \\ "@userName");
-                                            val note = (com \\ "notes")) yield{
-                                            var noteCom = note.toString
+                                        for(com <- readComment \ "comment";
+                                            sub <- com \\ "@subject";
+                                            date <- com \\ "@date";
+                                            name <- (com \\ "@userName");
+                                            note = (com \\ "notes")) yield{
+                                            val noteCom = note.toString
                                             if(noteCom.contains("notes")){
                                                 var1 = noteCom.replaceAll("notes", "div")
                                             }
