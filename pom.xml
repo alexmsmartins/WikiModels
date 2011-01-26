@@ -6,6 +6,13 @@
   <artifactId>wikimodels_project</artifactId>
   <name>WikiModels Project</name>
 
+  <scm>
+    <connection>scm:git:http://127.0.0.1/home/alex/develop/Projects/WikiModels/workspace/wikimodels</connection>
+    <developerConnection>scm:git:https://127.0.0.1//home/alex/develop/Projects/WikiModels/workspace/wikimodels</developerConnection>
+    <tag>HEAD</tag>
+    <!--<url>http://127.0.0.1/websvn/my-project</url>-->
+  </scm>
+
   <properties>
     <!--
         prevents
@@ -77,6 +84,14 @@
           <fork>true</fork>
           <source>1.6</source>
           <target>1.6</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>2.1</version>
+        <configuration>
+          <tagBase>https://svn.apache.org/repos/asf/maven/components/releases</tagBase>
         </configuration>
       </plugin>
     </plugins>
