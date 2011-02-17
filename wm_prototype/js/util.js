@@ -17,7 +17,7 @@ var Relator = function(Array, Object){
                     return  i;
             return  -1
         };
-    return  {
+    return      {
         get:function(value){
             return  Object[Array.indexOf(value)]
         },
@@ -40,7 +40,7 @@ print("### Relator tests ###");
 Stack         = ["1",  "2",  "3"];
 RelatedObject = [{}, {}, {}];
 
-print("Stack size is "+Stack.length);
+print("Stack size is " + Stack.length);
 print("Add a property");
 RelatedObject[Stack.indexOf("2")].description = "Number 2";
 
