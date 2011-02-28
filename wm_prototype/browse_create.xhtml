@@ -84,6 +84,7 @@
       }
       #left{
         width: 26.5%;
+        position: fixed;
       }
       #right{
         width: 66.5%;
@@ -107,6 +108,40 @@
         line-height: 0;
         clear: both;
       }
+    </style>
+    <style type="text/css">
+      h3.trigger {
+	padding: 0 0 0 50px;
+	margin: 0 0 5px 0;
+	background: url(h3_trigger_a.gif) no-repeat;
+	height: 46px;
+	line-height: 46px;
+	width: 450px;
+	font-size: 2em;
+	font-weight: normal;
+	float: left;
+}
+h3.trigger a {
+	color: #fff;
+	text-decoration: none;
+	display: block;
+}
+h3.trigger a:hover { color: #ccc; }
+h3.active {background-position: left bottom;} /*--When toggle is triggered, it will shift the image to the bottom to show its "opened" state--*/
+.toggle_container {
+	margin: 0 0 5px;
+	padding: 0;
+	border-top: 1px solid #d6d6d6;
+	background: #f0f0f0 url(toggle_block_stretch.gif) repeat-y left top;
+	overflow: hidden;
+	font-size: 1.2em;
+	width: 500px;
+	clear: both;
+}
+.toggle_container .block {
+	padding: 20px; /*--Padding of Container--*/
+	background: url(toggle_block_btm.gif) no-repeat left bottom; /*--Bottom rounded corners--*/
+}
     </style>
 
   </head>
@@ -163,30 +198,35 @@
       </div><!-- left -->
       <div id="right">
         <div class="demo">
-          <div id="accordion1">
-            <h3 id="accord_c"><a href="#accord_c" >Compartments  <button type="button" >Add Compartment</button></a></h3>
-            <div>
-              <div id="accordion2">
-                <h3 id="accord_c_c1"><a href="#accord_c_c1">Compartment 1   <button type="button">Edit</button>   <button type="button">Delete</button>   <button type="button">Add Species</button></a></h3>
-                <div>
+          <div id="accordion1" class="accordion">
+            <h3 id="accord_c" class="trigger"><a href="#accord_c" >Compartments  <button type="button" >Add Compartment</button></a></h3>
+            <div class="toggle_container">
+              <div id="accordion2" class="block">
+                <h3 id="accord_c_c1" class="trigger"><a href="#accord_c_c1">Compartment 1   <button type="button">Edit</button>   <button type="button">Delete</button>   <button type="button">Add Species</button></a></h3>
+                <div class="toggle_container">
+                  <div class="block">
                   <p>
                     Mauris mauris ante, blandit et, ultrices a, suscipit eget, quam. Integer
                     ut neque. Vivamus nisi metus, molestie vel, gravida in, condimentum sit
                     amet, nunc. Nam a nibh. Donec suscipit eros. Nam mi. Proin viverra leo ut
                     odio. Curabitur malesuada. Vestibulum a velit eu ante scelerisque vulputate.
                   </p>
+                  </div>
                 </div>
-                <h3 id="accord_c_c2"><a href="#accord_c_c2">Compartment 2   <button type="button">Edit</button>   <button type="button">Delete</button>   <button type="button">Add Species</button></a></h3>
-                <div>
+                <h3 id="accord_c_c2" class="trigger"><a href="#accord_c_c2">Compartment 2   <button type="button">Edit</button>   <button type="button">Delete</button>   <button type="button">Add Species</button></a></h3>
+                <div class="toggle_container">
+                  <div class="block">
                   <p>
                     Sed non urna. Donec et ante. Phasellus eu ligula. Vestibulum sit amet
                     purus. Vivamus hendrerit, dolor at aliquet laoreet, mauris turpis porttitor
                     velit, faucibus interdum tellus libero ac justo. Vivamus non quam. In
                     suscipit faucibus urna.
                   </p>
+                  </div>
                 </div>
-                <h3 id="accord_c_c3"><a href="#accord_c_c3">Compartment 3   <button type="button">Edit</button>   <button type="button">Delete</button>   <button type="button">Add Species</button></a></h3>
-                <div>
+                <h3 id="accord_c_c3" class="trigger"><a href="#accord_c_c3">Compartment 3   <button type="button">Edit</button>   <button type="button">Delete</button>   <button type="button">Add Species</button></a></h3>
+                <div class="toggle_container">
+                  <div  class="block">
                   <p>
                     Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis.
                     Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero
@@ -198,37 +238,39 @@
                     <li>List item two</li>
                     <li>List item three</li>
                   </ul>
+                  </div>
                 </div>
               </div>
-              <script type="text/javascript" >
-                  $(function() {
-                      $( "#accordion2" ).accordion();
-                  });
-              </script>
+
             </div>
-            <h3 id="accord_s"><a href="#accord_s">Species   <button type="button">Add Species</button></a></h3>
-            <div>
-              <div id="xxx4">
-                <h3 id="accord_s_s1"><a href="#accord_s_s1">Species 1   <button type="button">Edit</button>   <button type="button">Delete</button></a></h3>
-                <div>
+            <h3 id="accord_s" class="trigger"><a href="#accord_s">Species   <button type="button">Add Species</button></a></h3>
+            <div  class="toggle_container">
+              <div id="accordion3" class="block">
+                <h3 id="accord_s_s1" class="trigger"><a href="#accord_s_s1">Species 1   <button type="button">Edit</button>   <button type="button">Delete</button></a></h3>
+                <div class="toggle_container">
+                  <div class="block">
                   <p>
                     Mauris mauris ante, blandit et, ultrices a, suscipit eget, quam. Integer
                     ut neque. Vivamus nisi metus, molestie vel, gravida in, condimentum sit
                     amet, nunc. Nam a nibh. Donec suscipit eros. Nam mi. Proin viverra leo ut
                     odio. Curabitur malesuada. Vestibulum a velit eu ante scelerisque vulputate.
                   </p>
+                  </div>
                 </div>
-                <h3 id="accord_s_s2"><a href="#accord_s_s2">Species 2   <button type="button">Edit</button>   <button type="button">Delete</button></a></h3>
-                <div>
+                <h3 id="accord_s_s2" class="trigger"><a href="#accord_s_s2">Species 2   <button type="button">Edit</button>   <button type="button">Delete</button></a></h3>
+                <div class="toggle_container">
+                  <div class="block">
                   <p>
                     Sed non urna. Donec et ante. Phasellus eu ligula. Vestibulum sit amet
                     purus. Vivamus hendrerit, dolor at aliquet laoreet, mauris turpis porttitor
                     velit, faucibus interdum tellus libero ac justo. Vivamus non quam. In
                     suscipit faucibus urna.
                   </p>
+                  </div>
                 </div>
-                <h3 id="accord_s_s3"><a href="#accord_s_s3">Species 3   <button type="button">Edit</button>   <button type="button">Delete</button></a></h3>
-                <div>
+                <h3 id="accord_s_s3" class="trigger"><a href="#accord_s_s3">Species 3   <button type="button">Edit</button>   <button type="button">Delete</button></a></h3>
+                <div class="toggle_container">
+                  <div class="block">
                   <p>
                     Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis.
                     Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero
@@ -240,19 +282,23 @@
                     <li>List item two</li>
                     <li>List item three</li>
                   </ul>
+                  </div>
                 </div>
               </div>
-              <script type="text/javascript" >
-                  $(function() {
-                      $( "#xxx4" ).accordion();
-                  });
-              </script>
+
             </div>
           </div>
           <script type="text/javascript" >
-              $(function() {
-                  $( "#accordion1" ).accordion();
-              });
+jQuery(document).ready(function(){
+	//Hide (Collapse) the toggle containers on load
+	$(".toggle_container").hide();
+
+	//Switch the "Open" and "Close" state per click then slide up/down (depending on open/close state)
+	$("h3.trigger").click(function(){
+		$(this).toggleClass("active").next().slideToggle("slow");
+		return false; //Prevent the browser jump to the link anchor
+	});
+});
           </script>
         </div><!-- End demo -->
 
