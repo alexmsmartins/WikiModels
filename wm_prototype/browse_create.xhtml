@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <title>Conforming XHTML 1.0 Transitional Template</title>
-    8<!-- TODO - BEFORE RELEASE: change the local libraries to corresponding ones on Google CDN -->
+    <!-- TODO - BEFORE RELEASE: change the local libraries to corresponding ones on Google CDN -->
     <link rel="stylesheet" href="css/base.css" type="text/css" media="all" />
 
 
@@ -11,10 +11,12 @@
     <script type="text/javascript" src="js/jquery-1.5.1.js"></script>
 
     <!-- dojo -->
-    <script src="js/dojo-1.5.0/dojo/dojo.xd.js" type="text/javascript" ></script>
-
-    <!-- YUI -->
-    <script src="js/yui-3.3.0/build/yui/yui.js" type="text/javascript" ></script>
+    <link rel="stylesheet" type="text/css" href="js/dijit/themes/claro/claro.css" />
+    <script src="js/dojo-1.5.0/dojo/dojo.js" type="text/javascript" >
+    </script>
+    <script type="text/javascript">
+        dojo.require("dijit.TitlePane");
+    </script>
 
     <!-- Simple Tree Menu - Author: Dynamic Drive -->
     <script type="text/javascript" src="js/simpletreemenu/simpletreemenu.js">
@@ -194,19 +196,16 @@
       </div><!-- left -->
       <div id="right">
         ACCORDION HERE
-        <div dojoType="dijit.layout.AccordionContainer" style="height: 300px;">
-          <div dojoType="dijit.layout.ContentPane" title="Heeh, this is a content pane">
-            Hi!
-          </div>
-          <div dojoType="dijit.layout.ContentPane" title="This is as well" selected="true">
-            Hi how are you?
-          </div>
-          <div dojoType="dijit.layout.ContentPane" title="This too">
-            Hi how are you? .....Great, thx
-          </div>
-          <script type="text/javascript" src="js/dojo-1.5.0/dojo/dojo.js">
-             
-          </script>
+        <div style="border: solid black 1px;">
+            <div dojoType="dijit.TitlePane" title="Pane #1">
+                I'm pane #1
+            </div>
+            <div dojoType="dijit.TitlePane" title="Pane #2">
+                I'm pane #2
+            </div>
+            <div dojoType="dijit.TitlePane" title="Pane #3">
+                I'm pane #3
+            </div>
         </div>
 
       </div><!-- right -->
@@ -226,4 +225,7 @@
     </div><!-- End demo-description -->
 
   </body>
+  <script type="text/javascript">
+        dojo.require("dijit.TitlePane");
+  </script>
 </html>
