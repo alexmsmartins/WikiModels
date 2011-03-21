@@ -5,125 +5,225 @@ and open the template in the editor.
 -->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <title>TODO supply a title</title>
-    <style type="text/css">
-      body,html{
-        margin: 0;
-        padding: 0;
-      }
-    </style>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <title>TODO supply a title</title>
+        <style type="text/css">
+            body,html{
+                margin: 0;
+                padding: 0;
+            }
+        </style>
 
-    <link type="text/css" rel="stylesheet" href="js/yui-3.3.0/build/cssfonts/fonts-min.css" />
-    <script type="text/javascript"  src="js/yui-3.3.0/build/yui/yui.js" charset="utf-8">
-      //<![CDATA[
 
-        YUI().use('console', function (Y) {
-          alert("Console is available and ready for use.");
-          // Console has no required configuration
-          var yconsole = new Y.Console();
-          yconsole.render();
+        <!-- YUI3 -->
+        <link type="text/css" rel="stylesheet" href="js/yui-3.3.0/build/cssfonts/fonts.css" />
+        <link rel="stylesheet" type="text/css" href="js/yui-3.3.0/build/cssreset/reset.css"/>
+        <link rel="stylesheet" type="text/css" href="js/yui-3.3.0/build/cssbase/base.css"/>
+        <link type="text/css" rel="stylesheet" href="http://yui.yahooapis.com/gallery-2010.05.21-18-16/build/gallery-node-accordion/assets/skins/sam/gallery-node-accordion.css" />
+        <script type="text/javascript" src="js/yui-3.3.0/build/yui/yui-min.js"></script>
 
-          // In fact, you often don't even need to store the instance
-          new Y.Console().render();
-          });
-        var funct = function funct(){
-          alert("stoooopid!!!!!!!!!");
+        <script type="text/javascript">
+        </script>
+
+        <script type="text/javascript" src="js/yui-3.3.0/build/simpleyui/simpleyui-debug.js" charset="htf-8"></script>
+
+        <!--begin custom header content for this example-->
+
+        <style type="text/css">
+            .yui3-accordion {
+                position:relative;
+                padding-left: 1em;
+                    margin-left: 1em;
+
+            }
+        </style>
+        <style type="text/css">
+            #container {
+                background-color: #00CCFF;
+                border: 1px dotted black;
+                padding: 1em;
+                cursor: pointer;
+            }
+            #example-canvas #demo a {
+                color: #00c;
+                text-decoration: underline;
+            }
+        </style>
+
+        <!--end custom header content for this example-->
+
+    </head>
+
+    <body class="yui3-skin-sam  yui-skin-sam">
+
+        <h1>Simple DOM Events</h1>
+
+        <div class="exampleIntro">
+            <p>Clicking in the blue box will pop up a "Hello World!" alert window.  Clicking on the first link will take you to the YUI website; clicking on the second link, which has the same <code>href</code> attribute, will pop up an alert instead and not navigate to a new page.</p>
+
+            <p>Event Utility is used here to do two things:</p>
+
+            <ol>
+                <li>Attach the <code>click</code> event handler to the blue box;</li>
+                <li>Attach an <strong>event handler </strong> to the second <code>&lt;a&gt;</code> element that uses <code>preventDefault()</code> to prevent the link, when clicked, from navigating to a new page. </li>
+            </ol>
+        </div>
+
+        <!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+
+        <script type="text/javascript" >
+          Y.log("Start loading YUI Widgets!");
+        YUI({ filter: 'raw' }).use("node",
+        function(Y) {
+            //A function that pops up a "Hello World" alert:
+            var helloWorld = function(e) {
+                Y.log("helloWorld function firing.", "info", "example");
+                alert("Hello World!");
+            }
+
+            //subscribe the helloWorld function as an event
+            //handler for the click event on the container
+            //div:
+            Y.on("click", helloWorld, "#container");
+
+            //A function that pops up an alert and
+            //prevents the default behavior of the event
+            //for which it is a handler:
+            var interceptLink = function(e) {
+                e.preventDefault();
+                Y.log("You clicked on the second YUI link.", "info", "example");
+                alert("You clicked on the second YUI link.  Because *preventDefault* was called, this link will not navigate away from the page.");
+            }
+
+            //subscribe our interceptLink function
+            //as a click handler for the second anchor
+            //element:
+            Y.on("click", interceptLink, "#secondA");
+
+            //log message to indicate that the example is ready:
+            Y.log("When you begin interacting with the example at left, you'll see log messages appear here.", "info", "example");
+        });
+
+        </script>
+
+        <div id="demo">
+            <div id="container">
+                <p>Click for Hello World alert.</p>
+            </div>
+
+            <p><a href="http://developer.yahoo.com/yui" id="firstA">The YUI Library. (Link navigates away from page.)</a></p>
+
+            <p><a href="http://developer.yahoo.com/yui" id="secondA">The YUI Library. (Link's default behavior is suppressed.)</a></p>
+        </div>
+
+        <!--END SOURCE CODE FOR EXAMPLE =============================== -->
+
+        <!-- START OF ACCORDION-->
+        <br></br>
+        <h2>Accordion</h2>
+        <div class="bd">
+            <!-- Accordion for Model -->
+            <dl id="accord_m" class="yui3-accordion">
+                <div class="yui3-module yui3-accordion-item yui3-accordion-item-active first-of-type">
+                    <dt class="yui3-hd yui3-accordion-item-hd">
+                        <a href="#" class="yui3-accordion-item-trigger">Compartments  <button type="button" >Add Compartment</button></a>
+                    </dt>
+                    <dd class="yui3-bd yui3-accordion-item-bd">
+                        <!-- Accordion for Comparments -->
+                        <dl id="accord_m_c" class="yui3-accordion">
+                            <div class="yui3-module yui3-accordion-item yui3-accordion-item-active first-of-type">
+                                <dt class="yui3-hd yui3-accordion-item-hd">
+                                    <a href="#" class="yui3-accordion-item-trigger">Compartment 1   <button type="button">Edit</button>   <button type="button">Delete</button>   <button type="button">Add Species</button></a>
+                                </dt>
+                                <dd class="yui3-bd yui3-accordion-item-bd">
+                                    <p>Compartment 1 content here...</p>
+                                </dd>
+                            </div>
+                            <div class="yui3-module yui3-accordion-item">
+                                <dt class="yui3-hd yui3-accordion-item-hd">
+                                    <a href="#" class="yui3-accordion-item-trigger">Compartment 2   <button type="button">Edit</button>   <button type="button">Delete</button>   <button type="button">Add Species</button></a>
+                                </dt>
+                                <dd class="yui3-bd yui3-accordion-item-bd">
+                                    <p>item 2 content here...</p>
+                                </dd>
+                            </div>
+                            <div class="yui3-module yui3-accordion-item yui3-accordion-item-active first-of-type">
+                                <dt class="yui3-hd yui3-accordion-item-hd">
+                                    <a href="#" class="yui3-accordion-item-trigger">Compartment 3   <button type="button">Edit</button>   <button type="button">Delete</button>   <button type="button">Add Species</button></a>
+                                </dt>
+                                <dd class="yui3-bd yui3-accordion-item-bd">
+                                    <p>Compartment 1 content here...</p>
+                                </dd>
+                            </div>
+                        </dl> <!-- Accordion for Comparments -->
+                    </dd>
+                </div>
+                <div class="yui3-module yui3-accordion-item">
+                    <dt class="yui3-hd yui3-accordion-item-hd">
+                        <a href="#" class="yui3-accordion-item-trigger">Species  <button type="button" >Add Species</button></a>
+                    </dt>
+                    <dd class="yui3-bd yui3-accordion-item-bd">
+                        <!-- Accordion for Species -->
+                        <dl id="accord_m_s" class="yui3-accordion">
+                            <div class="yui3-module yui3-accordion-item yui3-accordion-item-active first-of-type">
+                                <dt class="yui3-hd yui3-accordion-item-hd">
+                                    <a href="#" class="yui3-accordion-item-trigger">Species 1   <button type="button">Edit</button>   <button type="button">Delete</button>   <button type="button">Add Species</button></a>
+                                </dt>
+                                <dd class="yui3-bd yui3-accordion-item-bd">
+                                    <p>Species 1 content here...</p>
+                                </dd>
+                            </div>
+                            <div class="yui3-module yui3-accordion-item">
+                                <dt class="yui3-hd yui3-accordion-item-hd">
+                                    <a href="#" class="yui3-accordion-item-trigger">Species 2   <button type="button">Edit</button>   <button type="button">Delete</button>   <button type="button">Add Species</button></a>
+                                </dt>
+                                <dd class="yui3-bd yui3-accordion-item-bd">
+                                    <p>Species 2 content here...</p>
+                                </dd>
+                            </div>
+                            <div class="yui3-module yui3-accordion-item yui3-accordion-item-active first-of-type">
+                                <dt class="yui3-hd yui3-accordion-item-hd">
+                                    <a href="#" class="yui3-accordion-item-trigger">Species 3   <button type="button">Edit</button>   <button type="button">Delete</button>   <button type="button">Add Species</button></a>
+                                </dt>
+                                <dd class="yui3-bd yui3-accordion-item-bd">
+                                    <p>Species 3 content here...</p>
+                                </dd>
+                            </div>
+                        </dl> <!-- Accordion for Comparments -->
+                    </dd>
+                </div>
+            </dl>> <!-- Accordion for Model -->
+        </div>
+
+        <!-- MyBlogLog instrumentation -->
+        <script type="text/javascript" src="http://track2.mybloglog.com/js/jsserv.php?mblID=2007020704011645">
+            alert("Start MyBlogLog instrumentation");
+        </script>
+        <script type="text/javascript" charset="htf-8">
+        //<![CDATA[
+          var wiki = new Object();
+          wiki.ModelComp = {
+              "accord_m": false,
+              "accord_m_c": false,
+              "accord_m_s": false
           };
-        var Y = new YUI({ debug : true });
-
-        //       message     category  source
-        Y.log("Hello world!", "info",  "myapp");
-      //]]>
-    </script>
-
-<!--begin custom header content for this example-->
-
-<style type="text/css">
-#container {
-    background-color: #00CCFF;
-    border: 1px dotted black;
-    padding: 1em;
-    cursor: pointer;
-}
-#example-canvas #demo a {
-    color: #00c;
-    text-decoration: underline;
-}
-</style>
-
-<!--end custom header content for this example-->
-
-</head>
-
-<body class="yui3-skin-sam  yui-skin-sam">
-
-<h1>Simple DOM Events</h1>
-
-<div class="exampleIntro">
-	<p>Clicking in the blue box will pop up a "Hello World!" alert window.  Clicking on the first link will take you to the YUI website; clicking on the second link, which has the same <code>href</code> attribute, will pop up an alert instead and not navigate to a new page.</p>
-
-<p>Event Utility is used here to do two things:</p>
-
-<ol>
-	<li>Attach the <code>click</code> event handler to the blue box;</li>
-	<li>Attach an event handler to the second <code>&lt;a&gt;</code> element that uses <code>preventDefault()</code> to prevent the link, when clicked, from navigating to a new page. </li>
-
-</ol>
-</div>
-
-<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
-
-<script type="text/javascript" >
-YUI({ filter: 'raw' }).use("node",
-function(Y) {
-
-    //A function that pops up a "Hello World" alert:
-    var helloWorld = function(e) {
-        Y.log("helloWorld function firing.", "info", "example");
-        alert("Hello World!");
-    }
-
-    //subscribe the helloWorld function as an event
-    //handler for the click event on the container
-    //div:
-    Y.on("click", helloWorld, "#container");
-
-    //A function that pops up an alert and
-    //prevents the default behavior of the event
-    //for which it is a handler:
-    var interceptLink = function(e) {
-        e.preventDefault();
-        Y.log("You clicked on the second YUI link.", "info", "example");
-        alert("You clicked on the second YUI link.  Because *preventDefault* was called, this link will not navigate away from the page.");
-    }
-
-    //subscribe our interceptLink function
-    //as a click handler for the second anchor
-    //element:
-    Y.on("click", interceptLink, "#secondA");
-
-    //log message to indicate that the example is ready:
-    Y.log("When you begin interacting with the example at left, you'll see log messages appear here.", "info", "example");
-});
-
-</script>
-
-<div id="demo">
-    <div id="container">
-        <p>Click for Hello World alert.</p>
-    </div>
-
-    <p><a href="http://developer.yahoo.com/yui" id="firstA">The YUI Library. (Link navigates away from page.)</a></p>
-
-    <p><a href="http://developer.yahoo.com/yui" id="secondA">The YUI Library. (Link's default behavior is suppressed.)</a></p>
-</div>
-
-<!--END SOURCE CODE FOR EXAMPLE =============================== -->
-
-
-<!--MyBlogLog instrumentation-->
-<script type="text/javascript" src="http://track2.mybloglog.com/js/jsserv.php?mblID=2007020704011645"></script>
-</body>
+          Y.log("Start loading accordion!");
+          YUI({
+                        //Last Gallery Build of this module
+                        gallery: 'gallery-2011.03.02-20-58'
+          }).use( 'anim', 'gallery-node-accordion', function(Y) {
+              Y.one("#accord_m_c").plug(Y.Plugin.NodeAccordion , {
+                  anim: Y.Easing.backIn
+              })
+              Y.one("#accord_m_s").plug(Y.Plugin.NodeAccordion , {
+                  anim: Y.Easing.backIn
+              })
+              Y.one("#accord_m").plug(Y.Plugin.NodeAccordion , {
+                  anim: Y.Easing.backIn
+              })
+          });
+        //]]>
+        </script>
+    </body>
 </html>

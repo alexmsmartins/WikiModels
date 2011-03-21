@@ -1,3 +1,4 @@
+#!/usr/bin/python
 """ My Simple HTTP Server.
 
 This module builds on BaseHTTPServer by implementing the standard GET
@@ -206,6 +207,7 @@ class MySimpleHTTPRequestHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         '.py': 'text/plain',
         '.c': 'text/plain',
         '.h': 'text/plain',
+        '.js': 'text/javascript',
         })
 
 
