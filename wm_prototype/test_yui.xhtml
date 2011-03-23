@@ -34,7 +34,7 @@ and open the template in the editor.
             .yui3-accordion {
                 position:relative;
                 padding-left: 1em;
-                    margin-left: 1em;
+                margin-left: 1em;
 
             }
         </style>
@@ -121,7 +121,7 @@ and open the template in the editor.
 
         <!-- START OF ACCORDION-->
         <br></br>
-        <h2>Accordion</h2>
+        <h2>Node Accordion</h2>
         <div class="bd">
             <!-- Accordion for Model -->
             <dl id="accord_m" class="yui3-accordion">
@@ -212,7 +212,7 @@ and open the template in the editor.
           YUI({
                         //Last Gallery Build of this module
                         gallery: 'gallery-2011.03.02-20-58'
-          }).use( 'anim', 'gallery-node-accordion', function(Y) {
+          }).use( 'anim', 'gallery-node-accordion', "node-base", function(Y) {
               Y.one("#accord_m_c").plug(Y.Plugin.NodeAccordion , {
                   anim: Y.Easing.backIn
               })
@@ -222,8 +222,26 @@ and open the template in the editor.
               Y.one("#accord_m").plug(Y.Plugin.NodeAccordion , {
                   anim: Y.Easing.backIn
               })
+              var handleAccordClick = function(e){
+
+                  alert("Rendering accord_m");
+                  var divv = Y.one("accord_m");
+                  var children = Y.divv.children();
+                  var height = 0;
+                  for(var i in children){
+                      if(i.getComputedStyle("height") > height){
+                         alert("Child height = " + i.getComputedStyle("height"));
+                         height = i.getComputedStyle("height");
+                         e.setStyle("height");
+                      }
+                  }
+                  this.render();
+              }
+
+              Y.on("click", handleAccordClick, "#accord_m");
           });
         //]]>
         </script>
+
     </body>
 </html>

@@ -1,10 +1,35 @@
+//TODO: dead code,for now. Use it or delete it
+// It is meant to be used to coordinate a tree-view of a mode
+// land a set of accordions that contain information related to the differt
+// elements of the same model
+
+
+var WM = {};
+WM.createEditModel = function() {
+
+
+
+    return {
+        elementStatePrototype: {
+            metaId: "",
+            expanded: false
+        },
+        pageState: (function () {
+            //key value dictionary that tells if the model element show be expanded or collapsed
+            //The true false values are observed by the tree-view
+            var expandedOrCollapsedState = {};
+            var updateNodes = 2;
+        })
+    }
+};
+
 
 function show_props(obj, obj_name) {
 	  var result = "";
 	  for (var i in obj)
 	    result += obj_name + "." + i + " = " + obj[i] + "\n";
 	  return result;
-	}
+	};
 
 var myDog = {
     "name" : "Spot",
