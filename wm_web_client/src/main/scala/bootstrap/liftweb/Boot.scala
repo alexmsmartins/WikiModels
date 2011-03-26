@@ -46,7 +46,8 @@ class Boot {
              Menu(Loc("browseM", List("models","index"), "Browse Model", loggedIn)),
              Menu(Loc("browseMm", List("models","browse.xhtml"), "Browse Model", Hidden, loggedIn)),
              Menu(Loc("editM", List("models","editModel.xhtml"), "Edit Model", Hidden, loggedIn)),
-             Menu(Loc("addM", List("models","addModel.xhtml"), "Add Model", Hidden, loggedIn))) ::
+             Menu(Loc("addM", List("models","addModel.xhtml"), "Add Model", Hidden, loggedIn)),
+             Menu(Loc("browseCreateM", List("models","browseCreateModel.xhtml"), "Navigate Model", Hidden, loggedIn))) ::
         //Menu(Loc("listM", List("models","list"), "List of Models"))) ::
         Menu(Loc("tags", List("tags"), "Tags")) ::
         Menu(Loc("create_user", List("create_user"), "Create User", Hidden)) ::

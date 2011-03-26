@@ -6,28 +6,29 @@
 
 var WM = {};
 WM.createEditModel = function() {
-
-
-
     return {
         elementStatePrototype: {
             metaId: "",
             expanded: false
         },
-        pageState: (function () {
+        pageState: function () {
             //key value dictionary that tells if the model element show be expanded or collapsed
             //The true false values are observed by the tree-view
             var expandedOrCollapsedState = {};
             var updateNodes = 2;
-        })
-    }
+        }
+    };
 };
 
 
 function show_props(obj, obj_name) {
+    var i = 0;
 	  var result = "";
-	  for (var i in obj)
+	  for (i in obj){
+              if (listeners.hasOwnProperty(o)) {
 	    result += obj_name + "." + i + " = " + obj[i] + "\n";
+              }
+          }
 	  return result;
 	};
 
