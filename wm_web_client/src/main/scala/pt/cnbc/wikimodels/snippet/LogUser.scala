@@ -40,8 +40,8 @@ class LogUser {
             } else if (password.length == 0) {
                 S.error("Password missing")
             } else {
-
-                ra = new RestfulAccess("localhost", 8080, "/wm_server-1.0-SNAPSHOT/resources", username, password, BasicAuth.startWithBasicAuth)
+                //TODO: these constants related to the server URL should be refactored to a configuration file
+                ra = new RestfulAccess("localhost", 8080, "/wm_server/resources", username, password, BasicAuth.startWithBasicAuth)
                 val userXML = ra.getRequest("/user/"+username).asInstanceOf[scala.xml.Elem]
                 Console.println("STATUS MESSAGE => "+ra.getStatusCode)
                 if(ra.getStatusCode == 200){
