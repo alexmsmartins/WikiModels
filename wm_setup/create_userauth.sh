@@ -10,8 +10,8 @@ $GLASSFISH_HOME/bin/asadmin stop-database
 $GLASSFISH_HOME/bin/asadmin start-database --dbhost $DB_HOST --dbport $DERBY_PORT --dbhome $DB_HOME
 
 RETVAL=$?
-[ $RETVAL -eq 0 ] && ~/glassfish/javadb/bin/ij $SQL_SCRIPT
-[ $RETVAL -ne 0 ] && echo "Failure: the Derby Database System could not be started!"
+[ $RETVAL -eq 0 ] && $GLASSFISH_HOME/javadb/bin/ij $SQL_SCRIPT
+[ $RETVAL -ne 0 ] && echo "\nFailure: the Derby Database System could not be started!"
 exit $RETVAL
 
 
