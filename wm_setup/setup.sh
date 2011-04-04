@@ -14,3 +14,4 @@ RETVAL=$?
 [ $RETVAL -ne 0 ] && echo "\nFailure: the Postgres 8.3 Database System could not be started!"
 exit $RETVAL
 
+

@@ -1,0 +1,5 @@
+To adeploy this application execute:
+ # asadmin -deploydir $CURR_DIR
+and then just
+ # touch  $CURR_DIR/.reload
+to redeploy the web project in glassfish
