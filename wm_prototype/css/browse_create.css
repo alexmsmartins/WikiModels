@@ -1,0 +1,90 @@
+/* 
+    Document   : browse_create
+    Created on : 28-Feb-2011, 01:29:23
+    Author     : alex
+    Description:
+        Specific WikiModels twwaks specific to browse_create.xthml page
+        TODO: changethese rules to base-wm when generalization is possible
+*/
+
+/* 
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+
+root { 
+    display: block;
+}
+
+
+/*Left and Right styling of the page*/
+
+body {
+    margin: 0;
+    padding: 0;
+}
+#container {
+    margin: 1%;
+    padding: 0;
+    width: 97%;
+    /*background-color: #fc9;*/
+}
+#left{
+    width: 26.5%;
+    position: fixed;
+}
+#right{
+    width: 66.5%;
+}
+#left, #right {
+    float: left;
+    margin: 1% 0 1% 1%;
+    padding: 1%;
+    /*background-color: #9cf;
+    color: #000;*/
+}
+#right {
+    float: right;
+    margin: 1% 1% 1% 0;
+}
+.clear {
+    height: 0;
+    font-size: 1px;
+    margin: 0;
+    padding: 0;
+    line-height: 0;
+    clear: both;
+}
+
+
+
+/*Toggle panels styling (aka Accordion) */
+h3.trigger {
+    padding: 0 0 0 50px;
+    margin: 0 0 5px 0;
+    background: url(h3_trigger_a.gif) no-repeat;
+    height: 46px;
+    line-height: 46px;
+    width: 800px;
+    font-weight: normal;
+    float: left;
+}
+h3.trigger a {
+    color: #fff;
+    text-decoration: none;
+    display: block;
+}
+h3.trigger a:hover { color: #ccc; }
+h3.active {background-position: left bottom;} /*--When toggle is triggered, it will shift the image to the bottom to show its "opened" state--*/
+.toggle_container {
+    margin: 0 0 5px;
+    padding: 0;
+    border-top: 1px solid #d6d6d6;
+    background: #f0f0f0 url(toggle_block_stretch.gif) repeat-y left top;
+    overflow: hidden;
+    width: 850px;
+    clear: both;
+}
+.toggle_container .block {
+    padding: 20px; /*--Padding of Container--*/
+    background: url(toggle_block_btm.gif) no-repeat left bottom; /*--Bottom rounded corners--*/
+}

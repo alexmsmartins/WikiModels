@@ -3,7 +3,19 @@ target/
 project/ 
 lib_managed/
 MathJax/
-
+wm_library/project/
+wm_math_parser/project/
+wm_prototype/js/jquery-1.5.1.js
+wm_prototype/js/jquery-ui-1.8.10/
+wm_prototype/js/jquery-ui-1.8.11/
+wm_prototype/js/yui-3.3.0/
+wm_prototype/jslint
+wm_prototype/project/
+wm_server/project/
+wm_setup/project/
+wm_web_client/project/
+wm_web_mathml/lib/
+wm_web_mathml/project/
 
 #ignore IntelliJ IDEA project files
 *.iml
