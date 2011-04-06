@@ -13,5 +13,3 @@ RETVAL=$?
 [ $RETVAL -eq 0 ] && $GLASSFISH_HOME/javadb/bin/ij $SQL_SCRIPT
 [ $RETVAL -ne 0 ] && echo "\nFailure: the Derby Database System could not be started!"
 exit $RETVAL
-
-
