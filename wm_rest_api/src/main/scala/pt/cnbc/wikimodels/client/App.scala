@@ -379,7 +379,7 @@ object App {
   def setUp: Unit = {
     this.ra = new RestfulAccess("localhost",
       8080,
-      "/wm_server-1.0-SNAPSHOT/resources",
+      "/wm_server/resources",
       "admin",
       "admin",
       BasicAuth.startWithBasicAuth)
@@ -427,7 +427,7 @@ object App {
   def loginFailedTest = {
     val raFailed = new RestfulAccess("localhost",
       8080,
-      "/wm_server-1.0-SNAPSHOT/resources",
+      "/wm_server/resources",
       "admin",
       "adminwrong",
       BasicAuth.startWithBasicAuth)
