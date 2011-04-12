@@ -46,7 +46,10 @@ class Boot {
              Menu(Loc("browseM", List("models","index"), "Browse Model", loggedIn)),
              Menu(Loc("browseMm", List("models","browse.xhtml"), "Browse Model", Hidden, loggedIn)),
              Menu(Loc("editM", List("models","editModel.xhtml"), "Edit Model", Hidden, loggedIn)),
-             Menu(Loc("addM", List("models","addModel.xhtml"), "Add Model", Hidden, loggedIn))) ::
+             Menu(Loc("addM", List("models","addModel.xhtml"), "Add Model", Hidden, loggedIn)),
+             //entries for new brows/edit model in teh same page
+             Menu(Loc("browseEditM", List("model","index.xhtml"), "Browse/Edit Model", Hidden, loggedIn))
+        ) ::
         //Menu(Loc("listM", List("models","list"), "List of Models"))) ::
         Menu(Loc("tags", List("tags"), "Tags")) ::
         Menu(Loc("create_user", List("create_user"), "Create User", Hidden)) ::
@@ -70,7 +73,7 @@ class Boot {
         // redirects the pages, it is used for the bookmarks
         LiftRules.statelessRewrite.append {
           case RewriteRequest(ParsePath("model"::model::Nil,_,_,_),_,_) =>
-            RewriteResponse("model"::Nil)
+            RewriteResponse(ParsePath("model/","xhtml"), Map("modelId" -> model))
           /* code written by Gonçalo
             case RewriteRequest(ParsePath(List("model",any,"edit"),_,_,_),_,_) =>
                 RewriteResponse("models" :: "editModel.xhtml" :: Nil)

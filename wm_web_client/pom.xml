@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>pt.cnbc.wikimodels</groupId>
   <artifactId>wm_web_client</artifactId>
@@ -14,9 +15,9 @@
     <artifactId>wikimodels_project</artifactId>
   </parent>
 
-    <properties>
-        <netbeans.hint.deploy.server>J2EE</netbeans.hint.deploy.server>
-      </properties>
+  <properties>
+    <netbeans.hint.deploy.server>J2EE</netbeans.hint.deploy.server>
+  </properties>
   <repositories>
     <repository>
       <id>scala-tools.org</id>
@@ -50,9 +51,9 @@
       <version>${scala.version}</version>
     </dependency>
     <dependency>
-        <groupId>net.liftweb</groupId>
-        <artifactId>lift-webkit_${scala.version}</artifactId>
-        <version>2.2</version>
+      <groupId>net.liftweb</groupId>
+      <artifactId>lift-webkit_${scala.version}</artifactId>
+      <version>2.2</version>
     </dependency>
     <dependency>
       <groupId>net.liftweb</groupId>
@@ -70,9 +71,9 @@
       <version>2.2</version>
     </dependency>
     <dependency>
-        <groupId>net.liftweb</groupId>
-        <artifactId>lift-widgets_${scala.version}</artifactId>
-        <version>2.2</version>
+      <groupId>net.liftweb</groupId>
+      <artifactId>lift-widgets_${scala.version}</artifactId>
+      <version>2.2</version>
     </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>
@@ -100,12 +101,12 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-            <groupId>pt.cnbc.wikimodels</groupId>
-            <artifactId>wm_rest_api</artifactId>
-            <version>0.1-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-    
+      <groupId>pt.cnbc.wikimodels</groupId>
+      <artifactId>wm_rest_api</artifactId>
+      <version>0.1-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+
   </dependencies>
 
   <build>
@@ -141,17 +142,19 @@
           </execution>
         </executions>
         <configuration>
-           <excludes>
-              <exclude>**/sparklines*.js</exclude>
-           </excludes>
-         </configuration>
+          <excludes>
+            <exclude>**/sparklines*.js</exclude>
+          </excludes>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.mortbay.jetty</groupId>
         <artifactId>maven-jetty-plugin</artifactId>
-	<configuration>
+        <configuration>
           <contextPath>/</contextPath>
-          <extraClasspath>${basedir}/src/main/resources/;${basedir}/target/classes/;${basedir}/target/test-classes</extraClasspath>
+          <extraClasspath>
+            ${basedir}/src/main/resources/;${basedir}/target/classes/;${basedir}/target/test-classes
+          </extraClasspath>
           <scanIntervalSeconds>3</scanIntervalSeconds>
           <scanTargets>
             <scanTarget>${basedir}/src/main/resources/</scanTarget>

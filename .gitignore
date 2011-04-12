@@ -16,6 +16,7 @@ wm_setup/project/
 wm_web_client/project/
 wm_web_mathml/lib/
 wm_web_mathml/project/
+wm_rest_api/project/
 
 #ignore IntelliJ IDEA project files
 *.iml
