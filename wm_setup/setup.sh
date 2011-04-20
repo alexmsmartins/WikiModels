@@ -12,6 +12,11 @@ usage()
 
 main() 
 {
+  #Prompt user for the sudo password at the beginning of the script so it does not have to be asked later 
+  sudo -v
+  RETVAL=$?
+  [ $RETVAL -ne 0 ] && exit $RETVAL
+
   #Create the Derby DB for JDBC authentication
   sh ./create_userauth.sh
   RETVAL=$?
@@ -19,8 +24,8 @@ main()
   [ $RETVAL -ne 0 ] && echo -e "\nFailure: the userauth Realm database was not configured!" && exit $RETVAL
  
   #Create the models Knowledgebase
-  sudo /etc/init.d/postgresql stop
-  sudo /etc/init.d/postgresql start 8.3
+  sudo -n /etc/init.d/postgresql stop
+  sudo -n /etc/init.d/postgresql start 8.3
   #FIXME the postgresql debian script returns 0 even in cases when it was unsuccessful. Find a workaround for that.
   RETVAL=$?
   [ $RETVAL -eq 0 ] && mvn scala:run

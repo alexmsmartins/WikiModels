@@ -8,17 +8,21 @@ import Helpers._
 import net.liftweb.widgets.menu.MenuWidget
 import net.liftweb.widgets.tablesorter.TableSorter
 import net.liftweb.widgets.tree.TreeView
+
 import pt.cnbc.wikimodels.tabs.TabsView
 
 import pt.cnbc.wikimodels.snippet._
 
-/**
+/**            s
  * A class that's instantiated early and run.  It allows the application
  * to modify lift's environment
  */
 class Boot {
+  //TODO: object Log extends Logger
+  //TODO: replace log4j for SLF4J
     def boot {
-        val any = ""
+
+      val any = ""
         // set the character enconding to UTF-8
         LiftRules.early.append {
             _.setCharacterEncoding("UTF-8")
@@ -46,10 +50,7 @@ class Boot {
              Menu(Loc("browseM", List("models","index"), "Browse Model", loggedIn)),
              Menu(Loc("browseMm", List("models","browse.xhtml"), "Browse Model", Hidden, loggedIn)),
              Menu(Loc("editM", List("models","editModel.xhtml"), "Edit Model", Hidden, loggedIn)),
-             Menu(Loc("addM", List("models","addModel.xhtml"), "Add Model", Hidden, loggedIn)),
-             //entries for new brows/edit model in teh same page
-             Menu(Loc("browseEditM", List("model","index.xhtml"), "Browse/Edit Model", Hidden, loggedIn))
-        ) ::
+             Menu(Loc("addM", List("models","addModel.xhtml"), "Add Model", Hidden, loggedIn)) ) ::
         //Menu(Loc("listM", List("models","list"), "List of Models"))) ::
         Menu(Loc("tags", List("tags"), "Tags")) ::
         Menu(Loc("create_user", List("create_user"), "Create User", Hidden)) ::
@@ -62,6 +63,8 @@ class Boot {
         Menu(Loc("help", List("help","index"), "Help"),
              Menu(Loc("helpMath", List("help","helpMath"), "Help Math", Hidden))) ::
         Menu(Loc("administrator", List("administrator","index"), "Administrator", Hidden, loggedIn)) ::
+        //entries for new brows/edit model in teh same page
+        Menu(Loc("browseEditM", List("modele","indexe.xhtml"), "Browse/Edit Model", Hidden, loggedIn)) ::
         User.sitemap
         
         // Build SiteMap
@@ -72,8 +75,10 @@ class Boot {
 
         // redirects the pages, it is used for the bookmarks
         LiftRules.statelessRewrite.append {
-          case RewriteRequest(ParsePath("model"::model::Nil,_,_,_),_,_) =>
-            RewriteResponse(ParsePath("model/","xhtml"), Map("modelId" -> model))
+          case RewriteRequest(ParsePath("model"::model::Nil,_,_,_),_,_) => {
+            Console.print("AQQQQQQQQUUUUUUUUIIIIIIIIIIIII E COM MODEL = " + model)
+            RewriteResponse("modele"::"indexe.xhtml"::Nil, Map("modelId" -> model))
+          }
           /* code written by Gonçalo
             case RewriteRequest(ParsePath(List("model",any,"edit"),_,_,_),_,_) =>
                 RewriteResponse("models" :: "editModel.xhtml" :: Nil)
@@ -95,7 +100,6 @@ class Boot {
                 RewriteResponse("models" :: "editModel.xhtml" :: Nil)
                 */
         }
-               
     }
         
     MenuWidget init;
