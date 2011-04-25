@@ -63,8 +63,8 @@ class Boot {
         Menu(Loc("help", List("help","index"), "Help"),
              Menu(Loc("helpMath", List("help","helpMath"), "Help Math", Hidden))) ::
         Menu(Loc("administrator", List("administrator","index"), "Administrator", Hidden, loggedIn)) ::
-        //entries for new brows/edit model in teh same page
-        Menu(Loc("browseEditM", List("modele","indexe.xhtml"), "Browse/Edit Model", Hidden, loggedIn)) ::
+        //entries for new brows/edit model in the same page
+        Menu(Loc("browseEditM", List("modele","indexe"), "Browse/Edit Model", Hidden, loggedIn)) ::
         User.sitemap
         
         // Build SiteMap
@@ -75,9 +75,9 @@ class Boot {
 
         // redirects the pages, it is used for the bookmarks
         LiftRules.statelessRewrite.append {
-          case RewriteRequest(ParsePath("model"::model::Nil,_,_,_),_,_) => {
+          case RewriteRequest(ParsePath("model"::model::Nil,_,_,false),_,_) => {
             Console.print("AQQQQQQQQUUUUUUUUIIIIIIIIIIIII E COM MODEL = " + model)
-            RewriteResponse("modele"::"indexe.xhtml"::Nil, Map("modelId" -> model))
+            RewriteResponse(ParsePath( "modele"::"indexe"::Nil,"xhtml",true, false), Map("modelId" -> model), true)
           }
           /* code written by Gonçalo
             case RewriteRequest(ParsePath(List("model",any,"edit"),_,_,_),_,_) =>
