@@ -1,6 +1,4 @@
 <lift:surround with="default" at="content">
-
-
   <lift:HomePage.logInfo>
       <div id="login">
         <h1><lift:HomePage.profile /></h1>
@@ -15,9 +13,11 @@
   </div>
   <div id='content'>
     Browse and Edit/Create Models Here.
-    <lift:SBMLModel:modelMetaId>
-      Model metaId is <span id="mMetaId"></span> .
-    </lift:SBMLModel:modelMetaId>
+    <div class="lift:SBMLModelSnip:modelMetaId">
+      <h1>Model with metaId <span id="mMetaId"></span> .</h1>
+    </div>
+    <div class="lift:SBMLModelSnip:entireModelInXML">
+      <span id="xmlmodel"></span>
+    </div>
 </div>
-
 </lift:surround>
