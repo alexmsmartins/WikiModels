@@ -1,4 +1,4 @@
-package pt.cnbc.wikimodels.snippet
+package pt.cnbc.wikimodels.client.snippet
 
 import _root_.scala.xml.{NodeSeq, Text}
 import _root_.net.liftweb.util._

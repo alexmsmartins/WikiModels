@@ -32,8 +32,12 @@ class Boot {
             case "css" :: "js" :: _ => true
         }
         
-        // where to search snippet
-        LiftRules.addToPackages("pt.cnbc.wikimodels")
+      // where to search snippet
+      LiftRules.addToPackages("pt.cnbc.wikimodels")
+      //Where to search for lift related files. This is the new location
+      LiftRules.addToPackages("pt.cnbc.wikimodels.client")
+
+        //TODO: LiftRules.htmlProperties.default.set((r: Req) =>new Html5Properties(r.userAgent))
 
         // verification if the user is logged
         val loggedIn = If(() => User.loggedIn_?, "You must be logged in.")
