@@ -1,5 +1,23 @@
 <lift:surround with="default" at="content">
-<body>
-           Browse and Edit/Create Models Here.
-</body>
+
+
+  <lift:HomePage.logInfo>
+      <div id="login">
+        <h1><lift:HomePage.profile /></h1>
+          <h1><lift:Menu.item name="Logout" /></h1>
+      </div>
+  </lift:HomePage.logInfo>
+  <div id="error_msg">
+      <lift:snippet type="msgs">
+          <lift:error_msg></lift:error_msg>
+          <lift:error_class>errorBox</lift:error_class>
+      </lift:snippet>
+  </div>
+  <div id='content'>
+    Browse and Edit/Create Models Here.
+    <lift:SBMLModel:modelMetaId>
+      Model metaId is <span id="mMetaId"></span> .
+    </lift:SBMLModel:modelMetaId>
+</div>
+
 </lift:surround>
