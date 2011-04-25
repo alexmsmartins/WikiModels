@@ -1,22 +1,31 @@
 #ignore maven build directories in general
 target/
-project/ 
+project/boot/
+project/build/target/
 lib_managed/
 MathJax/
-wm_library/project/
-wm_math_parser/project/
+wm_library/project/boot/
+wm_library/project/build/target/
+wm_math_parser/project/boot/
+wm_math_parser/project/build/target/
 wm_prototype/js/jquery-1.5.1.js
 wm_prototype/js/jquery-ui-1.8.10/
 wm_prototype/js/jquery-ui-1.8.11/
 wm_prototype/js/yui-3.3.0/
 wm_prototype/jslint
-wm_prototype/project/
-wm_server/project/
-wm_setup/project/
-wm_web_client/project/
+wm_prototype/project/boot/
+wm_prototype/project/build/target/
+wm_server/project/boot/
+wm_server/project/build/target/
+wm_setup/project/boot/
+wm_setup/project/build/target/
+wm_web_client/project/boot/
+wm_web_client/project/build/target/
 wm_web_mathml/lib/
-wm_web_mathml/project/
-wm_rest_api/project/
+wm_web_mathml/project/boot/
+wm_web_mathml/project/build/target/
+wm_rest_api/project/boot/
+wm_rest_api/project/build/target/
 
 #ignore IntelliJ IDEA project files
 *.iml
