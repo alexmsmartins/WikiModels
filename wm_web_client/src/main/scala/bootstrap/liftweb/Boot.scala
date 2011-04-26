@@ -1,17 +1,18 @@
 package bootstrap.liftweb
 
-import net.liftweb.util._
-import net.liftweb.http._
-import net.liftweb.sitemap._
-import net.liftweb.sitemap.Loc._
+import _root_.net.liftweb.util._
+import _root_.net.liftweb.http._
+import _root_.net.liftweb.sitemap._
+import _root_.net.liftweb.sitemap.Loc._
 import Helpers._
-import net.liftweb.widgets.menu.MenuWidget
-import net.liftweb.widgets.tablesorter.TableSorter
-import net.liftweb.widgets.tree.TreeView
+import _root_.net.liftweb.widgets.menu.MenuWidget
+import _root_.net.liftweb.widgets.tablesorter.TableSorter
+import _root_.net.liftweb.widgets.tree.TreeView
 
-import pt.cnbc.wikimodels.tabs.TabsView
+import _root_.pt.cnbc.wikimodels.tabs.TabsView
 
-import pt.cnbc.wikimodels.snippet._
+import _root_.pt.cnbc.wikimodels.snippet._
+
 
 /**            s
  * A class that's instantiated early and run.  It allows the application
@@ -31,7 +32,7 @@ class Boot {
         ResourceServer.allow {
             case "css" :: "js" :: _ => true
         }
-        
+
       // where to search snippet
       LiftRules.addToPackages("pt.cnbc.wikimodels")
       //Where to search for lift related files. This is the new location
@@ -70,19 +71,23 @@ class Boot {
         //entries for new brows/edit model in the same page
         Menu(Loc("browseEditM", List("modele","indexe"), "Browse/Edit Model", Hidden, loggedIn)) ::
         User.sitemap
-        
+
         // Build SiteMap
         LiftRules.setSiteMap(SiteMap(entries:_*))
 
         // Allows the wysiwyg editor's inside pages (ie, allows the user to "insert a link")
         LiftRules.passNotFoundToChain = true
 
-        // redirects the pages, it is used for the bookmarks
+        // URL rewritess the pages, it is used for the bookmarks
         LiftRules.statelessRewrite.append {
-          case RewriteRequest(ParsePath("model"::model::Nil,_,_,false),_,_) => {
+          case RewriteRequest(ParsePath("model"::model::Nil,"",_,false),_,_) => {
             Console.print("AQQQQQQQQUUUUUUUUIIIIIIIIIIIII E COM MODEL = " + model)
             RewriteResponse(ParsePath( "modele"::"indexe"::Nil,"xhtml",true, false), Map("modelMetaId" -> model), true)
           }
+          case RewriteRequest(ParsePath("model"::model::"export"::Nil,"",_,false),_,_) => {
+            RewriteResponse(ParsePath( "modele"::"export"::Nil,"xhtml",true, false), Map("modelMetaId" -> model), true)
+          }
+
           /* code written by Gonçalo
             case RewriteRequest(ParsePath(List("model",any,"edit"),_,_,_),_,_) =>
                 RewriteResponse("models" :: "editModel.xhtml" :: Nil)
@@ -104,8 +109,16 @@ class Boot {
                 RewriteResponse("models" :: "editModel.xhtml" :: Nil)
                 */
         }
+
+      LiftRules.statelessDispatchTable.append{
+        case Req("model" :: modelMetaId :: "export" :: Nil, "", GetRequest) =>
+        () => {
+          import _root_.pt.cnbc.wikimodels.client.lib.Export
+          Export.asSBMLL2V4(modelMetaId)
+        }
+      }
     }
-        
+
     MenuWidget init;
     TreeView init;
     TableSorter init;
