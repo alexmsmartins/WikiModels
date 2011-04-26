@@ -81,7 +81,7 @@ class Boot {
         LiftRules.statelessRewrite.append {
           case RewriteRequest(ParsePath("model"::model::Nil,_,_,false),_,_) => {
             Console.print("AQQQQQQQQUUUUUUUUIIIIIIIIIIIII E COM MODEL = " + model)
-            RewriteResponse(ParsePath( "modele"::"indexe"::Nil,"xhtml",true, false), Map("modelId" -> model), true)
+            RewriteResponse(ParsePath( "modele"::"indexe"::Nil,"xhtml",true, false), Map("modelMetaId" -> model), true)
           }
           /* code written by Gonçalo
             case RewriteRequest(ParsePath(List("model",any,"edit"),_,_,_),_,_) =>

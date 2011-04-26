@@ -1,15 +1,19 @@
 <lift:surround with="default" at="content">
   <lift:HomePage.logInfo>
-      <div id="login">
-        <h1><lift:HomePage.profile /></h1>
-          <h1><lift:Menu.item name="Logout" /></h1>
-      </div>
+    <div id="login">
+      <h1>
+        <lift:HomePage.profile/>
+      </h1>
+      <h1>
+        <lift:Menu.item name="Logout"/>
+      </h1>
+    </div>
   </lift:HomePage.logInfo>
   <div id="error_msg">
-      <lift:snippet type="msgs">
-          <lift:error_msg></lift:error_msg>
-          <lift:error_class>errorBox</lift:error_class>
-      </lift:snippet>
+    <lift:snippet type="msgs">
+      <lift:error_msg></lift:error_msg>
+      <lift:error_class>errorBox</lift:error_class>
+    </lift:snippet>
   </div>
   <div id='content'>
     Browse and Edit/Create Models Here.
@@ -19,5 +23,14 @@
     <div class="lift:SBMLModelSnip:entireModelInXML">
       <span id="xmlmodel"></span>
     </div>
-</div>
+
+    <div class="ui-widget">
+      <div class="lift:SBMLModelSnip.modelMetaId">
+        <h1>Model with metaId <span id="mMetaId"></span> .</h1>
+      </div>
+      <div class="lift:SBMLModelSnip.modelMetaIdToAttr">
+        <input id="tags" input:val=""/>
+      </div> <!--end of lift:SBMLModelSnip:modelMetaIdToAttr-->
+    </div> <!-- end of ui-widget -->
+  </div> <!-- end of content -->
 </lift:surround>
