@@ -24,6 +24,9 @@ object Export {
     val completeModel:Elem = <sbml xmlns="http://www.sbml.org/sbml/level2/version4" level="2" version="4">{
         model
        }</sbml>
-    Full(XmlResponse(completeModel))
+    Full(AppXmlResponse(completeModel))
+
+    //val arrayByte = completeModel.toString.toArray[Byte]
+    //AppXmlResponse(completeModel)
   }
 }

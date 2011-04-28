@@ -12,6 +12,7 @@ import _root_.net.liftweb.widgets.tree.TreeView
 import _root_.pt.cnbc.wikimodels.tabs.TabsView
 
 import _root_.pt.cnbc.wikimodels.snippet._
+import net.liftweb.common.Full
 
 
 /**            s
@@ -81,11 +82,7 @@ class Boot {
         // URL rewritess the pages, it is used for the bookmarks
         LiftRules.statelessRewrite.append {
           case RewriteRequest(ParsePath("model"::model::Nil,"",_,false),_,_) => {
-            Console.print("AQQQQQQQQUUUUUUUUIIIIIIIIIIIII E COM MODEL = " + model)
             RewriteResponse(ParsePath( "modele"::"indexe"::Nil,"xhtml",true, false), Map("modelMetaId" -> model), true)
-          }
-          case RewriteRequest(ParsePath("model"::model::"export"::Nil,"",_,false),_,_) => {
-            RewriteResponse(ParsePath( "modele"::"export"::Nil,"xhtml",true, false), Map("modelMetaId" -> model), true)
           }
 
           /* code written by Gonçalo
@@ -112,10 +109,12 @@ class Boot {
 
       LiftRules.statelessDispatchTable.append{
         case Req("model" :: modelMetaId :: "export" :: Nil, "", GetRequest) =>
-        () => {
-          import _root_.pt.cnbc.wikimodels.client.lib.Export
-          Export.asSBMLL2V4(modelMetaId)
-        }
+          //() => Full(PlainTextResponse("test"))
+          () => {
+            Console.println("AQQQQQQQQUUUUUUUUIIIIIIIIIIIII E COM MODEL = " + modelMetaId)
+            import _root_.pt.cnbc.wikimodels.client.lib.Export
+            Export.asSBMLL2V4(modelMetaId)
+          }
       }
     }
 
