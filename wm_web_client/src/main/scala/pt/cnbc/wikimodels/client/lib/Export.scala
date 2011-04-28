@@ -26,7 +26,7 @@ object Export {
     val completeModel:Elem = <sbml xmlns="http://www.sbml.org/sbml/level2/version4" level="2" version="4">{
         model
        }</sbml>
-    val arrayByte = completeModel.toString.getBytes("UTF-8")
+    val arrayByte = ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"+completeModel.toString).getBytes("UTF-8")
 
     //Content-type and Content-disposition are both important to force the appearance of the Save as dialog
     Full(InMemoryResponse(arrayByte,
