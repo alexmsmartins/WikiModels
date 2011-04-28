@@ -9,6 +9,7 @@ import _root_.scala.xml._
 
 import _root_.pt.cnbc.wikimodels.rest.client.RestfulAccess
 import _root_.pt.cnbc.wikimodels.snippet.User
+import collection.immutable.List._
 
 /**
  * Created by IntelliJ IDEA.
@@ -19,14 +20,20 @@ import _root_.pt.cnbc.wikimodels.snippet.User
  */
 
 object Export {
+
   def asSBMLL2V4(modelMetaId:String):Box[LiftResponse] = {
     val model = User.getRestful.getRequest("/model/" + modelMetaId )
     val completeModel:Elem = <sbml xmlns="http://www.sbml.org/sbml/level2/version4" level="2" version="4">{
         model
        }</sbml>
-    Full(AppXmlResponse(completeModel))
+    val arrayByte = completeModel.toString.getBytes("UTF-8")
 
-    //val arrayByte = completeModel.toString.toArray[Byte]
-    //AppXmlResponse(completeModel)
+    //Content-type and Content-disposition are both important to force the appearance of the Save as dialog
+    Full(InMemoryResponse(arrayByte,
+                          ("Content-Length", arrayByte.length.toString) ::
+                          ("content-disposition","attachment; filename=" + modelMetaId + ".xml") ::
+                          ("Content-Type", "application/x-download; charset=utf-8") :: Nil,
+                          Nil,
+                          200))
   }
 }
