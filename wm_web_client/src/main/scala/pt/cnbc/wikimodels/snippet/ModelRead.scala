@@ -59,6 +59,13 @@ class ModelRead {
                                     <td title={(fun \ "@name")}><a href={"/model/"+(fun \ "@metaid")}>{(fun \ "@name")}</a></td>
                                     <td title="Author"><a href=""></a></td>
                                     <td title="Last Modification">-</td>
+                                    <td title="Actions">
+                                      <!-- TODO CHECK WHY window.location.href does not work
+                                      <form>
+                                        <input title="Export" type="submit" onclick={"window.location.href='/model/"+ (fun \ "@metaid") +"/export'"}></input>
+                                      </form> -->
+                                      <a href={"/model/"+(fun \ "@metaid")+"/export"}>Export</a>
+                                    </td>
                                 </tr>
                             </tbody>
                         }

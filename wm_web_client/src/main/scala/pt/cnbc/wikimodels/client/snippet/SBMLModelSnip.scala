@@ -19,7 +19,6 @@ import xml.{Elem, NodeSeq, Text}
  * Time: 3:59
  * To change this template use File | Settings | File Templates.
  */
-
 class SBMLModelSnip{
 
   def modelMetaId = "#mMetaId *" #> S.param("modelMetaId").openOr("<<handling this is a TODO>>")
