@@ -21,6 +21,8 @@ class LiftProject(info: ProjectInfo) extends DefaultWebProject(info) {
 
     //chenges port where jetty listens to
     override val jettyPort = 9999
+    //Stop file change detection (While using JRebel)
+    override def scanDirectories = Nil
   }
 
 

@@ -1,9 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title></title>
-</head>
-<body>
 <lift:surround with="default" at="content">
   <lift:HomePage.logInfo>
     <div id="login">
@@ -23,14 +17,10 @@
   </div>
   <div id="content">
 
-    <p>
-      This is the file upload sample page. You choose a file
-      to upload and the application will tell you the file name, the mime type,
-      the number of bytes in the file and the MD5 checksum.
-    </p>
+
 
     <lift:snippet type="misc:upload" form="post" multipart="true">
-      <choose:post>
+      <choose:postSuccess>
         <p>
           File name:
           <ul:file_name></ul:file_name>
@@ -48,15 +38,16 @@
       </choose:post>
 
       <choose:get>
+            <p>
+This is where a SBMLl2v4 can be uploaded to WikiModels.
+Note that, if there isn't any metaid in the file or the metaid is already used in wikimodels a new one will be issued.
+          </p>
         Select a file to upload:
         <ul:file_upload></ul:file_upload>
         <br/>
         <input type="submit" value="Upload File"/>
       </choose:get>
-
     </lift:snippet>
   </div>
 
 </lift:surround>
-</body>
-</html>
