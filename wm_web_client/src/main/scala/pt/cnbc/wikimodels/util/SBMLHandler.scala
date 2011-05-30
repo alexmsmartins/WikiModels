@@ -1,8 +1,9 @@
 package pt.cnbc.wikimodels.util
 
-import scala.None
 import net.liftweb.common.{Failure, Full, Empty, Box}
 import xml.{Node, XML, Elem}
+import scala.util.matching._
+import scala.None
 
 /**
  * Created by IntelliJ IDEA.
@@ -31,7 +32,7 @@ object SBMLDocHandler {
       val <sbml>{ret}</sbml> = XML.loadString( removeXMLHeader( xmlDoc  ) )
       Full(ret.asInstanceOf[Elem])
     } catch {
-      case _ => Failure("Badly formed SBML level 2 version 4")
+      case _ => Failure("Badly formed xml document")
     }
   }
 
@@ -41,26 +42,14 @@ object SBMLDocHandler {
   private def removeXMLHeader(str:String):String = {
     var tempStr = str
     //remove first line until content becomes parsable xml
-    while ("^<[^!?]".r( tempStr ) == None){
+    while ( "^<[^!?]".r.findFirstMatchIn(tempStr) == None){
       tempStr = stripFirstLine(tempStr)
     }
+    tempStr
   }
 
 
   private def stripFirstLine(str:String):String  =    {
-    split(str, "\n").tail.mkString("\n")
+    str.split("\n").toList.tail.mkString("\n")
   }
-}
-
-object XMLHandler{
-  def BoxNull(elem:Elem|Node) = {
-    case scala.xml.Null => Empty
-    case null => Empty
-    case _ => Full(elem)
-  }
-
- def BoxNull(box:Box[scala.xml.Node]) = {
-    case Full(scala.xml.Null) => Empty
-    case _ => box
- }
 }

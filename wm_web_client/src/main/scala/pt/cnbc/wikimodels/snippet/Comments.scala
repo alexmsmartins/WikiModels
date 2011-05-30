@@ -72,7 +72,7 @@ class Comments {
                                     {commentCreated.theSeq}</comments>
                             }
                         }
-                        XML.save("comment.xml", finalComment.elements.next)
+                        XML.save("comment.xml", finalComment.iterator.next)
                     }
                 }
                 bind("createComment", xhtml,
@@ -123,7 +123,7 @@ class Comments {
                                     {commentCreated.theSeq}</comments>
                             }
                         }
-                        XML.save("comment.xml", finalComment.elements.next)
+                        XML.save("comment.xml", finalComment.iterator.next)
                     }
                 }
                 bind("createComment", xhtml,

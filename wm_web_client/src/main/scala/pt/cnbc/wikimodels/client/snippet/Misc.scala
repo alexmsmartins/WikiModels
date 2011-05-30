@@ -37,7 +37,7 @@ import _root_.java.util.Locale
 
 import _root_.pt.cnbc.wikimodels.snippet.{User => Usr}
 import _root_.pt.cnbc.wikimodels.util.SBMLDocHandler._
-import xml.{NodeBuffer, NodeSeq, Text, Group}
+import xml._
 
 class Misc {
   private object selectedUser extends RequestVar[Box[User]](Empty)
@@ -130,39 +130,44 @@ class Misc {
    * Bind the appropriate XHTML to the form
    */
   def upload(xhtml: Group): NodeSeq =
-    if (S.get_?) uploadDialogue(xhtml)
+    if (S.get_?) {
+      Console.print("jgdfsghwqefjiofqeuhqefwiohiu")
+      uploadDialogue(xhtml, Empty)
+    }
     else {
-      Console.print(" XML of the Model to import:/n" + scala.xml.XML.loadString(theUpload.toString))
-      val modelBox = extractModelTagfromSBML(theUpload.toString)
-      modelBox match {
-        case Full(modelTag) => {
-          Usr.re.postRequest("/model", modelTag)
-          if (Usr.re.getStatusCode == 200) {
-            bind("ul", chooseTemplate("choose", "post", xhtml),
-              "file_name" -> theUpload.is.map(v => Text(v.fileName)),
-              "mime_type" -> theUpload.is.map(v => Box.legacyNullTest(v.mimeType).map(Text).openOr(Text("No mime type supplied"))), // Text(v.mimeType)),
-              "length" -> theUpload.is.map(v => Text(v.file.length.toString)),
-              "md5" -> theUpload.is.map(v => Text(hexEncode(md5(v.file))))
-            );
-          } else {
-            {
-              <p class="error">Form to import SBML should appear here again with erro messages.</p>
-                  <p class="error">Saving the model to the server did not succed..</p>
-              uploadDialogue(xhtml)
+      val fileBox = theUpload.is.map(v => v.file)
+      fileBox match {
+        case Full(file) => {
+          Console.println("File content is " + new String(file, "UTF-8"))
+          val modelBox = extractModelTagfromSBML(new String(file, "UTF-8"))
+          modelBox match {
+            case Full(model) => {
+              Usr.re.putRequest("/model/", model)
+              Usr.re.getStatusCode match {
+                case 200 => {
+                  Console.println("Creating the model in the server succeded")
+                  bind("ul", chooseTemplate("choose", "post", xhtml),
+                    "file_name" -> theUpload.is.map(v => Text(v.fileName)),
+                    "mime_type" -> theUpload.is.map(v => Box.legacyNullTest(v.mimeType).map(Text).openOr(Text("No mime type supplied"))), // Text(v.mimeType)),
+                    "length" -> theUpload.is.map(v => Text(v.file.length.toString)),
+                    "md5" -> theUpload.is.map(v => Text(hexEncode(md5(v.file))))
+                  );
+                }
+                case _ => {
+                  Console.println("Creating the model in the server failed with status code "+ Usr.re.getStatusCode)
+                  uploadDialogue(xhtml, Failure("Importing the model to the knowledgebase wasn't possible. The statuscode was " + Usr.re.getStatusCode))
+                }
+              }
             }
+            case x => uploadDialogue(xhtml, x)
           }
         }
-        //TODO ADD SPECIFIC EXCEPTIONS
-        case _ => {
-          <p class="error">Form to import SBML should appear here again with erro messages.</p>
-          <p class="error">Saving the model threw a strange exception..</p>
-          uploadDialogue(xhtml)
-        }
+        case _ => uploadDialogue(xhtml, Failure("THERE IS NOT FUCKING FILE ASSHOLE"))
       }
     }
 
 
-  private def uploadDialogue(xhtml:Group):  NodeSeq  = {
+  private def uploadDialogue(xhtml:Group, error:Box[Elem]):  NodeSeq  = {
     bind("ul", chooseTemplate("choose", "get", xhtml),
                       "file_upload" -> fileUpload(ul => theUpload(Full(ul))))
   }

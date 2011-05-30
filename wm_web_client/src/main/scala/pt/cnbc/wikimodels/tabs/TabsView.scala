@@ -43,7 +43,7 @@ class TabsView {
       <link rel="stylesheet" href={"/" + LiftRules.resourceServerPath + "/tabs/css/ui-lightness/jquery-ui-1.7.2.custom.css"} type="text/css"/>
       <script type="text/javascript" src={"/" + LiftRules.resourceServerPath + "/tabs/js/jquery-ui-1.7.2.custom.min.js"}/>
        <script type="text/javascript" charset="utf-8">{
-         OnLoad(JqId(id) >> new JsExp with JsMember {
+         OnLoad(JqId(id) ~> new JsExp with JsMember {
            def toJsCmd = "tabs(" + jsObj.toJsCmd + ")"
          }) toJsCmd
        }

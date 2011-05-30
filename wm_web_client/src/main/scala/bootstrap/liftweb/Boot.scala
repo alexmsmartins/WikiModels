@@ -112,7 +112,6 @@ class Boot {
         case Req("model" :: modelMetaId :: "export" :: Nil, "", GetRequest) =>
           //() => Full(PlainTextResponse("test"))
           () => {
-            Console.println("AQQQQQQQQUUUUUUUUIIIIIIIIIIIII E COM MODEL = " + modelMetaId)
             import _root_.pt.cnbc.wikimodels.client.lib.Export
             Export.asSBMLL2V4(modelMetaId)
           }
