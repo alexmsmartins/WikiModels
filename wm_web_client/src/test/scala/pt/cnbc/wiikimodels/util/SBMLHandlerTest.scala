@@ -1,9 +1,9 @@
-package pt.cnbc.wikimodels.package
+package pt.cnbc.wikimodels.util
 
 import org.junit._
 import Assert._
 
-class ExampleTest {
+class SBMLHandlerTest {
 
   @Before
   def setUp: Unit = {
@@ -15,8 +15,7 @@ class ExampleTest {
 
   @Test
   def example = {
-    assertTrue(true)
+    //
   }
 
 }
-

@@ -20,7 +20,7 @@
 
 
     <lift:snippet type="misc:upload" form="post" multipart="true">
-      <choose:postSuccess>
+      <choose:post>
         <p>
           File name:
           <ul:file_name></ul:file_name>
@@ -42,6 +42,7 @@
 This is where a SBMLl2v4 can be uploaded to WikiModels.
 Note that, if there isn't any metaid in the file or the metaid is already used in wikimodels a new one will be issued.
           </p>
+        <!--<span class="lift:Msg?id=file_upload&errorClass=error">error</span>-->
         Select a file to upload:
         <ul:file_upload></ul:file_upload>
         <br/>

@@ -160,7 +160,6 @@ class RestfulAccess(val host: String,
     lastStatusLine.getReasonPhrase
   }
 
-
   protected def setRequestEntity(elem: Elem, method: HttpEntityEnclosingRequest) = {
     if (elem != null) {
       val ent = new StringEntity(elem.toString)

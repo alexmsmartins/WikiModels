@@ -30,8 +30,14 @@ import common._
 import util._
 import Helpers._
 
-import _root_.scala.xml.{NodeSeq, Text, Group}
+import net.liftweb.common.{Box,Full,Empty,Failure,ParamFailure}
+
+
 import _root_.java.util.Locale
+
+import _root_.pt.cnbc.wikimodels.snippet.{User => Usr}
+import _root_.pt.cnbc.wikimodels.util.SBMLDocHandler._
+import xml.{NodeBuffer, NodeSeq, Text, Group}
 
 class Misc {
   private object selectedUser extends RequestVar[Box[User]](Empty)
@@ -124,16 +130,42 @@ class Misc {
    * Bind the appropriate XHTML to the form
    */
   def upload(xhtml: Group): NodeSeq =
-    if (S.get_?) bind("ul", chooseTemplate("choose", "get", xhtml),
-                      "file_upload" -> fileUpload(ul => theUpload(Full(ul))))
-    else{
-      bind("ul", chooseTemplate("choose", "post_Success", xhtml),
+    if (S.get_?) uploadDialogue(xhtml)
+    else {
+      Console.print(" XML of the Model to import:/n" + scala.xml.XML.loadString(theUpload.toString))
+      val modelBox = extractModelTagfromSBML(theUpload.toString)
+      modelBox match {
+        case Full(modelTag) => {
+          Usr.re.postRequest("/model", modelTag)
+          if (Usr.re.getStatusCode == 200) {
+            bind("ul", chooseTemplate("choose", "post", xhtml),
               "file_name" -> theUpload.is.map(v => Text(v.fileName)),
               "mime_type" -> theUpload.is.map(v => Box.legacyNullTest(v.mimeType).map(Text).openOr(Text("No mime type supplied"))), // Text(v.mimeType)),
               "length" -> theUpload.is.map(v => Text(v.file.length.toString)),
               "md5" -> theUpload.is.map(v => Text(hexEncode(md5(v.file))))
-        );
+            );
+          } else {
+            {
+              <p class="error">Form to import SBML should appear here again with erro messages.</p>
+                  <p class="error">Saving the model to the server did not succed..</p>
+              uploadDialogue(xhtml)
+            }
+          }
+        }
+        //TODO ADD SPECIFIC EXCEPTIONS
+        case _ => {
+          <p class="error">Form to import SBML should appear here again with erro messages.</p>
+          <p class="error">Saving the model threw a strange exception..</p>
+          uploadDialogue(xhtml)
+        }
+      }
     }
+
+
+  private def uploadDialogue(xhtml:Group):  NodeSeq  = {
+    bind("ul", chooseTemplate("choose", "get", xhtml),
+                      "file_upload" -> fileUpload(ul => theUpload(Full(ul))))
+  }
 
 
   def lang = {
