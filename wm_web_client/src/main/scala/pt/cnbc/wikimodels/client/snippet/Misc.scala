@@ -38,6 +38,7 @@ import _root_.java.util.Locale
 import _root_.pt.cnbc.wikimodels.snippet.{User => Usr}
 import _root_.pt.cnbc.wikimodels.util.SBMLDocHandler._
 import xml._
+import org.junit.runners.Parameterized.Parameters
 
 class Misc {
   private object selectedUser extends RequestVar[Box[User]](Empty)
@@ -138,10 +139,12 @@ class Misc {
       val fileBox = theUpload.is.map(v => v.file)
       fileBox match {
         case Full(file) => {
-          Console.println("File content is " + new String(file, "UTF-8"))
-          val modelBox = extractModelTagfromSBML(new String(file, "UTF-8"))
+          Console.println("imported File content was obtained")
+          Console.println(new String(file,"UTF-8"))
+          val modelBox:Box[Elem] = extractModelTagfromSBML(new String(file, "UTF-8"))
           modelBox match {
             case Full(model) => {
+              Console.println("Model XML tag was extracted")
               Usr.re.putRequest("/model/", model)
               Usr.re.getStatusCode match {
                 case 200 => {
@@ -162,13 +165,19 @@ class Misc {
             case x => uploadDialogue(xhtml, x)
           }
         }
-        case _ => uploadDialogue(xhtml, Failure("THERE IS NOT FUCKING FILE ASSHOLE"))
+        case _ => uploadDialogue(xhtml, Failure("No such file was located."))
       }
     }
 
 
   private def uploadDialogue(xhtml:Group, error:Box[Elem]):  NodeSeq  = {
+    //variable error message makes it possible for an implicit conversion from String -> NodeSeq to BoxBindParameter
+    val errorMessage:Text = error match {
+                        case Failure(msg,_,_) => Text(msg)
+                        case _ => Text("")
+                      }
     bind("ul", chooseTemplate("choose", "get", xhtml),
+                      "error_message" -> errorMessage,
                       "file_upload" -> fileUpload(ul => theUpload(Full(ul))))
   }
 

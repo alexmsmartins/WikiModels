@@ -29,20 +29,35 @@ object SBMLDocHandler {
   def extractModelTagfromSBML(xmlDoc:String):Box[Elem] = {
     try{
       //the next expression matches <sbml> even if it has atributes. Scala 2.8.1 aND 2.9
-      val <sbml>{ret}</sbml> = XML.loadString( removeXMLHeader( xmlDoc  ) )
-      Full(ret.asInstanceOf[Elem])
+      val model = XML.loadString( removeXMLHeader( xmlDoc  ) )
+      val Elem(_, roottag, _, _, _*) = model
+      Console.println("XML.loadString return soemthing of type " + model.getClass +
+          " with " + roottag + " has the root element" )
+      model match {
+        case <sbml>{xml}</sbml> => {
+          Full(xml.asInstanceOf[Elem])
+        }
+        case xml =>{
+          Console.println("Invalid sbml file: <sbml> is not the root tag. the xml is " + xml)
+          Failure("Invalid sbml file: <sbml> is not the root tag.")
+        }
+      }
     } catch {
-      case _ => Failure("Badly formed xml document")
+      case e =>{
+        Console.println(e.printStackTrace())
+        new Failure("Badly formed xml document", Full(e), Empty)
+      }
     }
   }
 
   /**
    * Removes the lines before the first xml tag since they cant be parsed by <code>scala.xml.XML</code> classes
    */
-  private def removeXMLHeader(str:String):String = {
+  def removeXMLHeader(str:String):String = {
     var tempStr = str
     //remove first line until content becomes parsable xml
     while ( "^<[^!?]".r.findFirstMatchIn(tempStr) == None){
+      Console.println("""Removing line """" + tempStr.split("\n")(0) + """" From file""")
       tempStr = stripFirstLine(tempStr)
     }
     tempStr
