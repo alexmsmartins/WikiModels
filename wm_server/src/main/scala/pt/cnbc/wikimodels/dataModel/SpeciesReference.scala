@@ -50,7 +50,6 @@ case class SpeciesReference() extends Element{
     this.species = species
     this.stoichiometry = stoichiometry
     this.stoichiometryMath = stoichiometryMath.toString
-    (new SBMLHandler).idExistsAndIsValid(this.id)
     if(this.stoichiometry != null)
       if(this.stoichiometry.compareTo(0) <= 0 ) throw new BadFormatException("Stoichiometry in SpeciesReference should be greater than 0.")
     if(this.stoichiometry == null && (this.stoichiometryMath == null || this.stoichiometryMath.trim == ""))
