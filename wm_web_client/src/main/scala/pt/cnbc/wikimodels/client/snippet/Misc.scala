@@ -145,7 +145,7 @@ class Misc {
           modelBox match {
             case Full(model) => {
               Console.println("Model XML tag was extracted")
-              Usr.re.putRequest("/model/", model)
+              Usr.re.postRequest("/model/", model)
               Usr.re.getStatusCode match {
                 case 200 => {
                   Console.println("Creating the model in the server succeded")

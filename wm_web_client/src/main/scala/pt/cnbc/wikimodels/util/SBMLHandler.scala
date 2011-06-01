@@ -29,17 +29,16 @@ object SBMLDocHandler {
   def extractModelTagfromSBML(xmlDoc:String):Box[Elem] = {
     try{
       //the next expression matches <sbml> even if it has atributes. Scala 2.8.1 aND 2.9
-      val model = XML.loadString( removeXMLHeader( xmlDoc  ) )
-      val Elem(_, roottag, _, _, _*) = model
-      Console.println("XML.loadString return soemthing of type " + model.getClass +
-          " with " + roottag + " has the root element" )
-      model match {
-        case <sbml>{xml}</sbml> => {
-          Full(xml.asInstanceOf[Elem])
+      val sbml:Elem = XML.loadString(removeXMLHeader( xmlDoc  ))
+      val sbml2 = xml.Utility.trim(sbml)
+      Console.println("XML.loadString return soemthing of type " + sbml.getClass )
+      sbml2 match {
+        case <sbml>{y}</sbml> => {
+          Full(y.asInstanceOf[Elem])
         }
-        case xml =>{
-          Console.println("Invalid sbml file: <sbml> is not the root tag. the xml is " + xml)
-          Failure("Invalid sbml file: <sbml> is not the root tag.")
+        case y =>{
+          Console.println("Invalid sbml file: <sbml> is not the root tag. the xml is " + sbml)
+          Failure("Invalid sbml file: <sbml> is not the root tag.\n The content is " + sbml)
         }
       }
     } catch {
