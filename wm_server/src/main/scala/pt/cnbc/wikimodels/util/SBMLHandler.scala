@@ -11,15 +11,9 @@ package pt.cnbc.wikimodels.util
 import org.sbml.libsbml.SBMLDocument
 import org.sbml.libsbml.SBMLReader
 
-import scala.xml.Elem
-import scala.xml.Node
-import scala.xml.NodeSeq
-import scala.xml.TopScope
-import scala.xml.UnprefixedAttribute
-import scala.xml.XML
-
 import pt.cnbc.wikimodels.exceptions.BadFormatException
 import javax.resource.spi.SecurityException
+import xml._
 
 object SBMLHandler {
   var LibSBMLLoaded = false
@@ -95,8 +89,12 @@ class SBMLHandler {
     wrapHTML(messageContent, "message")
   }
 
-
-  def wrapHTML(content: String, labelWrapper: String) =
+  /**
+   * Produces the XML of the <notes section of any SBase
+   * @returns a <notes> sections with the content of notesContent
+   * embebed inside or null if there is no content to embeb
+   */
+  private def wrapHTML(content: String, labelWrapper: String) =
     if (content != null && content.trim != "") {
       XML.loadString("<" + labelWrapper + ">" +
           content +
@@ -110,10 +108,8 @@ class SBMLHandler {
       ns.map(i => {
         new Elem(null,
           i.label,
-          new UnprefixedAttribute("xmlns",
-            namespace,
-            scala.xml.Null),
-          TopScope,
+          scala.xml.Null,
+          NamespaceBinding(null, namespace, TopScope ),
           i.child: _*)
       }
       ).filter(_.label != "#PCDATA")

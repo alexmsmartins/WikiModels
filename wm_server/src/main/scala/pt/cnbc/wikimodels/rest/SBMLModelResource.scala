@@ -47,7 +47,7 @@ class SBMLModelResource extends RESTResource {
                 val sbmlModel = dao.deepLoadSBMLModel(sbmlModelResource)
                 if(sbmlModel != null &&
                    sbmlModel.metaid == sbmlModelResource){
-                    sbmlModel.toXML.toString
+                   sbmlModel.toXML.toString
                 } else {
                     throw new WebApplicationException(Response.Status.NOT_FOUND)
                 }
@@ -88,7 +88,7 @@ class SBMLModelResource extends RESTResource {
             } catch {
                 case e:Exception => {
                         e.printStackTrace
-                        throw throw new WebApplicationException(
+                        throw new WebApplicationException(
                             Response.Status.BAD_REQUEST)
                     }
             }
@@ -98,6 +98,7 @@ class SBMLModelResource extends RESTResource {
                 val uri:URI = uriInfo.getAbsolutePathBuilder()
                 .path(modelMetaId)
                 .build();
+                Console.println("POST return URL is: "+uri)
                 Response.created( uri ).build()
             }
         } else {

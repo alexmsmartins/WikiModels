@@ -36,7 +36,6 @@ class AddNotesTagRuleTest {
         Console.println("html before transformation -> " + html.toString )
         Console.println("html transformation -> " + transf.toString )
         Console.println("anticipated notes -> " + finalhtml.toString )
-        //TODO find out why this test does not work without using toString
-        assertTrue( transf.toString == finalhtml.toString )
+        assertTrue( transf == finalhtml )
     }
 }
