@@ -111,11 +111,13 @@ class RestfulAccess(val host: String,
     lastStatusLine = response.getStatusLine
     log.debug(response.getStatusLine())
     log.debug(response.toString)
-    val is = response.getEntity.getContent
-
-    val uriFinal = new URI(response.getFirstHeader("Location").getValue)
-    log.debug("======================")
-    uriFinal
+    // If entity was CREATED(201)
+    if (lastStatusLine.getStatusCode == 201) {
+      val is = response.getEntity.getContent
+      val uriFinal = new URI(response.getFirstHeader("Location").getValue)
+      log.debug("======================")
+      uriFinal
+    } else null
   }
 
 

@@ -1,0 +1,318 @@
+<lift:surround with="default" at="content">
+
+    <lift:HomePage.logInfo>
+      <div id="login">
+        <h1>
+          <lift:HomePage.profile/>
+        </h1>
+        <h1>
+          <lift:Menu.item name="Logout"/>
+        </h1>
+      </div>
+    </lift:HomePage.logInfo>
+    <div id="error_msg">
+      <lift:snippet type="msgs">
+        <lift:error_msg></lift:error_msg>
+        <lift:error_class>errorBox</lift:error_class>
+      </lift:snippet>
+    </div>
+
+    <head>
+        <title>Conforming XHTML 1.0 Transitional Template</title>
+
+        <!-- JQuery and JQuery-UI -->
+
+        <link rel="stylesheet" href="js/jquery-ui-1.8.11/development-bundle/themes/cupertino/jquery.ui.all.css" type="text/css" media="all" />
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js" type="text/javascript"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/jquery-ui.js" type="text/javascript"></script>
+        <script src="http://jquery-ui.googlecode.com/svn/tags/latest/external/jquery.bgiframe-2.1.2.js" type="text/javascript"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/i18n/jquery-ui-i18n.js" type="text/javascript"></script>
+
+        <!-- Simple Tree Menu - Author: Dynamic Drive -->
+        <script type="text/javascript" src="js/simpletreemenu/simpletreemenu.js">
+
+    /***********************************************
+    * Simple Tree Menu- © Dynamic Drive DHTML code library (www.dynamicdrive.com)
+    * This notice MUST stay intact for legal use
+    * Visit Dynamic Drive at http://www.dynamicdrive.com/ for full source code
+    ***********************************************/
+
+        </script>
+
+        <link rel="stylesheet" type="text/css" href="js/simpletreemenu/simpletree.css" />
+        <!-- Simple Tree Menu - Author: Dynamic Drive -->
+
+        <style type="text/css">
+
+            #jq-books{
+                width:200px;
+                float:right;
+                margin-right:0
+            }
+            #jq-books li{
+                line-height:1.25em;
+                margin:1em 0 1.8em;
+                clear:left
+            }
+            #home-content-wrapper #jq-books a.jq-bookImg{
+                float:left;
+                margin-right:10px;
+                width:55px;
+                height:70px}
+            #jq-books h3{
+                margin:0 0 .2em 0
+            }
+            #home-content-wrapper #jq-books h3 a{
+                font-size:1em;
+                color:black;}
+            #home-content-wrapper #jq-books a.jq-buyNow{
+                font-size:1em;
+                color:white;
+                display:block;
+                background:url(http://static.jquery.com/files/rocker/images/btn_blueSheen.gif) 50% repeat-x;
+                text-decoration:none;
+                color:#fff;font-weight:bold;
+                padding:.2em .8em;float:left;
+                margin-top:.2em;
+            }
+        </style>
+
+
+        <script type="text/javascript">
+             //<![CDATA[
+             jQuery(document).ready(function(){
+                 $('.accordion .head').click(function() {
+                     $(this).next().toggle();
+                     return false;
+                 }).next().hide();
+             });
+             //]]>
+        </script>
+
+        <!-- Wikimodels specific js and css -->
+
+        <link rel="stylesheet" type="text/css" href="css/base-wm.css" />
+        <link rel="stylesheet" type="text/css" href="css/browse_create.css" />
+
+
+              <script src="../classpath/js/fckeditor/fckeditor.js" type="text/javascript"></script>
+
+        <!--<script src="../classpath/js/wymeditor/wymeditor/jquery.wymeditor.pack.js" type="text/javascript" />-->
+        <script type="text/javascript">
+            window.onload = function() {
+                var oFCKeditor01 = new FCKeditor( 'descriptionArea' );
+                oFCKeditor01.BasePath = '../classpath/js/fckeditor/' ;
+                oFCKeditor01.ToolbarSet = 'MyTool' ;
+                /*oFCKeditor01.ToolbarSets["Default"] = [
+                ['Cut','Copy','Paste','PasteText','PasteWord'],['Undo','Redo','-','Find','Replace'],
+                ['Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'],
+                ['OrderedList','UnorderedList','-','Outdent','Indent','Blockquote'],
+                ['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],['Link','Unlink'],
+                ['Image','Table','Rule','SpecialChar'],['FontSize','TextColor','BGColor'],['Source','FitWindow']
+                ] ;*/
+                oFCKeditor01.ReplaceTextarea();
+            };
+        </script>
+
+    </head>
+
+    <div id="content">
+
+      <div id="tab-1">
+
+          <h4><span id="required_field">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* required fields</span></h4><br />
+          <lift:ModelTree.render />
+          <ul id="model_tree" class="treeview-gray">
+              <li><span><h3>Model ID: <span id="required_field">*</span><div id="messages"></div></h3><br /></span></li>
+              <li><h3>Name of the model:
+                      <createDescription:name>
+                          <text:model_id/>
+              </createDescription:name></h3><br /></li>
+              <li><span><h3>Description of the model:</h3></span>
+                  <br />
+                  <ul>
+                      <li><span><createDescription:description /></span><br /></li>
+                  </ul>
+              </li>
+          </ul>
+      </div>
+
+
+
+        <div id="container">
+            <h1>Model browsing prototype</h1>
+            <div id="left">
+
+                <div class="tree">
+
+                    <a href="javascript:ddtreemenu.flatten('treemenu1', 'expand')">Expand All</a> | <a href="javascript:ddtreemenu.flatten('treemenu1', 'contact')">Contact All</a>
+
+                    <ul id="treemenu1" class="treeview">
+                        <li>Model 1 <input type="checkbox"/>
+                            <ul>
+                                <li>Sub Item 1.1 <input type="checkbox"/></li>
+                                <li>Compartments<input type="checkbox"/>
+                                    <ul rel="open">
+                                        <li id="tree_c1">Compartment 1 <input type="checkbox"/>
+                                            <ul>
+                                                <li id="tree_c1_s1">Species 1 <input type="checkbox"/></li>
+                                                <li id="tree_c1_s2">Species 2 <input type="checkbox"/></li>
+                                            </ul>
+                                        </li>
+                                        <li id="tree_c2">Compartment 2 <input type="checkbox"/></li>
+                                        <li id="tree_c3">Compartment 3 <input type="checkbox"/>
+                                            <ul>
+                                                <li id="tree_c3_s3">Species 3 <input type="checkbox"/></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li> <!-- end of Compartments -->
+                                <li>Species <input type="checkbox"/>
+                                    <ul>
+                                        <li id="tree_s1">Species 1 <input type="checkbox"/></li>
+                                        <li id="tree_s2">Species 2 <input type="checkbox"/></li>
+                                        <li id="tree_s3">Species 3 <input type="checkbox"/></li>
+                                    </ul>
+                                </li> <!-- end of Species-->
+                            </ul>
+                        </li> <!-- end of Model -->
+                    </ul>
+
+                    <script type="text/javascript">
+
+                    //ddtreemenu.createTree(treeid, enablepersist, opt_persist_in_days (default is 1))
+
+                    ddtreemenu.createTree("treemenu1", true)
+
+                    </script>
+                </div>
+
+            </div><!-- left -->
+            <div id="right">
+                <div class="demo cupertino">
+                    <div id="accordion1" class="accordion ui-accordion ui-widget ui-helper-reset ui-accordion-icons">
+                        <h3 id="accord_c" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top"><a href="#accord_c" >Compartments  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Add Compartment</button></a></h3>
+                        <div class="toggle_container">
+                            <div id="accordion2" class="block">
+                                <h3 id="accord_c_c1" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top"><a href="#accord_c_c1">
+                                        Compartment 1
+                                        <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Edit</button>   <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Delete</button>
+                                        <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Add Species</button></a></h3>
+                                <div class="toggle_container">
+                                    <div class="block">
+                                        <p>
+                                            Mauris mauris ante, blandit et, ultrices a, suscipit eget, quam. Integer
+                                            ut neque. Vivamus nisi metus, molestie vel, gravida in, condimentum sit
+                                            amet, nunc. Nam a nibh. Donec suscipit eros. Nam mi. Proin viverra leo ut
+                                            odio. Curabitur malesuada. Vestibulum a velit eu ante scelerisque vulputate.
+                                        </p>
+                                    </div>
+                                </div>
+                                <h3 id="accord_c_c2" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top"><a href="#accord_c_c2">Compartment 2   <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Edit</button>   <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Delete</button>   <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Add Species</button></a></h3>
+                                <div class="toggle_container">
+                                    <div class="block">
+                                        <p>
+                                            Sed non urna. Donec et ante. Phasellus eu ligula. Vestibulum sit amet
+                                            purus. Vivamus hendrerit, dolor at aliquet laoreet, mauris turpis porttitor
+                                            velit, faucibus interdum tellus libero ac justo. Vivamus non quam. In
+                                            suscipit faucibus urna.
+                                        </p>
+                                    </div>
+                                </div>
+                                <h3 id="accord_c_c3" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top"><a href="#accord_c_c3">Compartment 3   <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Edit</button>   <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Delete</button>   <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Add Species</button></a></h3>
+                                <div class="toggle_container">
+                                    <div  class="block">
+                                        <p>
+                                            Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis.
+                                            Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero
+                                            ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis
+                                            lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui.
+                                        </p>
+                                        <ul>
+                                            <li>List item one</li>
+                                            <li>List item two</li>
+                                            <li>List item three</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <h3 id="accord_s" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top"><a href="#accord_s">Species   <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Add Species</button></a></h3>
+                        <div  class="toggle_container">
+                            <div id="accordion3" class="block">
+                                <h3 id="accord_s_s1" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top"><a href="#accord_s_s1">Species 1   <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Edit</button>   <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Delete</button></a></h3>
+                                <div class="toggle_container">
+                                    <div class="block">
+                                        <p>
+                                            Mauris mauris ante, blandit et, ultrices a, suscipit eget, quam. Integer
+                                            ut neque. Vivamus nisi metus, molestie vel, gravida in, condimentum sit
+                                            amet, nunc. Nam a nibh. Donec suscipit eros. Nam mi. Proin viverra leo ut
+                                            odio. Curabitur malesuada. Vestibulum a velit eu ante scelerisque vulputate.
+                                        </p>
+                                    </div>
+                                </div>
+                                <h3 id="accord_s_s2" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top"><a href="#accord_s_s2">Species 2   <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Edit</button>   <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Delete</button></a></h3>
+                                <div class="toggle_container">
+                                    <div class="block">
+                                        <p>
+                                            Sed non urna. Donec et ante. Phasellus eu ligula. Vestibulum sit amet
+                                            purus. Vivamus hendrerit, dolor at aliquet laoreet, mauris turpis porttitor
+                                            velit, faucibus interdum tellus libero ac justo. Vivamus non quam. In
+                                            suscipit faucibus urna.
+                                        </p>
+                                    </div>
+                                </div>
+                                <h3 id="accord_s_s3" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top"><a href="#accord_s_s3">Species 3   <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Edit</button>   <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Delete</button></a></h3>
+                                <div class="toggle_container">
+                                    <div class="block">
+                                        <p>
+                                            Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis.
+                                            Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero
+                                            ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis
+                                            lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui.
+                                        </p>
+                                        <ul>
+                                            <li>List item one</li>
+                                            <li>List item two</li>
+                                            <li>List item three</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <script type="text/javascript" >
+          jQuery(document).ready(function(){
+                  //Hide (Collapse) the toggle containers on load
+                  $(".toggle_container").hide();
+
+                  //Switch the "Open" and "Close" state per click then slide up/down (depending on open/close state)
+                  $("h3.trigger").click(function(){
+                          $(this).toggleClass("active").next().slideToggle("slow");
+                          return false; //Prevent the browser jump to the link anchor
+                  });
+          });
+                    </script>
+                </div><!-- End demo -->
+
+            </div><!-- right -->
+            <div class="clear"></div>
+        </div><!-- container -->
+
+
+        <div style="display: none;" class="demo-description">
+            <p>
+                Click headers to expand/collapse content that is broken into logical sections, much like tabs.
+                Optionally, toggle sections open/closed on mouseover.
+            </p>
+            <p>
+                The underlying HTML markup is a series of headers (H3 tags) and content divs so the content is
+                usable without JavaScript.
+            </p>
+        </div><!-- End demo-description -->
+
+  </div>
+
+</lift:surround>

@@ -53,7 +53,8 @@ class Boot {
                            Menu(Loc("faq", List("faq"), "FAQ"))) ::
         Menu(Loc("models", List(""), "Models"),
              Menu(Loc("createM", List("models","create"), "Create Model", loggedIn)),
-             Menu(Loc("importM", List("models","import"), "Import Model", loggedIn)),
+             Menu(Loc("createEditM", List("models","createEdit"), "[NEW]Create Model", loggedIn)),
+             Menu(Loc("importM", List("models","import"), "[NEW]Import Model", loggedIn)),
              Menu(Loc("browseM", List("models","index"), "Browse Models", loggedIn)),
              Menu(Loc("browseMm", List("models","browse.xhtml"), "Browse Model", Hidden, loggedIn)),
              Menu(Loc("editM", List("models","editModel.xhtml"), "Edit Model", Hidden, loggedIn)),

@@ -103,7 +103,7 @@ class SBMLHandler {
       null.asInstanceOf[Elem]
     }
 
-  def addNamespaceToXML(ns: NodeSeq, namespace: String): NodeSeq = {
+  private def addNamespaceToXML(ns: NodeSeq, namespace: String): NodeSeq = {
     if (ns != Nil)
       ns.map(i => {
         new Elem(null,
