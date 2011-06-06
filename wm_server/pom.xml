@@ -43,11 +43,11 @@
             <url>http://download.java.net/maven/1</url>
             <layout>legacy</layout>
         </repository>
-        <repository>
+        <!--<repository>
             <id>localMavenRepo</id>
             <name>localMavenRepo</name>
             <url>file:../localMavenRepo</url>
-        </repository>
+        </repository>-->
     </repositories>
     
     <pluginRepositories>
@@ -98,12 +98,6 @@
             <artifactId>jersey-server</artifactId>
             <version>1.1.5.1</version>
         </dependency>
-      <!--dependency from local repository-->
-        <!--<dependency>
-            <groupId>com.hippikon</groupId>
-            <artifactId>hippikon</artifactId>
-            <version>3.3</version>
-        </dependency>-->
         <dependency>
             <groupId>thewebsemantic</groupId>
             <artifactId>jenabean</artifactId>
@@ -159,24 +153,13 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.5.8</version>
+            <version>1.5.11</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
-            <version>1.5.8</version>
+            <version>1.5.11</version>
         </dependency>
-        <!--<dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.15</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>jms</artifactId>
-                    <groupId>javax.jms</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>-->
         <dependency>
             <groupId>com.hp.hpl.jena</groupId>
             <artifactId>jena</artifactId>

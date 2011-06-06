@@ -138,7 +138,11 @@ class SBMLHandler {
     val notes: NodeSeq = (xmlLabel \ "notes")
     if (notes.size == 0) {
       Nil
-    } else notes.iterator.next.child
+    } else {
+      val noteContent = notes.iterator.next.child
+      Console.println("SBMLHandler.checkCurrentLabelForNotes() received the following note: \n" + noteContent)
+      noteContent
+    }
   }
 
 
