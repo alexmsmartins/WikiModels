@@ -109,7 +109,7 @@ case class SBMLModel() extends Element {
    * @return the XML representing the user
    */
   override def toXML(): Elem = {
-    Console.println("HTML to generate SBML notes in toXML = " + notes)
+    Console.println("SBMLModel.toXML is including the following notes in the model: " + notes)
     <model metaid={metaid} id={id} name={name}>
       <!--order is important according to SBML Specifications-->
       {Console.println("Notes of the model are " + notes)}

@@ -4,6 +4,8 @@ import net.liftweb.common.{Failure, Full, Empty, Box}
 import xml.{Node, XML, Elem}
 import scala.util.matching._
 import scala.None
+import javax.xml.soap.SOAPElementFactory
+import org.slf4j._
 
 /**
  * Created by IntelliJ IDEA.
@@ -14,10 +16,12 @@ import scala.None
  */
 
 object SBMLDocHandler {
+  self  =>
+
+  val logger = LoggerFactory.getLogger(SBMLDocHandler.getClass)
 
   def surroundModelTagWithSBML(model:Elem):String = {
-    """<?xml version="1.0" encoding="UTF-8"?>
-    """ +
+    """<?xml version="1.0" encoding="UTF-8"?>""" + System.getProperty("line.separator") +
 <sbml xmlns="http://www.sbml.org/sbml/level2/version4" level="2" version="4">
   {model}
 </sbml>
@@ -27,9 +31,12 @@ object SBMLDocHandler {
    * Extracts the <model/> tag along with its content  from a valid SBML file so that it can be handled by scala.xml.XML
    */
   def extractModelTagfromSBML(xmlDoc:String):Box[Elem] = {
+    logger.warn("Entering method extractModelTagfromSBML()")
     try{
       //the next expression matches <sbml> even if it has atributes. Scala 2.8.1 aND 2.9
-      val sbml:Elem = XML.loadString(removeXMLHeader( xmlDoc  ))
+      val removedHeader = removeXMLHeader( xmlDoc  ).trim
+      Console.println("SBMLHandler.extractModelTagfromSBML() after removing header ->" + removedHeader)
+      val sbml:Elem = XML.loadString( removedHeader )
       val sbml2 = xml.Utility.trim(sbml)
       Console.println("XML.loadString return soemthing of type " + sbml.getClass )
       sbml2 match {
@@ -49,21 +56,32 @@ object SBMLDocHandler {
     }
   }
 
+
+  private val xmlTegRegExo = """^(\s)*<[^!?]""".r
+
   /**
    * Removes the lines before the first xml tag since they cant be parsed by <code>scala.xml.XML</code> classes
+   * It is assumed that the XML Decalaration is separated from the rest of the xml document  by a \n
    */
   def removeXMLHeader(str:String):String = {
     var tempStr = str
     //remove first line until content becomes parsable xml
-    while ( "^<[^!?]".r.findFirstMatchIn(tempStr) == None){
-      Console.println("""Removing line """" + tempStr.split("\n")(0) + """" From file""")
+    while ("""^(\s)*<[^!?]""".r.findFirstMatchIn(tempStr) == None){
+      Console.println("""Removing line '""" + tempStr.split("\n").toList.head + """' from file""")
       tempStr = stripFirstLine(tempStr)
     }
     tempStr
   }
 
+  /**
+   * Removes whitespaces from XML that come from code formatting tools.
+   * In the XML
+   */
+  //def removeXMLWhitespace(str:String)
+
 
   private def stripFirstLine(str:String):String  =    {
-    str.split("\n").toList.tail.mkString("\n")
+    val a = str.split("\n")
+    a.toList.tail.mkString("\n")
   }
 }

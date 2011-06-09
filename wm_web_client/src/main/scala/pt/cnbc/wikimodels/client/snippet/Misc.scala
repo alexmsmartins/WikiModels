@@ -32,13 +32,11 @@ import Helpers._
 
 import net.liftweb.common.{Box,Full,Empty,Failure,ParamFailure}
 
-
 import _root_.java.util.Locale
 
 import _root_.pt.cnbc.wikimodels.snippet.{User => Usr}
 import _root_.pt.cnbc.wikimodels.util.SBMLDocHandler._
 import xml._
-import org.junit.runners.Parameterized.Parameters
 
 class Misc {
   private object selectedUser extends RequestVar[Box[User]](Empty)

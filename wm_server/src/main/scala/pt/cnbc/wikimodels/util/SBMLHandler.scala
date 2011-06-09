@@ -135,6 +135,7 @@ class SBMLHandler {
    * if there are not notes
    */
   def checkCurrentLabelForNotes(xmlLabel: Elem): NodeSeq = {
+    Console.println("SBMLHandler.checkCurrentLabelForNotes() was called.")
     val notes: NodeSeq = (xmlLabel \ "notes")
     if (notes.size == 0) {
       Nil
