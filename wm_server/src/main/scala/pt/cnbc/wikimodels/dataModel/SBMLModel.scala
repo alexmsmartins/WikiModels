@@ -39,6 +39,7 @@ import pt.cnbc.wikimodels.exceptions.BadFormatException
 @Namespace("http://wikimodels.cnbc.pt/ontologies/sbml.owl#")
 @RdfType("Model")
 case class SBMLModel() extends Element {
+
   var id: String = null
   var name: String = null
 
@@ -109,10 +110,10 @@ case class SBMLModel() extends Element {
    * @return the XML representing the user
    */
   override def toXML(): Elem = {
-    Console.println("SBMLModel.toXML is including the following notes in the model: " + notes)
+    logger.debug("SBMLModel.toXML is including the following notes in the model: " + notes)
     <model metaid={metaid} id={id} name={name}>
       <!--order is important according to SBML Specifications-->
-      {Console.println("Notes of the model are " + notes)}
+      {logger.debug("Notes of the model are " + notes)}
       {new SBMLHandler().genNotesFromHTML(notes)}
       {if (listOfFunctionDefinitions != null && listOfFunctionDefinitions.size != 0)
         <listOfFunctionDefinitions>

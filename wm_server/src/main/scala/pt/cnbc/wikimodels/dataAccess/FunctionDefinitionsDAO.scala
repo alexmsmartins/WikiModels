@@ -37,8 +37,11 @@ import pt.cnbc.wikimodels.exceptions.NotImplementedException
 import pt.cnbc.wikimodels.ontology.ManipulatorWrapper
 import pt.cnbc.wikimodels.ontology.{Namespaces => NS}
 import thewebsemantic.Sparql
+import org.slf4j.LoggerFactory
 
 class FunctionDefinitionsDAO {
+  val logger = LoggerFactory.getLogger(getClass)
+
   /**
    * Allows testing procedures. This is not to be used from outside this class
    */
@@ -51,7 +54,7 @@ class FunctionDefinitionsDAO {
       loadFunctionDefinition(functionDefinitionMetaid, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException =>
-        Console.println("Bean of " + FunctionDefinition.getClass + "and " +
+        logger.debug("Bean of " + FunctionDefinition.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         null
@@ -64,8 +67,8 @@ class FunctionDefinitionsDAO {
   def loadFunctionDefinition(functionDefinitionMetaid: String, model: Model): FunctionDefinition = {
     var ret: FunctionDefinition = null
 
-    Console.print("After loading Jena Model")
-    Console.print("Jena Model content")
+    logger.debug("After loading Jena Model")
+    logger.debug("Jena Model content")
     val queryString =
     """
     PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
@@ -76,7 +79,7 @@ class FunctionDefinitionsDAO {
 
     val l: java.util.LinkedList[FunctionDefinition]
     = Sparql.exec(model, classOf[FunctionDefinition], queryString)
-    Console.println("Found " + l.size + " FunctionDefinitions with metaid " + functionDefinitionMetaid)
+    logger.debug("Found " + l.size + " FunctionDefinitions with metaid " + functionDefinitionMetaid)
     if (l.size > 0)
       l.iterator.next
     else null
@@ -85,8 +88,8 @@ class FunctionDefinitionsDAO {
   def loadFunctionDefinitionsInModel(modelMetaId: String,
                                      model: Model): java.util.Collection[FunctionDefinition] = {
     val c =
-    Console.print("After loading Jena Model")
-    Console.print("Jena Model content")
+    logger.debug("After loading Jena Model")
+    logger.debug("Jena Model content")
     val queryString =
     """
 PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
@@ -100,7 +103,7 @@ SELECT ?s WHERE
 
     val l: java.util.LinkedList[FunctionDefinition]
     = Sparql.exec(model, classOf[FunctionDefinition], queryString)
-    Console.println("Found " + l.size + " FunctionDefinitions from model " + modelMetaId)
+    logger.debug("Found " + l.size + " FunctionDefinitions from model " + modelMetaId)
     if (l.size > 0)
       l
     else null
@@ -109,15 +112,15 @@ SELECT ?s WHERE
   def loadFunctionDefinition(): java.util.Collection[FunctionDefinition] = {
     try {
       val myModel: Model = ManipulatorWrapper.loadModelfromDB
-      Console.print("After loading Jena Model")
+      logger.debug("After loading Jena Model")
       var reader = new RDF2Bean(myModel)
-      Console.print("After creating a new RDF2Bean")
+      logger.debug("After creating a new RDF2Bean")
       val l: java.util.List[FunctionDefinition] = reader.load(new FunctionDefinition().getClass)
               .asInstanceOf[java.util.List[FunctionDefinition]]
       l
     } catch {
       case ex: thewebsemantic.NotFoundException =>
-        Console.println("Bean of " + FunctionDefinition.getClass + "and id is not found")
+        logger.debug("Bean of " + FunctionDefinition.getClass + "and id is not found")
         ex.printStackTrace()
         null
     }
@@ -139,13 +142,13 @@ SELECT ?s WHERE
       myModel.commit
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + FunctionDefinition.getClass + "and " +
+        logger.debug("Bean of " + FunctionDefinition.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         false
       }
       case ex => {
-        Console.println("Saving model " + functionDefinition +
+        logger.debug("Saving model " + functionDefinition +
                 "was not possible")
         ex.printStackTrace
 
@@ -172,7 +175,7 @@ SELECT ?s WHERE
       tryToCreateFunctionDefinitionInModel(modelMetaid, functionDefinition, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + FunctionDefinition.getClass + "and " +
+        logger.debug("Bean of " + FunctionDefinition.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         null
@@ -218,7 +221,7 @@ SELECT ?s WHERE
       tryToCreateFunctionDefinition(functionDefinition, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + FunctionDefinition.getClass + "and " +
+        logger.debug("Bean of " + FunctionDefinition.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         null
@@ -253,7 +256,7 @@ SELECT ?s WHERE
       functionDefinitionMetaidExists(metaid, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + FunctionDefinition.getClass + "and " +
+        logger.debug("Bean of " + FunctionDefinition.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         false
@@ -280,7 +283,7 @@ SELECT ?s WHERE
     val qe: QueryExecution = QueryExecutionFactory.create(query, model);
     val results: Boolean = qe.execAsk;
 
-    Console.println("SPARQL query \n" + queryString + "\nIs " + results)
+    logger.debug("SPARQL query \n" + queryString + "\nIs " + results)
 
     results
   }
@@ -296,13 +299,13 @@ SELECT ?s WHERE
       updateFunctionDefinition(functionDefinition, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + FunctionDefinition.getClass + "and " +
+        logger.debug("Bean of " + FunctionDefinition.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         false
       }
       case ex => {
-        Console.println(ex.toString)
+        logger.debug(ex.toString)
         ex.printStackTrace()
         false
       }
@@ -333,7 +336,7 @@ SELECT ?s WHERE
       deleteFunctionDefinition(functionDefinition, myModel)
     } catch {
       case ex: Exception => {
-        Console.println("Deleting model " + functionDefinition +
+        logger.debug("Deleting model " + functionDefinition +
                 "was not possible")
         ex.printStackTrace
 
@@ -356,13 +359,13 @@ SELECT ?s WHERE
       } else false
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + FunctionDefinition.getClass + "and " +
+        logger.debug("Bean of " + FunctionDefinition.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         false
       }
       case ex => {
-        Console.println(ex.toString)
+        logger.debug(ex.toString)
         ex.printStackTrace()
         false
       }

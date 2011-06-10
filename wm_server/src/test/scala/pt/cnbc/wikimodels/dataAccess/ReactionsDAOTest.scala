@@ -15,8 +15,10 @@ import scala.xml.Elem
 import pt.cnbc.wikimodels.dataModel.{SBMLModel, Reaction}
 import pt.cnbc.wikimodels.ontology.ManipulatorWrapper
 import pt.cnbc.wikimodels.setup.Setup
+import org.slf4j.LoggerFactory
 
 class ReactionsDAOTest {
+  val logger = LoggerFactory.getLogger(getClass)
 
   val modelWReaction:Elem =
   <model metaid="metaid_01" id="simpleModel">
@@ -113,8 +115,8 @@ class ReactionsDAOTest {
     val newSBMLModel = daoModel.deepLoadSBMLModel("metaid_01", model)
 
     //check XML
-    Console.println("Old model is " + modelWReaction )
-    Console.println("New model is " + newSBMLModel.toXML )
+    logger.debug("Old model is " + modelWReaction )
+    logger.debug("New model is " + newSBMLModel.toXML )
 
     //check local parameter list
     assertEquals(newSBMLModel.metaid, "metaid_01")
@@ -144,8 +146,8 @@ class ReactionsDAOTest {
     val newSBMLModel = daoModel.deepLoadSBMLModel("metaid_02", model)
 
     //check XML
-    Console.println("Old model is " + modelWithReactionNoKineticLaw )
-    Console.println("New model is " + newSBMLModel.toXML )
+    logger.debug("Old model is " + modelWithReactionNoKineticLaw )
+    logger.debug("New model is " + newSBMLModel.toXML )
 
     //check local parameter list
     assertEquals( newSBMLModel.metaid, "metaid_02")
@@ -203,8 +205,8 @@ class ReactionsDAOTest {
     val newSBMLModel = daoModel.deepLoadSBMLModel("metaid_03", model)
 
     //check XML
-    Console.println("Old model is " + modelWithReactionNoLocalParameters )
-    Console.println("New model is " + newSBMLModel.toXML )
+    logger.debug("Old model is " + modelWithReactionNoLocalParameters )
+    logger.debug("New model is " + newSBMLModel.toXML )
 
     //check local parameter list
     assertEquals(newSBMLModel.metaid, "metaid_03")

@@ -12,7 +12,10 @@ import pt.cnbc.wikimodels.security.SecurityContextFactory
 
 import javax.ws.rs.core.Context
 import javax.ws.rs.core.SecurityContext
+import org.slf4j.LoggerFactory
 
 trait RESTResource {
-    val secContext = SecurityContextFactory.createSecurityContext
+  val logger = LoggerFactory.getLogger(getClass)
+
+  val secContext = SecurityContextFactory.createSecurityContext
 }

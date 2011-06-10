@@ -13,6 +13,7 @@ import scala.xml.Elem
 import thewebsemantic.binding.RdfBean
 
 import pt.cnbc.wikimodels.util.SBMLHandler
+import org.slf4j.LoggerFactory
 
 /**
  * The initial bean from which every other persistence model class
@@ -20,6 +21,8 @@ import pt.cnbc.wikimodels.util.SBMLHandler
  * @author Alexandre Martins
  */
 trait DataModel extends RdfBean[DataModel]{
+  val logger = LoggerFactory.getLogger(getClass)
+
     val sbmlHandler = new SBMLHandler()
     /**
      * Converts this data model to xnl form

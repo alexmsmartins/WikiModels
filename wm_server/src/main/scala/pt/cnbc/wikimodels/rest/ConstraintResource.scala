@@ -48,7 +48,7 @@ class ConstraintResource(sbmlModelResource:String) extends RESTResource {
           ):String = {
     val username:String = security.getUserPrincipal().getName()
 
-    Console.print("GET verb was used in constraint " + constraintResource)
+    logger.debug("GET verb was used in constraint " + constraintResource)
     if(secContext.isAuthorizedTo(username,
       "GET", "model/" + sbmlModelResource +
                                      "/constraint/" + constraintResource ) ){
@@ -84,7 +84,7 @@ class ConstraintResource(sbmlModelResource:String) extends RESTResource {
     @Consumes(Array("application/xml"))
     def post(requestContent:InputStream) = {
         val username = security.getUserPrincipal().getName()
-        Console.print("POST verb was used in user " + username)
+        logger.debug("POST verb was used in user " + username)
 
         var ret = ""
         if(secContext.isAuthorizedTo(username,
@@ -134,10 +134,10 @@ class ConstraintResource(sbmlModelResource:String) extends RESTResource {
     def put(@PathParam("constraintid") constraintResource:String,
             requestContent:String):Response = {
         val username = security.getUserPrincipal().getName()
-        Console.print("PUT verb was used in user " + username)
-        Console.print("constraintid = " + constraintResource)
-        Console.print("Content of request = " + requestContent)
-        Console.print("--------------------------------------")
+        logger.debug("PUT verb was used in user " + username)
+        logger.debug("constraintid = " + constraintResource)
+        logger.debug("Content of request = " + requestContent)
+        logger.debug("--------------------------------------")
         var ret = ""
         if(secContext.isAuthorizedTo(username,
                                      "PUT", "model/" + sbmlModelResource +
@@ -175,8 +175,8 @@ class ConstraintResource(sbmlModelResource:String) extends RESTResource {
     def delete(@PathParam("constraintid") constraintResource:String
     ):Unit = {
         val username = security.getUserPrincipal().getName()
-        Console.print("DELETE verb was used with user " + username)
-        Console.print("DELETE verb was used with constraintid " + constraintResource)
+        logger.debug("DELETE verb was used with user " + username)
+        logger.debug("DELETE verb was used with constraintid " + constraintResource)
 
         var ret = ""
         if(secContext.isAuthorizedTo(username,

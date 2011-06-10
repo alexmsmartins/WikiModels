@@ -50,17 +50,17 @@ class CompartmentResource(sbmlModelResource:String) extends RESTResource {
     ):String = {
         val username:String = security.getUserPrincipal().getName()
 
-        Console.print("GET verb was used in compartment " + compartmentResource)
+        logger.debug("GET verb was used in compartment " + compartmentResource)
         if(secContext.isAuthorizedTo(username,
                                      "GET", "model/" + sbmlModelResource +
                                      "/compartment/" + compartmentResource ) ){
             try{
                 val dao = new CompartmentsDAO
                 val compartment = dao.loadCompartment(compartmentResource)
-                Console.println("Obtained compartment:")
+                logger.debug("Obtained compartment:")
                 if(compartment != null &&
                    compartment.metaid == compartmentResource){
-                  Console.println("The right compartment is being returned")
+                  logger.debug("The right compartment is being returned")
                     compartment.toXML.toString
                 } else {
                     throw new WebApplicationException(Response.Status.NOT_FOUND)
@@ -88,7 +88,7 @@ class CompartmentResource(sbmlModelResource:String) extends RESTResource {
     @Consumes(Array("application/xml"))
     def post(requestContent:InputStream) = {
         val username = security.getUserPrincipal().getName()
-        Console.print("POST verb was used in user " + username)
+        logger.debug("POST verb was used in user " + username)
 
         var ret = ""
         if(secContext.isAuthorizedTo(username,
@@ -138,10 +138,10 @@ class CompartmentResource(sbmlModelResource:String) extends RESTResource {
     def put(@PathParam("compartmentid") compartmentResource:String,
             requestContent:String):Response = {
         val username = security.getUserPrincipal().getName()
-        Console.print("PUT verb was used in user " + username)
-        Console.print("compartmentid = " + compartmentResource)
-        Console.print("Content of request = " + requestContent)
-        Console.print("--------------------------------------")
+        logger.debug("PUT verb was used in user " + username)
+        logger.debug("compartmentid = " + compartmentResource)
+        logger.debug("Content of request = " + requestContent)
+        logger.debug("--------------------------------------")
         var ret = ""
         if(secContext.isAuthorizedTo(username,
                                      "PUT", "model/" + sbmlModelResource +
@@ -179,8 +179,8 @@ class CompartmentResource(sbmlModelResource:String) extends RESTResource {
     def delete(@PathParam("compartmentid") compartmentResource:String
     ):Unit = {
         val username = security.getUserPrincipal().getName()
-        Console.print("DELETE verb was used with user " + username)
-        Console.print("DELETE verb was used with compartmentid " + compartmentResource)
+        logger.debug("DELETE verb was used with user " + username)
+        logger.debug("DELETE verb was used with compartmentid " + compartmentResource)
 
         var ret = ""
         if(secContext.isAuthorizedTo(username,

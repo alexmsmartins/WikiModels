@@ -48,7 +48,7 @@ case class KineticLaw() extends Element{
   }
 
   override def toXML:Elem = {
-    Console.println("«KineticLaw math element is " + this.math)
+    logger.debug("«KineticLaw math element is " + this.math)
     <kineticLaw metaid={metaid}>
       <!--order is important according to SBML Specifications-->
       {new SBMLHandler().genNotesFromHTML(notes)}

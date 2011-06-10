@@ -41,7 +41,7 @@ class SBMLModelsResource extends RESTResource{
     ):String = {
         val username:String = security.getUserPrincipal().getName()
 
-        Console.print("GET verb was used in model " + sbmlModelResource)
+        logger.debug("GET verb was used in model " + sbmlModelResource)
         if(secContext.isAuthorizedTo(username,
                                      "GET", "model/" + sbmlModelResource ) ){
             try{

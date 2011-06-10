@@ -38,8 +38,11 @@ import pt.cnbc.wikimodels.exceptions.NotImplementedException
 import pt.cnbc.wikimodels.ontology.ManipulatorWrapper
 import pt.cnbc.wikimodels.ontology.{Namespaces => NS}
 import thewebsemantic.Sparql
+import org.slf4j.LoggerFactory
 
 class ParametersDAO {
+  val logger = LoggerFactory.getLogger(getClass)
+
   /**
    * Allows testing procedures. This is not to be used from outside this class
    */
@@ -52,7 +55,7 @@ class ParametersDAO {
       loadParameter(parameterMetaid, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException =>
-        Console.println("Bean of " + Parameter.getClass + "and " +
+        logger.debug("Bean of " + Parameter.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         null
@@ -65,8 +68,8 @@ class ParametersDAO {
   def loadParameter(parameterMetaid: String, model: Model): Parameter = {
     var ret: Parameter = null
 
-    Console.print("After loading Jena Model")
-    Console.print("Jena Model content")
+    logger.debug("After loading Jena Model")
+    logger.debug("Jena Model content")
     val queryString =
     """
     PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
@@ -77,7 +80,7 @@ class ParametersDAO {
 
     val l: java.util.LinkedList[Parameter]
     = Sparql.exec(model, classOf[Parameter], queryString)
-    Console.println("Found " + l.size + " Parameters with metaid " + parameterMetaid)
+    logger.debug("Found " + l.size + " Parameters with metaid " + parameterMetaid)
     if (l.size > 0)
       l.iterator.next
     else null
@@ -86,8 +89,8 @@ class ParametersDAO {
   def loadParametersInModel(modelMetaId: String,
                             model: Model): java.util.Collection[Parameter] = {
     val c =
-    Console.print("After loading Jena Model")
-    Console.print("Jena Model content")
+    logger.debug("After loading Jena Model")
+    logger.debug("Jena Model content")
     val queryString =
     """
 PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
@@ -101,7 +104,7 @@ SELECT ?s WHERE
 
     val l: java.util.LinkedList[Parameter]
     = Sparql.exec(model, classOf[Parameter], queryString)
-    Console.println("Found " + l.size + " Parameters from model " + modelMetaId)
+    logger.debug("Found " + l.size + " Parameters from model " + modelMetaId)
     if (l.size > 0)
       l
     else null
@@ -110,15 +113,15 @@ SELECT ?s WHERE
   def loadParameter(): java.util.Collection[Parameter] = {
     try {
       val myModel: Model = ManipulatorWrapper.loadModelfromDB
-      Console.print("After loading Jena Model")
+      logger.debug("After loading Jena Model")
       var reader = new RDF2Bean(myModel)
-      Console.print("After creating a new RDF2Bean")
+      logger.debug("After creating a new RDF2Bean")
       val l: java.util.List[Parameter] = reader.load(new Parameter().getClass)
               .asInstanceOf[java.util.List[Parameter]]
       l
     } catch {
       case ex: thewebsemantic.NotFoundException =>
-        Console.println("Bean of " + Parameter.getClass + "and id is not found")
+        logger.debug("Bean of " + Parameter.getClass + "and id is not found")
         ex.printStackTrace()
         null
     }
@@ -135,13 +138,13 @@ SELECT ?s WHERE
       createParameter(parameter, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + Parameter.getClass + "and " +
+        logger.debug("Bean of " + Parameter.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         false
       }
       case ex => {
-        Console.println("Saving model " + parameter +
+        logger.debug("Saving model " + parameter +
                 "was not possible")
         ex.printStackTrace
 
@@ -167,7 +170,7 @@ SELECT ?s WHERE
       tryToCreateParameterInModel(modelMetaid, parameter, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + Parameter.getClass + "and " +
+        logger.debug("Bean of " + Parameter.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         null
@@ -206,7 +209,7 @@ SELECT ?s WHERE
       tryToCreateParameterInKineticLaw(kineticLawMetaId, parameter, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + Parameter.getClass + "and " +
+        logger.debug("Bean of " + Parameter.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         null
@@ -250,7 +253,7 @@ SELECT ?s WHERE
       tryToCreateParameter(parameter, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + Parameter.getClass + "and " +
+        logger.debug("Bean of " + Parameter.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         null
@@ -285,7 +288,7 @@ SELECT ?s WHERE
       parameterMetaidExists(metaid, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + Parameter.getClass + "and " +
+        logger.debug("Bean of " + Parameter.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         false
@@ -314,7 +317,7 @@ SELECT ?s WHERE
     val qe: QueryExecution = QueryExecutionFactory.create(query, model);
     val results: Boolean = qe.execAsk;
 
-    Console.println("SPARQL query \n" + queryString + "\nIs " + results)
+    logger.debug("SPARQL query \n" + queryString + "\nIs " + results)
 
     results
   }
@@ -330,13 +333,13 @@ SELECT ?s WHERE
       updateParameter(parameter, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + Parameter.getClass + "and " +
+        logger.debug("Bean of " + Parameter.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         false
       }
       case ex => {
-        Console.println(ex.toString)
+        logger.debug(ex.toString)
         ex.printStackTrace()
         false
       }
@@ -367,7 +370,7 @@ SELECT ?s WHERE
       deleteParameter(parameter, myModel)
     } catch {
       case ex: Exception => {
-        Console.println("Deleting model " + parameter +
+        logger.debug("Deleting model " + parameter +
                 "was not possible")
         ex.printStackTrace
 
@@ -390,13 +393,13 @@ SELECT ?s WHERE
       } else false
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + Parameter.getClass + "and " +
+        logger.debug("Bean of " + Parameter.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         false
       }
       case ex => {
-        Console.println(ex.toString)
+        logger.debug(ex.toString)
         ex.printStackTrace()
         false
       }

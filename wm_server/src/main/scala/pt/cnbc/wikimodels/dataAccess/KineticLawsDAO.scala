@@ -25,8 +25,11 @@ import thewebsemantic.Sparql
 import pt.cnbc.wikimodels.ontology.ManipulatorWrapper
 import pt.cnbc.wikimodels.dataModel.KineticLaw
 import pt.cnbc.wikimodels.ontology.{Namespaces => NS}
+import org.slf4j.LoggerFactory
 
 class KineticLawsDAO {
+  val logger = LoggerFactory.getLogger(getClass)
+
   /**
    * Allows testing procedures. This is not to be used from outside this class
    */
@@ -40,7 +43,7 @@ class KineticLawsDAO {
       loadKineticLaw(kineticLawMetaid, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException =>
-        Console.println("Bean of " + KineticLaw.getClass + "and " +
+        logger.debug("Bean of " + KineticLaw.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         null
@@ -53,8 +56,8 @@ class KineticLawsDAO {
   def loadKineticLaw(kineticLawMetaid: String, model: Model): KineticLaw = {
     var ret: KineticLaw = null
 
-    Console.print("After loading Jena Model")
-    Console.print("Jena Model content")
+    logger.debug("After loading Jena Model")
+    logger.debug("Jena Model content")
     val queryString =
     """
     PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
@@ -65,7 +68,7 @@ class KineticLawsDAO {
 
     val l: java.util.LinkedList[KineticLaw]
     = Sparql.exec(model, classOf[KineticLaw], queryString)
-    Console.println("Found " + l.size + " KineticLaws with metaid " + kineticLawMetaid)
+    logger.debug("Found " + l.size + " KineticLaws with metaid " + kineticLawMetaid)
     if (l.size > 0)
       l.iterator.next
     else null
@@ -73,8 +76,8 @@ class KineticLawsDAO {
 
   def loadKineticLawInReaction(reactionMetaId: String,
                                model: Model): KineticLaw = {
-    Console.print("After loading Jena Model")
-    Console.print("Jena Model content")
+    logger.debug("After loading Jena Model")
+    logger.debug("Jena Model content")
     val queryString =
     """
 PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
@@ -88,7 +91,7 @@ SELECT ?s WHERE
 
     val l: java.util.LinkedList[KineticLaw]
     = Sparql.exec(model, classOf[KineticLaw], queryString)
-    Console.println("Found " + l.size + " KineticLaws from reaction " + reactionMetaId)
+    logger.debug("Found " + l.size + " KineticLaws from reaction " + reactionMetaId)
     if (l.size > 0) {
       l.iterator.next.asInstanceOf[KineticLaw]
     } else null
@@ -97,15 +100,15 @@ SELECT ?s WHERE
   def loadKineticLaw(): java.util.Collection[KineticLaw] = {
     try {
       val myModel: Model = ManipulatorWrapper.loadModelfromDB
-      Console.print("After loading Jena Model")
+      logger.debug("After loading Jena Model")
       var reader = new RDF2Bean(myModel)
-      Console.print("After creating a new RDF2Bean")
+      logger.debug("After creating a new RDF2Bean")
       val l: java.util.List[KineticLaw] = reader.load(new KineticLaw().getClass)
               .asInstanceOf[java.util.List[KineticLaw]]
       l
     } catch {
       case ex: thewebsemantic.NotFoundException =>
-        Console.println("Bean of " + KineticLaw.getClass + "and id is not found")
+        logger.debug("Bean of " + KineticLaw.getClass + "and id is not found")
         ex.printStackTrace()
         null
     }
@@ -122,13 +125,13 @@ SELECT ?s WHERE
       createKineticLaw(kineticLaw, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + KineticLaw.getClass + "and " +
+        logger.debug("Bean of " + KineticLaw.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         false
       }
       case ex => {
-        Console.println("Saving kineticLaw " + kineticLaw +
+        logger.debug("Saving kineticLaw " + kineticLaw +
                 "was not possible")
         ex.printStackTrace
 
@@ -163,7 +166,7 @@ SELECT ?s WHERE
       tryToCreateKineticLawInReaction(reactionMetaid, kineticLaw, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + KineticLaw.getClass + "and " +
+        logger.debug("Bean of " + KineticLaw.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         null
@@ -207,7 +210,7 @@ SELECT ?s WHERE
       tryToCreateKineticLaw(kineticLaw, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + KineticLaw.getClass + "and " +
+        logger.debug("Bean of " + KineticLaw.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         null
@@ -243,7 +246,7 @@ SELECT ?s WHERE
       kineticLawMetaidExists(metaid, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + KineticLaw.getClass + "and " +
+        logger.debug("Bean of " + KineticLaw.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         false
@@ -268,7 +271,7 @@ SELECT ?s WHERE
     val qe: QueryExecution = QueryExecutionFactory.create(query, model);
     val results: Boolean = qe.execAsk;
 
-    Console.println("SPARQL query \n" + queryString + "\nIs " + results)
+    logger.debug("SPARQL query \n" + queryString + "\nIs " + results)
 
     results
   }
@@ -284,13 +287,13 @@ SELECT ?s WHERE
       updateKineticLaw(kineticLaw, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + KineticLaw.getClass + "and " +
+        logger.debug("Bean of " + KineticLaw.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         false
       }
       case ex => {
-        Console.println(ex.toString)
+        logger.debug(ex.toString)
         ex.printStackTrace()
         false
       }
@@ -321,7 +324,7 @@ SELECT ?s WHERE
       deleteKineticLaw(kineticLaw, myModel)
     } catch {
       case ex: Exception => {
-        Console.println("Deleting kineticLaw " + kineticLaw +
+        logger.debug("Deleting kineticLaw " + kineticLaw +
                 "was not possible")
         ex.printStackTrace
 
@@ -344,13 +347,13 @@ SELECT ?s WHERE
       } else false
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + KineticLaw.getClass + "and " +
+        logger.debug("Bean of " + KineticLaw.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         false
       }
       case ex => {
-        Console.println(ex.toString)
+        logger.debug(ex.toString)
         ex.printStackTrace()
         false
       }

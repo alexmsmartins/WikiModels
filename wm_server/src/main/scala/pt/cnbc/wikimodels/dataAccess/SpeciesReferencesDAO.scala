@@ -39,8 +39,11 @@ import pt.cnbc.wikimodels.exceptions.NotImplementedException
 import pt.cnbc.wikimodels.ontology.ManipulatorWrapper
 import pt.cnbc.wikimodels.ontology.{Namespaces => NS}
 import thewebsemantic.Sparql
+import org.slf4j.LoggerFactory
 
-class SpeciesReferencesDAO {
+class SpeciesReferencesDAO{
+  val logger = LoggerFactory.getLogger(getClass)
+
   /**
    * Allows testing procedures. This is not to be used from outside this class
    */
@@ -54,7 +57,7 @@ class SpeciesReferencesDAO {
       loadSpeciesReference(speciesReferenceMetaid, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException =>
-        Console.println("Bean of " + SpeciesReference.getClass + "and " +
+        logger.debug("Bean of " + SpeciesReference.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         null
@@ -67,8 +70,8 @@ class SpeciesReferencesDAO {
   def loadSpeciesReference(speciesReferenceMetaid: String, model: Model): SpeciesReference = {
     var ret: SpeciesReference = null
 
-    Console.print("After loading Jena Model")
-    Console.print("Jena Model content")
+    logger.debug("After loading Jena Model")
+    logger.debug("Jena Model content")
     val queryString =
     """
     PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
@@ -79,7 +82,7 @@ class SpeciesReferencesDAO {
 
     val l: java.util.LinkedList[SpeciesReference]
     = Sparql.exec(model, classOf[SpeciesReference], queryString)
-    Console.println("Found " + l.size + " SpeciesReferences with metaid " + speciesReferenceMetaid)
+    logger.debug("Found " + l.size + " SpeciesReferences with metaid " + speciesReferenceMetaid)
     if (l.size > 0)
       l.iterator.next
     else null
@@ -87,8 +90,8 @@ class SpeciesReferencesDAO {
 
   def loadReactantsInReaction(reactionMetaId: String,
                               model: Model): java.util.Collection[SpeciesReference] = {
-    Console.print("After loading Jena Model")
-    Console.print("Jena Model content")
+    logger.debug("After loading Jena Model")
+    logger.debug("Jena Model content")
     val queryString =
     """
     PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
@@ -102,7 +105,7 @@ class SpeciesReferencesDAO {
 
     val l: java.util.LinkedList[SpeciesReference]
     = Sparql.exec(model, classOf[SpeciesReference], queryString)
-    Console.println("Found " + l.size + " Reactants from model " + reactionMetaId)
+    logger.debug("Found " + l.size + " Reactants from model " + reactionMetaId)
     if (l.size > 0)
       l
     else null
@@ -110,8 +113,8 @@ class SpeciesReferencesDAO {
 
   def loadProductsInReaction(reactionMetaId: String,
                              model: Model): java.util.Collection[SpeciesReference] = {
-    Console.print("After loading Jena Model")
-    Console.print("Jena Model content")
+    logger.debug("After loading Jena Model")
+    logger.debug("Jena Model content")
     val queryString =
     """
 PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
@@ -125,7 +128,7 @@ SELECT ?s WHERE
 
     val l: java.util.LinkedList[SpeciesReference]
     = Sparql.exec(model, classOf[SpeciesReference], queryString)
-    Console.println("Found " + l.size + " Products from reaction " + reactionMetaId)
+    logger.debug("Found " + l.size + " Products from reaction " + reactionMetaId)
     if (l.size > 0)
       l
     else null
@@ -133,8 +136,8 @@ SELECT ?s WHERE
 
   def loadModifiersInReaction(reactionMetaId: String,
                               model: Model): java.util.Collection[ModifierSpeciesReference] = {
-    Console.print("After loading Jena Model")
-    Console.print("Jena Model content")
+    logger.debug("After loading Jena Model")
+    logger.debug("Jena Model content")
     val queryString =
     """
 PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
@@ -148,7 +151,7 @@ SELECT ?s WHERE
 
     val l: java.util.LinkedList[ModifierSpeciesReference]
     = Sparql.exec(model, classOf[ModifierSpeciesReference], queryString)
-    Console.println("Found " + l.size + " Modifiers from reaction " + reactionMetaId)
+    logger.debug("Found " + l.size + " Modifiers from reaction " + reactionMetaId)
     if (l.size > 0)
       l
     else null
@@ -157,15 +160,15 @@ SELECT ?s WHERE
   def loadSpeciesReference(): java.util.Collection[SpeciesReference] = {
     try {
       val myModel: Model = ManipulatorWrapper.loadModelfromDB
-      Console.print("After loading Jena Model")
+      logger.debug("After loading Jena Model")
       var reader = new RDF2Bean(myModel)
-      Console.print("After creating a new RDF2Bean")
+      logger.debug("After creating a new RDF2Bean")
       val l: java.util.List[SpeciesReference] = reader.load(new SpeciesReference().getClass)
               .asInstanceOf[java.util.List  [SpeciesReference]]
       l
     } catch {
       case ex: thewebsemantic.NotFoundException =>
-        Console.println("Bean of " + SpeciesReference.getClass + "and id is not found")
+        logger.debug("Bean of " + SpeciesReference.getClass + "and id is not found")
         ex.printStackTrace()
         null
     }
@@ -182,7 +185,7 @@ SELECT ?s WHERE
       createSpeciesReference(speciesReference, myModel)
     } catch {
       case ex: Exception => {
-        Console.println("Saving SpeciesReference " + speciesReference +
+        logger.debug("Saving SpeciesReference " + speciesReference +
                 "was not possible")
         ex.printStackTrace
 
@@ -202,13 +205,13 @@ SELECT ?s WHERE
       true
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + SpeciesReference.getClass + "and " +
+        logger.debug("Bean of " + SpeciesReference.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         false
       }
       case ex => {
-        Console.println(ex.toString)
+        logger.debug(ex.toString)
         ex.printStackTrace()
         false
       }
@@ -226,13 +229,13 @@ SELECT ?s WHERE
       createModifierSpeciesReference(speciesReference, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + ModifierSpeciesReference.getClass + "and " +
+        logger.debug("Bean of " + ModifierSpeciesReference.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         false
       }
       case ex => {
-        Console.println("Saving ModifierSpeciesReference " + speciesReference +
+        logger.debug("Saving ModifierSpeciesReference " + speciesReference +
                 "was not possible")
         ex.printStackTrace
 
@@ -324,7 +327,7 @@ SELECT ?s WHERE
       tryToCreateSpeciesReference(speciesReference, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + SpeciesReference.getClass + "and " +
+        logger.debug("Bean of " + SpeciesReference.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         null
@@ -363,7 +366,7 @@ SELECT ?s WHERE
       tryToCreateModifierSpeciesReference(speciesReference, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + ModifierSpeciesReference.getClass + "and " +
+        logger.debug("Bean of " + ModifierSpeciesReference.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         null
@@ -398,7 +401,7 @@ SELECT ?s WHERE
       speciesReferenceMetaidExists(metaid, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + SpeciesReference.getClass + "and " +
+        logger.debug("Bean of " + SpeciesReference.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         false
@@ -427,7 +430,7 @@ SELECT ?s WHERE
     val qe: QueryExecution = QueryExecutionFactory.create(query, model);
     val results: Boolean = qe.execAsk;
 
-    Console.println("SPARQL query \n" + queryString + "\nIs " + results)
+    logger.debug("SPARQL query \n" + queryString + "\nIs " + results)
 
     results
   }
@@ -438,7 +441,7 @@ SELECT ?s WHERE
       modifierSpeciesReferenceMetaidExists(metaid, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + ModifierSpeciesReference.getClass + "and " +
+        logger.debug("Bean of " + ModifierSpeciesReference.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         false
@@ -467,7 +470,7 @@ SELECT ?s WHERE
     val qe: QueryExecution = QueryExecutionFactory.create(query, model);
     val results: Boolean = qe.execAsk;
 
-    Console.println("SPARQL query \n" + queryString + "\nIs " + results)
+    logger.debug("SPARQL query \n" + queryString + "\nIs " + results)
 
     results
   }
@@ -483,13 +486,13 @@ SELECT ?s WHERE
       updateSpeciesReference(speciesReference, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + SpeciesReference.getClass + "and " +
+        logger.debug("Bean of " + SpeciesReference.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         false
       }
       case ex => {
-        Console.println(ex.toString)
+        logger.debug(ex.toString)
         ex.printStackTrace()
         false
       }
@@ -519,13 +522,13 @@ SELECT ?s WHERE
       updateModifierSpeciesReference(speciesReference, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + SpeciesReference.getClass + "and " +
+        logger.debug("Bean of " + SpeciesReference.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         false
       }
       case ex => {
-        Console.println(ex.toString)
+        logger.debug(ex.toString)
         ex.printStackTrace()
         false
       }
@@ -555,7 +558,7 @@ SELECT ?s WHERE
       deleteSpeciesReference(speciesReference, myModel)
     } catch {
       case ex: Exception => {
-        Console.println("Deleting speciesReference " + speciesReference +
+        logger.debug("Deleting speciesReference " + speciesReference +
                 "was not possible")
         ex.printStackTrace
 
@@ -577,13 +580,13 @@ SELECT ?s WHERE
       } else false
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + SpeciesReference.getClass + "and " +
+        logger.debug("Bean of " + SpeciesReference.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         false
       }
       case ex => {
-        Console.println(ex.toString)
+        logger.debug(ex.toString)
         ex.printStackTrace()
         false
       }
@@ -601,7 +604,7 @@ SELECT ?s WHERE
       deleteModifierSpeciesReference(speciesReference, myModel)
     } catch {
       case ex: Exception => {
-        Console.println("Deleting speciesReference " + speciesReference +
+        logger.debug("Deleting speciesReference " + speciesReference +
                 "was not possible")
         ex.printStackTrace
 
@@ -623,13 +626,13 @@ SELECT ?s WHERE
       } else false
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + SpeciesReference.getClass + "and " +
+        logger.debug("Bean of " + SpeciesReference.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         false
       }
       case ex => {
-        Console.println(ex.toString)
+        logger.debug(ex.toString)
         ex.printStackTrace()
         false
       }

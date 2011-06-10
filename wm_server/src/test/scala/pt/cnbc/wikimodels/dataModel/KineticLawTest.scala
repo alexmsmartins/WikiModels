@@ -11,11 +11,12 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.Assert._
+import org.slf4j.LoggerFactory
 
 class KineticLawTest{
+  val logger = LoggerFactory.getLogger(getClass)
 
-
-    val kineticLaw = 
+    val kineticLaw =
     <kineticLaw>
      <math xmlns="http://www.w3.org/1998/Math/MathML">
        <apply>
@@ -75,10 +76,10 @@ class KineticLawTest{
         val kl = new KineticLaw( """metaid""" ,
              <p>dasdfs</p> ,
              mathml  )
-        Console.println("XML representation of the model is "
+        logger.debug("XML representation of the model is "
                         + kl.toXML.toString)
         val kl2 = new KineticLaw(kl.toXML)
-        Console.println("XML representation of the reound tripped model is "
+        logger.debug("XML representation of the reound tripped model is "
                         + kl2.toXML.toString)
         assertTrue(true )
     }
@@ -87,10 +88,10 @@ class KineticLawTest{
       val kl = new KineticLaw( """metaid""" ,
            Nil ,
            mathml  )
-      Console.println("XML representation of the model is "
+      logger.debug("XML representation of the model is "
                       + kl.toXML.toString)
       val kl2 = new KineticLaw(kl.toXML)
-      Console.println("XML representation of the reound tripped model is "
+      logger.debug("XML representation of the reound tripped model is "
                       + kl2.toXML.toString)
       assertTrue(true )
   }

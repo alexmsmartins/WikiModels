@@ -12,8 +12,11 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.Assert._
 import pt.cnbc.wikimodels.exceptions.BadFormatException
+import org.slf4j.LoggerFactory
 
 class SBMLModelTest {
+  val logger = LoggerFactory.getLogger(getClass)
+
   val model1 =
   <model metaid="metaid_0000002" id="model_0000001" name="Izhikevich2004_SpikingNeurons_Class1Excitable">
     <annotation>
@@ -215,10 +218,10 @@ class SBMLModelTest {
   def createModelWithoutComponents = {
     val sbml = new SBMLModel("any_metaid", <p>dasdfs</p>,
       "any_id", "any_name")
-    /*Console.println("XML representation of the model is "
+    /*logger.debug("XML representation of the model is "
    + sbml.toXML.toString)*/
     val sbml2 = new SBMLModel(sbml.toXML)
-    /*Console.println("XML representation of the reound tripped model is "
+    /*logger.debug("XML representation of the reound tripped model is "
    + sbml2.toXML.toString)*/
 
 
@@ -230,10 +233,10 @@ class SBMLModelTest {
   def createModelWithoutNotes = {
     val sbml = new SBMLModel("any_metaid", Nil,
       "any_id", "any_name")
-    Console.println("XML representation of the model is "
+    logger.debug("XML representation of the model is "
             + sbml.toXML.toString)
     val sbml2 = new SBMLModel(sbml.toXML)
-    Console.println("XML representation of the reound tripped model is "
+    logger.debug("XML representation of the reound tripped model is "
             + sbml2.toXML.toString)
     assertTrue(sbml == sbml2)
   }
@@ -244,7 +247,7 @@ class SBMLModelTest {
       try{
           val sbml = new SBMLModel(null, <p>dasdfs</p>,
                                    "any_id", "any_name")
-          Console.println("XML representation of the model is "
+          logger.debug("XML representation of the model is "
                           + sbml.toXML.toString)
           assertTrue(false)
       } catch {
@@ -258,10 +261,10 @@ class SBMLModelTest {
   def createModelWithoutId = {
     val sbml = new SBMLModel("any_metaid", <p>dasdfs</p>,
       null, "any_name")
-    Console.println("XML representation of the model is "
+    logger.debug("XML representation of the model is "
             + sbml.toXML.toString)
     val sbml2 = new SBMLModel(sbml.toXML)
-    Console.println("XML representation of the reound tripped model is "
+    logger.debug("XML representation of the reound tripped model is "
             + sbml2.toXML.toString)
     assertTrue(sbml == sbml2)
   }
@@ -270,10 +273,10 @@ class SBMLModelTest {
   def createModelWithoutName = {
     val sbml = new SBMLModel("any_metaid", <p>dasdfs</p>,
       "any_id", null)
-    Console.println("XML representation of the model is "
+    logger.debug("XML representation of the model is "
             + sbml.toXML.toString)
     val sbml2 = new SBMLModel(sbml.toXML)
-    Console.println("XML representation of the reound tripped model is "
+    logger.debug("XML representation of the reound tripped model is "
             + sbml2.toXML.toString)
     assertTrue(sbml == sbml2)
   }

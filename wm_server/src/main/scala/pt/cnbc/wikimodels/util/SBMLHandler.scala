@@ -14,12 +14,14 @@ import org.sbml.libsbml.SBMLReader
 import pt.cnbc.wikimodels.exceptions.BadFormatException
 import javax.resource.spi.SecurityException
 import xml._
+import org.slf4j.LoggerFactory
 
 object SBMLHandler {
   var LibSBMLLoaded = false
 }
 
 class SBMLHandler {
+  val logger = LoggerFactory.getLogger(getClass)
 
   if (SBMLHandler.LibSBMLLoaded == false) {
     LibSBMLLoader()
@@ -43,11 +45,11 @@ class SBMLHandler {
     val sbmlDoc = new SBMLDocument(sbmlLevel, sbmlVersion)
 
 
-    Console.println("checkL2v4Compatibility errors:" + sbmlDoc.checkL2v4Compatibility)
-    Console.println("checkConsistency errors:" + sbmlDoc.checkConsistency)
-    Console.println("checkInternalConsistency errors:" + sbmlDoc.checkInternalConsistency)
+    logger.debug("checkL2v4Compatibility errors:" + sbmlDoc.checkL2v4Compatibility)
+    logger.debug("checkConsistency errors:" + sbmlDoc.checkConsistency)
+    logger.debug("checkInternalConsistency errors:" + sbmlDoc.checkInternalConsistency)
     if (sbmlDoc.checkInternalConsistency > 0) {
-      Console.println("Error: " + sbmlDoc.getError(0).getErrorId + "\n" +
+      logger.debug("Error: " + sbmlDoc.getError(0).getErrorId + "\n" +
                       "Category:" + sbmlDoc.getError(0).getCategoryAsString + "\n" +
                       "Line:" + sbmlDoc.getError(0).getLine + "\n" +
                       "Column:" + sbmlDoc.getError(0).getColumn + "\n" +
@@ -75,7 +77,7 @@ class SBMLHandler {
    * embebed inside or null if there is no content to embeb
    */
   def genNotesFromHTML(notesContent: String): Elem = {
-    Console.println("HTML to generate notes = " + notesContent)
+    logger.debug("HTML to generate notes = " + notesContent)
     wrapHTML(notesContent, "notes")
   }
 
@@ -85,7 +87,7 @@ class SBMLHandler {
    * embebed inside or null if there is no content to embeb
    */
   def genMessageFromHTML(messageContent: String): Elem = {
-    Console.println("HTML to generate message = " + messageContent)
+    logger.debug("HTML to generate message = " + messageContent)
     wrapHTML(messageContent, "message")
   }
 
@@ -135,13 +137,13 @@ class SBMLHandler {
    * if there are not notes
    */
   def checkCurrentLabelForNotes(xmlLabel: Elem): NodeSeq = {
-    Console.println("SBMLHandler.checkCurrentLabelForNotes() was called.")
+    logger.debug("SBMLHandler.checkCurrentLabelForNotes() was called.")
     val notes: NodeSeq = (xmlLabel \ "notes")
     if (notes.size == 0) {
       Nil
     } else {
       val noteContent = notes.iterator.next.child
-      Console.println("SBMLHandler.checkCurrentLabelForNotes() received the following note: \n" + noteContent)
+      logger.debug("SBMLHandler.checkCurrentLabelForNotes() received the following note: \n" + noteContent)
       noteContent
     }
   }
@@ -198,6 +200,8 @@ class SBMLHandler {
  * that library is loaded only once in the apply method
  */
 object LibSBMLLoader {
+  val logger = LoggerFactory.getLogger(getClass)
+
   var alreadyLoaded = false
 
   def apply() = {
@@ -220,12 +224,12 @@ object LibSBMLLoader {
           e.printStackTrace
         }
         case e: UnsatisfiedLinkError => {
-          Console.println("UnsatisfiedLinkError  if the file " +
+          logger.debug("UnsatisfiedLinkError  if the file " +
                           "does not exist: ")
           e.printStackTrace
         }
         case e: NullPointerException => {
-          Console.println("<code>filename</code> is " +
+          logger.debug("<code>filename</code> is " +
                           "<code>null</code>")
           e.printStackTrace
         }

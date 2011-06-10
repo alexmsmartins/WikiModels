@@ -50,7 +50,7 @@ class ParameterResource(sbmlModelResource:String) extends RESTResource {
     ):String = {
         val username:String = security.getUserPrincipal().getName()
 
-        Console.print("GET verb was used in parameter " + parameterResource)
+        logger.debug("GET verb was used in parameter " + parameterResource)
         if(secContext.isAuthorizedTo(username,
                                      "GET", "model/" + sbmlModelResource +
                                      "/parameter/" + parameterResource ) ){
@@ -86,7 +86,7 @@ class ParameterResource(sbmlModelResource:String) extends RESTResource {
     @Consumes(Array("application/xml"))
     def post(requestContent:InputStream) = {
         val username = security.getUserPrincipal().getName()
-        Console.print("POST verb was used in user " + username)
+        logger.debug("POST verb was used in user " + username)
 
         var ret = ""
         if(secContext.isAuthorizedTo(username,
@@ -136,10 +136,10 @@ class ParameterResource(sbmlModelResource:String) extends RESTResource {
     def put(@PathParam("parameterid") parameterResource:String,
             requestContent:String):Response = {
         val username = security.getUserPrincipal().getName()
-        Console.print("PUT verb was used in user " + username)
-        Console.print("parameterid = " + parameterResource)
-        Console.print("Content of request = " + requestContent)
-        Console.print("--------------------------------------")
+        logger.debug("PUT verb was used in user " + username)
+        logger.debug("parameterid = " + parameterResource)
+        logger.debug("Content of request = " + requestContent)
+        logger.debug("--------------------------------------")
         var ret = ""
         if(secContext.isAuthorizedTo(username,
                                      "PUT", "model/" + sbmlModelResource +
@@ -177,8 +177,8 @@ class ParameterResource(sbmlModelResource:String) extends RESTResource {
     def delete(@PathParam("parameterid") parameterResource:String
     ):Unit = {
         val username = security.getUserPrincipal().getName()
-        Console.print("DELETE verb was used with user " + username)
-        Console.print("DELETE verb was used with parameterid " + parameterResource)
+        logger.debug("DELETE verb was used with user " + username)
+        logger.debug("DELETE verb was used with parameterid " + parameterResource)
 
         var ret = ""
         if(secContext.isAuthorizedTo(username,
@@ -202,7 +202,7 @@ class ParameterResource(sbmlModelResource:String) extends RESTResource {
                             Response.Status.BAD_REQUEST)
                     }
             }
-           //Console.print(uriInfo + " HERE")
+           //logger.debug(uriInfo + " HERE")
         } else {
             //user is trying to access a resource for which
             //it does not have permissions

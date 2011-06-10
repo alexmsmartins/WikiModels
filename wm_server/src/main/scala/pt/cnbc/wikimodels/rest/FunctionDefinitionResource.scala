@@ -49,7 +49,7 @@ class FunctionDefinitionResource(sbmlModelResource:String) extends RESTResource 
     ):String = {
         val username:String = security.getUserPrincipal().getName()
 
-        Console.print("GET verb was used in functionDefinition " + functionDefinitionResource)
+        logger.debug("GET verb was used in functionDefinition " + functionDefinitionResource)
         if(secContext.isAuthorizedTo(username,
                                      "GET", "model/" + sbmlModelResource +
                                      "/functionDefinition/" + functionDefinitionResource ) ){
@@ -85,7 +85,7 @@ class FunctionDefinitionResource(sbmlModelResource:String) extends RESTResource 
     @Consumes(Array("application/xml"))
     def post(requestContent:InputStream) = {
         val username = security.getUserPrincipal().getName()
-        Console.print("POST verb was used in user " + username)
+        logger.debug("POST verb was used in user " + username)
 
         var ret = ""
         if(secContext.isAuthorizedTo(username,
@@ -135,10 +135,10 @@ class FunctionDefinitionResource(sbmlModelResource:String) extends RESTResource 
     def put(@PathParam("functionDefinitionid") functionDefinitionResource:String,
             requestContent:String):Response = {
         val username = security.getUserPrincipal().getName()
-        Console.print("PUT verb was used in user " + username)
-        Console.print("functionDefinitionid = " + functionDefinitionResource)
-        Console.print("Content of request = " + requestContent)
-        Console.print("--------------------------------------")
+        logger.debug("PUT verb was used in user " + username)
+        logger.debug("functionDefinitionid = " + functionDefinitionResource)
+        logger.debug("Content of request = " + requestContent)
+        logger.debug("--------------------------------------")
         var ret = ""
         if(secContext.isAuthorizedTo(username,
                                      "PUT", "model/" + sbmlModelResource +
@@ -176,8 +176,8 @@ class FunctionDefinitionResource(sbmlModelResource:String) extends RESTResource 
     def delete(@PathParam("functionDefinitionid") functionDefinitionResource:String
     ):Unit = {
         val username = security.getUserPrincipal().getName()
-        Console.print("DELETE verb was used with user " + username)
-        Console.print("DELETE verb was used with functionDefinitionid " + functionDefinitionResource)
+        logger.debug("DELETE verb was used with user " + username)
+        logger.debug("DELETE verb was used with functionDefinitionid " + functionDefinitionResource)
 
         var ret = ""
         if(secContext.isAuthorizedTo(username,

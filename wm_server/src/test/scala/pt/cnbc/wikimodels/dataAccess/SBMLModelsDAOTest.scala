@@ -13,8 +13,10 @@ import Assert._
 import com.hp.hpl.jena.rdf.model.ModelFactory
 import pt.cnbc.wikimodels.setup.Setup
 import pt.cnbc.wikimodels.dataModel.SBMLModel
+import org.slf4j.LoggerFactory
 
 class SBMLModelsDAOTest {
+  val logger = LoggerFactory.getLogger(getClass)
 
   @Before
   def setUp: Unit = {

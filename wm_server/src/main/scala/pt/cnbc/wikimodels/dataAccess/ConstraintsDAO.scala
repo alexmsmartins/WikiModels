@@ -23,8 +23,11 @@ import pt.cnbc.wikimodels.dataModel.Constraint
 import pt.cnbc.wikimodels.ontology.ManipulatorWrapper
 import pt.cnbc.wikimodels.ontology.{Namespaces => NS}
 import thewebsemantic.Sparql
+import org.slf4j.LoggerFactory
 
 class ConstraintsDAO {
+  val logger = LoggerFactory.getLogger(getClass)
+
   /**
    * Allows testing procedures. This is not to be used from outside this class
    */
@@ -37,7 +40,7 @@ class ConstraintsDAO {
       loadConstraint(constraintMetaid, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException =>
-        Console.println("Bean of " + Constraint.getClass + "and " +
+        logger.debug("Bean of " + Constraint.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         null
@@ -50,8 +53,8 @@ class ConstraintsDAO {
   def loadConstraint(constraintMetaid: String, model: Model): Constraint = {
     var ret: Constraint = null
 
-    Console.print("After loading Jena Model")
-    Console.print("Jena Model content")
+    logger.debug("After loading Jena Model")
+    logger.debug("Jena Model content")
     val queryString =
     """
     PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
@@ -62,7 +65,7 @@ class ConstraintsDAO {
 
     val l: java.util.LinkedList[Constraint]
     = Sparql.exec(model, classOf[Constraint], queryString)
-    Console.println("Found " + l.size + " Constraints with metaid " + constraintMetaid)
+    logger.debug("Found " + l.size + " Constraints with metaid " + constraintMetaid)
     if (l.size > 0)
       l.iterator.next
     else null
@@ -71,8 +74,8 @@ class ConstraintsDAO {
   def loadConstraintsInModel(modelMetaId: String,
                              model: Model): java.util.Collection[Constraint] = {
     val c =
-    Console.print("After loading Jena Model")
-    Console.print("Jena Model content")
+    logger.debug("After loading Jena Model")
+    logger.debug("Jena Model content")
     val queryString =
     """
 PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
@@ -86,7 +89,7 @@ SELECT ?s WHERE
 
     val l: java.util.LinkedList[Constraint]
     = Sparql.exec(model, classOf[Constraint], queryString)
-    Console.println("Found " + l.size + " Constraints from model " + modelMetaId)
+    logger.debug("Found " + l.size + " Constraints from model " + modelMetaId)
     if (l.size > 0)
       l
     else null
@@ -95,15 +98,15 @@ SELECT ?s WHERE
   def loadConstraint(): java.util.Collection[Constraint] = {
     try {
       val myModel: Model = ManipulatorWrapper.loadModelfromDB
-      Console.print("After loading Jena Model")
+      logger.debug("After loading Jena Model")
       var reader = new RDF2Bean(myModel)
-      Console.print("After creating a new RDF2Bean")
+      logger.debug("After creating a new RDF2Bean")
       val l: java.util.List[Constraint] = reader.load(new Constraint().getClass)
               .asInstanceOf[java.util.List[Constraint]]
       l
     } catch {
       case ex: thewebsemantic.NotFoundException =>
-        Console.println("Bean of " + Constraint.getClass + "and id is not found")
+        logger.debug("Bean of " + Constraint.getClass + "and id is not found")
         ex.printStackTrace()
         null
     }
@@ -125,13 +128,13 @@ SELECT ?s WHERE
       myModel.commit
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + Constraint.getClass + "and " +
+        logger.debug("Bean of " + Constraint.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         false
       }
       case ex => {
-        Console.println("Saving model " + constraint +
+        logger.debug("Saving model " + constraint +
                 "was not possible")
         ex.printStackTrace
 
@@ -158,7 +161,7 @@ SELECT ?s WHERE
       tryToCreateConstraintInModel(modelMetaid, constraint, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + Constraint.getClass + "and " +
+        logger.debug("Bean of " + Constraint.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         null
@@ -203,7 +206,7 @@ SELECT ?s WHERE
       tryToCreateConstraint(constraint, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + Constraint.getClass + "and " +
+        logger.debug("Bean of " + Constraint.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         null
@@ -238,7 +241,7 @@ SELECT ?s WHERE
       constraintMetaidExists(metaid, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + Constraint.getClass + "and " +
+        logger.debug("Bean of " + Constraint.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         false
@@ -267,7 +270,7 @@ SELECT ?s WHERE
     val qe: QueryExecution = QueryExecutionFactory.create(query, model);
     val results: Boolean = qe.execAsk;
 
-    Console.println("SPARQL query \n" + queryString + "\nIs " + results)
+    logger.debug("SPARQL query \n" + queryString + "\nIs " + results)
 
     results
   }
@@ -283,13 +286,13 @@ SELECT ?s WHERE
       updateConstraint(constraint, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + Constraint.getClass + "and " +
+        logger.debug("Bean of " + Constraint.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         false
       }
       case ex => {
-        Console.println(ex.toString)
+        logger.debug(ex.toString)
         ex.printStackTrace()
         false
       }
@@ -320,7 +323,7 @@ SELECT ?s WHERE
       deleteConstraint(constraint, myModel)
     } catch {
       case ex: Exception => {
-        Console.println("Deleting model " + constraint +
+        logger.debug("Deleting model " + constraint +
                 "was not possible")
         ex.printStackTrace
 
@@ -343,13 +346,13 @@ SELECT ?s WHERE
       } else false
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + Constraint.getClass + "and " +
+        logger.debug("Bean of " + Constraint.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         false
       }
       case ex => {
-        Console.println(ex.toString)
+        logger.debug(ex.toString)
         ex.printStackTrace()
         false
       }

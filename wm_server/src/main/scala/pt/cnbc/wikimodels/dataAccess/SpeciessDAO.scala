@@ -37,8 +37,11 @@ import pt.cnbc.wikimodels.exceptions.NotImplementedException
 import pt.cnbc.wikimodels.ontology.ManipulatorWrapper
 import pt.cnbc.wikimodels.ontology.{Namespaces => NS}
 import thewebsemantic.Sparql
+import org.slf4j.LoggerFactory
 
 class SpeciessDAO {
+  val logger = LoggerFactory.getLogger(getClass)
+
   /**
    * Allows testing procedures. This is not to be used from outside this class
    */
@@ -51,7 +54,7 @@ class SpeciessDAO {
       loadSpecies(speciesMetaid, myModel)
     } catch {
       case ex:thewebsemantic.NotFoundException =>
-        Console.println("Bean of " + Species.getClass + "and " +
+        logger.debug("Bean of " + Species.getClass + "and " +
                         "id is not found")
         ex.printStackTrace()
         null
@@ -64,8 +67,8 @@ class SpeciessDAO {
   def loadSpecies(speciesMetaid:String, model:Model):Species = {
     var ret:Species = null
 
-    Console.print("After loading Jena Model")
-    Console.print("Jena Model content")
+    logger.debug("After loading Jena Model")
+    logger.debug("Jena Model content")
     val queryString =
       """
         PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
@@ -76,7 +79,7 @@ class SpeciessDAO {
 
     val l:java.util.LinkedList[Species]
     = Sparql.exec(model, classOf[Species], queryString)
-    Console.println("Found " + l.size + " Speciess with metaid " + speciesMetaid)
+    logger.debug("Found " + l.size + " Speciess with metaid " + speciesMetaid)
     if(l.size > 0)
       l.iterator.next
     else null
@@ -85,8 +88,8 @@ class SpeciessDAO {
   def loadSpeciesInModel(modelMetaId:String,
                             model:Model):java.util.Collection[Species] = {
     val c =
-    Console.print("After loading Jena Model")
-    Console.print("Jena Model content")
+    logger.debug("After loading Jena Model")
+    logger.debug("Jena Model content")
     val queryString =
       """
         PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
@@ -100,7 +103,7 @@ class SpeciessDAO {
 
     val l:java.util.LinkedList[Species]
     = Sparql.exec(model, classOf[Species], queryString)
-    Console.println("Found " + l.size + " Species from model " + modelMetaId)
+    logger.debug("Found " + l.size + " Species from model " + modelMetaId)
     if(l.size > 0)
       l
     else null
@@ -109,15 +112,15 @@ class SpeciessDAO {
   def loadSpecies():java.util.Collection[Species] = {
     try{
       val myModel:Model = ManipulatorWrapper.loadModelfromDB
-      Console.print("After loading Jena Model")
+      logger.debug("After loading Jena Model")
       var reader = new RDF2Bean(myModel)
-      Console.print("After creating a new RDF2Bean")
+      logger.debug("After creating a new RDF2Bean")
       val l:java.util.List[Species] = reader.load(new Species().getClass )
       .asInstanceOf[java.util.List[Species]]
       l
     } catch {
       case ex:thewebsemantic.NotFoundException =>
-        Console.println("Bean of " + Species.getClass + "and id is not found")
+        logger.debug("Bean of " + Species.getClass + "and id is not found")
         ex.printStackTrace()
         null
     }
@@ -138,13 +141,13 @@ class SpeciessDAO {
       myModel.commit
     } catch {
       case ex:thewebsemantic.NotFoundException => {
-          Console.println("Bean of " + Species.getClass + "and " +
+          logger.debug("Bean of " + Species.getClass + "and " +
                           "id is not found")
           ex.printStackTrace()
           ret = false
         }
       case ex => {
-          Console.println("Saving model " + species +
+          logger.debug("Saving model " + species +
                           "was not possible")
           ex.printStackTrace
           ret =false
@@ -170,7 +173,7 @@ class SpeciessDAO {
       tryToCreateSpeciesInModel(modelMetaid, species, myModel)
     } catch {
       case ex:thewebsemantic.NotFoundException => {
-          Console.println("Bean of " + Species.getClass + "and " +
+          logger.debug("Bean of " + Species.getClass + "and " +
                           "id is not found")
           ex.printStackTrace()
           null
@@ -215,7 +218,7 @@ class SpeciessDAO {
       tryToCreateSpecies(species, myModel)
     } catch {
       case ex:thewebsemantic.NotFoundException => {
-          Console.println("Bean of " + Species.getClass + "and " +
+          logger.debug("Bean of " + Species.getClass + "and " +
                           "id is not found")
           ex.printStackTrace()
           null
@@ -247,7 +250,7 @@ class SpeciessDAO {
       speciesMetaidExists(metaid, myModel)
     } catch {
       case ex:thewebsemantic.NotFoundException => {
-          Console.println("Bean of " + Species.getClass + "and " +
+          logger.debug("Bean of " + Species.getClass + "and " +
                           "id is not found")
           ex.printStackTrace()
           false
@@ -276,7 +279,7 @@ class SpeciessDAO {
     val qe:QueryExecution = QueryExecutionFactory.create(query, model);
     val results:Boolean = qe.execAsk;
 
-    Console.println("SPARQL query \n" + queryString + "\nIs " + results)
+    logger.debug("SPARQL query \n" + queryString + "\nIs " + results)
 
     results
   }
@@ -292,13 +295,13 @@ class SpeciessDAO {
       updateSpecies(species, myModel)
     } catch {
       case ex:thewebsemantic.NotFoundException => {
-          Console.println("Bean of " + Species.getClass + "and " +
+          logger.debug("Bean of " + Species.getClass + "and " +
                           "id is not found")
           ex.printStackTrace()
           false
         }
       case ex => {
-          Console.println(ex.toString)
+          logger.debug(ex.toString)
           ex.printStackTrace()
           false
         }
@@ -329,7 +332,7 @@ class SpeciessDAO {
       deleteSpecies(species, myModel)
     } catch {
       case ex:Exception => {
-          Console.println("Deleting model " + species +
+          logger.debug("Deleting model " + species +
                           "was not possible")
           ex.printStackTrace
 
@@ -352,13 +355,13 @@ class SpeciessDAO {
       } else false
     } catch {
       case ex:thewebsemantic.NotFoundException => {
-          Console.println("Bean of " + Species.getClass + "and " +
+          logger.debug("Bean of " + Species.getClass + "and " +
                           "id is not found")
           ex.printStackTrace()
           false
         }
       case ex => {
-          Console.println(ex.toString)
+          logger.debug(ex.toString)
           ex.printStackTrace()
           false
         }

@@ -31,8 +31,11 @@ import pt.cnbc.wikimodels.ontology.ManipulatorWrapper
 import pt.cnbc.wikimodels.dataModel._
 import pt.cnbc.wikimodels.ontology.{Namespaces => NS}
 import thewebsemantic.Sparql
+import org.slf4j.LoggerFactory
 
 class ReactionsDAO {
+  val logger = LoggerFactory.getLogger(getClass)
+
   /**
    * Allows testing procedures. This is not to be used from outside this class
    */
@@ -45,7 +48,7 @@ class ReactionsDAO {
       loadReaction(reactionMetaid, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException =>
-        Console.println("Bean of " + Reaction.getClass + "and " +
+        logger.debug("Bean of " + Reaction.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         null
@@ -58,8 +61,8 @@ class ReactionsDAO {
   def loadReaction(reactionMetaid: String, model: Model): Reaction = {
     var ret: Reaction = null
 
-    Console.print("After loading Jena Model")
-    Console.print("Jena Model content")
+    logger.debug("After loading Jena Model")
+    logger.debug("Jena Model content")
     val queryString =
     """
     PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
@@ -70,7 +73,7 @@ class ReactionsDAO {
 
     val l: java.util.LinkedList[Reaction]
     = Sparql.exec(model, classOf[Reaction], queryString)
-    Console.println("Found " + l.size + " Reactions with metaid " + reactionMetaid)
+    logger.debug("Found " + l.size + " Reactions with metaid " + reactionMetaid)
     if (l.size > 0) {
       val reaction = l.iterator.next
       val specRefDAO = new SpeciesReferencesDAO()
@@ -94,8 +97,8 @@ class ReactionsDAO {
 
   def loadReactionsInModel(modelMetaId: String,
                            model: Model): java.util.Collection[Reaction] = {
-    Console.print("After loading Jena Model")
-    Console.print("Jena Model content")
+    logger.debug("After loading Jena Model")
+    logger.debug("Jena Model content")
     val queryString =
     """
     PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
@@ -109,7 +112,7 @@ class ReactionsDAO {
 
     val l: java.util.LinkedList[Reaction]
     = Sparql.exec(model, classOf[Reaction], queryString)
-    Console.println("Found " + l.size + " Reactions from model " + modelMetaId)
+    logger.debug("Found " + l.size + " Reactions from model " + modelMetaId)
     if (l.size > 0){
       l.map(i => loadReaction(i.metaid, model))
     }
@@ -119,15 +122,15 @@ class ReactionsDAO {
   def loadReaction(): java.util.Collection[Reaction] = {
     try {
       val myModel: Model = ManipulatorWrapper.loadModelfromDB
-      Console.print("After loading Jena Model")
+      logger.debug("After loading Jena Model")
       var reader = new RDF2Bean(myModel)
-      Console.print("After creating a new RDF2Bean")
+      logger.debug("After creating a new RDF2Bean")
       val l: java.util.List[Reaction] = reader.load(new Reaction().getClass)
               .asInstanceOf[java.util.List[Reaction]]
       l
     } catch {
       case ex: thewebsemantic.NotFoundException =>
-        Console.println("Bean of " + Reaction.getClass + "and id is not found")
+        logger.debug("Bean of " + Reaction.getClass + "and id is not found")
         ex.printStackTrace()
         null
     }
@@ -148,13 +151,13 @@ class ReactionsDAO {
       myModel.commit
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + Reaction.getClass + "and " +
+        logger.debug("Bean of " + Reaction.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         false
       }
       case ex => {
-        Console.println("Saving model " + reaction +
+        logger.debug("Saving model " + reaction +
                 "was not possible")
         ex.printStackTrace
         false
@@ -168,7 +171,7 @@ class ReactionsDAO {
    * @return true if creating the new model was possible and false otherwise
    */
   def createReaction(reaction: Reaction, model: Model): Boolean = {
-    Console.println("CreateReaction(" + reaction.metaid + ", model)")    
+    logger.debug("CreateReaction(" + reaction.metaid + ", model)")
     val writer = new Bean2RDF(model)
 
     //Code to keep save from saving the sub-elements since we need to check if their metaids already exist
@@ -210,7 +213,7 @@ class ReactionsDAO {
       tryToCreateReactionInModel(modelMetaid, reaction, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + Reaction.getClass + "and " +
+        logger.debug("Bean of " + Reaction.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         null
@@ -255,7 +258,7 @@ class ReactionsDAO {
       tryToCreateReaction(reaction, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + Reaction.getClass + "and " +
+        logger.debug("Bean of " + Reaction.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         null
@@ -291,7 +294,7 @@ class ReactionsDAO {
       reactionMetaidExists(metaid, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + Reaction.getClass + "and " +
+        logger.debug("Bean of " + Reaction.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         false
@@ -316,7 +319,7 @@ class ReactionsDAO {
     val qe: QueryExecution = QueryExecutionFactory.create(query, model);
     val results: Boolean = qe.execAsk;
 
-    Console.println("SPARQL query \n" + queryString + "\nIs " + results)
+    logger.debug("SPARQL query \n" + queryString + "\nIs " + results)
 
     results
   }
@@ -332,13 +335,13 @@ class ReactionsDAO {
       updateReaction(reaction, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + Reaction.getClass + "and " +
+        logger.debug("Bean of " + Reaction.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         false
       }
       case ex => {
-        Console.println(ex.toString)
+        logger.debug(ex.toString)
         ex.printStackTrace()
         false
       }
@@ -387,13 +390,13 @@ class ReactionsDAO {
       deleteReaction(reaction, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + Reaction.getClass + "and " +
+        logger.debug("Bean of " + Reaction.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         false
       }
       case ex => {
-        Console.println("Deleting model " + reaction +
+        logger.debug("Deleting model " + reaction +
                 "was not possible")
         ex.printStackTrace
         false

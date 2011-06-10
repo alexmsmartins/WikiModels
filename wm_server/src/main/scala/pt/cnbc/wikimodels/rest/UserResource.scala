@@ -49,7 +49,7 @@ class UserResource extends RESTResource {
         val username = security.getUserPrincipal().getName()
 
         var ret = ""
-        Console.print("GET verb was used in user " + userResource)
+        logger.debug("GET verb was used in user " + userResource)
         if(secContext.isAuthorizedTo(username,
                                      "GET", "user/" + userResource ) ){
             val user = UsersDAO.loadUser(userResource)

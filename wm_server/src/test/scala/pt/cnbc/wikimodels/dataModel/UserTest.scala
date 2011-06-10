@@ -14,8 +14,10 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.Assert._
 import scala.xml.Node
+import org.slf4j.LoggerFactory
 
 class UserTest {
+  val logger = LoggerFactory.getLogger(getClass)
 
     @Before
     def setUp: Unit = {

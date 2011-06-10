@@ -49,7 +49,7 @@ class SpeciesResource(sbmlModelResource:String) extends RESTResource {
     ):String = {
         val username:String = security.getUserPrincipal().getName()
 
-        Console.print("GET verb was used in species " + speciesResource)
+        logger.debug("GET verb was used in species " + speciesResource)
         if(secContext.isAuthorizedTo(username,
                                      "GET", "model/" + sbmlModelResource +
                                      "/species/" + speciesResource ) ){
@@ -85,7 +85,7 @@ class SpeciesResource(sbmlModelResource:String) extends RESTResource {
     @Consumes(Array("application/xml"))
     def post(requestContent:InputStream) = {
         val username = security.getUserPrincipal().getName()
-        Console.print("POST verb was used in user " + username)
+        logger.debug("POST verb was used in user " + username)
 
         var ret = ""
         if(secContext.isAuthorizedTo(username,
@@ -134,10 +134,10 @@ class SpeciesResource(sbmlModelResource:String) extends RESTResource {
     def put(@PathParam("speciesid") speciesResource:String,
             requestContent:String):Response = {
         val username = security.getUserPrincipal().getName()
-        Console.print("PUT verb was used in user " + username)
-        Console.print("speciesid = " + speciesResource)
-        Console.print("Content of request = " + requestContent)
-        Console.print("--------------------------------------")
+        logger.debug("PUT verb was used in user " + username)
+        logger.debug("speciesid = " + speciesResource)
+        logger.debug("Content of request = " + requestContent)
+        logger.debug("--------------------------------------")
         var ret = ""
         if(secContext.isAuthorizedTo(username,
                                      "PUT", "model/" + sbmlModelResource +
@@ -175,8 +175,8 @@ class SpeciesResource(sbmlModelResource:String) extends RESTResource {
     def delete(@PathParam("speciesid") speciesResource:String
     ):Unit = {
         val username = security.getUserPrincipal().getName()
-        Console.print("DELETE verb was used with user " + username)
-        Console.print("DELETE verb was used with speciesid " + speciesResource)
+        logger.debug("DELETE verb was used with user " + username)
+        logger.debug("DELETE verb was used with speciesid " + speciesResource)
 
         var ret = ""
         if(secContext.isAuthorizedTo(username,

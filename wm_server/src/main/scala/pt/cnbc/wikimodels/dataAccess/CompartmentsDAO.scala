@@ -38,8 +38,11 @@ import pt.cnbc.wikimodels.dataModel.SBMLModel
 import pt.cnbc.wikimodels.exceptions.NotImplementedException
 import pt.cnbc.wikimodels.ontology.ManipulatorWrapper
 import pt.cnbc.wikimodels.ontology.{Namespaces => NS}
+import org.slf4j.LoggerFactory
 
 class CompartmentsDAO {
+  val logger = LoggerFactory.getLogger(getClass)
+
   /**
    * Allows testing procedures. This is not to be used from outside this class
    */
@@ -52,7 +55,7 @@ class CompartmentsDAO {
       loadCompartment(compartmentMetaid, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException =>
-        Console.println("Bean of " + Compartment.getClass + "and " +
+        logger.debug("Bean of " + Compartment.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         null
@@ -65,8 +68,8 @@ class CompartmentsDAO {
   def loadCompartment(compartmentMetaid: String, model: Model): Compartment = {
     var ret: Compartment = null
 
-    Console.print("After loading Jena Model")
-    Console.print("Jena Model content")
+    logger.debug("After loading Jena Model")
+    logger.debug("Jena Model content")
     val queryString =
     """
     PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
@@ -77,7 +80,7 @@ class CompartmentsDAO {
 
     val l: java.util.LinkedList[Compartment]
     = Sparql.exec(model, classOf[Compartment], queryString)
-    Console.println("Found " + l.size + " Compartments with metaid " + compartmentMetaid)
+    logger.debug("Found " + l.size + " Compartments with metaid " + compartmentMetaid)
     if (l.size > 0)
       l.iterator.next
     else null
@@ -86,8 +89,8 @@ class CompartmentsDAO {
   def loadCompartmentsInModel(modelMetaId: String,
                               model: Model): java.util.Collection[Compartment] = {
     val c =
-    Console.print("After loading Jena Model")
-    Console.print("Jena Model content")
+    logger.debug("After loading Jena Model")
+    logger.debug("Jena Model content")
     val queryString =
     """
 PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
@@ -101,7 +104,7 @@ SELECT ?s WHERE
 
     val l: java.util.LinkedList[Compartment]
     = Sparql.exec(model, classOf[Compartment], queryString)
-    Console.println("Found " + l.size + " Compartments from model " + modelMetaId)
+    logger.debug("Found " + l.size + " Compartments from model " + modelMetaId)
     if (l.size > 0)
       l
     else null
@@ -110,12 +113,12 @@ SELECT ?s WHERE
   def loadCompartment(): java.util.Collection[Compartment] = {
     try {
       val myModel: Model = ManipulatorWrapper.loadModelfromDB
-      Console.print("After loading Jena Model")
+      logger.debug("After loading Jena Model")
       var reader = new RDF2Bean(myModel)
-      Console.print("After creating a new RDF2Bean")
+      logger.debug("After creating a new RDF2Bean")
       val l: java.util.List[Compartment] = reader.load(new Compartment().getClass)
               .asInstanceOf[java.util.List[Compartment]]
-      //Console.print("User XML = " + c.toList(0).toXML.toString)
+      //logger.debug("User XML = " + c.toList(0).toXML.toString)
 
       l
       /*var l:List[User] = Nil
@@ -123,7 +126,7 @@ SELECT ?s WHERE
        .toList*/
     } catch {
       case ex: thewebsemantic.NotFoundException =>
-        Console.println("Bean of " + Compartment.getClass + "and id is not found")
+        logger.debug("Bean of " + Compartment.getClass + "and id is not found")
         ex.printStackTrace()
         null
     }
@@ -145,13 +148,13 @@ SELECT ?s WHERE
       myModel.commit
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + Compartment.getClass + "and " +
+        logger.debug("Bean of " + Compartment.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         false
       }
       case ex => {
-        Console.println("Saving model " + compartment +
+        logger.debug("Saving model " + compartment +
                 "was not possible")
         ex.printStackTrace
 
@@ -178,7 +181,7 @@ SELECT ?s WHERE
       tryToCreateCompartmentInModel(modelMetaid, compartment, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + Compartment.getClass + "and " +
+        logger.debug("Bean of " + Compartment.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         null
@@ -222,7 +225,7 @@ SELECT ?s WHERE
       tryToCreateCompartment(compartment, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + Compartment.getClass + "and " +
+        logger.debug("Bean of " + Compartment.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         null
@@ -257,7 +260,7 @@ SELECT ?s WHERE
       compartmentMetaidExists(metaid, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + Compartment.getClass + "and " +
+        logger.debug("Bean of " + Compartment.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         false
@@ -286,7 +289,7 @@ SELECT ?s WHERE
     val qe: QueryExecution = QueryExecutionFactory.create(query, model);
     val results: Boolean = qe.execAsk;
 
-    Console.println("SPARQL query \n" + queryString + "\nIs " + results)
+    logger.debug("SPARQL query \n" + queryString + "\nIs " + results)
 
     results
   }
@@ -302,13 +305,13 @@ SELECT ?s WHERE
       updateCompartment(compartment, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + Compartment.getClass + "and " +
+        logger.debug("Bean of " + Compartment.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         false
       }
       case ex => {
-        Console.println(ex.toString)
+        logger.debug(ex.toString)
         ex.printStackTrace()
         false
       }
@@ -339,7 +342,7 @@ SELECT ?s WHERE
       deleteCompartment(compartment, myModel)
     } catch {
       case ex: Exception => {
-        Console.println("Deleting model " + compartment +
+        logger.debug("Deleting model " + compartment +
                 "was not possible")
         ex.printStackTrace
 
@@ -362,13 +365,13 @@ SELECT ?s WHERE
       } else false
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + Compartment.getClass + "and " +
+        logger.debug("Bean of " + Compartment.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         false
       }
       case ex => {
-        Console.println(ex.toString)
+        logger.debug(ex.toString)
         ex.printStackTrace()
         false
       }

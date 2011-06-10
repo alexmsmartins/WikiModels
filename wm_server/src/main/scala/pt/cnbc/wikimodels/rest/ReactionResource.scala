@@ -50,7 +50,7 @@ class ReactionResource(sbmlModelResource:String) extends RESTResource {
     ):String = {
         val username:String = security.getUserPrincipal().getName()
 
-        Console.print("GET verb was used in reaction " + reactionResource)
+        logger.debug("GET verb was used in reaction " + reactionResource)
         if(secContext.isAuthorizedTo(username,
                                      "GET", "model/" + sbmlModelResource +
                                      "/reaction/" + reactionResource ) ){
@@ -86,7 +86,7 @@ class ReactionResource(sbmlModelResource:String) extends RESTResource {
     @Consumes(Array("application/xml"))
     def post(requestContent:InputStream) = {
         val username = security.getUserPrincipal().getName()
-        Console.print("POST verb was used in user " + username)
+        logger.debug("POST verb was used in user " + username)
 
         var ret = ""
         if(secContext.isAuthorizedTo(username,
@@ -136,10 +136,10 @@ class ReactionResource(sbmlModelResource:String) extends RESTResource {
     def put(@PathParam("reactionid") reactionResource:String,
             requestContent:String):Response = {
         val username = security.getUserPrincipal().getName()
-        Console.print("PUT verb was used in user " + username)
-        Console.print("reactionid = " + reactionResource)
-        Console.print("Content of request = " + requestContent)
-        Console.print("--------------------------------------")
+        logger.debug("PUT verb was used in user " + username)
+        logger.debug("reactionid = " + reactionResource)
+        logger.debug("Content of request = " + requestContent)
+        logger.debug("--------------------------------------")
         var ret = ""
         if(secContext.isAuthorizedTo(username,
                                      "PUT", "model/" + sbmlModelResource +
@@ -177,8 +177,8 @@ class ReactionResource(sbmlModelResource:String) extends RESTResource {
     def delete(@PathParam("reactionid") reactionResource:String
     ):Unit = {
         val username = security.getUserPrincipal().getName()
-        Console.print("DELETE verb was used with user " + username)
-        Console.print("DELETE verb was used with reactionid " + reactionResource)
+        logger.debug("DELETE verb was used with user " + username)
+        logger.debug("DELETE verb was used with reactionid " + reactionResource)
 
         var ret = ""
         if(secContext.isAuthorizedTo(username,

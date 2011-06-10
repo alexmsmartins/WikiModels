@@ -39,7 +39,7 @@ class SBMLModelResource extends RESTResource {
     ):String = {
         val username:String = security.getUserPrincipal().getName()
 
-        Console.print("GET verb was used in model " + sbmlModelResource)
+        logger.debug("GET verb was used in model " + sbmlModelResource)
         if(secContext.isAuthorizedTo(username,
                                      "GET", "model/" + sbmlModelResource ) ){
             try{
@@ -74,7 +74,7 @@ class SBMLModelResource extends RESTResource {
     @Consumes(Array("application/xml"))
     def post(requestContent:InputStream) = {
         val username = security.getUserPrincipal().getName()
-        Console.print("POST verb was used in user " + username)
+        logger.debug("POST verb was used in user " + username)
 
         var ret = ""
         if(secContext.isAuthorizedTo(username,
@@ -98,7 +98,7 @@ class SBMLModelResource extends RESTResource {
                 val uri:URI = uriInfo.getAbsolutePathBuilder()
                 .path(modelMetaId)
                 .build();
-                Console.println("POST return URL is: "+uri)
+                logger.debug("POST return URL is: "+uri)
                 Response.created( uri ).build()
             }
         } else {
@@ -123,10 +123,10 @@ class SBMLModelResource extends RESTResource {
     def put(@PathParam("modelid") sbmlModelResource:String,
             requestContent:String):Response = {
         val username = security.getUserPrincipal().getName()
-        Console.print("PUT verb was used in user " + username)
-        Console.print("modelid = " + sbmlModelResource)
-        Console.print("Content of request = " + requestContent)
-        Console.print("--------------------------------------")
+        logger.debug("PUT verb was used in user " + username)
+        logger.debug("modelid = " + sbmlModelResource)
+        logger.debug("Content of request = " + requestContent)
+        logger.debug("--------------------------------------")
         var ret = ""
         if(secContext.isAuthorizedTo(username,
                                      "PUT", "model/") ){
@@ -163,7 +163,7 @@ class SBMLModelResource extends RESTResource {
     def delete(@PathParam("modelid") sbmlModelResource:String
     ):Unit = {
         val username = security.getUserPrincipal().getName()
-        Console.print("DELETE verb was used in user " + username)
+        logger.debug("DELETE verb was used in user " + username)
 
         var ret = ""
         if(secContext.isAuthorizedTo(username,

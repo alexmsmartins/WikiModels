@@ -18,11 +18,13 @@ import scala.collection.mutable.LinkedList
 
 import thewebsemantic.Bean2RDF
 import thewebsemantic.RDF2Bean
+import org.slf4j.LoggerFactory
 
 /**
  * Class responsible for the access to Jena
  */
 object UsersDAO {
+  val logger = LoggerFactory.getLogger(getClass)
 
     def saveUser(u:User) = {
         try{
@@ -31,12 +33,12 @@ object UsersDAO {
             writer.save(u)
         } catch {
             case ex:thewebsemantic.NotFoundException =>
-                Console.println("Bean of " + User.getClass + "and " +
+                logger.debug("Bean of " + User.getClass + "and " +
                                 "id is not found")
                 ex.printStackTrace()
                 null
             case ex =>
-                Console.println(ex.toString)
+                logger.debug(ex.toString)
                 ex.printStackTrace()
                 null
         }
@@ -47,15 +49,15 @@ object UsersDAO {
         saveUser(User("xxxx", "xxxxp", "Alexxx", "Martinxx", "alex@xxx.com"))
         try{
             var myModel:Model = ManipulatorWrapper.loadModelfromDB
-            Console.print("Number of individuals in loaded model is " + myModel.size)
+            logger.debug("Number of individuals in loaded model is " + myModel.size)
 
-            Console.print("After loading Jena Model")
+            logger.debug("After loading Jena Model")
             var reader = new RDF2Bean(myModel)
-            Console.print("After creating a new RDF2Bean")
+            logger.debug("After creating a new RDF2Bean")
             val l:java.util.Collection[User]
                 = reader.load( new User().getClass)
                     .asInstanceOf[java.util.Collection[User]]
-            Console.println("Found " + l.size + " users with username " + userName)
+            logger.debug("Found " + l.size + " users with username " + userName)
             val iter = l.iterator
             var next:User=null
             for(i <- 0 until l.size-1){
@@ -66,7 +68,7 @@ object UsersDAO {
             return ret
         } catch {
             case ex:thewebsemantic.NotFoundException =>
-                Console.println("Bean of " + User.getClass + "and " +
+                logger.debug("Bean of " + User.getClass + "and " +
                                 "id is not found")
                 ex.printStackTrace()
                 null
@@ -79,12 +81,12 @@ object UsersDAO {
     def loadUsers():java.util.Collection[User] = {
         try{
             val myModel:Model = ManipulatorWrapper.loadModelfromDB
-            Console.print("After loading Jena Model")
+            logger.debug("After loading Jena Model")
             var reader = new RDF2Bean(myModel)
-            Console.print("After creating a new RDF2Bean")
+            logger.debug("After creating a new RDF2Bean")
             val l:java.util.List[User] = reader.load(new User().getClass )
                 .asInstanceOf[java.util.List[User]]
-            //Console.print("User XML = " + c.toList(0).toXML.toString)
+            //logger.debug("User XML = " + c.toList(0).toXML.toString)
 
             l
             /*var l:List[User] = Nil
@@ -92,7 +94,7 @@ object UsersDAO {
                 .toList*/
         } catch {
             case ex:thewebsemantic.NotFoundException =>
-                Console.println("Bean of " + User.getClass + "and id is not found")
+                logger.debug("Bean of " + User.getClass + "and id is not found")
                 ex.printStackTrace()
                 null
         }

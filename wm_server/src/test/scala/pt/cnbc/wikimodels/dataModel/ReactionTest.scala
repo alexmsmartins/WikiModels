@@ -10,8 +10,10 @@ package pt.cnbc.wikimodels.dataModel
 
 import org.junit._
 import Assert._
+import org.slf4j.LoggerFactory
 
 class ReactionTest {
+  val logger = LoggerFactory.getLogger(getClass)
 
   val reaction1 =
     <reaction id="J1">

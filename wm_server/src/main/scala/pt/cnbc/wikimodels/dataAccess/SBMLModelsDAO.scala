@@ -27,8 +27,10 @@ import pt.cnbc.wikimodels.dataModel.Element
 import pt.cnbc.wikimodels.dataModel.SBMLModels
 import pt.cnbc.wikimodels.exceptions.BadFormatException
 import pt.cnbc.wikimodels.ontology.ManipulatorWrapper
+import org.slf4j.LoggerFactory
 
 class SBMLModelsDAO {
+  val logger = LoggerFactory.getLogger(getClass)
 
   /**
    * Allows testing procedures. This is not to be used from outside this class
@@ -42,7 +44,7 @@ class SBMLModelsDAO {
       deepLoadSBMLModel(modelMetaid, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException =>
-        Console.println("Bean of " + SBMLModel.getClass + "and " +
+        logger.debug("Bean of " + SBMLModel.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         null
@@ -55,10 +57,10 @@ class SBMLModelsDAO {
   def deepLoadSBMLModel(modelMetaId: String, model: Model): SBMLModel = {
     var ret: SBMLModel = null
 
-    Console.print("After loading Jena Model")
+    logger.debug("After loading Jena Model")
     if (modelMetaId == null) throw new java.lang.NullPointerException("modelMetaId is null")
     if (model == null) throw new java.lang.NullPointerException("model is null")
-    Console.print("Jena Model content")
+    logger.debug("Jena Model content")
     val queryString =
     """
     PREFIX sbml: <http://wikimodels.cnbc.pt/ontologies/sbml.owl#>
@@ -69,7 +71,7 @@ class SBMLModelsDAO {
 
     val l: java.util.LinkedList[SBMLModel]
     = Sparql.exec(model, classOf[SBMLModel], queryString)
-    Console.println("Found " + l.size + " SBMLModels with metaid " + modelMetaId)
+    logger.debug("Found " + l.size + " SBMLModels with metaid " + modelMetaId)
 
     if (l.size > 0) {
       val sbmlmodel = l.iterator.next
@@ -97,8 +99,8 @@ class SBMLModelsDAO {
       val reactDAO = new ReactionsDAO()
       sbmlmodel.listOfReactions = reactDAO.loadReactionsInModel(
         sbmlmodel.metaid, model)
-      Console.println("SBMLModel after loading")
-      Console.println(sbmlmodel.toXML)
+      logger.debug("SBMLModel after loading")
+      logger.debug("{}",sbmlmodel.toXML)
       sbmlmodel
     } else null
   }
@@ -110,7 +112,7 @@ class SBMLModelsDAO {
       loadSBMLModels(myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException =>
-        Console.println("Bean of " + SBMLModel.getClass + "and id is not found")
+        logger.debug("Bean of " + SBMLModel.getClass + "and id is not found")
         ex.printStackTrace()
         null
     }
@@ -123,9 +125,9 @@ class SBMLModelsDAO {
   }
 
   def loadListOfSBMLModels(myModel: Model): java.util.Collection[SBMLModel] = {
-    Console.print("After loading Jena Model")
+    logger.debug("After loading Jena Model")
     var reader = new RDF2Bean(myModel)
-    Console.print("After creating a new RDF2Bean")
+    logger.debug("After creating a new RDF2Bean")
     reader.load[SBMLModel](classOf[SBMLModel])
   }
 
@@ -141,14 +143,14 @@ class SBMLModelsDAO {
       createSBMLModel(sbmlmodel, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + SBMLModel.getClass + "and " +
+        logger.debug("Bean of " + SBMLModel.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         false
       }
       case ex => {
-        Console.println(ex.toString)
-        Console.println("Saving model " + sbmlmodel +
+        logger.debug(ex.toString)
+        logger.debug("Saving model " + sbmlmodel +
                 "was not possible")
         ex.printStackTrace
         false
@@ -163,9 +165,9 @@ class SBMLModelsDAO {
   def createSBMLModel(sbmlmodel: SBMLModel, model: Model): Boolean = {
     val writer = new Bean2RDF(model)
 
-    Console.println("SBML Model before removing lists")
-    Console.println(sbmlmodel.toXML.toString)
-    Console.println("")
+    logger.debug("SBML Model before removing lists")
+    logger.debug(sbmlmodel.toXML.toString)
+    logger.debug("")
 
     //Code to keep save from saving the subelements since we need to check if their metaids already exist
     val tmpsbmlmodel = new SBMLModel()
@@ -182,9 +184,9 @@ class SBMLModelsDAO {
     tmpsbmlmodel.listOfReactions = sbmlmodel.listOfReactions
     sbmlmodel.listOfReactions = null
 
-    Console.println("Temp SBML Model after addimg lists")
-    Console.println(tmpsbmlmodel.toXML.toString)
-    Console.println("")
+    logger.debug("Temp SBML Model after addimg lists")
+    logger.debug(tmpsbmlmodel.toXML.toString)
+    logger.debug("")
 
     writer.save(sbmlmodel)
 
@@ -233,7 +235,7 @@ class SBMLModelsDAO {
       tryToCreateSBMLModel(sbmlModel, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + SBMLModel.getClass + "and " +
+        logger.debug("Bean of " + SBMLModel.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         null
@@ -318,7 +320,7 @@ class SBMLModelsDAO {
     val qe: QueryExecution = QueryExecutionFactory.create(query, model);
     val result: Boolean = qe.execAsk;
 
-    Console.println("SPARQL query \n" + queryString + "\nIs " + result)
+    logger.debug("SPARQL query \n" + queryString + "\nIs " + result)
 
     result
   }
@@ -340,7 +342,7 @@ class SBMLModelsDAO {
     val qe: QueryExecution = QueryExecutionFactory.create(query, model);
     val results: Boolean = qe.execAsk;
 
-    Console.println("SPARQL query \n" + queryString + "\nIs " + results)
+    logger.debug("SPARQL query \n" + queryString + "\nIs " + results)
 
     results
   }
@@ -351,7 +353,7 @@ class SBMLModelsDAO {
       modelIdExists(id, myModel)
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + SBMLModel.getClass + "and " +
+        logger.debug("Bean of " + SBMLModel.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         false
@@ -379,7 +381,7 @@ class SBMLModelsDAO {
     val query: Query = QueryFactory.create(queryString);
     val qe: QueryExecution = QueryExecutionFactory.create(query, model);
     val results: Boolean = qe.execAsk;
-    Console.println("SPARQL query \n" + queryString + "\nIs " + results)
+    logger.debug("SPARQL query \n" + queryString + "\nIs " + results)
     results
   }
 
@@ -394,7 +396,7 @@ class SBMLModelsDAO {
       updateSBMLModel(sbmlmodel, myModel)
     } catch {
       case ex: Exception => {
-        Console.println("Saving model " + sbmlmodel +
+        logger.debug("Saving model " + sbmlmodel +
                 "was not possible")
         ex.printStackTrace
 
@@ -447,13 +449,13 @@ class SBMLModelsDAO {
       } else false
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + SBMLModel.getClass + "and " +
+        logger.debug("Bean of " + SBMLModel.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         false
       }
       case ex => {
-        Console.println(ex.toString)
+        logger.debug(ex.toString)
         ex.printStackTrace()
         false
       }
@@ -472,7 +474,7 @@ class SBMLModelsDAO {
       deleteSBMLModel(sbmlmodel, myModel)
     } catch {
       case ex: Exception => {
-        Console.println("Deleting model " + sbmlmodel +
+        logger.debug("Deleting model " + sbmlmodel +
                 "was not possible")
         ex.printStackTrace
 
@@ -538,13 +540,13 @@ class SBMLModelsDAO {
       } else false
     } catch {
       case ex: thewebsemantic.NotFoundException => {
-        Console.println("Bean of " + SBMLModel.getClass + "and " +
+        logger.debug("Bean of " + SBMLModel.getClass + "and " +
                 "id is not found")
         ex.printStackTrace()
         false
       }
       case ex => {
-        Console.println(ex.toString)
+        logger.debug(ex.toString)
         ex.printStackTrace()
         false
       }

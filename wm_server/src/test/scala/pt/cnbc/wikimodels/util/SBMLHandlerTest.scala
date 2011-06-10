@@ -13,11 +13,14 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.Assert._
 import scala.xml.Node
+import org.slf4j.LoggerFactory
 
 class SBMLHandlerTest {
-    var example1:String =
+  val logger = LoggerFactory.getLogger(getClass)
+
+  var example1:String =
 """<?xml version="1.0" encoding="UTF-8"?>
-<sbml xmlns="http://www.sbml.org/sbml/level2/version4" metaid="metaid_0000001" level="2" version="4">
+""" + <sbml xmlns="http://www.sbml.org/sbml/level2/version4" metaid="metaid_0000001" level="2" version="4">
   <model metaid="metaid_0000002" id="model_0000001" name="Izhikevich2004_SpikingNeurons_Class1Excitable">
     <notes>
       <body xmlns="http://www.w3.org/1999/xhtml">
@@ -210,9 +213,6 @@ class SBMLHandlerTest {
     </listOfEvents>
   </model>
 </sbml>
-"""
-
-
 
     @Before
     def setUp: Unit = {
@@ -231,43 +231,41 @@ class SBMLHandlerTest {
     }
 
 
-    
-    @Test
-    def genNotesFromHTMLTest = {
-        val inNotes =
+  @Test
+  def genNotesFromHTMLTest = {
+    val inNotes =
+      <html>
+        <body>
+          <h1>Title</h1>
+        </body>
+      </html>
+    val outNotes =
+      <notes>
         <html>
-            <body>
-                <h1>Title</h1>
-            </body>
+          <body>
+            <h1>Title</h1>
+          </body>
         </html>
-        val outNotes =
-        <notes>
-            <html>
-                <body>
-                    <h1>Title</h1>
-                </body>
-            </html>
-                </notes>
+      </notes>
 
-        val spit = (new SBMLHandler().genNotesFromHTML(inNotes.toString))
+    val spit = (new SBMLHandler().genNotesFromHTML(inNotes.toString))
 
 
-        Console.println("Predicted notes = " + spit )
-        Console.println("Predicted h1 = " + (outNotes \ "html" \ "body" \ "h1").text)
-        Console.println("Obtained h1 = " + (spit \ "html" \ "body" \ "h1").text)
+    logger.debug("Predicted notes = " + spit)
+    logger.debug("Predicted h1 = " + (outNotes \ "html" \ "body" \ "h1").text)
+    logger.debug("Obtained h1 = " + (spit \ "html" \ "body" \ "h1").text)
 
-        assertEquals( (spit \ "html" \ "body" \ "h1").text,
-                      (outNotes \ "html" \ "body" \ "h1").text)
-        assertTrue(spit.label == "notes")
-    }
+    assertEquals((spit \ "html" \ "body" \ "h1").text,
+      (outNotes \ "html" \ "body" \ "h1").text)
+    assertTrue(spit.label == "notes")
+  }
 
-    @Test
-    def spitNullNotesTest =
-        assertEquals(new SBMLHandler().genNotesFromHTML(null), null)
+  @Test
+  def spitNullNotesTest =
+    assertEquals(new SBMLHandler().genNotesFromHTML(null), null)
 
-    @Test
-    def spitEmptyStringNotesTest =
-        assertEquals(new SBMLHandler().genNotesFromHTML("  "), null)
-
+  @Test
+  def spitEmptyStringNotesTest =
+    assertEquals(new SBMLHandler().genNotesFromHTML("  "), null)
 }
 
