@@ -17,6 +17,7 @@ import pt.cnbc.wikimodels.ontology.ManipulatorWrapper
 import pt.cnbc.wikimodels.setup.Setup
 import org.slf4j.LoggerFactory
 
+@Test
 class ReactionsDAOTest {
   val logger = LoggerFactory.getLogger(getClass)
 

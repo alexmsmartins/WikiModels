@@ -1,31 +1,21 @@
 package pt.cnbc.wikimodels.setup
 
 
-import org.apache.log4j.Logger
-import com.hp.hpl.jena.rdf.model.ModelFactory
 import com.hp.hpl.jena.rdf.model.Model
-import com.hp.hpl.jena.sdb.StoreDesc
-import com.hp.hpl.jena.rdf.model.Resource
-import com.hp.hpl.jena.vocabulary.VCARD
-import com.hp.hpl.jena.sdb.store.LayoutType
-import com.hp.hpl.jena.sdb.store.DatabaseType
-import com.hp.hpl.jena.sdb.sql.JDBC
-import com.hp.hpl.jena.sdb.sql.SDBConnection
-import com.hp.hpl.jena.sdb.Store
-import com.hp.hpl.jena.sdb.SDBFactory
-import com.hp.hpl.jena.shared.NotFoundException
-import com.hp.hpl.jena.graph.GraphEvents
 
 import java.io.File
 import scala.Array
 
 import pt.cnbc.wikimodels.ontology.ManipulatorWrapper
+import java.util.logging.Logger
+import org.slf4j.LoggerFactory
 
 /**
  * Hello world!
  *
  */
 object Setup {
+  val logger = LoggerFactory.getLogger(this.getClass)
   ///Setup ontologies
   def saveOntologiesOnKB = {
     val modelFromKB = ManipulatorWrapper.loadModelfromDB
@@ -59,20 +49,11 @@ Unexpected Error.""" + e)
               }) //Merge Ontologies with KnowledgeBase
     if(model==null)
       throw new Exception("saveOntologiesOn - Model is null")
-
     model
-  }
-
-  /**
-   * Setup user's passwords
-   */
-  def savePasswordsOnKB = {
-    ""
   }
 
   def main(args: Array[String]): Unit = {
     ManipulatorWrapper.initializeDB
     saveOntologiesOnKB
-    savePasswordsOnKB
   }
 }
