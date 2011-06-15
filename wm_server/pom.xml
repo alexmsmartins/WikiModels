@@ -43,11 +43,11 @@
             <url>http://download.java.net/maven/1</url>
             <layout>legacy</layout>
         </repository>
-        <!--<repository>
+        <repository>
             <id>localMavenRepo</id>
             <name>localMavenRepo</name>
             <url>file:../localMavenRepo</url>
-        </repository>-->
+        </repository>
     </repositories>
     
     <pluginRepositories>

@@ -50,7 +50,8 @@
   </repositories>
 
   <dependencies>
-    <dependency>
+      <!-- TODO: uncomment this dependency again after checking this does not screw the build -->
+    <!-- <dependency>
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
       <version>1.2.16</version>
@@ -60,7 +61,7 @@
           <groupId>javax.jms</groupId>
         </exclusion>
       </exclusions>
-    </dependency>
+    </dependency>-->
     <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
