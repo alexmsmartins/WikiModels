@@ -27,6 +27,7 @@ import pt.cnbc.wikimodels.dataModel.Element
 import pt.cnbc.wikimodels.dataModel.SBMLModels
 import pt.cnbc.wikimodels.exceptions.BadFormatException
 import pt.cnbc.wikimodels.ontology.ManipulatorWrapper
+import org.slf4j.LoggerFactory
 
 class SBMLModelsDAO {
 
@@ -52,8 +53,11 @@ class SBMLModelsDAO {
     }
   }
 
+  val logger = LoggerFactory.getLogger(getClass)
+
   def deepLoadSBMLModel(modelMetaId: String, model: Model): SBMLModel = {
     var ret: SBMLModel = null
+    logger.debug("Lets make this fail")
 
     Console.print("After loading Jena Model")
     if (modelMetaId == null) throw new java.lang.NullPointerException("modelMetaId is null")

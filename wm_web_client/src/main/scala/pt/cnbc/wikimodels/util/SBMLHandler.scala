@@ -18,7 +18,7 @@ import org.slf4j._
 object SBMLDocHandler {
   self  =>
 
-  val logger = LoggerFactory.getLogger(SBMLDocHandler.getClass)
+  val logger = LoggerFactory.getLogger(getClass)
 
   def surroundModelTagWithSBML(model:Elem):String = {
     """<?xml version="1.0" encoding="UTF-8"?>""" + System.getProperty("line.separator") +
@@ -31,7 +31,7 @@ object SBMLDocHandler {
    * Extracts the <model/> tag along with its content  from a valid SBML file so that it can be handled by scala.xml.XML
    */
   def extractModelTagfromSBML(xmlDoc:String):Box[Elem] = {
-    logger.warn("Entering method extractModelTagfromSBML()")
+    logger.trace("XXXXXEntering method extractModelTagfromSBML()")
     try{
       //the next expression matches <sbml> even if it has atributes. Scala 2.8.1 aND 2.9
       val removedHeader = removeXMLHeader( xmlDoc  ).trim
