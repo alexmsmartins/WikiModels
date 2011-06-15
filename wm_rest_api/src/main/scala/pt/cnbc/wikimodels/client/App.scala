@@ -420,7 +420,7 @@ object App {
       if ((xml \ "userName").text == "admin") {
 
       } else throw new Exception("Wrong user")
-    } else throw new Exception("Wrong StatusCode. Should be 200 OK")
+    } else throw new Exception("Wrong StatusCode. Should be 200 OK and not " + ra.getStatusCode + "!")
   }
 
   @Test

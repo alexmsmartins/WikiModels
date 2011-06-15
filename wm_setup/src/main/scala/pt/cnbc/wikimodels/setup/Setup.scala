@@ -53,7 +53,7 @@ Unexpected Error.""" + e)
             .filter(i => i.isFile && !i.isHidden) //select non hidden files
             .map(i => i.getName) //get the names of files
             .filter(i => i.matches("""\S+(.rdf|.owl)""")) //filter the ones which end with .rdf and owl
-            .map(i => { Console.println("Loading file " + i + "to KB")
+            .map(i => { Console.println("Loading file " + i + " to KB")
                         model.add(
                           ManipulatorWrapper.loadModelfromfile(i))
               }) //Merge Ontologies with KnowledgeBase

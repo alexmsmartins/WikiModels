@@ -63,6 +63,17 @@
       </exclusions>
     </dependency>-->
     <dependency>
+        <groupId>log4j</groupId>
+        <artifactId>log4j</artifactId>
+        <version>1.2.14</version>
+        <exclusions>
+            <exclusion>
+                <groupId>jms</groupId>
+                <artifactId>javax</artifactId>
+            </exclusion>
+        </exclusions>
+    </dependency>
+    <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
         <version>1.5.11</version>
