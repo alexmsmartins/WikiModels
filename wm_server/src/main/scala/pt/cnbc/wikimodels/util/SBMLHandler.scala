@@ -103,14 +103,28 @@ class SBMLHandler {
       null.asInstanceOf[Elem]
     }
 
-  private def addNamespaceToXML(ns: NodeSeq, namespace: String): NodeSeq = {
+  private def addNamespaceToXML(ns: NodeSeq, namespace: String): NodeSeq ={
+   if (ns != Nil)
+     ns.map(i => {
+       new Elem(i.prefix,
+         i.label,
+         i.attributes,
+         NamespaceBinding(null, namespace, TopScope ),
+         addTopScopeToXMLRecurs(i.child, namespace): _*)
+     }
+     ).filter(_.label != "#PCDATA")
+   //the filter is an hack to make <#PCDATA go away
+   else Nil
+ }
+
+  def addTopScopeToXMLRecurs(ns: NodeSeq, namespace: String): NodeSeq ={
     if (ns != Nil)
       ns.map(i => {
-        new Elem(null,
+        new Elem(i.prefix,
           i.label,
-          scala.xml.Null,
-          NamespaceBinding(null, namespace, TopScope ),
-          i.child: _*)
+          i.attributes,
+          TopScope,
+          addTopScopeToXMLRecurs(i.child, namespace): _*)
       }
       ).filter(_.label != "#PCDATA")
     //the filter is an hack to make <#PCDATA go away
@@ -125,7 +139,7 @@ class SBMLHandler {
 
 
   /**
-   * Checks the current XML labe for the presence of a Notes labe.
+   * Checks the current XML label for the presence of a Notes labe.
    * The input must be in the form:
    * <currentlabel metaid="123" id="456" name"name789">
    *  <notes>

@@ -63,11 +63,6 @@
     </dependency>
     <dependency>
       <groupId>net.liftweb</groupId>
-      <artifactId>lift-webkit_${scala.version}</artifactId>
-      <version>${lift.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>net.liftweb</groupId>
       <artifactId>lift-mapper_${scala.version}</artifactId>
       <version>${lift.version}</version>
     </dependency>
@@ -101,7 +96,6 @@
       <version>0.1-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
-
   </dependencies>
 
   <build>

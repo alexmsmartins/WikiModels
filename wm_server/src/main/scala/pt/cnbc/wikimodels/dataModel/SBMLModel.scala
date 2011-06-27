@@ -29,6 +29,7 @@ import thewebsemantic.RdfType
 
 import pt.cnbc.wikimodels.util.SBMLHandler
 import pt.cnbc.wikimodels.exceptions.BadFormatException
+import org.apache.log4j.Logger
 
 
 /**
@@ -108,11 +109,13 @@ case class SBMLModel() extends Element {
    * Those should be added by a proper export funtion when it is created
    * @return the XML representing the user
    */
+
+
   override def toXML(): Elem = {
     Console.println("SBMLModel.toXML is including the following notes in the model: " + notes)
     <model metaid={metaid} id={id} name={name}>
       <!--order is important according to SBML Specifications-->
-      {Console.println("Notes of the model are " + notes)}
+      {logger.debug("Notes of the model are " + notes)}
       {new SBMLHandler().genNotesFromHTML(notes)}
       {if (listOfFunctionDefinitions != null && listOfFunctionDefinitions.size != 0)
         <listOfFunctionDefinitions>
