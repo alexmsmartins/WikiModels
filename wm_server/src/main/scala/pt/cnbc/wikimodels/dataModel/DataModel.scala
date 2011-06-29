@@ -22,7 +22,7 @@ import org.apache.log4j.Logger
  */
 trait DataModel extends RdfBean[DataModel]{
 
-  val logger = Logger.getLogger(this.getClass)
+  //val logger = Logger.getLogger(this.getClass)
 
     val sbmlHandler = new SBMLHandler()
     /**

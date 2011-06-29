@@ -115,7 +115,7 @@ case class SBMLModel() extends Element {
     Console.println("SBMLModel.toXML is including the following notes in the model: " + notes)
     <model metaid={metaid} id={id} name={name}>
       <!--order is important according to SBML Specifications-->
-      {logger.debug("Notes of the model are " + notes)}
+      {Console.println("Notes of the model are " + notes)}
       {new SBMLHandler().genNotesFromHTML(notes)}
       {if (listOfFunctionDefinitions != null && listOfFunctionDefinitions.size != 0)
         <listOfFunctionDefinitions>

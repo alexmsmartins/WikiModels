@@ -90,6 +90,7 @@
             <groupId>thewebsemantic</groupId>
             <artifactId>jenabean</artifactId>
             <version>${jenabeans.version}</version>
+
         </dependency>
         <dependency>
             <groupId>glassfish</groupId>
