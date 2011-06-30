@@ -29,7 +29,6 @@ import thewebsemantic.RdfType
 
 import pt.cnbc.wikimodels.util.SBMLHandler
 import pt.cnbc.wikimodels.exceptions.BadFormatException
-import org.apache.log4j.Logger
 
 
 /**

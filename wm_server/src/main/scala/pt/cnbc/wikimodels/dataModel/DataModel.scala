@@ -8,12 +8,10 @@
 
 package pt.cnbc.wikimodels.dataModel
 
-import scala.xml.Node
 import scala.xml.Elem
 import thewebsemantic.binding.RdfBean
 
 import pt.cnbc.wikimodels.util.SBMLHandler
-import org.apache.log4j.Logger
 
 /**
  * The initial bean from which every other persistence model class

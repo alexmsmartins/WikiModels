@@ -224,7 +224,10 @@ object LibSBMLLoader {
         //            System.loadLibrary("libsbml");
         System.load("/usr/local/lib/libsbmlj.so")
         /* Extra check to be sure we have access to libSBML: */
-        Class.forName("org.sbml.libsbml.libsbml")
+        if( Class.forName("org.sbml.libsbml.libsbml") == null)
+          alreadyLoaded = false
+        else
+          alreadyLoaded = true
       } catch {
         case e: SecurityException => {
           System.err.println("A security manager exists and its" +
