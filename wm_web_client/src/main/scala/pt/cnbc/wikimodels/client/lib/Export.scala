@@ -22,7 +22,7 @@ import collection.immutable.List._
 object Export {
 
   def asSBMLL2V4(modelMetaId:String):Box[LiftResponse] = {
-    val model = User.getRestful.getRequest("/model/" + modelMetaId )
+    val model = User.restfulConnection.getRequest("/model/" + modelMetaId )
     val completeModel:Elem = <sbml xmlns="http://www.sbml.org/sbml/level2/version4" level="2" version="4">{
         model
        }</sbml>

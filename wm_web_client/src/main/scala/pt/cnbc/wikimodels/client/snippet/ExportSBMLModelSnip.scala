@@ -21,7 +21,7 @@ import _root_.pt.cnbc.wikimodels.snippet.User
 class ExportSBMLModelSnip {
 
   def doIt = {
-    val model = User.getRestful.getRequest("/model/" + S.param("modelMetaId").openOr("TODO: Error export model") )
+    val model = User.restfulConnection.getRequest("/model/" + S.param("modelMetaId").openOr("TODO: Error export model") )
     val completeModel =
       <sbml xmlns="http://www.sbml.org/sbml/level2/version4" level="2" version="4">{
         model

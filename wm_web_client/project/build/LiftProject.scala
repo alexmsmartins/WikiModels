@@ -4,8 +4,8 @@ import sbt._
 
 class LiftProject(info: ProjectInfo) extends DefaultWebProject(info) {
   val liftVersion = "2.2"
-
   val lift = "net.liftweb" %% "lift-mapper" % liftVersion % "compile"
+  val liftRecord = "net.liftweb" %% "lift-record" % liftVersion % "compile"
   val liftWidget = "net.liftweb" %% "lift-widgets" % liftVersion % "compile"
   val wm_rest_api = "pt.cnbc.wikimodels" % "wm_rest_api" % "0.1-SNAPSHOT" % "compile"
   val jetty6 = "org.mortbay.jetty" % "jetty" % "6.1.25" % "test"

@@ -16,6 +16,7 @@
     <name>wm_web_mathml</name>
     <inceptionYear>2010</inceptionYear>
     <properties>
+        <lift.version>2.2</lift.version>
         <!-- Common plugin settings -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>${project.build.sourceEncoding}</project.reporting.outputEncoding>
@@ -50,17 +51,17 @@
         <dependency>
             <groupId>net.liftweb</groupId>
             <artifactId>lift-common_${scala.version}</artifactId>
-            <version>2.2</version>
+            <version>${lift.version}</version>
         </dependency>
         <dependency>
             <groupId>net.liftweb</groupId>
             <artifactId>lift-mapper_${scala.version}</artifactId>
-            <version>2.2</version>
+            <version>${lift.version}</version>
         </dependency>
         <dependency>
             <groupId>net.liftweb</groupId>
             <artifactId>lift-actor_${scala.version}</artifactId>
-            <version>2.2</version>
+            <version>${lift.version}</version>
         </dependency>
         <dependency>
             <groupId>com.h2database</groupId>

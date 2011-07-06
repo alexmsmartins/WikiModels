@@ -347,7 +347,7 @@ class CreateModel {
                         }
                         Console.println(modelSBML)
 
-                        var restful:RestfulAccess = User.getRestful
+                        var restful:RestfulAccess = User.restfulConnection
                         try {
                             val uriModel:URI = restful.postRequest("/model", modelSBML)
                             if((restful.getStatusCode >= 200) || (restful.getStatusCode < 300)){

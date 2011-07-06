@@ -37,7 +37,7 @@ class EditModel {
     def editWhat (xhtml : NodeSeq) : NodeSeq = User.currentUserName match {
         case Full(user) => {
                 val uriLink = S.uri
-                var restful:RestfulAccess = User.getRestful
+                var restful:RestfulAccess = User.restfulConnection
                 var modelAtribute:Elem = null
                 if(uriLink.contains("/edit")){
                     var uriIndex = uriLink.indexOf("/edit")
@@ -138,7 +138,7 @@ class EditModel {
                 val msgName: String = S.attr("id_msgs") openOr "messages"
 
                 val uriLink = S.uri
-                var restful:RestfulAccess = User.getRestful
+                var restful:RestfulAccess = User.restfulConnection
                 var modelAtribute:Elem = null
                 if(uriLink.contains("/edit")){
                     var uriIndex = uriLink.indexOf("/edit")
@@ -834,7 +834,7 @@ class EditModel {
                 val msgName: String = S.attr("id_msgs") openOr "messages"
 
                 val uriLink = S.uri
-                var restful:RestfulAccess = User.getRestful
+                var restful:RestfulAccess = User.restfulConnection
                 
                 if(restful.getStatusCode == 200){
                     val listaNova = List("true","false")

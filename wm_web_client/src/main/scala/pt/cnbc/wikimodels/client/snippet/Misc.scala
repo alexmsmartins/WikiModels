@@ -143,8 +143,8 @@ class Misc {
           modelBox match {
             case Full(model) => {
               Console.println("Model XML tag was extracted")
-              Usr.re.postRequest("/model/", model)
-              Usr.re.getStatusCode match {
+              Usr.restfulConnection.postRequest("/model/", model)
+              Usr.restfulConnection.getStatusCode match {
                 case 201 => {
                   Console.println("Creating the model in the server succeded")
                   bind("ul", chooseTemplate("choose", "post", xhtml),
@@ -154,10 +154,10 @@ class Misc {
                     "md5" -> theUpload.is.map(v => Text(hexEncode(md5(v.file))))
                   );
                 }
-                case 500 => uploadDialogue(xhtml, Failure(Text("[STATUS" + Usr.re.getStatusCode) + ": A server internal error occured in the WikiModels KnowledgeBase. Please report it to Alexandre Martins at alexmsmartins@gmail.com with the model that caused the error."))
+                case 500 => uploadDialogue(xhtml, Failure(Text("[STATUS" + Usr.restfulConnection.getStatusCode) + ": A server internal error occured in the WikiModels KnowledgeBase. Please report it to Alexandre Martins at alexmsmartins@gmail.com with the model that caused the error."))
                 case _ => {
-                  Console.println("Creating the model in the server failed with status code "+ Usr.re.getStatusCode + ". Please report it to Alexandre Martins at alexmsmartins@gmail.com.")
-                  uploadDialogue(xhtml, Failure("Importing the model to the knowledgebase wasn't possible. The statuscode was " + Usr.re.getStatusCode))
+                  Console.println("Creating the model in the server failed with status code "+ Usr.restfulConnection.getStatusCode + ". Please report it to Alexandre Martins at alexmsmartins@gmail.com.")
+                  uploadDialogue(xhtml, Failure("Importing the model to the knowledgebase wasn't possible. The statuscode was " + Usr.restfulConnection.getStatusCode))
                 }
               }
             }

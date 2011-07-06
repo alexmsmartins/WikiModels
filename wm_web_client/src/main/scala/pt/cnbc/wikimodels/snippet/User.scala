@@ -22,15 +22,7 @@ import pt.cnbc.wikimodels.rest.client.RestfulAccess
 object User {
     object UserName extends SessionVar[Box[String]](Empty)
 
-    var re:RestfulAccess = null
-
-    def setRestful(ra: RestfulAccess) = {
-        re = ra
-    }
-
-    def getRestful:RestfulAccess = {
-        re
-    }
+    var restfulConnection:RestfulAccess = null
 
     def screenWrap: Box[Node] = Full(<lift:surround with="default" at="content">
 			       <lift:bind /></lift:surround>)

@@ -44,7 +44,7 @@ class ModelRead {
         var mod:String = ""
 
         val teste = S.uri
-        var restful:RestfulAccess = User.getRestful
+        var restful:RestfulAccess = User.restfulConnection
         
         val modelsSBML = restful.getRequest(teste)
         
@@ -123,7 +123,7 @@ class ModelRead {
 
                  }*/
                 val teste = S.uri
-                var restful:RestfulAccess = User.getRestful
+                var restful:RestfulAccess = User.restfulConnection
                 //Console.println("aqui..->"+teste)
                 val modelSBML = restful.getRequest(teste)
                 if(restful.getStatusCode == 200){
