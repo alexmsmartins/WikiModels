@@ -55,7 +55,7 @@ class Comments {
                         count = count+1
                         println("CODE "+comment)
                         commentCreated = {
-                            <comment metaId={count} userName={user} aboutMetaId={count} subject={title} date={dateMsg}>
+                            <comment metaId={count.toString} userName={user} aboutMetaId={count.toString} subject={title} date={dateMsg}>
                                 <notes>{XML.loadString(comment)}
                                 </notes>
                             </comment>
@@ -106,7 +106,7 @@ class Comments {
                         count = count+1
                         println("CODE "+comment)
                         commentCreated = {
-                            <comment metaId={count} userName={user} aboutMetaId={count} subject={title} date={dateMsg}>
+                            <comment metaId={count.toString} userName={user} aboutMetaId={count.toString} subject={title} date={dateMsg}>
                                 <notes>{XML.loadString(comment)}
                                 </notes>
                             </comment>

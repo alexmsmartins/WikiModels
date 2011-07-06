@@ -211,7 +211,7 @@ class CreateModel {
                                                         {var o1 = reactant_hash.entrySet
                                                          var o2 = o1.iterator
                                                          for(k <- 1 to reactant_hash.size) yield{
-                                                                for ( l <- o2.hasNext) yield {
+                                                                //for ( l <- o2.hasNext) yield {
                                                                     var o3 = o2.next
                                                                     var id1 = o3.getValue
                                                                     //Console.println("VALORES----------"+id1.get_reactant_id)
@@ -223,7 +223,7 @@ class CreateModel {
                                                                                 var ent = reactant_hash.entrySet
                                                                                 var enum = ent.iterator
                                                                                 for(k <- 1 to reactant_hash.size) yield{
-                                                                                    for ( l <- enum.hasNext) yield {
+                                                                                    //for ( l <- enum.hasNext) yield {
                                                                                         var entry = enum.next
                                                                                         var teste = "reactant_"+i+"_"+k
                                                                                         if((entry.getKey.equals(teste)) && (contadorReactant == i)){
@@ -238,15 +238,15 @@ class CreateModel {
                                                                                                     } else scala.xml.Null}
                                                                                             </speciesReference>
                                                                                         } else scala.xml.Null
-                                                                                    }
+
                                                                                 }
                                                                             }
                                                                         </listOfReactants>
-                                                                    } else scala.xml.Null}}}
+                                                                    } else scala.xml.Null}}
                                                         {var o1 = product_hash.entrySet
                                                          var o2 = o1.iterator
                                                          for(k <- 1 to product_hash.size) yield{
-                                                                for ( l <- o2.hasNext) yield {
+                                                                //for ( l <- o2.hasNext) yield {
                                                                     var o3 = o2.next
                                                                     var id1 = o3.getValue
                                                                     //Console.println("VALORES----------"+id1.get_reactant_id)
@@ -257,7 +257,7 @@ class CreateModel {
                                                                                 var ent = product_hash.entrySet
                                                                                 var enum = ent.iterator
                                                                                 for(k <- 1 to product_hash.size) yield{
-                                                                                    for ( l <- enum.hasNext) yield {
+                                                                                    //for ( l <- enum.hasNext) yield {
                                                                                         var entry = enum.next
                                                                                         var teste = "product_"+i+"_"+k
                                                                                         if((entry.getKey.equals(teste)) && (contadorProduct == i)){
@@ -272,15 +272,15 @@ class CreateModel {
                                                                                                     } else scala.xml.Null}
                                                                                             </speciesReference>
                                                                                         } else scala.xml.Null
-                                                                                    }
+
                                                                                 }
                                                                             }
                                                                         </listOfProducts>
-                                                                    } else scala.xml.Null}}}
+                                                                    } else scala.xml.Null}}
                                                         {var o1 = modifier_hash.entrySet
                                                          var o2 = o1.iterator
                                                          for(k <- 1 to modifier_hash.size) yield{
-                                                                for ( l <- o2.hasNext) yield {
+                                                                //for ( l <- o2.hasNext) yield {
                                                                     var o3 = o2.next
                                                                     var id1 = o3.getValue
                                                                     //Console.println("VALORES----------"+id1.get_reactant_id)
@@ -290,7 +290,7 @@ class CreateModel {
                                                                                 var ent = modifier_hash.entrySet
                                                                                 var enum = ent.iterator
                                                                                 for(k <- 1 to modifier_hash.size) yield{
-                                                                                    for ( l <- enum.hasNext) yield {
+                                                                                    //for ( l <- enum.hasNext) yield {
                                                                                         var entry = enum.next
                                                                                         var teste = "modifier_"+i+"_"+k
                                                                                         if((entry.getKey.equals(teste)) && (contadorModifier == i)){
@@ -305,11 +305,11 @@ class CreateModel {
                                                                                                     } else scala.xml.Null}
                                                                                             </speciesReference>
                                                                                         } else scala.xml.Null
-                                                                                    }
+
                                                                                 }
                                                                             }
                                                                         </listOfModifiers>
-                                                                    } else scala.xml.Null}}}
+                                                                    } else scala.xml.Null}}
                                                         <kineticLaw>{
                                                                 for(k <- 0 to reaction_kinetic.size-1) yield{
                                                                     if(((reaction_kinetic.size > 0)) && (reaction_kinetic.get(k).contains("<math"))){
@@ -323,7 +323,7 @@ class CreateModel {
                                                                             var ent = parameter_hash.entrySet
                                                                             var enum = ent.iterator
                                                                             for(k <- 1 to parameter_hash.size) yield{
-                                                                                for ( l <- enum.hasNext) yield {
+                                                                                //for ( l <- enum.hasNext) yield {
                                                                                     var entry = enum.next
                                                                                     var teste = "parameter_"+i+"_"+k
                                                                                     if((entry.getKey.equals(teste)) && (contadorParameter == i)){
@@ -333,7 +333,7 @@ class CreateModel {
                                                                                             <notes>{valor.get_parameter_note}</notes>
                                                                                         </parameter>
                                                                                     } else scala.xml.Null
-                                                                                }
+
                                                                             }
                                                                         }
                                                                     </listOfParameters>
