@@ -17,7 +17,7 @@
 
   <properties>
     <netbeans.hint.deploy.server>J2EE</netbeans.hint.deploy.server>
-    <lift.version>2.3</lift.version>
+    <lift.version>2.4-M2</lift.version>
   </properties>
   <repositories>
     <repository>
