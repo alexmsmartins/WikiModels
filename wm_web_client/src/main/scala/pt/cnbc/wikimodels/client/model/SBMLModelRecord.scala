@@ -5,6 +5,11 @@ import xml.NodeSeq
 import net.liftweb.http.StringField
 import java.net.URI
 
+
+
+
+
+
 /**
  * Created by IntelliJ IDEA.
  * User: alex
@@ -12,8 +17,8 @@ import java.net.URI
  * Time: 17:37
  * To change this template use File | Settings | File Templates.
  */
-/*class SBMLModelRecord extends KeyedRecord[SBMLModelRecord, URI]{
-  def meta = SBMLModelRecord
+/*class SBMLModelRecord extends RestRecord[SBMLModelRecord]{
+  def meta:SBMLModelMetaRecord[SBMLModelRecord]
 
   object metaId extends KeyField[StringField, SBMLModelRecord]
   object metaId2 extends StringField(default = "defaultMetaId")
@@ -23,12 +28,12 @@ import java.net.URI
 
 
 
-//  can be created
+  //  can be created
   def create( ) = {
     pt.cnbc.wikimodels.snippet.User.restfulConnection.postRequest("/model/"+ modelId, <model></model>)
   }
-//  can be validated with validate
-//  can be presented as XHtml, Json, or as a Form.
+  //  can be validated with validate
+  //  can be presented as XHtml, Json, or as a Form.
 
 
   def toXHTML():NodeSeq = null
@@ -57,6 +62,10 @@ import java.net.URI
 
 object SBMLModelRecord extends SBMLModelRecord with MetaRecord[SBMLModelRecord]{
   protected val rootClass: Class[Any] = _
+}
+
+class SBMLModelMetaRecord[SBMLModelRecord] extends MetaRecord[SBMLModelRecord]{
+
 }*/
 
 
