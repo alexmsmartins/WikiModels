@@ -1,14 +1,17 @@
 package pt.cnbc.wikimodels.client.model
 
 import net.liftweb.record._
+import field.StringField
 import xml.NodeSeq
-import net.liftweb.http.StringField
 import java.net.URI
-
-
-
-
-
+import pt.cnbc.wikimodels.client.record.{RestRecord, RestMetaRecord}
+import net.liftweb.http.js.JsExp
+import pt.cnbc.wikimodels.client.record.{RestMetaRecord, RestRecord}
+import net.liftweb.json.JsonAST.JValue
+import org.h2.value.ValueTime
+import net.liftweb.util.ElemSelector
+import net.liftweb.common.{Empty, Full, Box}
+import java.security.acl.Owner
 
 /**
  * Created by IntelliJ IDEA.
@@ -17,20 +20,21 @@ import java.net.URI
  * Time: 17:37
  * To change this template use File | Settings | File Templates.
  */
-/*class SBMLModelRecord extends RestRecord[SBMLModelRecord]{
-  def meta:SBMLModelMetaRecord[SBMLModelRecord]
+class SBMLModelRecord extends RestRecord[SBMLModelRecord] {
+  type MyType = SBMLModelRecord
+  def meta:SBMLModelMetaRecord = new SBMLModelMetaRecord()
 
-  object metaId extends KeyField[StringField, SBMLModelRecord]
-  object metaId2 extends StringField(default = "defaultMetaId")
-  object id extends StringField(this, "defaultId")
-  object name extends StringField(this, "defaultName")
-  object description extends StringField(this, "")
+  val metaIdd:String = "THIS IS WRONG!!!"
+  val idd:String = "THIS IS ALSO WRONG!!!"
 
-
+  object metaId extends MetaId(metaIdd, this)
+  object id extends Id(this)
+  //object name extends StringField
+  //object description extends StringField(this, "No description")
 
   //  can be created
   def create( ) = {
-    pt.cnbc.wikimodels.snippet.User.restfulConnection.postRequest("/model/"+ modelId, <model></model>)
+    pt.cnbc.wikimodels.snippet.User.restfulConnection.postRequest("/model/"+ metaId.valueBox.openTheBox, <model></model>)
   }
   //  can be validated with validate
   //  can be presented as XHtml, Json, or as a Form.
@@ -59,15 +63,92 @@ import java.net.URI
 //  can be created directly from a Request containing params with names that match the fields on a Record ( see fromReq ).
 }
 
+//TODO - DELETE IF NOT USED FOR ANYTHING
+object SBMLModelRecord extends SBMLModelRecord with RestMetaRecord[SBMLModelRecord]
 
-object SBMLModelRecord extends SBMLModelRecord with MetaRecord[SBMLModelRecord]{
-  protected val rootClass: Class[Any] = _
+class SBMLModelMetaRecord extends RestMetaRecord[SBMLModelMetaRecord]
+
+
+class MetaId(pMetaId:String ,own:SBMLModelRecord) extends KeyField[String, SBMLModelRecord] with RestRecord[MetaId] {
+  type ValueType = String
+
+  //TODO DELETE THIS AND PUT EVERY object field in  IN owner
+  var _metaId:ValueType = owner.metaIdd
+
+  def get: MetaId#ValueType = _metaId
+
+  def setFromJValue(jvalue: JValue): Box[MetaId#ValueType] = throw new UnsupportedOperationException
+
+  def defaultValueBox: Box[MetaId#MyType] = throw new UnsupportedOperationException
+
+  protected def toValueType(in: Box[MetaId#MyType]): MetaId#ValueType = throw new UnsupportedOperationException
+
+  protected def toBoxMyType(in: MetaId#ValueType): Box[MetaId#MyType] = throw new UnsupportedOperationException
+
+  protected def liftSetFilterToBox(in: Box[MetaId#MyType]): Box[MetaId#MyType] = throw new UnsupportedOperationException
+
+  def setFromAny(in: Any): Box[MetaId#MyType] = throw new UnsupportedOperationException
+
+  def setFromString(s: String): Box[MetaId#MyType] = {
+    if(s == null){
+      Empty
+    } else {
+      Full(s)
+    }
+  }
+
+  def meta: RestMetaRecord[MetaId] = throw new UnsupportedOperationException
+
+  def toForm: Box[NodeSeq] = null
+
+  def asJs: JsExp = throw new UnsupportedOperationException
+
+  def set(in: MetaId#ValueType): MetaId#ValueType = {
+    _metaId = in;_metaId
+  }
+
+  def owner: SBMLModelRecord = own
 }
 
-class SBMLModelMetaRecord[SBMLModelRecord] extends MetaRecord[SBMLModelRecord]{
+class Id(rec: SBMLModelRecord) extends StringField[SBMLModelRecord](rec,-1) with RestRecord[Id] {
+  type ValueType = String
 
-}*/
+  var _id:ValueType = SBMLModelRecord.idd
 
+  def get: MetaId#ValueType = _id
+
+  def setFromJValue(jvalue: JValue): Box[Id#ValueType] = throw new UnsupportedOperationException
+
+  def defaultValueBox: Box[MetaId#MyType] = throw new UnsupportedOperationException
+
+  protected def toValueType(in: Box[MetaId#MyType]): MetaId#ValueType = throw new UnsupportedOperationException
+
+  protected def toBoxMyType(in: MetaId#ValueType): Box[MetaId#MyType] = throw new UnsupportedOperationException
+
+  protected def liftSetFilterToBox(in: Box[MetaId#MyType]): Box[MetaId#MyType] = throw new UnsupportedOperationException
+
+  def setFromAny(in: Any): Box[MetaId#MyType] = throw new UnsupportedOperationException
+
+  def setFromString(s: String): Box[MetaId#MyType] = {
+    if(s == null){
+      Empty
+    } else {
+      Full(s)
+    }
+  }
+
+  def meta: RestMetaRecord[MetaId] = throw new UnsupportedOperationException
+
+  //def owner: OwnerType = null
+
+  def toForm: Box[NodeSeq] = null
+
+  def asJs: JsExp = throw new UnsupportedOperationException
+
+  def set(in: MetaId#ValueType): MetaId#ValueType = {
+    _id = in;_id
+  }
+}
 
 
 sealed class ManipModelState( stateName:String){
