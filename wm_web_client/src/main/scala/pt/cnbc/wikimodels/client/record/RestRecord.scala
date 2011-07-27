@@ -36,8 +36,6 @@ trait RestRecord[MyType <: RestRecord[MyType]] extends Record[MyType] {
   /**
    * The meta record (the object that contains the meta result for this type)
    */
-  def meta: RestMetaRecord[MyType]
-
 }
 
 

@@ -22,13 +22,13 @@ import java.security.acl.Owner
  */
 class SBMLModelRecord extends RestRecord[SBMLModelRecord] {
   type MyType = SBMLModelRecord
-  def meta:SBMLModelMetaRecord = new SBMLModelMetaRecord()
+  override def meta = SBMLModelRecord
 
-  val metaIdd:String = "THIS IS WRONG!!!"
-  val idd:String = "THIS IS ALSO WRONG!!!"
+  var metaIdd:String = "THIS IS WRONG!!!"
+  var idd:String = "THIS IS ALSO WRONG!!!"
 
-  object metaId extends MetaId(metaIdd, this)
-  object id extends Id(this)
+  object metaId extends MetaId(this,metaIdd)
+  object id extends Id(this,idd)
   //object name extends StringField
   //object description extends StringField(this, "No description")
 
@@ -40,7 +40,6 @@ class SBMLModelRecord extends RestRecord[SBMLModelRecord] {
   //  can be presented as XHtml, Json, or as a Form.
 
 
-  def toXHTML():NodeSeq = null
   def toForm():NodeSeq = <form method="post" action="/models/createEdit">
     <div id="tab-1">
           <h4><span id="required_field">     * required fields</span></h4><br />
@@ -66,87 +65,28 @@ class SBMLModelRecord extends RestRecord[SBMLModelRecord] {
 //TODO - DELETE IF NOT USED FOR ANYTHING
 object SBMLModelRecord extends SBMLModelRecord with RestMetaRecord[SBMLModelRecord]
 
-class SBMLModelMetaRecord extends RestMetaRecord[SBMLModelMetaRecord]
 
+class MetaId(own:SBMLModelRecord, pMetaId:String) extends StringField[SBMLModelRecord](own,pMetaId) {
+  override type ValueType = String
 
-class MetaId(pMetaId:String ,own:SBMLModelRecord) extends KeyField[String, SBMLModelRecord] with RestRecord[MetaId] {
-  type ValueType = String
+  override def is:MetaId#ValueType = owner.metaIdd
 
-  //TODO DELETE THIS AND PUT EVERY object field in  IN owner
-  var _metaId:ValueType = owner.metaIdd
+  override def get: MetaId#ValueType = owner.metaIdd
 
-  def get: MetaId#ValueType = _metaId
-
-  def setFromJValue(jvalue: JValue): Box[MetaId#ValueType] = throw new UnsupportedOperationException
-
-  def defaultValueBox: Box[MetaId#MyType] = throw new UnsupportedOperationException
-
-  protected def toValueType(in: Box[MetaId#MyType]): MetaId#ValueType = throw new UnsupportedOperationException
-
-  protected def toBoxMyType(in: MetaId#ValueType): Box[MetaId#MyType] = throw new UnsupportedOperationException
-
-  protected def liftSetFilterToBox(in: Box[MetaId#MyType]): Box[MetaId#MyType] = throw new UnsupportedOperationException
-
-  def setFromAny(in: Any): Box[MetaId#MyType] = throw new UnsupportedOperationException
-
-  def setFromString(s: String): Box[MetaId#MyType] = {
-    if(s == null){
-      Empty
-    } else {
-      Full(s)
-    }
+  override def set(in: MetaId#ValueType): MetaId#ValueType = {
+    owner.metaIdd  = in;in
   }
-
-  def meta: RestMetaRecord[MetaId] = throw new UnsupportedOperationException
-
-  def toForm: Box[NodeSeq] = null
-
-  def asJs: JsExp = throw new UnsupportedOperationException
-
-  def set(in: MetaId#ValueType): MetaId#ValueType = {
-    _metaId = in;_metaId
-  }
-
-  def owner: SBMLModelRecord = own
 }
 
-class Id(rec: SBMLModelRecord) extends StringField[SBMLModelRecord](rec,-1) with RestRecord[Id] {
-  type ValueType = String
+class Id(own:SBMLModelRecord, pId:String) extends StringField[SBMLModelRecord](own, pId) {
+  override type ValueType = String
 
-  var _id:ValueType = SBMLModelRecord.idd
+  override def is:MetaId#ValueType = owner.idd
 
-  def get: MetaId#ValueType = _id
+  override def get: MetaId#ValueType = owner.idd
 
-  def setFromJValue(jvalue: JValue): Box[Id#ValueType] = throw new UnsupportedOperationException
-
-  def defaultValueBox: Box[MetaId#MyType] = throw new UnsupportedOperationException
-
-  protected def toValueType(in: Box[MetaId#MyType]): MetaId#ValueType = throw new UnsupportedOperationException
-
-  protected def toBoxMyType(in: MetaId#ValueType): Box[MetaId#MyType] = throw new UnsupportedOperationException
-
-  protected def liftSetFilterToBox(in: Box[MetaId#MyType]): Box[MetaId#MyType] = throw new UnsupportedOperationException
-
-  def setFromAny(in: Any): Box[MetaId#MyType] = throw new UnsupportedOperationException
-
-  def setFromString(s: String): Box[MetaId#MyType] = {
-    if(s == null){
-      Empty
-    } else {
-      Full(s)
-    }
-  }
-
-  def meta: RestMetaRecord[MetaId] = throw new UnsupportedOperationException
-
-  //def owner: OwnerType = null
-
-  def toForm: Box[NodeSeq] = null
-
-  def asJs: JsExp = throw new UnsupportedOperationException
-
-  def set(in: MetaId#ValueType): MetaId#ValueType = {
-    _id = in;_id
+  override def set(in: MetaId#ValueType): MetaId#ValueType = {
+    owner.idd = in;in
   }
 }
 
