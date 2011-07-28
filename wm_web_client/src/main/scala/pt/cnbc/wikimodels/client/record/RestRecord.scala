@@ -33,12 +33,18 @@ import javax.xml.soap.SOAPElementFactory
 
 trait RestRecord[MyType <: RestRecord[MyType]] extends Record[MyType] {
   self : MyType =>
-  /**
-   * The meta record (the object that contains the meta result for this type)
-   */
+  def create():MyType
+  def read(url:String):MyType
+  def update():MyType
+  def delete():MyType
 }
 
 
 trait RestMetaRecord[BaseRecord <: RestRecord[BaseRecord]] extends MetaRecord[BaseRecord] {
   self: BaseRecord =>
+
+  def create():BaseRecord
+  def read(url:String):BaseRecord
+  def update():BaseRecord
+  def delete():BaseRecord
 }
