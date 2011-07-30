@@ -31,6 +31,7 @@
 
   <modules>
     <module>wm_library</module>
+    <module>wm_libjsbml</module>
     <module>wm_math_parser</module>
     <module>wm_setup</module>
     <module>wm_server</module>
