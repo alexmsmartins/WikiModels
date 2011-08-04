@@ -1,0 +1,3 @@
+[submodule "wm_libjsbml"]
+	path = wm_libjsbml
+	url = ./wm_libjsbml
