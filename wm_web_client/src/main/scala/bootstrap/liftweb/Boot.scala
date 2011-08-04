@@ -12,6 +12,8 @@ import _root_.net.liftweb.widgets.tree.TreeView
 import _root_.pt.cnbc.wikimodels.tabs.TabsView
 
 import _root_.pt.cnbc.wikimodels.snippet._
+import _root_.pt.cnbc.wikimodels.client.snippet._
+
 import net.liftweb.common.Full
 
 
@@ -116,6 +118,13 @@ class Boot {
             import _root_.pt.cnbc.wikimodels.client.lib.Export
             Export.asSBMLL2V4(modelMetaId)
           }
+      }
+
+      /**
+       * The following lines are used to call object snippers that extends Dis+atchSnippet
+       */
+      LiftRules.snippetDispatch.append{
+        Map("SBMLFormSnippet" -> new SBMLForm)
       }
     }
 

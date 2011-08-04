@@ -33,18 +33,39 @@ import javax.xml.soap.SOAPElementFactory
 
 trait RestRecord[MyType <: RestRecord[MyType]] extends Record[MyType] {
   self : MyType =>
-  def create():MyType
-  def read(url:String):MyType
-  def update():MyType
-  def delete():MyType
+  def createRestRec():MyType
+
+  def readRestRec(url:String):MyType
+
+  def updateRestRec():MyType
+
+  def deleteRestRec():MyType
+
 }
 
 
 trait RestMetaRecord[BaseRecord <: RestRecord[BaseRecord]] extends MetaRecord[BaseRecord] {
   self: BaseRecord =>
 
-  def create():BaseRecord
-  def read(url:String):BaseRecord
-  def update():BaseRecord
-  def delete():BaseRecord
+  /**
+   * Creates a new RestRecord in the RESTful service
+   */
+  def createRestRec():BaseRecord
+
+  /**
+   * Loads an existant RestRecord from the RESTful service
+   */
+  def readRestRec(url:String):BaseRecord
+
+  /***
+   * Updates an existent RestRecord in the RESTful service with new information
+   */
+  def updateRestRec():BaseRecord
+
+  /**
+   * Erases an existent RestRecord from the RESTful service
+   */
+  def deleteRestRec():BaseRecord
+
+
 }

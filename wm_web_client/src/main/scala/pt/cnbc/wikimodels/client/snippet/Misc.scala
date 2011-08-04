@@ -39,6 +39,9 @@ import _root_.pt.cnbc.wikimodels.util.SBMLDocHandler._
 import xml._
 
 class Misc {
+  //TODO - check if this class has unused code
+  //TODO - refactor the code in Misc to a file and class with a more explanatory name
+
   private object selectedUser extends RequestVar[Box[User]](Empty)
 
   /**

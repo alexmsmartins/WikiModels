@@ -8,10 +8,10 @@ import pt.cnbc.wikimodels.client.record.{RestRecord, RestMetaRecord}
 import net.liftweb.http.js.JsExp
 import pt.cnbc.wikimodels.client.record.{RestMetaRecord, RestRecord}
 import net.liftweb.json.JsonAST.JValue
-import org.h2.value.ValueTime
 import net.liftweb.util.ElemSelector
 import net.liftweb.common.{Empty, Full, Box}
 import java.security.acl.Owner
+import pt.cnbc.wikimodels.dataModel.SBMLModel
 
 /**
  * Created by IntelliJ IDEA.
@@ -20,36 +20,33 @@ import java.security.acl.Owner
  * Time: 17:37
  * To change this template use File | Settings | File Templates.
  */
-class SBMLModelRecord extends RestRecord[SBMLModelRecord] {
+class SBMLModelRecord extends SBMLModel with RestRecord[SBMLModelRecord] {
   type MyType = SBMLModelRecord
   override def meta = SBMLModelRecord
 
-  var metaIdd:String = "THIS IS WRONG!!!"
-  var idd:String = "THIS IS ALSO WRONG!!!"
-
-  object metaId extends MetaId(this,metaIdd)
-  object id extends Id(this,idd)
+  object metaIdO extends MetaId(this,metaid)
+  object idO extends Id(this,id)
   //object name extends StringField
   //object description extends StringField(this, "No description")
 
   //  can be created
-  override def create():MyType = {
-    pt.cnbc.wikimodels.snippet.User.restfulConnection.postRequest("/model/"+ metaId.valueBox.openTheBox, <model>this</model>)
+  override def createRestRec():MyType = {
+    pt.cnbc.wikimodels.snippet.User.restfulConnection.postRequest("/model/"+ metaIdO.valueBox.openTheBox, <model>this</model>)
     this
   }
 
-  override def read(url:String):MyType = {
-    pt.cnbc.wikimodels.snippet.User.restfulConnection.getRequest("/model/"+ metaId.valueBox.openTheBox)
+  override def readRestRec(url:String):MyType = {
+    pt.cnbc.wikimodels.snippet.User.restfulConnection.getRequest("/model/"+ metaIdO.valueBox.openTheBox)
     this
   }
 
-  override def update():MyType = {
-    pt.cnbc.wikimodels.snippet.User.restfulConnection.putRequest("/model/"+ metaId.valueBox.openTheBox, <model>this</model>)
+  override def updateRestRec():MyType = {
+    pt.cnbc.wikimodels.snippet.User.restfulConnection.putRequest("/model/"+ metaIdO.valueBox.openTheBox, <model>this</model>)
     this
   }
 
-  override def delete = {
-    pt.cnbc.wikimodels.snippet.User.restfulConnection.deleteRequest("/model/"+ metaId.valueBox.openTheBox)
+  override def deleteRestRec():MyType = {
+    pt.cnbc.wikimodels.snippet.User.restfulConnection.deleteRequest("/model/"+ metaIdO.valueBox.openTheBox)
     this
   }
 
@@ -60,41 +57,32 @@ class SBMLModelRecord extends RestRecord[SBMLModelRecord] {
 }
 
 //TODO - DELETE IF NOT USED FOR ANYTHING
-object SBMLModelRecord extends SBMLModelRecord with RestMetaRecord[SBMLModelRecord]
+object SBMLModelRecord extends SBMLModelRecord with RestMetaRecord[SBMLModelRecord] {
+  def apply() = new SBMLModelRecord
+}
 
 
 class MetaId(own:SBMLModelRecord, pMetaId:String) extends StringField[SBMLModelRecord](own,pMetaId) {
   override type ValueType = String
 
-  override def is:MetaId#ValueType = owner.metaIdd
+  override def is:MetaId#ValueType = owner.metaid
 
-  override def get: MetaId#ValueType = owner.metaIdd
+  override def get: MetaId#ValueType = owner.metaid
 
   override def set(in: MetaId#ValueType): MetaId#ValueType = {
-    owner.metaIdd  = in;in
+    owner.metaid  = in;in
   }
 }
 
 class Id(own:SBMLModelRecord, pId:String) extends StringField[SBMLModelRecord](own, pId) {
   override type ValueType = String
 
-  override def is:MetaId#ValueType = owner.idd
+  override def is:MetaId#ValueType = owner.id
 
-  override def get: MetaId#ValueType = owner.idd
+  override def get: MetaId#ValueType = owner.id
 
   override def set(in: MetaId#ValueType): MetaId#ValueType = {
-    owner.idd = in;in
+    owner.id = in;in
   }
 }
 
-
-sealed class ManipModelState( stateName:String){
-  case object EnterPage extends ManipModelState("EnterPage")
-  case object Create extends ManipModelState("Create")
-  case object CreateWithErrors extends ManipModelState("CreateWithErrors")
-  case object Edit extends ManipModelState("Edit")
-  case object EditWithErrors extends ManipModelState("EditWithErros")
-  case object Visualize extends ManipModelState("Visualize")
-  case object GoToBrowseModelsPage extends ManipModelState("GoToBrowseModelsPage")
-  case class AnotherState(_state:String) extends ManipModelState(_state)
-}
