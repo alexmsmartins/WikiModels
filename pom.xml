@@ -54,7 +54,6 @@
   </repositories>
 
   <dependencies>
-      <!-- TODO: uncomment this dependency again after checking this does not screw the build -->
     <dependency>
         <groupId>log4j</groupId>
         <artifactId>log4j</artifactId>

@@ -8,6 +8,7 @@ class LiftProject(info: ProjectInfo) extends DefaultWebProject(info) {
   val liftRecord = "net.liftweb" %% "lift-record" % liftVersion % "compile"
   val liftWidget = "net.liftweb" %% "lift-widgets" % liftVersion % "compile"
   val wm_rest_api = "pt.cnbc.wikimodels" % "wm_rest_api" % "0.1-SNAPSHOT" % "compile"
+  val wm_libjsbml = "pt.cnbc.wikimodels" % "wm_libjsbml" % "0.1-SNAPSHOT" % "compile"
   val jetty6 = "org.mortbay.jetty" % "jetty" % "6.1.25" % "test"
    //val h2 = "com.h2database" % "h2" % "1.2.121" % "runtime"
    // alternately use derby
