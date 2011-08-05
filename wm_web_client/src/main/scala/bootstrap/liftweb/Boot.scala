@@ -143,6 +143,10 @@ class Boot {
     //              function that will be executed when a form field is set etc.). Please see SHtml obejct
     //              3.4.2.
     //         iii. Check the SiteMap and Loc functions. We cover SiteMap extensively in chapter 7.
+
+    // verification if the user is logged
+    val loggedIn = If(() => User.loggedIn_?, "You must be logged in.")
+
     // SiteMap
     val entries =
       Menu(Loc("Home", List("index"), "Home"),
@@ -235,12 +239,7 @@ class Boot {
       case "css" :: "js" :: _ => true
     }
 
-
     //TODO: LiftRules.htmlProperties.default.set((r: Req) =>new Html5Properties(r.userAgent))
-
-    // verification if the user is logged
-    val loggedIn = If(() => User.loggedIn_?, "You must be logged in.")
-
 
     // Allows the wysiwyg editor's inside pages (ie, allows the user to "insert a link")
     LiftRules.passNotFoundToChain = true
