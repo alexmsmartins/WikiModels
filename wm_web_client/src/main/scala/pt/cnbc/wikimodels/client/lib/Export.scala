@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2011. Alexandre Martins. All rights reserved.
+ */
+
 package pt.cnbc.wikimodels.client.lib
 
 import _root_.net.liftweb.common._
@@ -29,12 +33,12 @@ object Export {
     val arrayByte = ("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"+completeModel.toString).getBytes("UTF-8")
 
     //Content-type and Content-disposition are both important to force the appearance of the Save as dialog
-    Full(
-      InMemoryResponse(arrayByte,
-      ("Content-Length", arrayByte.length.toString) ::
-        ("content-disposition", "attachment; filename=" + modelMetaId + ".xml") ::
-        ("Content-Type", "application/x-download; charset=utf-8") :: Nil,
-      Nil,
-      200))
+    Full(InMemoryResponse(arrayByte,
+                          ("Content-Length", arrayByte.length.toString) ::
+                          ("content-disposition","attachment; filename=" + modelMetaId + ".xml") ::
+                          ("Content-Type", "application/x-download; charset=utf-8") :: Nil,
+                          Nil,
+                          200))
   }
 }
+

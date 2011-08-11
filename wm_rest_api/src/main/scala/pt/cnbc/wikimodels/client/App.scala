@@ -1,4 +1,8 @@
 /*
+ * Copyright (c) 2011. Alexandre Martins. All rights reserved.
+ */
+
+/*
  * App.scala
  *
  * To change this template, choose Tools | Template Manager

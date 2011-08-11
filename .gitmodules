@@ -1,3 +1,6 @@
 [submodule "wm_libjsbml"]
 	path = wm_libjsbml
 	url = ./wm_libjsbml
+[submodule "framework"]
+	path = framework
+	url = ./framework

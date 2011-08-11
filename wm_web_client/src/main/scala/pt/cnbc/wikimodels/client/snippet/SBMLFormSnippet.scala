@@ -4,7 +4,6 @@ import xml.NodeSeq
 import javax.mail.Session
 import pt.cnbc.wikimodels.client.model.SBMLModelRecord
 import net.liftweb.http._
-import org.sbml.libsbml.SBMLNamespaces
 
 // This is the common usage case of StatefulSnippet
 
@@ -18,40 +17,63 @@ import org.sbml.libsbml.SBMLNamespaces
  */
 class SBMLForm extends DispatchSnippet {
 
+  object modelState extends SessionVar[CreateEditPageState](EnterPage)
+
+  /**
+   * Defines teh possible states of the CreateEdit page in WikiModels
+   */
+  sealed class CreateEditPageState(state: String)
+
+  case object EnterPage extends CreateEditPageState("EnterPage")
+
+  case object Create extends CreateEditPageState("Create")
+
+  case object CreateWithErrors extends CreateEditPageState("CreateWithErrors")
+
+  case object Edit extends CreateEditPageState("Edit")
+
+  case object EditWithErrors extends CreateEditPageState("EditWithErros")
+
+  case object Visualize extends CreateEditPageState("Visualize")
+
+  case object GoToBrowseModelsPage extends CreateEditPageState("GoToBrowseModelsPage")
+
+  case class AnotherState(_state: String) extends CreateEditPageState(_state)
 
   var somevar: Int = 0
 
 
   def dispatch: DispatchIt = {
-    case "createModel" => createModele _
+    case "createModel" => createModele
   }
 
   def createModele(ns: NodeSeq): NodeSeq = {
+    S.setHeader("aaaHeader", "valHeader")
+    S.set("set","set")
+    S.setSessionAttribute("sessionAttribute", "valSessionAttribute")
+    S.getHeader("aaa").map(_.toInt).openOr("aaa")
+
+    var rv = SBMLForm.reqvar.is
+    SBMLForm.reqvar(rv + 1)
+    var sv = SBMLForm.sessionvar.is
+    SBMLForm.sessionvar(sv + 1)
+    somevar = somevar + 1;
     {
       <h1>CreateModel</h1>
-      <p>State of page: {SBMLFormOp.stateOfPage.is}</p>
+      <p>Paragraph of trial snippet</p>
+      <p>object reqvar extends RequestVar(0)⁼= {SBMLForm.reqvar}
+      </p>
+      <p>object sessionvar extends SessionVar = {SBMLForm.sessionvar}
+      </p>
+      <p>var somevar =
+        {this.somevar}
+      </p>
     }
   }
 }
-object SBMLFormOp{
-  object stateOfPage extends RequestVar[SBMLFormState](Create)
-
-  /**
-   * Defines teh possible states of the CreateEdit page in WikiModels
-   */
-  sealed class SBMLFormState(state: String)
-
-  case object EnterPage extends SBMLFormState("EnterPage")
-
-  case object Create extends SBMLFormState("Create")
-
-  case object CreateWithErrors extends SBMLFormState("CreateWithErrors")
-
-  case object Edit extends SBMLFormState("Edit")
-
-  case object EditWithErrors extends SBMLFormState("EditWithErros")
-
-  case object Visualize extends SBMLFormState("Visualize")
-
-  case object GoToBrowseModelsPage extends SBMLFormState("GoToBrowseModelsPage")
+object SBMLForm{
+  object reqvar extends RequestVar[Int](0)
+  object sessionvar extends SessionVar[Int](0)
 }
+
+
