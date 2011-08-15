@@ -13,8 +13,11 @@ import _root_.pt.cnbc.wikimodels.tabs.TabsView
 
 import _root_.pt.cnbc.wikimodels.snippet._
 import _root_.pt.cnbc.wikimodels.client.snippet._
+import _root_.pt.cnbc.wikimodels.client.sitemapTweaks._
+
 
 import net.liftweb.common.Full
+import tools.nsc.Phase.Model
 
 
 /**            s
@@ -41,23 +44,8 @@ class Boot {
       //Where to search for lift related files. This is the new location
       LiftRules.addToPackages("pt.cnbc.wikimodels.client")
 
-      LiftRules.statefulRewrite.append(NamedPF("CreateAndEditRewrite") {
-        case RewriteRequest(
-            ParsePath("models" :: "createEdit" :: state :: Nil, _, _,_), _, _) => {
-          Console.println("Rewriting path: models/createEdit/Create to createEdit.html")
-          val rewriteResp = RewriteResponse(
-            ParsePath("models/createEdit" :: Nil, "html", true, false) , Map("state" -> "Create") // Use webapp/models/creteEdit.html
-          )
-          Console.println("Response refers to URL " + rewriteResp.path + " with parameters " + rewriteResp.params.toList.map(x => "" + x.key + "=" + x.value + ", "))
-          rewriteResp
-        }
-      })
-
-
         //TODO: LiftRules.htmlProperties.default.set((r: Req) =>new Html5Properties(r.userAgent))
 
-        // verification if the user is logged
-        val loggedIn = If(() => User.loggedIn_?, "You must be logged in.")
 
         // SiteMap
         val entries = Menu(Loc("Home", List("index"), "Home"),
@@ -70,6 +58,7 @@ class Boot {
              Menu(Loc("createM", List("models","create"), "Create Model", loggedIn)),
              //Menu(Loc("createEditM", List("models","createEdit","Create"), "[NEW]Create Model", loggedIn)),
              Menu(Loc("createEditMXX", List("models","createEdit"), "[NEW]Create Model", loggedIn)),
+             Menu(ModelPageLoc),
              Menu(Loc("importM", List("models","import"), "[NEW]Import Model", loggedIn)),
              Menu(Loc("browseM", List("models","index"), "Browse Models", loggedIn)),
              Menu(Loc("browseMm", List("models","browse.xhtml"), "Browse Model", Hidden, loggedIn)),
