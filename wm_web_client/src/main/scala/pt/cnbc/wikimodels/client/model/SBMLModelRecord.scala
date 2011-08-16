@@ -32,24 +32,27 @@ class SBMLModelRecord extends SBMLModel with RestRecord[SBMLModelRecord] {
 
   //  can be created
   override def createRestRec():MyType = {
-    pt.cnbc.wikimodels.snippet.User.restfulConnection.postRequest("/model/"+ metaIdO.valueBox.openTheBox, <model>this</model>)
+    pt.cnbc.wikimodels.snippet.User.restfulConnection.postRequest(relativeURL, this.toXML)
     this
   }
 
   override def readRestRec(url:String):MyType = {
-    pt.cnbc.wikimodels.snippet.User.restfulConnection.getRequest("/model/"+ metaIdO.valueBox.openTheBox)
+    pt.cnbc.wikimodels.snippet.User.restfulConnection.getRequest(relativeURL)
     this
   }
 
   override def updateRestRec():MyType = {
-    pt.cnbc.wikimodels.snippet.User.restfulConnection.putRequest("/model/"+ metaIdO.valueBox.openTheBox, <model>this</model>)
+    pt.cnbc.wikimodels.snippet.User.restfulConnection.putRequest(relativeURL, this.toXML)
     this
   }
 
   override def deleteRestRec():MyType = {
-    pt.cnbc.wikimodels.snippet.User.restfulConnection.deleteRequest("/model/"+ metaIdO.valueBox.openTheBox)
+    pt.cnbc.wikimodels.snippet.User.restfulConnection.deleteRequest(relativeURL)
     this
   }
+
+  override protected def relativeURLasList = "model" :: metaid :: Nil
+
 
   //  can be validated with validate
   //  can be presented as XHtml, Json, or as a Form.

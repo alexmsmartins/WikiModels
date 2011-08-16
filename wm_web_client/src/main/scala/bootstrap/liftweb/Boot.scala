@@ -5,6 +5,7 @@ import _root_.net.liftweb.http._
 import _root_.net.liftweb.sitemap._
 import _root_.net.liftweb.sitemap.Loc._
 import Helpers._
+import net.liftweb.common._
 import _root_.net.liftweb.widgets.menu.MenuWidget
 import _root_.net.liftweb.widgets.tablesorter.TableSorter
 import _root_.net.liftweb.widgets.tree.TreeView
@@ -14,11 +15,6 @@ import _root_.pt.cnbc.wikimodels.tabs.TabsView
 import _root_.pt.cnbc.wikimodels.snippet._
 import _root_.pt.cnbc.wikimodels.client.snippet._
 import _root_.pt.cnbc.wikimodels.client.sitemapTweaks._
-
-
-import net.liftweb.common.Full
-import tools.nsc.Phase.Model
-
 
 /**            s
  * A class that's instantiated early and run.  It allows the application
@@ -46,7 +42,18 @@ class Boot {
 
         //TODO: LiftRules.htmlProperties.default.set((r: Req) =>new Html5Properties(r.userAgent))
 
-
+      // TODO - i STILL WANT TO FIND OUT WHY THIS DOES NOT WKRK. Something to do wiht the response not returning statuscode 302 to the browser, perhaps
+      /*      LiftRules.statefulRewrite.prepend(NamedPF("CreateAndEditRewrite") {
+        case RewriteRequest(
+            ParsePath("models" :: "createEdit" :: state :: Nil, _, _,_), _, _) => {
+          Console.println("Rewriting path: models/createEdit/Create to createEdit.html")
+          val rewriteResp = RewriteResponse(
+            ParsePath("models/createEdit" :: Nil, "html", true, false) , Map("state" -> "Create") // Use webapp/models/creteEdit.html
+          )
+          Console.println("Response refers to URL " + rewriteResp.path + " with parameters " + rewriteResp.params.toList.map(x => "" + x.key + "=" + x.value + ", "))
+          rewriteResp
+        }
+      })*/
         // SiteMap
         val entries = Menu(Loc("Home", List("index"), "Home"),
                            Menu(Loc("overview", List("overview"), "Overview")),

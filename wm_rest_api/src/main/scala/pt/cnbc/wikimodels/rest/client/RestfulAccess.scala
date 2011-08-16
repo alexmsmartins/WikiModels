@@ -35,6 +35,8 @@ import org.apache.http._
  * restful Web Service
  * the parameter startFunc receives a function that starts the client wiht the
  * intended authentication scheme.
+ * IT IS IMPORTANT TO NOT CHANGE THIS CODE TO A MORE IDIOMATIC SCALA since it is supposed to be used by any JVM language.
+ * This means NO scala.Option, net.liftweb.common.Box or even tuples
  */
 class RestfulAccess(val host: String,
                     val port: Int,
@@ -42,6 +44,8 @@ class RestfulAccess(val host: String,
                     val username: String,
                     val password: String,
                     val startFunc: (RestfulAccess) => Unit) {
+  // Even though this looks easy to use, the last paramenter might cause problems for other JVM languages.
+  // TODO: So, it should be replaced by something more general.
   var lastStatusLine: StatusLine = null
   val log = Logger.getLogger(this.getClass)
 

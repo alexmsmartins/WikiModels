@@ -33,6 +33,7 @@ import javax.xml.soap.SOAPElementFactory
 
 trait RestRecord[MyType <: RestRecord[MyType]] extends Record[MyType] {
   self : MyType =>
+
   def createRestRec():MyType
 
   def readRestRec(url:String):MyType
@@ -41,6 +42,16 @@ trait RestRecord[MyType <: RestRecord[MyType]] extends Record[MyType] {
 
   def deleteRestRec():MyType
 
+  /**
+   * The protocol, host, port and path of the RESTful service were already defined when making the connection.
+   * This only represents the relative URL from the roomt
+   */
+  def relativeURL = relativeURLasList mkString("/","/","")
+
+  /**
+   * Lift friendly representation of a URL.
+   */
+  protected def relativeURLasList:List[String]
 }
 
 

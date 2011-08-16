@@ -29,8 +29,6 @@ wm_rest_api/project/build/target/
 
 #ignore IntelliJ IDEA project files
 *.iml
-*.ipr
-*.iws
 .idea/
 *.db
 *~
