@@ -15,6 +15,7 @@ package object sitemapTweaks {
   }
   import net.liftweb.sitemap.Loc.If._
   import pt.cnbc.wikimodels.snippet.User
+  import pt.cnbc.wikimodels.client.snippet.SBMLForm._
   import net.liftweb.sitemap.Loc._
 
   // verification if the user is logged
@@ -25,15 +26,15 @@ package object sitemapTweaks {
   /**
    * Created by IntelliJ IDEA. User: alex Date: 11-08-2011 Time: 21:19 To change this template use File | Settings | File Templates.
    */
-  object ModelPageLoc extends Loc[ModelPageState] {
-    var state:ModelPageState = defaultValue.openTheBox
+  object ModelPageLoc extends Loc[CreateEditPageState] {
+    var state:CreateEditPageState = defaultValue.openTheBox
     def name: String = "CreateEDitWithState"
 
-    def link = new Link[ModelPageState]("models" :: "createEdit" :: "Create" :: Nil)
+    def link = new Link[CreateEditPageState]("models" :: "createEdit" :: "Create" :: Nil)
 
     def text = "Model handling" + defaultValue
 
-    def params: List[LocParam[ModelPageState]] = List(loggedIn)
+    def params: List[LocParam[CreateEditPageState]] = List(loggedIn)
 
     override def rewrite = Full({
       case RewriteRequest(ParsePath(List("models", "createEdit", _state), _, _, _), _, _) => {
@@ -49,13 +50,8 @@ package object sitemapTweaks {
         }
       }
     })
-    def defaultValue: Box[ModelPageState] = Full(Create)
+    def defaultValue: Box[CreateEditPageState] = Full(Create)
   }
 
-  sealed abstract class ModelPageState
-
-  case object Create extends ModelPageState
-
-  case object Edit extends ModelPageState
 
 }

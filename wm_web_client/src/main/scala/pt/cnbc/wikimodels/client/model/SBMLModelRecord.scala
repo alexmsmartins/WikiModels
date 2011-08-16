@@ -12,6 +12,7 @@ import net.liftweb.util.ElemSelector
 import net.liftweb.common.{Empty, Full, Box}
 import java.security.acl.Owner
 import pt.cnbc.wikimodels.dataModel.SBMLModel
+import com.hp.hpl.jena.sdb.layout2.ValueType
 
 /**
  * Created by IntelliJ IDEA.
@@ -24,9 +25,9 @@ class SBMLModelRecord extends SBMLModel with RestRecord[SBMLModelRecord] {
   type MyType = SBMLModelRecord
   override def meta = SBMLModelRecord
 
-  object metaIdO extends MetaId(this,metaid)
-  object idO extends Id(this,id)
-  //object name extends StringField
+  object metaIdO extends MetaId(this, metaid)
+  object idO extends Id(this, id)
+  object nameO extends Name(this, name)
   //object description extends StringField(this, "No description")
 
   //  can be created
@@ -65,11 +66,9 @@ object SBMLModelRecord extends SBMLModelRecord with RestMetaRecord[SBMLModelReco
 class MetaId(own:SBMLModelRecord, pMetaId:String) extends StringField[SBMLModelRecord](own,pMetaId) {
   override type ValueType = String
 
-  override def is:MetaId#ValueType = owner.metaid
+  override def get: ValueType = owner.metaid
 
-  override def get: MetaId#ValueType = owner.metaid
-
-  override def set(in: MetaId#ValueType): MetaId#ValueType = {
+  override def set(in: ValueType): ValueType = {
     owner.metaid  = in;in
   }
 }
@@ -77,12 +76,20 @@ class MetaId(own:SBMLModelRecord, pMetaId:String) extends StringField[SBMLModelR
 class Id(own:SBMLModelRecord, pId:String) extends StringField[SBMLModelRecord](own, pId) {
   override type ValueType = String
 
-  override def is:MetaId#ValueType = owner.id
+  override def get: ValueType = owner.id
 
-  override def get: MetaId#ValueType = owner.id
-
-  override def set(in: MetaId#ValueType): MetaId#ValueType = {
+  override def set(in: ValueType): ValueType = {
     owner.id = in;in
+  }
+}
+
+class Name(own:SBMLModelRecord, pName:String) extends StringField[SBMLModelRecord](own, pName){
+  override type ValueType = String
+
+  override def get:ValueType = owner.name
+
+  override def set(in: ValueType): ValueType = {
+    owner.name = in; in
   }
 }
 
