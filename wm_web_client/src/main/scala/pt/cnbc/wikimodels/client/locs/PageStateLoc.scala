@@ -32,7 +32,7 @@ package object sitemapTweaks {
 
     def link = new Link[CreateEditPageState]("models" :: "createEdit" :: "Create" :: Nil)
 
-    def text = "Model handling" + defaultValue
+    def text = "[NEW]Create Model"
 
     def params: List[LocParam[CreateEditPageState]] = List(loggedIn)
 

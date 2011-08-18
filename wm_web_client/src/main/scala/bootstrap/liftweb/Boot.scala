@@ -64,7 +64,7 @@ class Boot {
         Menu(Loc("models", List(""), "Models"),
              Menu(Loc("createM", List("models","create"), "Create Model", loggedIn)),
              //Menu(Loc("createEditM", List("models","createEdit","Create"), "[NEW]Create Model", loggedIn)),
-             Menu(Loc("createEditMXX", List("models","createEdit"), "[NEW]Create Model", loggedIn)),
+             Menu(Loc("createEditMXX", List("models","createEdit"), "[NEW]Create Model", Hidden, loggedIn)),
              Menu(ModelPageLoc),
              Menu(Loc("importM", List("models","import"), "[NEW]Import Model", loggedIn)),
              Menu(Loc("browseM", List("models","index"), "Browse Models", loggedIn)),
