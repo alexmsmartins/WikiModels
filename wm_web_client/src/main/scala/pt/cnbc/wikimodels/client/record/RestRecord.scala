@@ -2,24 +2,13 @@ package pt.cnbc.wikimodels.client.record
 
 import java.util.prefs.BackingStoreException
 import java.lang.reflect.Method
-import net.liftweb.record.{LifecycleCallbacks, Field, MetaRecord, Record}
-import collection.mutable.ListBuffer
-import xml.Text._
-import net.liftweb.http.js.JE.JsObj._
-import net.liftweb.http.js.{JsExp, JsObj}
-import net.liftweb.util.{JSONParser, FieldError}
-import net.liftweb.json.JsonAST.JObject._
-import net.liftweb.json.JsonAST.JField._
-import net.liftweb.json.JsonAST._
+import scala.xml._
+import net.liftweb.record._
 import net.liftweb.record.FieldHelpers._
-import net.liftweb.json.{JsonParser, Printer}
-import xml.Elem._
 import net.liftweb.http.{LiftRules, LiftResponse, Req, SHtml}
 import net.liftweb.http.js.{JsExp, JsObj}
-import net.liftweb.http.js.JE._
-import xml.{Text, Elem, NodeSeq}
-import javax.xml.soap.SOAPElementFactory
-import net.liftweb.common.{ParamFailure, Empty, Full, Box}
+import net.liftweb.common._
+import pt.cnbc.wikimodels.snippet.User
 
 
 //  because of WriteConcern
@@ -59,6 +48,7 @@ trait RestRecord[MyType <: RestRecord[MyType]] extends Record[MyType] {
   protected def handleStatusCodes(status:Int, printableAction:String) :Box[MyType] = {
     status match{
       case x if(x >= 200 && x <300) => ParamFailure("Error " + printableAction + " . The status code "+ status + " should never have appeared.", this)
+      case 404 => Failure("Authorization error you don't have permissions to " + printableAction + ": " + User.restfulConnection.getReasonPhrase)
       case _ => ParamFailure("Error " + printableAction + " . It failed with status code "+ status + "", this)
     }
   }

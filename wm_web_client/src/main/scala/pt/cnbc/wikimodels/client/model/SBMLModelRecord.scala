@@ -126,8 +126,6 @@ class Notes(own:SBMLModelRecord, size:Int) extends OptionalTextareaField[SBMLMod
 
   override protected def valueTypeToBoxString(in: ValueType): Box[String] = in
   override protected def boxStrToValType(in: Box[String]): ValueType = {
-    //TODO: this is only like this to avoid compile errors. IMPROVE if it ever blows up in your face.
     in.toOption
   }
 }
-
