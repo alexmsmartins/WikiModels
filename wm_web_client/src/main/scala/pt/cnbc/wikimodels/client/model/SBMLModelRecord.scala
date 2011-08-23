@@ -3,9 +3,10 @@ package pt.cnbc.wikimodels.client.model
 import scala.xml._
 import net.liftweb.common._
 import net.liftweb.record._
-import field.StringField
+import field.{OptionalTextareaField, StringField}
 import pt.cnbc.wikimodels.client.record._
 import pt.cnbc.wikimodels.dataModel.SBMLModel
+import net.liftweb.json.JsonAST.JValue
 
 /**
  * Created by IntelliJ IDEA.
@@ -21,24 +22,40 @@ class SBMLModelRecord extends SBMLModel with RestRecord[SBMLModelRecord] {
   override def meta = SBMLModelRecord
 
   //  ### can be created ###
-  override def createRestRec():MyType = {
+  override def createRestRec():Box[MyType] = {
     User.restfulConnection.postRequest(relativeURL, this.toXML)
-    this
+    User.restfulConnection.getStatusCode match {
+      case 201 => Full(this)//delete went ok
+      case 404 => ParamFailure("Error reading " + this.metaid + ". This element does not exist.", this)
+      case status => handleStatusCodes(status, "creating model with " + this.metaid)
+    }
   }
 
-  override def readRestRec(url:String):MyType = {
+  override def readRestRec(url:String):Box[MyType] = {
     User.restfulConnection.getRequest(relativeURL)
-    this
+    User.restfulConnection.getStatusCode match {
+      case 200 => Full(this)//delete went ok
+      case 404 => ParamFailure("Error reading " + this.metaid + ". This element does not exist.", this)
+      case status => handleStatusCodes(status, "reading model with " + this.metaid)
+    }
   }
 
-  override def updateRestRec():MyType = {
+  override def updateRestRec():Box[MyType] = {
     User.restfulConnection.putRequest(relativeURL, this.toXML)
-    this
+    User.restfulConnection.getStatusCode match {
+      case 200 => Full(this)//delete went ok
+      case 404 => ParamFailure("Error updateing " + this.metaid + ". This element does not exist.", this)
+      case status => handleStatusCodes(status, "updataing model with " + this.metaid)
+    }
   }
 
-  override def deleteRestRec():MyType = {
+  override def deleteRestRec():Box[MyType] = {
     User.restfulConnection.deleteRequest(relativeURL)
-    this
+    User.restfulConnection.getStatusCode match {
+      case 204 => Full(this)//delete went ok
+      case 404 => ParamFailure("Error deleting " + this.metaid + ". This element does not exist.", this)
+      case status => handleStatusCodes(status, "deleting model with " + this.metaid)
+    }
   }
 
   override protected def relativeURLasList = "model" :: metaid :: Nil
@@ -52,6 +69,7 @@ class SBMLModelRecord extends SBMLModel with RestRecord[SBMLModelRecord] {
   object metaIdO extends MetaId(this, metaid)
   object idO extends Id(this, id)
   object nameO extends Name(this, name)
+  object notesO extends Notes(this, 1000)
   //object description extends StringField(this, "No description")
 
   //  ### can be created directly from a Request containing params with names that match the fields on a Record ( see fromReq ). ###
@@ -72,7 +90,8 @@ class MetaId(own:SBMLModelRecord, pMetaId:String) extends StringField[SBMLModelR
     owner.metaid  = in;in
   }
 
-  override def toForm() = Full(Text("the MetaId will be generated autimatically from concatenating the ids of any parent entities with '_' in between."))
+  //the MetaId will be generated autimatically from concatenating the ids of any parent entities with '_' in between.
+  override def toForm() = Full(Text("the MetaId will be generated automatically."))
 }
 
 class Id(own:SBMLModelRecord, pId:String) extends StringField[SBMLModelRecord](own, pId) {
@@ -92,6 +111,23 @@ class Name(own:SBMLModelRecord, pName:String) extends StringField[SBMLModelRecor
 
   override def set(in: ValueType): ValueType = {
     owner.name = in; in
+  }
+}
+
+class Notes(own:SBMLModelRecord, size:Int) extends OptionalTextareaField[SBMLModelRecord](own, size){
+  override def get: ValueType =
+    if ((owner.notes != null) ||
+      (owner.notes.trim() != "")) Some(owner.notes)
+    else None
+
+  override def set(in: ValueType): ValueType = {
+    owner.notes = in.toString; in
+  }
+
+  override protected def valueTypeToBoxString(in: ValueType): Box[String] = in
+  override protected def boxStrToValType(in: Box[String]): ValueType = {
+    //TODO: this is only like this to avoid compile errors. IMPROVE if it ever blows up in your face.
+    in.toOption
   }
 }
 

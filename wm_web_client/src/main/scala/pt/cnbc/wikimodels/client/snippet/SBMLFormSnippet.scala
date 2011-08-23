@@ -12,6 +12,8 @@ import common._
 import util._
 import Helpers._
 
+import scala.xml._
+
 import pt.cnbc.wikimodels.client.model._
 
 /**
@@ -31,21 +33,68 @@ class SBMLForm extends DispatchSnippet {
 
   def dispatch: DispatchIt = {
     case "createModel" => createNewModel
+    case "editModel" => editSelectedModel
+    case "visualizeModel" => visualizeSelectedModel
+    case "deleteModel" => confirmAndDeleteSelectedModel
   }
 
-  def saveModel(model:SBMLModelRecord):Unit = {
-    model.validate match {
-      case Nil => model.createRestRec(); redirectTo("/model/" + model.metaid) //TODO: maybe (hope not) this can be executed in parallel
-      case x => error(x); selectedModel(Full(model))
+  //Create state
 
+  def saveNewModel(model:SBMLModelRecord):Unit = {
+    model.validate match {
+      case Nil => val metaid = model.createRestRec(); redirectTo("/model/" + model.metaid) //TODO: handle failure in the server (maybe this should be general)
+      case x => error(x); selectedModel(Full(model))
     }
   }
 
   def createNewModel(ns:NodeSeq) =
-    selectedModel.is.openOr(SBMLModelRecord()).toForm(saveModel _) ++ <tr>
+    selectedModel.is.openOr(SBMLModelRecord()).toForm(saveNewModel _) ++ <tr>
       <td><a href="/models">Cancel</a></td>
       <td><input type="submit" value="Create"/></td>
       </tr>
+
+  //Edit state
+
+  def saveSelectedModel(model:SBMLModelRecord):Unit = {
+    model.validate match {
+      case Nil => model.updateRestRec(); redirectTo("/model/" + model.metaid) //TODO: handle the possibility that the server does not accept the change (maybe this should be general)
+      case x => error(x); selectedModel(Full(model))
+    }
+  }
+
+  def editSelectedModel(ns:NodeSeq) =
+    selectedModel.is.openTheBox.toForm(saveSelectedModel _ ) ++ <tr>
+                                      <td><a href="/simple/index.html">Cancel</a></td>
+                                      <td><input type="submit" value="Save"/></td>
+                                    </tr>
+
+  //Visualize state
+  def visualizeSelectedModel(ns:NodeSeq):NodeSeq = {
+    selectedModel.map(_.toXHtml) openOr {error("Model not found"); redirectTo("/models/")}
+  }
+
+  //delete state
+
+  def confirmAndDeleteSelectedModel(ns:NodeSeq):NodeSeq = {
+
+    (for(model <- selectedModel.is) yield {
+       def deleteModel():NodeSeq = {
+        notice("Model "+ model.metaid +" deleted")
+        model.deleteRestRec()
+        redirectTo("/models/")
+      }
+      // bind the incoming XHTML to a "delete" button.
+      // when the delete button is pressed, call the "deleteUser"
+      // function (which is a closure and bound the "user" object
+      // in the current content)
+      bind("xmp", ns, "Model " -> (model.metaid),
+      "delete" -> submit("Delete", deleteModel ))
+
+      // if the was no ID or the user couldn't be found,
+      // display an error and redirect
+    }) openOr {error("Model not found"); redirectTo("/models/")}
+  }
+
 
   def createModele(ns: NodeSeq): NodeSeq = {
     //TODO: delete this code when no longer necessary

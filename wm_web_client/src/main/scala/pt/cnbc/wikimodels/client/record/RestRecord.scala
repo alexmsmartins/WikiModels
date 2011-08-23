@@ -2,7 +2,6 @@ package pt.cnbc.wikimodels.client.record
 
 import java.util.prefs.BackingStoreException
 import java.lang.reflect.Method
-import net.liftweb.common.{Empty, Full, Box}
 import net.liftweb.record.{LifecycleCallbacks, Field, MetaRecord, Record}
 import collection.mutable.ListBuffer
 import xml.Text._
@@ -20,6 +19,7 @@ import net.liftweb.http.js.{JsExp, JsObj}
 import net.liftweb.http.js.JE._
 import xml.{Text, Elem, NodeSeq}
 import javax.xml.soap.SOAPElementFactory
+import net.liftweb.common.{ParamFailure, Empty, Full, Box}
 
 
 //  because of WriteConcern
@@ -34,13 +34,13 @@ import javax.xml.soap.SOAPElementFactory
 trait RestRecord[MyType <: RestRecord[MyType]] extends Record[MyType] {
   self : MyType =>
 
-  def createRestRec():MyType
+  def createRestRec():Box[MyType]
 
-  def readRestRec(url:String):MyType
+  def readRestRec(url:String):Box[MyType]
 
-  def updateRestRec():MyType
+  def updateRestRec():Box[MyType]
 
-  def deleteRestRec():MyType
+  def deleteRestRec():Box[MyType]
 
   /**
    * The protocol, host, port and path of the RESTful service were already defined when making the connection.
@@ -52,6 +52,16 @@ trait RestRecord[MyType <: RestRecord[MyType]] extends Record[MyType] {
    * Lift friendly representation of a URL.
    */
   protected def relativeURLasList:List[String]
+
+  /**
+   * returns Failure boxes for all types of umpredicted status codes that come within a response to WikiModels Server
+   */
+  protected def handleStatusCodes(status:Int, printableAction:String) :Box[MyType] = {
+    status match{
+      case x if(x >= 200 && x <300) => ParamFailure("Error " + printableAction + " . The status code "+ status + " should never have appeared.", this)
+      case _ => ParamFailure("Error " + printableAction + " . It failed with status code "+ status + "", this)
+    }
+  }
 }
 
 
@@ -61,22 +71,22 @@ trait RestMetaRecord[BaseRecord <: RestRecord[BaseRecord]] extends MetaRecord[Ba
   /**
    * Creates a new RestRecord in the RESTful service
    */
-  def createRestRec():BaseRecord
+  def createRestRec():Box[BaseRecord]
 
   /**
    * Loads an existant RestRecord from the RESTful service
    */
-  def readRestRec(url:String):BaseRecord
+  def readRestRec(url:String):Box[BaseRecord]
 
   /***
    * Updates an existent RestRecord in the RESTful service with new information
    */
-  def updateRestRec():BaseRecord
+  def updateRestRec():Box[BaseRecord]
 
   /**
    * Erases an existent RestRecord from the RESTful service
    */
-  def deleteRestRec():BaseRecord
+  def deleteRestRec():Box[BaseRecord]
 
 
 }

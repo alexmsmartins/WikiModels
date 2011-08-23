@@ -44,8 +44,8 @@ class RestfulAccess(val host: String,
                     val username: String,
                     val password: String,
                     val startFunc: (RestfulAccess) => Unit) {
-  // Even though this looks easy to use, the last paramenter might cause problems for other JVM languages.
-  // TODO: So, it should be replaced by something more general.
+  //Even though this looks easy to use, the last paramenter might cause problems for other JVM languages.
+  // TODO: So, it shoul
   var lastStatusLine: StatusLine = null
   val log = Logger.getLogger(this.getClass)
 
