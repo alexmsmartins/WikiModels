@@ -1,18 +1,19 @@
 package pt.cnbc.wikimodels.client.snippet
 
-import xml.NodeSeq
+import java.util.Date
+import scala.xml._
 
-import _root_.net.liftweb._
+
+import net.liftweb._
+import common._
+import util.Helpers._
 import http._
+import sitemap._
 import mapper._
 import S._
 import SHtml._
-
-import common._
 import util._
 import Helpers._
-
-import scala.xml._
 
 import pt.cnbc.wikimodels.client.model._
 
@@ -38,7 +39,7 @@ class SBMLForm extends DispatchSnippet {
     case "deleteModel" => confirmAndDeleteSelectedModel
   }
 
-  //Create state
+  //### Create state
 
   def saveNewModel(model:SBMLModelRecord):Unit = {
     model.validate match {
@@ -53,7 +54,7 @@ class SBMLForm extends DispatchSnippet {
       <td><input type="submit" value="Create"/></td>
       </tr>
 
-  //Edit state
+  //### Edit state
 
   def saveSelectedModel(model:SBMLModelRecord):Unit = {
     model.validate match {
@@ -68,12 +69,15 @@ class SBMLForm extends DispatchSnippet {
                                       <td><input type="submit" value="Save"/></td>
                                     </tr>
 
-  //Visualize state
+  //### Visualize state
+   case class ParamModelMetaIDInfo(theMetaId:String)
+   //TODO val menu = Menu.param[ParamModelMetaIDInfo]("model", "model", s => Full(s),encoder: T => String)
+
   def visualizeSelectedModel(ns:NodeSeq):NodeSeq = {
     selectedModel.map(_.toXHtml) openOr {error("Model not found"); redirectTo("/models/")}
   }
 
-  //delete state
+  //### delete state
 
   def confirmAndDeleteSelectedModel(ns:NodeSeq):NodeSeq = {
 
