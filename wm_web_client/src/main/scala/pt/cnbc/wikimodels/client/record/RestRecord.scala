@@ -77,6 +77,4 @@ trait RestMetaRecord[BaseRecord <: RestRecord[BaseRecord]] extends MetaRecord[Ba
    * Erases an existent RestRecord from the RESTful service
    */
   def deleteRestRec():Box[BaseRecord]
-
-
 }

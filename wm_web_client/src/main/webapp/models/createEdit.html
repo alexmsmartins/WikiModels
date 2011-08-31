@@ -127,32 +127,33 @@
 <p>Real code over this line</p>
 <p>Experiences under this line</p>
         ===========================================================================================
-        <lift:CreateModel.createDescription form="post" name="createForm" id_msgs="messages" >
+    <lift:CreateModel.createDescription form="post" name="createForm" id_msgs="messages">
+            <h4><span id="required_field">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* required fields</span></h4><br/>
+            <lift:ModelTree.render/>
+            <ul id="model_tree" class="treeview-gray">
+                <li><span>
+                    <h3>Model ID: <span id="required_field">*</span>
+                        <div id="messages"></div>
+                    </h3><br/>
+                </span></li>
+                <li>
+                    <h3>Name of the model:
+                        <createDescription:name>
+                            <text:model_id/>
+                        </createDescription:name>
+                    </h3>
+                    <br/></li>
+                <li><span><h3>Description of the model:</h3></span>
+                    <br/>
+                    <ul>
+                        <li><span><createDescription:description/></span><br/></li>
+                    </ul>
+                </li>
+            </ul>
+    </lift:CreateModel.createDescription>
 
 
-      <div id="tab-1">
-
-          <h4><span id="required_field">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* required fields</span></h4><br />
-          <lift:ModelTree.render />
-          <ul id="model_tree" class="treeview-gray">
-              <li><span><h3>Model ID: <span id="required_field">*</span><div id="messages"></div></h3><br /></span></li>
-              <li><h3>Name of the model:
-                      <createDescription:name>
-                          <text:model_id/>
-              </createDescription:name></h3><br /></li>
-              <li><span><h3>Description of the model:</h3></span>
-                  <br />
-                  <ul>
-                      <li><span><createDescription:description /></span><br /></li>
-                  </ul>
-              </li>
-          </ul>
-      </div>
-        </lift:CreateModel.createDescription>
-
-
-
-        <div id="container">
+    <div id="container">
             <h1>Model browsing prototype</h1>
             <div id="left">
 
