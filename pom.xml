@@ -52,11 +52,16 @@
       <id>Jenabean</id>
       <url>http://jenabean.googlecode.com/svn/trunk/repo</url>
     </repository>
-    <repository>
-      <id>localMavenRepo</id>
-      <name>localMavenRepo</name>
-      <url>file:./localMavenRepo</url>
-                                          </repository>
+    <repository><!-- for compilation within the module -->
+        <id>localMavenRepo</id>
+        <name>localMavenRepo</name>
+        <url>file:${basedir}/../localMavenRepo</url>
+    </repository>
+    <repository><!-- for compilation from the main project -->
+        <id>localMavenRepo</id>
+        <name>localMavenRepo</name>
+        <url>file:${basedir}/localMavenRepo</url>
+    </repository>
   </repositories>
 
   <dependencies>
