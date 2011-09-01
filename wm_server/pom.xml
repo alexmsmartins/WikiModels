@@ -32,13 +32,13 @@
             <layout>default</layout>
         </repository>
         <repository><!-- for compilation within the module -->
-            <id>localMavenRepo</id>
-            <name>localMavenRepo</name>
+            <id>localMavenRepo7</id>
+            <name>localMavenRepo7</name>
             <url>file:${basedir}/../localMavenRepo</url>
         </repository>
         <repository><!-- for compilation from the main project -->
-            <id>localMavenRepo</id>
-            <name>localMavenRepo</name>
+            <id>localMavenRepo8</id>
+            <name>localMavenRepo8</name>
             <url>file:${basedir}/localMavenRepo</url>
         </repository>
     </repositories>

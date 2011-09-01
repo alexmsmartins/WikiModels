@@ -97,13 +97,13 @@
       <layout>default</layout>
     </repository>
       <repository><!-- for compilation within the module -->
-          <id>localMavenRepo</id>
-          <name>localMavenRepo</name>
+          <id>localMavenRepo3</id>
+          <name>localMavenRepo3</name>
           <url>file:${basedir}/../localMavenRepo</url>
       </repository>
       <repository><!-- for compilation from the main project -->
-          <id>localMavenRepo</id>
-          <name>localMavenRepo</name>
+          <id>localMavenRepo4</id>
+          <name>localMavenRepo4</name>
           <url>file:${basedir}/localMavenRepo</url>
       </repository>
   </repositories>

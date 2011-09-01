@@ -58,8 +58,8 @@
         <url>file:${basedir}/../localMavenRepo</url>
     </repository>
     <repository><!-- for compilation from the main project -->
-        <id>localMavenRepo</id>
-        <name>localMavenRepo</name>
+        <id>localMavenRepo2</id>
+        <name>localMavenRepo2</name>
         <url>file:${basedir}/localMavenRepo</url>
     </repository>
   </repositories>
