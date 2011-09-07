@@ -9,6 +9,7 @@ import net.liftweb.http.{LiftRules, LiftResponse, Req, SHtml}
 import net.liftweb.http.js.{JsExp, JsObj}
 import net.liftweb.common._
 import pt.cnbc.wikimodels.snippet.User
+import net.liftweb.mapper.Mapper
 
 
 //  because of WriteConcern

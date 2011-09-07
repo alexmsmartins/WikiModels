@@ -121,7 +121,9 @@ class RestfulAccess(val host: String,
       val uriFinal = new URI(response.getFirstHeader("Location").getValue)
       log.debug("======================")
       uriFinal
-    } else null
+    } else {
+      Console.println("POST request returns null");null
+    }
   }
 
 

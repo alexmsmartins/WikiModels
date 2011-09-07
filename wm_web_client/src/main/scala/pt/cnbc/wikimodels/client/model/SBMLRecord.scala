@@ -12,7 +12,10 @@ import pt.cnbc.wikimodels.client.record._
 import net.liftweb.json.JsonAST.JValue
 import pt.cnbc.wikimodels.dataModel.{Element, SBMLModel}
 import thewebsemantic.vocabulary.Foaf.Person
-import net.liftweb.http.SHtml
+import net.liftweb.http.js.jquery.JqJsCmds.DisplayMessage._
+import net.liftweb.util.BindHelpers._
+import net.liftweb.http.{S, SHtml}
+import net.liftweb.http.js.jquery.JqJsCmds.DisplayMessage
 
 //Javascript handling imports
 import _root_.net.liftweb.http.js.{JE,JsCmd,JsCmds}
@@ -22,7 +25,6 @@ import JE.{JsRaw,Str}
 
 trait SBMLElement[MyType <: SBMLElement[MyType]] extends Element with RestRecord[MyType]{
   self : MyType =>
-
 }
 
 /**
@@ -138,10 +140,13 @@ class SBMLModelRecord extends SBMLModel with SBMLElement[SBMLModelRecord] {
 //TODO - DELETE IF NOT USED FOR ANYTHING
 object SBMLModelRecord extends SBMLModelRecord with RestMetaRecord[SBMLModelRecord] {
   def apply() = new SBMLModelRecord
+  //override def fieldOrder = List(metaIdO, idO, nameO, notesO)
+  //override def fields = fieldOrder
+
 }
 
 class MetaId(own:SBMLModelRecord, pMetaId:String) extends StringField[SBMLModelRecord](own,pMetaId) {
-  override type ValueType = String
+//  override type ValueType >: Option[String]
 
   override def get: ValueType = owner.metaid
 
@@ -150,11 +155,11 @@ class MetaId(own:SBMLModelRecord, pMetaId:String) extends StringField[SBMLModelR
   }
 
   //the MetaId will be generated autimatically from concatenating the ids of any parent entities with '_' in between.
-  override def toForm() = Full(Text("The MetaId will be generated automatically.") ++ <br/>)
+  override def toForm() = Empty//Full(Text("The MetaId will be generated automatically.") )
 }
 
-class Id(own:SBMLModelRecord, pId:String) extends StringField[SBMLModelRecord](own, pId) {
-  override type ValueType = String
+abstract class Id(own:SBMLModelRecord, pId:String) extends StringField[SBMLModelRecord](own, 60, pId) with DisplayWithLabel[SBMLModelRecord]{
+//  override type ValueType >: Option[String]
 
   override def get: ValueType = owner.id
 
@@ -162,14 +167,14 @@ class Id(own:SBMLModelRecord, pId:String) extends StringField[SBMLModelRecord](o
     owner.id = in;in
   }
 
-  //Appers when rendering the form or the vizualization
+  //Appears when rendering the form or the visualization
   override def displayName: String = "Model id"
 
-  override def toForm = Full(Text(displayName) ++ super.toForm.openTheBox)
+  override def toForm = super.toForm
 }
 
-class Name(own:SBMLModelRecord, pName:String) extends StringField[SBMLModelRecord](own, pName){
-  override type ValueType = String
+abstract class Name(own:SBMLModelRecord, pName:String) extends StringField[SBMLModelRecord](own, 100, pName) with DisplayWithLabel[SBMLModelRecord]{
+//  override type ValueType >: Option[String]
 
   override def get:ValueType = owner.name
 
@@ -177,13 +182,22 @@ class Name(own:SBMLModelRecord, pName:String) extends StringField[SBMLModelRecor
     owner.name = in; in
   }
 
-  //Appers when rendering the form or the vizualization
+  //Appears when rendering the form or the visualization
   override def displayName = "Model name"
 
-  override def toForm = Full(Text(displayName) ++ super.toForm.openTheBox)
+  override def toForm = super.toForm
+  val msgName: String = S.attr("id_msgs") openOr "messages"
+
+/*
+  override def toForm_Goncalo = SHtml.ajaxText("", ref => { owner.name = ref;
+                                               DisplayMessage(msgName,
+                                                              bind("text", nameml, "model_id" ->
+                                                                   SHtml.text(Text(ref.replace(" ", "").toLowerCase).toString, refer2 => model_id = refer2, ("id", "model_id"), ("name", "model_id"), ("size", "40"))),
+                                                              300000 seconds, 1 second)}, ("id", "name_model"), ("size", "40"), ("maxlength", "1000"))
+*/
 }
 
-class Notes(own:SBMLModelRecord, size:Int) extends OptionalTextareaField[SBMLModelRecord](own, size){
+abstract class Notes(own:SBMLModelRecord, size:Int) extends OptionalTextareaField[SBMLModelRecord](own, size){
   override def get: ValueType =
     if ((owner.notes != null) ||
       (owner.notes.trim() != "")) Some(owner.notes)

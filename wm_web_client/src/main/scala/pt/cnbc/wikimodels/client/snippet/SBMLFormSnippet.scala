@@ -42,6 +42,7 @@ class SBMLForm extends DispatchSnippet {
   //### Create state
 
   def saveNewModel(model:SBMLModelRecord):Unit = {
+    Console.println("SAVE NEW MODEL")
     model.validate match {
       case Nil => val metaid = model.createRestRec(); redirectTo("/model/" + model.metaid) //TODO: handle failure in the server (maybe this should be general)
       case x => error(x); selectedModel(Full(model))
@@ -52,11 +53,12 @@ class SBMLForm extends DispatchSnippet {
     selectedModel.is.openOr(SBMLModelRecord()).toForm(saveNewModel _) ++ <tr>
       <td><a href="/models">Cancel</a></td>
       <td><input type="submit" value="Create"/></td>
-      </tr>
+    </tr>
 
   //### Edit state
 
   def saveSelectedModel(model:SBMLModelRecord):Unit = {
+    Console.println("SAVE SELECTED MODEL")
     model.validate match {
       case Nil => model.updateRestRec(); redirectTo("/model/" + model.metaid) //TODO: handle the possibility that the server does not accept the change (maybe this should be general)
       case x => error(x); selectedModel(Full(model))
@@ -74,13 +76,14 @@ class SBMLForm extends DispatchSnippet {
    //TODO val menu = Menu.param[ParamModelMetaIDInfo]("model", "model", s => Full(s),encoder: T => String)
 
   def visualizeSelectedModel(ns:NodeSeq):NodeSeq = {
+    Console.println("VISUALIZE SELECTED MODEL")
     selectedModel.map(_.toXHtml) openOr {error("Model not found"); redirectTo("/models/")}
   }
 
   //### delete state
 
   def confirmAndDeleteSelectedModel(ns:NodeSeq):NodeSeq = {
-
+    Console.println("CONFIRM DELETE SELECTED MODEL")
     (for(model <- selectedModel.is) yield {
        def deleteModel():NodeSeq = {
         notice("Model "+ model.metaid +" deleted")
