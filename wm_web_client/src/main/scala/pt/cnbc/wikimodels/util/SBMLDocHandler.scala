@@ -14,7 +14,6 @@ import org.slf4j._
  * Time: 19:34
  * To change this template use File | Settings | File Templates.
  */
-
 object SBMLDocHandler {
   self  =>
 

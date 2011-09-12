@@ -28,10 +28,6 @@ import pt.cnbc.wikimodels.client.model._
 class SBMLForm extends DispatchSnippet {
   private object selectedModel extends RequestVar[Box[SBMLModelRecord]](Empty)
 
-  object modelState extends SessionVar[SBMLForm.CreateEditPageState](SBMLForm.EnterPage)
-
-  var somevar: Int = 0
-
   def dispatch: DispatchIt = {
     case "createModel" => createNewModel
     case "editModel" => editSelectedModel
@@ -42,18 +38,23 @@ class SBMLForm extends DispatchSnippet {
   //### Create state
 
   def saveNewModel(model:SBMLModelRecord):Unit = {
-    Console.println("SAVE NEW MODEL")
+    Console.println("SAVE NEW MODEL with xml " + model.toXML())
     model.validate match {
-      case Nil => val metaid = model.createRestRec(); redirectTo("/model/" + model.metaid) //TODO: handle failure in the server (maybe this should be general)
+      case Nil => { //no validation errors
+        model.metaid = model.id
+        val metaid = model.createRestRec(); redirectTo("/model/" + metaid) //TODO: handle failure in the server (maybe this should be general)
+      }
       case x => error(x); selectedModel(Full(model))
     }
   }
 
-  def createNewModel(ns:NodeSeq) =
-    selectedModel.is.openOr(SBMLModelRecord()).toForm(saveNewModel _) ++ <tr>
+  def createNewModel(ns:NodeSeq):NodeSeq = {
+    selectedModel.is.openOr(SBMLModelRecord.createRecord)
+      .toForm(saveNewModel _) ++ <tr>
       <td><a href="/models">Cancel</a></td>
       <td><input type="submit" value="Create"/></td>
     </tr>
+  }
 
   //### Edit state
 
@@ -65,7 +66,7 @@ class SBMLForm extends DispatchSnippet {
     }
   }
 
-  def editSelectedModel(ns:NodeSeq) =
+  def editSelectedModel(ns:NodeSeq):NodeSeq =
     selectedModel.is.openTheBox.toForm(saveSelectedModel _ ) ++ <tr>
                                       <td><a href="/simple/index.html">Cancel</a></td>
                                       <td><input type="submit" value="Save"/></td>
@@ -102,6 +103,7 @@ class SBMLForm extends DispatchSnippet {
     }) openOr {error("Model not found"); redirectTo("/models/")}
   }
 
+  var somevar: Int = 0
 
   def createModele(ns: NodeSeq): NodeSeq = {
     //TODO: delete this code when no longer necessary
@@ -123,7 +125,7 @@ class SBMLForm extends DispatchSnippet {
       <p>object sessionvar extends SessionVar = {SBMLForm.sessionvar}
       </p>
       <p>var somevar =
-        {this.somevar}
+        {somevar}
       </p>
     }
   }
@@ -135,7 +137,7 @@ object SBMLForm{
     /**
    * Defines teh possible states of the CreateEdit page in WikiModels
    */
-  sealed class CreateEditPageState(state: String)
+  sealed class CreateEditPageState(val state: String)
 
   case object EnterPage extends CreateEditPageState("EnterPage")
 
@@ -151,7 +153,7 @@ object SBMLForm{
 
   case object GoToBrowseModelsPage extends CreateEditPageState("GoToBrowseModelsPage")
 
-  case class AnotherState(_state: String) extends CreateEditPageState(_state)
+  case class AnotherState(override val state: String) extends CreateEditPageState(state)
 }
 
 

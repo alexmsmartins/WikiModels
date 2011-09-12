@@ -23,9 +23,10 @@ class SBMLModelSnip{
 
   def modelMetaId = "#mMetaId *" #> S.param("modelMetaId").openOr("<<handling this is a TODO>>")
 
-  def entireModelInXML ={
-    val rest = User.restfulConnection
-    val model = rest.getRequest("/model/" + S.param("modelMetaId").openOr("TODO: Error") )
+  def entireModelInXML = {
+    val model = User
+      .restfulConnection
+      .getRequest("/model/" + S.param("modelMetaId").openOr("TODO: Error") )
     "#xmlmodel *" #> model.toString()
   }
 

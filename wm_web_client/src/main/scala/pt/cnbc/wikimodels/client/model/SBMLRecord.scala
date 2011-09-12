@@ -9,13 +9,13 @@ import net.liftweb.common._
 import net.liftweb.record._
 import field.{OptionalTextareaField, StringField}
 import pt.cnbc.wikimodels.client.record._
-import net.liftweb.json.JsonAST.JValue
 import pt.cnbc.wikimodels.dataModel.{Element, SBMLModel}
 import thewebsemantic.vocabulary.Foaf.Person
 import net.liftweb.http.js.jquery.JqJsCmds.DisplayMessage._
 import net.liftweb.util.BindHelpers._
 import net.liftweb.http.{S, SHtml}
 import net.liftweb.http.js.jquery.JqJsCmds.DisplayMessage
+import net.liftweb.json.JsonAST.JValue
 
 //Javascript handling imports
 import _root_.net.liftweb.http.js.{JE,JsCmd,JsCmds}
@@ -23,8 +23,57 @@ import JsCmds._ // For implicits
 import JE.{JsRaw,Str}
 
 
-trait SBMLElement[MyType <: SBMLElement[MyType]] extends Element with RestRecord[MyType]{
+trait SBMLElement[MyType <: SBMLElement[MyType]] extends Element with RestRecord[MyType] {
   self : MyType =>
+  import pt.cnbc.wikimodels.snippet.User
+
+  /**
+   * informs if the fields of this record have information or not
+   */
+  var clean_? = true
+
+  /**
+   * Informs if this RestRecord is already saved in the WikiModels Knowledgebase.
+   * This is true if an existing element is loaded from the RESTful service or after
+   * a new element gets successfully saved into it.
+   */
+  var saved_? = false
+  //  ### can be created ###
+  override def createRestRec():Box[MyType] = {
+    User.restfulConnection.postRequest(relativeURL, this.toXML)
+    User.restfulConnection.getStatusCode match {
+      case 201 => saved_? = true;Full(this)//create went ok
+      case 404 => ParamFailure("Error reading " + this.metaid + ". This element does not exist.", this)
+      case status => handleStatusCodes(status, "creating " + sbmlType + " with " + this.metaid)
+    }
+  }
+
+  override def readRestRec(url:String):Box[MyType] = {
+    User.restfulConnection.getRequest(relativeURL)
+    User.restfulConnection.getStatusCode match {
+      case 200 => clean_? = false;Full(this)//read went ok
+      case 404 => ParamFailure("Error reading " + this.metaid + ". This element does not exist.", this)
+      case status => handleStatusCodes(status, "reading " + sbmlType + " with " + this.metaid)
+    }
+  }
+
+  override def updateRestRec():Box[MyType] = {
+    User.restfulConnection.putRequest(relativeURL, this.toXML)
+    User.restfulConnection.getStatusCode match {
+      case 200 => saved_? = true;Full(this)//update went ok
+      case 404 => ParamFailure("Error updateing " + this.metaid + ". This element does not exist.", this)
+      case status => handleStatusCodes(status, "updataing " + sbmlType + " with " + this.metaid)
+    }
+  }
+
+  override def deleteRestRec():Box[MyType] = {
+    User.restfulConnection.deleteRequest(relativeURL)
+    User.restfulConnection.getStatusCode match {
+      case 204 => saved_? = false;Full(this)//delete went ok
+      case 404 => ParamFailure("Error deleting " + this.metaid + ". This element does not exist.", this)
+      case status => handleStatusCodes(status, "deleting "+ sbmlType + " with " + this.metaid)
+    }
+  }
 }
 
 /**
@@ -34,74 +83,17 @@ trait SBMLElement[MyType <: SBMLElement[MyType]] extends Element with RestRecord
  * Time: 17:37
  * To change this template use File | Settings | File Templates.
  */
-class SBMLModelRecord extends SBMLModel with SBMLElement[SBMLModelRecord] {
+class SBMLModelRecord extends SBMLModel with SBMLElement[SBMLModelRecord]  {
   type MyType = SBMLModelRecord
-  import pt.cnbc.wikimodels.snippet.User
-
-  /**
-   * informs if the fields of this record have information or not
-   */
-  var isFilled = false
-
-  /**
-   * Informs if this RestRecord is already saved in the WikiModels Knowledgebase.
-   * This is true if an existing element is loaded from the RESTful service or after
-   * a new element gets successfully saved into it.
-   */
-  var isSaved = false
-
 
   override def meta = SBMLModelRecord
 
-  //  ### can be created ###
-  override def createRestRec():Box[MyType] = {
-    User.restfulConnection.postRequest(relativeURL, this.toXML)
-    User.restfulConnection.getStatusCode match {
-      case 201 => isSaved = true;Full(this)//delete went ok
-      case 404 => ParamFailure("Error reading " + this.metaid + ". This element does not exist.", this)
-      case status => handleStatusCodes(status, "creating model with " + this.metaid)
-    }
-  }
-
-  override def readRestRec(url:String):Box[MyType] = {
-    User.restfulConnection.getRequest(relativeURL)
-    User.restfulConnection.getStatusCode match {
-      case 200 => isFilled = true;Full(this)//delete went ok
-      case 404 => ParamFailure("Error reading " + this.metaid + ". This element does not exist.", this)
-      case status => handleStatusCodes(status, "reading model with " + this.metaid)
-    }
-  }
-
-  override def updateRestRec():Box[MyType] = {
-    User.restfulConnection.putRequest(relativeURL, this.toXML)
-    User.restfulConnection.getStatusCode match {
-      case 200 => isSaved = true;Full(this)//delete went ok
-      case 404 => ParamFailure("Error updateing " + this.metaid + ". This element does not exist.", this)
-      case status => handleStatusCodes(status, "updataing model with " + this.metaid)
-    }
-  }
-
-  override def deleteRestRec():Box[MyType] = {
-    User.restfulConnection.deleteRequest(relativeURL)
-    User.restfulConnection.getStatusCode match {
-      case 204 => isSaved = false;Full(this)//delete went ok
-      case 404 => ParamFailure("Error deleting " + this.metaid + ". This element does not exist.", this)
-      case status => handleStatusCodes(status, "deleting model with " + this.metaid)
-    }
-  }
-
   override protected def relativeURLasList = "model" :: metaid :: Nil
-
 
   //  ### can be validated with validate ###
 
   //  ### can be presented as XHtml, Json, or as a Form. ###
 
-  override def toForm(button:Box[String])(f:MyType => Unit) = {
-    meta.toForm(this) ++
-    (SHtml.hidden(() => f(this))) ++
-    ((button.map(b => (<input type="submit" value={b}/>)) openOr scala.xml.Text("")))
-  }
 
     <h4><span id="required_field">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* required fields</span></h4><br/>
     <lift:ModelTree.render/>
@@ -140,13 +132,13 @@ class SBMLModelRecord extends SBMLModel with SBMLElement[SBMLModelRecord] {
 //TODO - DELETE IF NOT USED FOR ANYTHING
 object SBMLModelRecord extends SBMLModelRecord with RestMetaRecord[SBMLModelRecord] {
   def apply() = new SBMLModelRecord
-  //override def fieldOrder = List(metaIdO, idO, nameO, notesO)
-  //override def fields = fieldOrder
+  override def fieldOrder = List(metaIdO, idO, nameO, notesO)
+  override def fields = fieldOrder
 
 }
 
 class MetaId(own:SBMLModelRecord, pMetaId:String) extends StringField[SBMLModelRecord](own,pMetaId) {
-//  override type ValueType >: Option[String]
+  //override type ValueType >: Option[String]
 
   override def get: ValueType = owner.metaid
 
@@ -155,10 +147,10 @@ class MetaId(own:SBMLModelRecord, pMetaId:String) extends StringField[SBMLModelR
   }
 
   //the MetaId will be generated autimatically from concatenating the ids of any parent entities with '_' in between.
-  override def toForm() = Empty//Full(Text("The MetaId will be generated automatically.") )
+  override def toForm() = Empty
 }
 
-abstract class Id(own:SBMLModelRecord, pId:String) extends StringField[SBMLModelRecord](own, 60, pId) with DisplayWithLabel[SBMLModelRecord]{
+class Id(own:SBMLModelRecord, pId:String) extends StringField[SBMLModelRecord](own, 60, pId) with DisplayWithLabelInOneLine[SBMLModelRecord]{
 //  override type ValueType >: Option[String]
 
   override def get: ValueType = owner.id
@@ -169,11 +161,12 @@ abstract class Id(own:SBMLModelRecord, pId:String) extends StringField[SBMLModel
 
   //Appears when rendering the form or the visualization
   override def displayName: String = "Model id"
+  override def displayNameHtml = Full(<h3>Id</h3>)
 
   override def toForm = super.toForm
 }
 
-abstract class Name(own:SBMLModelRecord, pName:String) extends StringField[SBMLModelRecord](own, 100, pName) with DisplayWithLabel[SBMLModelRecord]{
+class Name(own:SBMLModelRecord, pName:String) extends StringField[SBMLModelRecord](own, 100, pName) with DisplayWithLabelInOneLine[SBMLModelRecord]{
 //  override type ValueType >: Option[String]
 
   override def get:ValueType = owner.name
@@ -184,20 +177,13 @@ abstract class Name(own:SBMLModelRecord, pName:String) extends StringField[SBMLM
 
   //Appears when rendering the form or the visualization
   override def displayName = "Model name"
+  override def displayNameHtml = Full(<h3>Name</h3>)
 
   override def toForm = super.toForm
   val msgName: String = S.attr("id_msgs") openOr "messages"
-
-/*
-  override def toForm_Goncalo = SHtml.ajaxText("", ref => { owner.name = ref;
-                                               DisplayMessage(msgName,
-                                                              bind("text", nameml, "model_id" ->
-                                                                   SHtml.text(Text(ref.replace(" ", "").toLowerCase).toString, refer2 => model_id = refer2, ("id", "model_id"), ("name", "model_id"), ("size", "40"))),
-                                                              300000 seconds, 1 second)}, ("id", "name_model"), ("size", "40"), ("maxlength", "1000"))
-*/
 }
 
-abstract class Notes(own:SBMLModelRecord, size:Int) extends OptionalTextareaField[SBMLModelRecord](own, size){
+class Notes(own:SBMLModelRecord, size:Int) extends OptionalTextareaField[SBMLModelRecord](own, size){
   override def get: ValueType =
     if ((owner.notes != null) ||
       (owner.notes.trim() != "")) Some(owner.notes)
@@ -248,4 +234,27 @@ abstract class Notes(own:SBMLModelRecord, size:Int) extends OptionalTextareaFiel
     </li>
     </ul>
   )
+}
+
+//#### Aux Record traits
+
+/**
+ * Mix in to a field to change its form display to    for (id <- uniqueFieldId; control <- super.toXHtml) yield
+ be formatted with the label aside.
+ *
+ * E.g.
+ *   <div id={ id + "_holder" }>
+ *     <div><label for={ id }>{ displayName }</label></div>
+ *     { control }
+ *   </div>
+ */
+trait DisplayWithLabelInOneLine[OwnerType <: Record[OwnerType]] extends OwnedField[OwnerType] {
+  override abstract def toForm:Box[NodeSeq] =
+    for (id <- uniqueFieldId; control <- super.toForm)
+    yield
+      <div id={id + "_holder"}>
+        <label for={ id }>{ displayHtml }</label>
+        {control}
+        <lift:msg id={id}  errorClass="lift_error"/>
+      </div>
 }

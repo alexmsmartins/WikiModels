@@ -5,7 +5,7 @@ import Assert._
 import org.slf4j.LoggerFactory
 import net.liftweb.common.{Logger, Failure, Full}
 
-class SBMLHandlerTest {
+class SBMLDocHandlerTest {
 
   @Before
   def setUp: Unit = {
