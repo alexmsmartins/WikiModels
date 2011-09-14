@@ -39,6 +39,8 @@ class SBMLForm extends DispatchSnippet {
 
   def saveNewModel(model:SBMLModelRecord):Unit = {
     Console.println("SAVE NEW MODEL with xml " + model.toXML())
+    //metaid is never presented and, by default, we give it the same value as id
+    model.metaid = model.id
     model.validate match {
       case Nil => { //no validation errors
         model.metaid = model.id

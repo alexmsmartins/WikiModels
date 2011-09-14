@@ -177,12 +177,11 @@
             <version>2.0.0-M3</version>
             <scope>test</scope>
         </dependency>
-        <!-- TODO: delete in production. This only serves to put sources in Intellij IDEA -->
-        <!-- <dependency>
-            <groupId>xerces</groupId>
-            <artifactId>xercesImpl</artifactId>
-            <version>2.9.1</version>
-        </dependency> -->
+        <dependency>
+            <groupId>net.liftweb</groupId>
+            <artifactId>lift-common_${scala.version}</artifactId>
+            <version>${lift.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
