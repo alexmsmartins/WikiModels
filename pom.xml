@@ -25,6 +25,8 @@
     <sdb.version>1.3.1</sdb.version>
     <jenabeans.version>1.0.7</jenabeans.version>
     <jdbc.postgresql.version>8.3-603.jdbc4</jdbc.postgresql.version>
+    <!-- this property is used in the submodules and that is the reason for the ".." in the path -->
+    <main.dir>${project.basedir}/../localMavenRepo</main.dir>
   </properties>
 
   <packaging>pom</packaging>
@@ -52,20 +54,15 @@
       <id>Jenabean</id>
       <url>http://jenabean.googlecode.com/svn/trunk/repo</url>
     </repository>
-    <repository><!-- for compilation within the module -->
-        <id>localMavenRepo</id>
-        <name>localMavenRepo</name>
-        <url>file:${basedir}/../localMavenRepo</url>
-    </repository>
     <repository><!-- for compilation from the main project -->
-        <id>localMavenRepo2</id>
+        <id>localMavenRepo</id>
         <name>localMavenRepo2</name>
-        <url>file:${basedir}/localMavenRepo</url>
+        <url>file:${main.dir}</url>
     </repository>
   </repositories>
 
   <dependencies>
-    <dependency>
+    <!-- <dependency>
         <groupId>log4j</groupId>
         <artifactId>log4j</artifactId>
         <version>1.2.14</version>
@@ -75,15 +72,10 @@
                 <artifactId>javax</artifactId>
             </exclusion>
         </exclusions>
-    </dependency>
+    </dependency>-->
     <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
-        <version>1.5.11</version>
-    </dependency>
-    <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-log4j12</artifactId>
         <version>1.5.11</version>
     </dependency>
     <dependency>

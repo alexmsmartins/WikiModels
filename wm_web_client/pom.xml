@@ -20,9 +20,9 @@
   </properties>
   <repositories>
     <repository>
-      <id>scala-tools.org</id>
-      <name>Scala-Tools Maven2 Repository Snapshots</name>
-      <url>http://scala-tools.org/repo-snapshots</url>
+      <id>scala-tools.org2</id>
+      <name>Scala-Tools Maven2 Repository Releases</name>
+      <url>http://scala-tools.org/repo-releases</url>
     </repository>
     <repository>
       <id>mirrors.ibiblio.org</id>
@@ -33,12 +33,12 @@
 
   <pluginRepositories>
     <pluginRepository>
-      <id>scala-tools.org</id>
+      <id>scala-tools.org2</id>
       <name>Scala-Tools Maven2 Repository</name>
       <url>http://scala-tools.org/repo-releases</url>
     </pluginRepository>
     <pluginRepository>
-      <id>scala-tools.org</id>
+      <id>scala-tools.org3</id>
       <name>Scala-Tools Maven2 Repository Snapshots</name>
       <url>http://scala-tools.org/repo-snapshots</url>
     </pluginRepository>
@@ -105,6 +105,12 @@
         <artifactId>wm_libjsbml</artifactId>
         <version>0.1-SNAPSHOT</version>
     </dependency>
+      <!-- scalaish wrapper around SLF4J -->
+      <dependency>
+          <groupId>UsefullScalaStuff</groupId>
+          <artifactId>UsefullScalaStuff</artifactId>
+          <version>0.1</version>
+      </dependency>
   </dependencies>
 
   <build>
