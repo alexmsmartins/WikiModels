@@ -39,7 +39,7 @@ class SBMLForm extends DispatchSnippet with LoggerWrapper {
   //### Create state
 
   def saveNewModel(model:SBMLModelRecord):Unit = {
-    debug("SAVE NEW MODEL with xml " + model.toXML())
+    debug("SAVE NEW MODEL with xml {}", model.toXML())
     //metaid is never presented and, by default, we give it the same value as id
     model.metaid = model.id
     model.validate match {

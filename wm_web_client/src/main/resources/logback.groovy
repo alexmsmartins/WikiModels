@@ -14,3 +14,5 @@ appender("stdout", ConsoleAppender) {
     }
 }
 root(DEBUG, ["stdout"])
+
+scan("10 seconds")

@@ -44,8 +44,8 @@ trait SBMLElement[MyType <: SBMLElement[MyType]] extends Element with RestRecord
    * CRUD operation for creating a REST Record
    */
   override def createRestRec():Box[MyType] = {
-    User.restfulConnection.postRequest(relativeURL, this.toXML)
-    User.restfulConnection.getStatusCode match {
+    connection.postRequest("/" + this.sbmlType.toLowerCase , this.toXML)
+    connection.getStatusCode match {
       case 201 => saved_? = true;Full(this)//create went ok
       case 404 => ParamFailure("Error reading " + this.metaid + ". This element does not exist.", this)
       case status => handleStatusCodes(status, "creating " + sbmlType + " with " + this.metaid)

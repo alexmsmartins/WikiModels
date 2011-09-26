@@ -24,6 +24,7 @@ import net.liftweb.mapper.Mapper
 trait RestRecord[MyType <: RestRecord[MyType]] extends Record[MyType] {
   self : MyType =>
 
+  def connection = User.restfulConnection
   def createRestRec():Box[MyType]
 
   def readRestRec(url:String):Box[MyType]
@@ -49,8 +50,8 @@ trait RestRecord[MyType <: RestRecord[MyType]] extends Record[MyType] {
   protected def handleStatusCodes(status:Int, printableAction:String) :Box[MyType] = {
     status match{
       case x if(x >= 200 && x <300) => ParamFailure("Error " + printableAction + " . The status code "+ status + " should never have appeared.", this)
-      case 404 => Failure("Authorization error you don't have permissions to " + printableAction + ": " + User.restfulConnection.getReasonPhrase)
-      case _ => ParamFailure("Error " + printableAction + " . It failed with status code "+ status + "", this)
+      case 404 => Failure("Authorization error you don't have permissions to " + printableAction + ": " + connection.getReasonPhrase)
+      case _ => ParamFailure("Error " + printableAction + " . It failed with status code "+ status + ": " + connection.getReasonPhrase, this)
     }
   }
 }

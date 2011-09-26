@@ -160,7 +160,7 @@ class RestfulAccess(val host: String,
     lastStatusLine.getProtocolVersion
   }
 
-  def getStatusCode = {
+    def getStatusCode = {
     lastStatusLine.getStatusCode
   }
 
