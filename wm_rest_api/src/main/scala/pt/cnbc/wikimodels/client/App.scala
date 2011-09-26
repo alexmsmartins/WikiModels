@@ -12,24 +12,19 @@
 package pt.cnbc.wikimodels.client
 
 import java.net.URI
-import org.junit.After
-import org.junit.Before
-import org.junit.Test
-import org.junit.Assert._
 
-import org.apache.log4j._
-
-import scala.xml.Elem
-import scala.xml.XML
+import scala.xml._
 
 import pt.cnbc.wikimodels.rest.client.BasicAuth
 import pt.cnbc.wikimodels.rest.client.RestfulAccess
-import scala.xml
+import org.slf4j.LoggerFactory
+import org.junit._
+import org.junit.Assert._
 
 
 object App {
   var ra: RestfulAccess = null
-  var log: Logger = Logger.getLogger(this.getClass)
+  val log = LoggerFactory.getLogger(this.getClass)
 
   /**
    * Assumng wikimodels is working with the followning configuration

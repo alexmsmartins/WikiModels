@@ -26,9 +26,9 @@ import org.apache.http.client.HttpClient
 import org.apache.http.client.protocol.ClientContext
 import org.apache.http.auth.{AuthScope, Credentials, UsernamePasswordCredentials}
 import scala.xml.Elem
-import org.apache.log4j.Logger
 import org.apache.http.protocol.HttpContext
 import org.apache.http._
+import org.slf4j.{LoggerFactory, Logger}
 
 /**
  * Class which wraps the api to connect to WikiModels or even to another
@@ -47,7 +47,7 @@ class RestfulAccess(val host: String,
   //Even though this looks easy to use, the last paramenter might cause problems for other JVM languages.
   // TODO: So, it shoul
   var lastStatusLine: StatusLine = null
-  val log = Logger.getLogger(this.getClass)
+  val log = LoggerFactory.getLogger(this.getClass)
 
   //checks if everything is OK with the supplied host,  port and contextRoot
   val uri: URI = new URI(
@@ -87,13 +87,13 @@ class RestfulAccess(val host: String,
     val response: HttpResponse = httpclient.execute(meth, this.localContext)
     log.debug("==========After response============")
     lastStatusLine = response.getStatusLine
-    log.debug(response.getStatusLine())
+    log.debug("Response's status code was {}", response.getStatusLine())
     log.debug(response.toString)
     log.debug("======================")
     var xmldoc: Elem = null
     if (lastStatusLine.getStatusCode == 200) {
       xmldoc = XML.load(response.getEntity.getContent)
-      log.debug(xmldoc)
+      log.debug("Response's content was {} ", xmldoc)
       log.debug("======================")
 
     }
@@ -113,7 +113,7 @@ class RestfulAccess(val host: String,
     val response: HttpResponse = httpclient.execute(meth, this.localContext)
     log.debug("==========After response============")
     lastStatusLine = response.getStatusLine
-    log.debug(response.getStatusLine())
+    log.debug("Response's status code was {}", response.getStatusLine())
     log.debug(response.toString)
     // If entity was CREATED(201)
     if (lastStatusLine.getStatusCode == 201) {
@@ -136,7 +136,7 @@ class RestfulAccess(val host: String,
     val response: HttpResponse = httpclient.execute(meth, this.localContext)
     log.debug("==========After response============")
     lastStatusLine = response.getStatusLine
-    log.debug(response.getStatusLine())
+    log.debug("Response's status code was {}", response.getStatusLine())
     log.debug(response.toString)
     log.debug("======================")
   }
@@ -149,7 +149,7 @@ class RestfulAccess(val host: String,
     val response: HttpResponse = httpclient.execute(meth, this.localContext)
     log.debug("==========After response============")
     lastStatusLine = response.getStatusLine
-    log.debug(response.getStatusLine())
+    log.debug("Response's status code was {}", response.getStatusLine())
     log.debug(response.toString)
     log.debug("======================")
   }

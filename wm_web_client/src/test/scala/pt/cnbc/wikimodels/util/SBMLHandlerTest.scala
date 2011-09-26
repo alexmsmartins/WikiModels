@@ -2,19 +2,19 @@ package pt.cnbc.wikimodels.util
 
 import org.junit._
 import Assert._
-import org.slf4j.LoggerFactory
-import net.liftweb.common.{Logger, Failure, Full}
+import net.liftweb.common._
+import alexmsmartins.log.LoggerWrapper
 
-class SBMLDocHandlerTest {
+class SBMLDocHandlerTest extends LoggerWrapper{
 
   @Before
   def setUp: Unit = {
-    logger.debug("{}.setUp is running",this.getClass)
+    debug("setUp is running",this.getClass)
   }
 
   @After
   def tearDown: Unit = {
-    logger.debug("{}.tearDown is running",this.getClass)
+    debug("tearDown is running",this.getClass)
   }
 
   val xmlHeader = """<?xml version="1.0" encoding="UTF-8"?>"""
@@ -39,11 +39,9 @@ class SBMLDocHandlerTest {
       {modelTag}
     </sbml>
 
-  val logger = LoggerFactory.getLogger(getClass)
-
   @Test
   def extractModelTagfromSBML = {
-    logger.debug("[Test extractModelTagfromSBML]")
+    debug("[Test extractModelTagfromSBML]")
     val model = SBMLDocHandler.extractModelTagfromSBML(sbmlFileContent1)
     val scala.xml.Elem(_,a,_,_,_*) = model.get
     assertTrue(a == "model")
@@ -56,16 +54,16 @@ class SBMLDocHandlerTest {
 
     @Test
   def extractModelTagfromSBMLWithLine2 = {
-    logger.debug("[Test extractModelTagfromSBMLWithLine2]")
+    debug("[Test extractModelTagfromSBMLWithLine2]")
     val model = SBMLDocHandler.extractModelTagfromSBML(sbmlFileContent2)
-    Console.println("Model tag is ->" + model.head)
+    debug("Model tag is ->" + model.head)
     val scala.xml.Elem(_,a,_,_,_*) = model.get
     assertTrue(a == "model")
   }
 
   @Test
   def doNotExtractModelFromBadlyFormedSBML = {
-    logger.debug("[Test doNotExtractModelFromBadlyFormedSBML]")
+    debug("[Test doNotExtractModelFromBadlyFormedSBML]")
     val model = SBMLDocHandler.extractModelTagfromSBML(modelTag.toString())
     model match {
       case Failure(mesg,_,_) => assertTrue(true)

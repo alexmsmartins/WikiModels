@@ -25,6 +25,11 @@
       <url>http://scala-tools.org/repo-releases</url>
     </repository>
     <repository>
+        <id>scala-tools.org.snapshots</id>
+        <name>Scala-Tools Maven2 Repository Snapshots</name>
+        <url>http://scala-tools.org/repo-snapshots</url>
+    </repository>
+    <repository>
       <id>mirrors.ibiblio.org</id>
       <name>ibiblio Mirror of http://repo1.maven.org/maven2/</name>
       <url>http://mirrors.ibiblio.org/pub/mirrors/maven2</url>
@@ -110,6 +115,16 @@
           <groupId>UsefullScalaStuff</groupId>
           <artifactId>UsefullScalaStuff</artifactId>
           <version>0.1</version>
+      </dependency>
+      <dependency>
+          <groupId>ch.qos.logback</groupId>
+          <artifactId>logback-classic</artifactId>
+          <version>0.9.29</version>
+      </dependency>
+      <dependency>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-api</artifactId>
+          <version>1.6.1</version>
       </dependency>
   </dependencies>
 

@@ -82,7 +82,7 @@ class Misc {
 
         // if the was no ID or the user couldn't be found,
         // display an error and redirect
-      }) openOr {error("User not found"); redirectTo("/simple/index.html")}
+      }) openOr {S.error("User not found"); redirectTo("/simple/index.html")}
   }
 
   // called when the form is submitted
@@ -93,7 +93,7 @@ class Misc {
 
       // oops... validation errors
       // display the errors and make sure our selected user is still the same
-    case x => error(x); selectedUser(Full(user))
+    case x => S.error(x); selectedUser(Full(user))
   }
 
   /**
@@ -123,7 +123,7 @@ class Misc {
                                                 </tr>
 
                    // bail out if the ID is not supplied or the user's not found
-  ) openOr {error("User not found"); redirectTo("/simple/index.html")}
+  ) openOr {S.error("User not found"); redirectTo("/simple/index.html")}
 
   // the request-local variable that hold the file parameter
   private object theUpload extends RequestVar[Box[FileParamHolder]](Empty)
@@ -140,16 +140,16 @@ class Misc {
       val fileBox = theUpload.is.map(v => v.file)
       fileBox match {
         case Full(file) => {
-          Console.println("imported File content was obtained")
-          Console.println(new String(file,"UTF-8"))
+          debug("imported File content was obtained")
+          debug(new String(file,"UTF-8"))
           val modelBox:Box[Elem] = extractModelTagfromSBML(new String(file, "UTF-8"))
           modelBox match {
             case Full(model) => {
-              Console.println("Model XML tag was extracted")
+              debug("Model XML tag was extracted")
               Usr.restfulConnection.postRequest("/model/", model)
               Usr.restfulConnection.getStatusCode match {
                 case 201 => {
-                  Console.println("Creating the model in the server succeded")
+                  debug("Creating the model in the server succeded")
                   bind("ul", chooseTemplate("choose", "post", xhtml),
                     "file_name" -> theUpload.is.map(v => Text(v.fileName)),
                     "mime_type" -> theUpload.is.map(v => Box.legacyNullTest(v.mimeType).map(Text).openOr(Text("No mime type supplied"))), // Text(v.mimeType)),
@@ -159,7 +159,7 @@ class Misc {
                 }
                 case 500 => uploadDialogue(xhtml, Failure(Text("[STATUS" + Usr.restfulConnection.getStatusCode) + ": A server internal error occured in the WikiModels KnowledgeBase. Please report it to Alexandre Martins at alexmsmartins@gmail.com with the model that caused the error."))
                 case _ => {
-                  Console.println("Creating the model in the server failed with status code "+ Usr.restfulConnection.getStatusCode + ". Please report it to Alexandre Martins at alexmsmartins@gmail.com.")
+                  debug("Creating the model in the server failed with status code "+ Usr.restfulConnection.getStatusCode + ". Please report it to Alexandre Martins at alexmsmartins@gmail.com.")
                   uploadDialogue(xhtml, Failure("Importing the model to the knowledgebase wasn't possible. The statuscode was " + Usr.restfulConnection.getStatusCode))
                 }
               }

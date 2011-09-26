@@ -16,12 +16,13 @@ import java.util.LinkedList
 import java.util.Enumeration
 import net.liftweb.common._
 import pt.cnbc.wikimodels.model._
+import alexmsmartins.log.LoggerWrapper
 
 /*import pt.cnbc.wikimodels.rest.client.BasicAuth
  import pt.cnbc.wikimodels.rest.client.RestfulAccess*/
 
 
-class CreateUser {
+class CreateUser extends LoggerWrapper{
 
     def editUser (xhtml : NodeSeq) : NodeSeq = User.currentUserName match {
         case Full(user) => {
@@ -65,7 +66,7 @@ class CreateUser {
                                 <email>{firstEmail}</email>
                             </user>
                         }
-                        Console.println(userXML)
+                        debug("Update to user {}", userXML)
                         XML.save("userNew.xml", userXML)
 
                     }
@@ -148,7 +149,7 @@ class CreateUser {
                                 <country>{country}</country>
                             </user>
                         }
-                        Console.println(userXML)
+                        debug("Creating user {}", userXML)
                         XML.save("userNew.xml", userXML)
                         
                     }

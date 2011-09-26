@@ -16,6 +16,7 @@ import util._
 import Helpers._
 
 import pt.cnbc.wikimodels.client.model._
+import alexmsmartins.log.LoggerWrapper
 
 /**
  * This snippet contains the forms and html to handle all the actions a user can perform on a SBMLModel
@@ -25,7 +26,7 @@ import pt.cnbc.wikimodels.client.model._
  * Date: 01-08-2011
  * Time: 16:28
  */
-class SBMLForm extends DispatchSnippet {
+class SBMLForm extends DispatchSnippet with LoggerWrapper {
   private object selectedModel extends RequestVar[Box[SBMLModelRecord]](Empty)
 
   def dispatch: DispatchIt = {
@@ -38,7 +39,7 @@ class SBMLForm extends DispatchSnippet {
   //### Create state
 
   def saveNewModel(model:SBMLModelRecord):Unit = {
-    Console.println("SAVE NEW MODEL with xml " + model.toXML())
+    debug("SAVE NEW MODEL with xml " + model.toXML())
     //metaid is never presented and, by default, we give it the same value as id
     model.metaid = model.id
     model.validate match {
@@ -46,25 +47,25 @@ class SBMLForm extends DispatchSnippet {
         model.metaid = model.id
         val metaid = model.createRestRec(); redirectTo("/model/" + metaid) //TODO: handle failure in the server (maybe this should be general)
       }
-      case x => error(x); selectedModel(Full(model))
+      case x => S.error(x); selectedModel(Full(model))
     }
   }
 
   def createNewModel(ns:NodeSeq):NodeSeq = {
     selectedModel.is.openOr(SBMLModelRecord.createRecord)
-      .toForm(saveNewModel _) ++ <tr>
+      .toForm(Empty)(saveNewModel _) ++ <tr>
       <td><a href="/models">Cancel</a></td>
-      <td><input type="submit" value="Create"/></td>
+      <td><input type="submit" name="create" value="Create"/></td>
     </tr>
   }
 
   //### Edit state
 
   def saveSelectedModel(model:SBMLModelRecord):Unit = {
-    Console.println("SAVE SELECTED MODEL")
+    debug("SAVE SELECTED MODEL")
     model.validate match {
       case Nil => model.updateRestRec(); redirectTo("/model/" + model.metaid) //TODO: handle the possibility that the server does not accept the change (maybe this should be general)
-      case x => error(x); selectedModel(Full(model))
+      case x => S.error(x); selectedModel(Full(model))
     }
   }
 
@@ -79,14 +80,14 @@ class SBMLForm extends DispatchSnippet {
    //TODO val menu = Menu.param[ParamModelMetaIDInfo]("model", "model", s => Full(s),encoder: T => String)
 
   def visualizeSelectedModel(ns:NodeSeq):NodeSeq = {
-    Console.println("VISUALIZE SELECTED MODEL")
-    selectedModel.map(_.toXHtml) openOr {error("Model not found"); redirectTo("/models/")}
+    debug("VISUALIZE SELECTED MODEL")
+    selectedModel.map(_.toXHtml) openOr {S.error("Model not found"); redirectTo("/models/")}
   }
 
   //### delete state
 
   def confirmAndDeleteSelectedModel(ns:NodeSeq):NodeSeq = {
-    Console.println("CONFIRM DELETE SELECTED MODEL")
+    debug("CONFIRM DELETE SELECTED MODEL")
     (for(model <- selectedModel.is) yield {
        def deleteModel():NodeSeq = {
         notice("Model "+ model.metaid +" deleted")
@@ -102,7 +103,7 @@ class SBMLForm extends DispatchSnippet {
 
       // if the was no ID or the user couldn't be found,
       // display an error and redirect
-    }) openOr {error("Model not found"); redirectTo("/models/")}
+    }) openOr {S.error("Model not found"); redirectTo("/models/")}
   }
 
   var somevar: Int = 0

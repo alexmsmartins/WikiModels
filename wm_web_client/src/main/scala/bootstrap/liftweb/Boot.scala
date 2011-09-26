@@ -46,11 +46,11 @@ class Boot {
       /*      LiftRules.statefulRewrite.prepend(NamedPF("CreateAndEditRewrite") {
         case RewriteRequest(
             ParsePath("models" :: "createEdit" :: state :: Nil, _, _,_), _, _) => {
-          Console.println("Rewriting path: models/createEdit/Create to createEdit.html")
+          debug("Rewriting path: models/createEdit/Create to createEdit.html")
           val rewriteResp = RewriteResponse(
             ParsePath("models/createEdit" :: Nil, "html", true, false) , Map("state" -> "Create") // Use webapp/models/creteEdit.html
           )
-          Console.println("Response refers to URL " + rewriteResp.path + " with parameters " + rewriteResp.params.toList.map(x => "" + x.key + "=" + x.value + ", "))
+          debug("Response refers to URL " + rewriteResp.path + " with parameters " + rewriteResp.params.toList.map(x => "" + x.key + "=" + x.value + ", "))
           rewriteResp
         }
       })*/

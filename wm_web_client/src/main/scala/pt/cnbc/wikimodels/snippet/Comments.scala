@@ -31,7 +31,7 @@ class Comments {
     /*val ss = S.params("id")
      val e = ss.elements
      val n = e.next
-     Console.println("Valor aqui "+ss+" e "+n)*/
+     debug("Valor aqui "+ss+" e "+n)*/
     def newComment (xhtml : NodeSeq) : NodeSeq = User.currentUserName match {
         case Full(user) => {
                 var comment:String = null
@@ -45,7 +45,7 @@ class Comments {
                 val dateMsg = dateFormat.format(date);
                 //val novo = S.getHeaders(list)
                 val readListComments = XML.load("comment.xml")
-                //Console.println("Valor ="+novo.map(s => s))
+                //debug("Valor ="+novo.map(s => s))
                 def createNewComment () = {
                     existingComments = (readListComments \ "comment")
                     
@@ -96,7 +96,7 @@ class Comments {
                 val dateMsg = dateFormat.format(date);
                 //val novo = S.getHeaders(list)
                 val readListComments = XML.load("comment.xml")
-                //Console.println("Valor ="+novo.map(s => s))
+                //debug("Valor ="+novo.map(s => s))
                 def createNewComment () = {
                     existingComments = (readListComments \ "comment")
 

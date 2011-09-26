@@ -25,9 +25,10 @@ import net.liftweb.common._
 
 import pt.cnbc.wikimodels.rest.client.BasicAuth
 import pt.cnbc.wikimodels.rest.client.RestfulAccess
+import alexmsmartins.log.LoggerWrapper
 
 
-class LogUser {
+class LogUser extends LoggerWrapper {
     def form (xhtml : NodeSeq) : NodeSeq = {
 
         var username = ""
@@ -43,7 +44,7 @@ class LogUser {
                 //TODO: these constants related to the server URL should be refactored to a configuration file
                 ra = new RestfulAccess("localhost", 8080, "/wm_server/resources", username, password, BasicAuth.startWithBasicAuth)
                 val userXML = ra.getRequest("/user/"+username).asInstanceOf[scala.xml.Elem]
-                Console.println("STATUS MESSAGE => "+ra.getStatusCode)
+                debug("STATUS MESSAGE => "+ra.getStatusCode)
                 if(ra.getStatusCode == 200){
                     User.UserName(Full(username))
                     User.restfulConnection = ra

@@ -39,6 +39,10 @@ trait SBMLElement[MyType <: SBMLElement[MyType]] extends Element with RestRecord
    */
   var saved_? = false
   //  ### can be created ###
+
+  /**
+   * CRUD operation for creating a REST Record
+   */
   override def createRestRec():Box[MyType] = {
     User.restfulConnection.postRequest(relativeURL, this.toXML)
     User.restfulConnection.getStatusCode match {
@@ -48,6 +52,9 @@ trait SBMLElement[MyType <: SBMLElement[MyType]] extends Element with RestRecord
     }
   }
 
+  /**
+   * CRUD operation for reading a REST Record
+   */
   override def readRestRec(url:String):Box[MyType] = {
     User.restfulConnection.getRequest(relativeURL)
     User.restfulConnection.getStatusCode match {
@@ -57,6 +64,9 @@ trait SBMLElement[MyType <: SBMLElement[MyType]] extends Element with RestRecord
     }
   }
 
+  /**
+   * CRUD operation for updating a REST Record
+   */
   override def updateRestRec():Box[MyType] = {
     User.restfulConnection.putRequest(relativeURL, this.toXML)
     User.restfulConnection.getStatusCode match {
@@ -66,6 +76,9 @@ trait SBMLElement[MyType <: SBMLElement[MyType]] extends Element with RestRecord
     }
   }
 
+  /**
+   * CRUD operation for deleting a REST Record
+   */
   override def deleteRestRec():Box[MyType] = {
     User.restfulConnection.deleteRequest(relativeURL)
     User.restfulConnection.getStatusCode match {
@@ -138,12 +151,15 @@ object SBMLModelRecord extends SBMLModelRecord with RestMetaRecord[SBMLModelReco
 }
 
 class MetaId(own:SBMLModelRecord, pMetaId:String) extends StringField[SBMLModelRecord](own,pMetaId) {
-  //override type ValueType >: Option[String]
 
-  override def get: ValueType = owner.metaid
-
-  override def set(in: ValueType): ValueType = {
-    owner.metaid  = in;in
+  override def setBox(in: Box[MyType]): Box[MyType] = {
+    super.setBox(in) match {
+      case full:Full[MyType] =>{
+        owner.metaid=full.openTheBox
+        full
+      }
+      case notfull  => notfull
+    }
   }
 
   //the MetaId will be generated autimatically from concatenating the ids of any parent entities with '_' in between.
@@ -151,12 +167,15 @@ class MetaId(own:SBMLModelRecord, pMetaId:String) extends StringField[SBMLModelR
 }
 
 class Id(own:SBMLModelRecord, pId:String) extends StringField[SBMLModelRecord](own, 60, pId) with DisplayWithLabelInOneLine[SBMLModelRecord]{
-//  override type ValueType >: Option[String]
 
-  override def get: ValueType = owner.id
-
-  override def set(in: ValueType): ValueType = {
-    owner.id = in;in
+  override def setBox(in: Box[MyType]): Box[MyType] = {
+    super.setBox(in) match {
+      case full:Full[MyType] =>{
+        owner.id=full.openTheBox
+        full
+      }
+      case notFull  => notFull
+    }
   }
 
   //Appears when rendering the form or the visualization
@@ -167,35 +186,34 @@ class Id(own:SBMLModelRecord, pId:String) extends StringField[SBMLModelRecord](o
 }
 
 class Name(own:SBMLModelRecord, pName:String) extends StringField[SBMLModelRecord](own, 100, pName) with DisplayWithLabelInOneLine[SBMLModelRecord]{
-//  override type ValueType >: Option[String]
 
-  override def get:ValueType = owner.name
-
-  override def set(in: ValueType): ValueType = {
-    owner.name = in; in
+  override def setBox(in: Box[MyType]): Box[MyType] = {
+    super.setBox(in) match {
+      case full:Full[MyType] =>{
+        owner.name=full.openTheBox
+        full
+      }
+      case notFull  => notFull
+    }
   }
 
   //Appears when rendering the form or the visualization
   override def displayName = "Model name"
   override def displayNameHtml = Full(<h3>Name</h3>)
 
-  override def toForm = super.toForm
   val msgName: String = S.attr("id_msgs") openOr "messages"
 }
 
 class Notes(own:SBMLModelRecord, size:Int) extends OptionalTextareaField[SBMLModelRecord](own, size){
-  override def get: ValueType =
-    if ((owner.notes != null) ||
-      (owner.notes.trim() != "")) Some(owner.notes)
-    else None
 
-  override def set(in: ValueType): ValueType = {
-    owner.notes = in.toString; in
-  }
-
-  override protected def valueTypeToBoxString(in: ValueType): Box[String] = in
-  override protected def boxStrToValType(in: Box[String]): ValueType = {
-    in.toOption
+  override def setBox(in: Box[MyType]): Box[MyType] = {
+    super.setBox(in) match {
+      case full:Full[MyType] =>{
+        owner.notes=full.openTheBox
+        full
+      }
+      case notFull  => notFull
+    }
   }
 
   override def toForm() = Full(

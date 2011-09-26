@@ -4,8 +4,6 @@
 
 package pt.cnbc.wikimodels.client
 
-
-import org.apache.log4j._
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpException;
 import org.apache.http.HttpHost;
@@ -32,6 +30,7 @@ import scala.xml.Xhtml
 
 import pt.cnbc.wikimodels.rest.client.BasicAuth
 import pt.cnbc.wikimodels.rest.client.RestfulAccess
+import org.slf4j.LoggerFactory
 
 /**
  * Even though not all code is used in the initial protoype
@@ -61,7 +60,7 @@ object AppDigest {
             println( "======================" )
             ra.getRequest("/user/admin")
             println( "======================" )
-            var log  = Logger.getLogger(this.getClass)
+            val log = LoggerFactory.getLogger(this.getClass)
 
             println( "======================" )
             println( "= Hello World!       =" )

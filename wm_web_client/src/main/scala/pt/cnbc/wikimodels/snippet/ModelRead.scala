@@ -23,8 +23,9 @@ import net.liftweb.common._
 import java.util.LinkedList
 
 import pt.cnbc.wikimodels.rest.client.RestfulAccess
+import alexmsmartins.log.LoggerWrapper
 
-class ModelRead {
+class ModelRead extends LoggerWrapper {
 
     def listOfModels (xhtml : NodeSeq) : NodeSeq = {
         var model = new LinkedList[String]()
@@ -124,10 +125,10 @@ class ModelRead {
                  }*/
                 val teste = S.uri
                 var restful:RestfulAccess = User.restfulConnection
-                //Console.println("aqui..->"+teste)
+                //debug("aqui..->"+teste)
                 val modelSBML = restful.getRequest(teste)
                 if(restful.getStatusCode == 200){
-                    Console.println("MODELO ENCONTRADO------->>>>>>'"+modelSBML+"'")
+                    debug("MODELO ENCONTRADO------->>>>>>'"+modelSBML+"'")
 
                     //normalize-space(modelSBML)
                     //XML.load(modelRef)
@@ -350,7 +351,7 @@ class ModelRead {
                                                             {for( x <- react \ "kineticLaw" \ "math") yield {
                                                                     val te = x.toString
                                                                     val va = te.indexOf("/version")
-                                                                    //                                                                    Console.println("INDEX--->"+va+" te-"+te)
+                                                                    //                                                                    debug("INDEX--->"+va+" te-"+te)
                                                                     val v1 = te.substring(0,(va-39))
                                                                     val v2 = te.substring(va+10)
                                                                     val fi = XML.loadString(v1.concat(v2))
@@ -388,7 +389,7 @@ class ModelRead {
                                             <span>
                                                 <tr name={(compartData \\ "@metaid")} id={(compartData \\ "@metaid")}>{
                                                         if((compartData \\ "@name").isEmpty){
-                                                            Console.println("=====.---...-.-..VALOR DO COMPARTMENT ID-----------"+(compartData \\ "@id"))
+                                                            debug("=====.---...-.-..VALOR DO COMPARTMENT ID-----------"+(compartData \\ "@id"))
                                                             <td class="main">{(compartData \\ "@id")}</td>
                                                         } else {
                                                             <td class="main">{(compartData \\ "@name")}</td>
@@ -691,7 +692,7 @@ class ModelRead {
     def newComment () = {
         val list = List[(String,String)]()
         val novo = S.getHeaders(list)
-        Console.println("Valor ="+novo.map(s => s))
+        debug("Valor ="+novo.map(s => s))
     }
 
     def newCommentForm (xhtml : NodeSeq) : NodeSeq = {

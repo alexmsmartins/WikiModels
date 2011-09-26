@@ -20,9 +20,10 @@ import net.liftweb.common._
 import pt.cnbc.wikimodels.model._
 
 import pt.cnbc.wikimodels.rest.client.RestfulAccess
+import alexmsmartins.log.LoggerWrapper
 
 
-class CreateModel {
+class CreateModel extends LoggerWrapper {
     var global:String = null
 
     def createDescription (xhtml : NodeSeq) : NodeSeq = User.currentUserName match {
@@ -111,7 +112,7 @@ class CreateModel {
                             }
                         }
                     }
-                    Console.println("aqui------>"+XML.loadString(description))
+                    debug("aqui------>"+XML.loadString(description))
                     model_id = model_name.replace(" ", "").toLowerCase
                     if (model_id.length == 0 && model_name.length == 0) {
                         S.error("Invalid Content in the model")
@@ -214,7 +215,7 @@ class CreateModel {
                                                                 //for ( l <- o2.hasNext) yield {
                                                                     var o3 = o2.next
                                                                     var id1 = o3.getValue
-                                                                    //Console.println("VALORES----------"+id1.get_reactant_id)
+                                                                    //debug("VALORES----------"+id1.get_reactant_id)
                                                                     if(id1.get_reactant_id != ""){
 
                                                                         <listOfReactants>{
@@ -249,7 +250,7 @@ class CreateModel {
                                                                 //for ( l <- o2.hasNext) yield {
                                                                     var o3 = o2.next
                                                                     var id1 = o3.getValue
-                                                                    //Console.println("VALORES----------"+id1.get_reactant_id)
+                                                                    //debug("VALORES----------"+id1.get_reactant_id)
                                                                     if(id1.get_product_id != ""){
                                                                         <listOfProducts>{
                                                                     
@@ -283,7 +284,7 @@ class CreateModel {
                                                                 //for ( l <- o2.hasNext) yield {
                                                                     var o3 = o2.next
                                                                     var id1 = o3.getValue
-                                                                    //Console.println("VALORES----------"+id1.get_reactant_id)
+                                                                    //debug("VALORES----------"+id1.get_reactant_id)
                                                                     if(id1.get_modifier_id != ""){
                                                                         <listOfModifiers>{
                                                                                 contadorModifier = contadorModifier+1
@@ -345,7 +346,7 @@ class CreateModel {
                                 }
                             </model>
                         }
-                        Console.println(modelSBML)
+                        debug("Creating model {}", modelSBML)
 
                         var restful:RestfulAccess = User.restfulConnection
                         try {

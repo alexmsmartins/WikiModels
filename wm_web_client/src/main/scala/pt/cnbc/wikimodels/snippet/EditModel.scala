@@ -403,7 +403,7 @@ class EditModel {
                     }
 
 
-                    //Console.println("EDIT...----->>>> "+modelAtribute)
+                    //debug("EDIT...----->>>> "+modelAtribute)
                     bind("editModel", xhtml,
                          "editAttribute" -> {
                             <ul style="list-style-type: none;">{
@@ -1058,7 +1058,7 @@ class EditModel {
                     def setReactionF(va :String){
                         reac_f = va
                     }
-                    //Console.println("EDIT...----->>>> "+modelAtribute)
+                    //debug("EDIT...----->>>> "+modelAtribute)
                     bind("addModel", xhtml,
                          "addAttribute" -> {
                             <ul style="list-style-type: none;">{
