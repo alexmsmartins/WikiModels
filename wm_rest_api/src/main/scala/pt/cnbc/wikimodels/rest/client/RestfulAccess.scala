@@ -119,6 +119,7 @@ class RestfulAccess(val host: String,
     if (lastStatusLine.getStatusCode == 201) {
       val is = response.getEntity.getContent
       val uriFinal = new URI(response.getFirstHeader("Location").getValue)
+      log.debug("URL location returned by server for created resource is {}", uriFinal)
       log.debug("======================")
       uriFinal
     } else {

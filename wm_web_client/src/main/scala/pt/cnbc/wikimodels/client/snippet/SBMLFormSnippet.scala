@@ -45,7 +45,8 @@ class SBMLForm extends DispatchSnippet with LoggerWrapper {
     model.validate match {
       case Nil => { //no validation errors
         model.metaid = model.id
-        val metaid = model.createRestRec(); redirectTo("/model/" + metaid) //TODO: handle failure in the server (maybe this should be general)
+        val metaid = model.createRestRec().openTheBox.metaid
+        redirectTo("/model/" + metaid) //TODO: handle failure in the server (maybe this should be general)
       }
       case x => S.error(x); selectedModel(Full(model))
     }

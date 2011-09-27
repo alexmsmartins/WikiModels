@@ -11,6 +11,7 @@ import scala.xml._
 import _root_.pt.cnbc.wikimodels.rest.client.RestfulAccess
 import _root_.pt.cnbc.wikimodels.snippet.User
 import xml.{Elem, NodeSeq, Text}
+import alexmsmartins.log.LoggerWrapper
 
 /**
  * Created by IntelliJ IDEA.
@@ -19,14 +20,16 @@ import xml.{Elem, NodeSeq, Text}
  * Time: 3:59
  * To change this template use File | Settings | File Templates.
  */
-class SBMLModelSnip{
+class SBMLModelSnip extends LoggerWrapper{
 
   def modelMetaId = "#mMetaId *" #> S.param("modelMetaId").openOr("<<handling this is a TODO>>")
 
   def entireModelInXML = {
     val model = User
       .restfulConnection
-      .getRequest("/model/" + S.param("modelMetaId").openOr("TODO: Error") )
+      .getRequest {
+      "/model/" + debug("Getting /model/ {} from server",
+      S.param("modelMetaId").openOr("TODO: Error"))}
     "#xmlmodel *" #> model.toString()
   }
 
@@ -41,4 +44,3 @@ class SBMLModelSnip{
                                      "value"))
 
 }
-
