@@ -43,9 +43,13 @@ package object sitemapTweaks {
             state = Create
             (RewriteResponse(List("models", "createEdit")), Create)
           }
-          case _ => {
+          case "edit" => {
             state = Edit
             (RewriteResponse(List("models", "createEdit")), Edit)
+          }
+          case _ => {
+            state = Visualize
+            (RewriteResponse(List("models", "createEdit")), Visualize)
           }
         }
       }

@@ -29,6 +29,17 @@ import alexmsmartins.log.LoggerWrapper
 class SBMLForm extends DispatchSnippet with LoggerWrapper {
   private object selectedModel extends RequestVar[Box[SBMLModelRecord]](Empty)
 
+  private def loadSBMLFromPathParam() = {
+    debug("""Parameter "modelMetaId" « {} """, S.param("modelMetaId"))
+
+    selectedModel {
+      SBMLModelRecord
+        .createRecord
+        .readRestRec(
+        S.param("modelMetaId").openTheBox)
+    }
+  }
+
   def dispatch: DispatchIt = {
     case "createModel" => createNewModel
     case "editModel" => editSelectedModel
@@ -39,7 +50,7 @@ class SBMLForm extends DispatchSnippet with LoggerWrapper {
   //### Create state
 
   def saveNewModel(model:SBMLModelRecord):Unit = {
-    debug("SAVE NEW MODEL with xml {}", model.toXML())
+    info("SAVE NEW MODEL with xml {}", model.toXML())
     //metaid is never presented and, by default, we give it the same value as id
     model.metaid = model.id
     model.validate match {
@@ -53,6 +64,7 @@ class SBMLForm extends DispatchSnippet with LoggerWrapper {
   }
 
   def createNewModel(ns:NodeSeq):NodeSeq = {
+    info("CREATE SELECTED MODEL")
     selectedModel.is.openOr(SBMLModelRecord.createRecord)
       .toForm(Empty)(saveNewModel _) ++ <tr>
       <td><a href="/models">Cancel</a></td>
@@ -70,11 +82,14 @@ class SBMLForm extends DispatchSnippet with LoggerWrapper {
     }
   }
 
-  def editSelectedModel(ns:NodeSeq):NodeSeq =
+  def editSelectedModel(ns:NodeSeq):NodeSeq ={
+    debug("EDIT SELECTED MODEL")
+    loadSBMLFromPathParam
     selectedModel.is.openTheBox.toForm(saveSelectedModel _ ) ++ <tr>
                                       <td><a href="/simple/index.html">Cancel</a></td>
                                       <td><input type="submit" value="Save"/></td>
                                     </tr>
+  }
 
   //### Visualize state
    case class ParamModelMetaIDInfo(theMetaId:String)
@@ -82,6 +97,7 @@ class SBMLForm extends DispatchSnippet with LoggerWrapper {
 
   def visualizeSelectedModel(ns:NodeSeq):NodeSeq = {
     debug("VISUALIZE SELECTED MODEL")
+    loadSBMLFromPathParam
     selectedModel.map(_.toXHtml) openOr {S.error("Model not found"); redirectTo("/models/")}
   }
 

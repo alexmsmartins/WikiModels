@@ -21,19 +21,16 @@ import _root_.pt.cnbc.wikimodels.client.sitemapTweaks._
  * to modify lift's environment
  */
 class Boot {
-  //TODO: object Log extends Logger
-  //TODO: replace log4j for SLF4J
     def boot {
 
-      val any = ""
-        // set the character enconding to UTF-8
-        LiftRules.early.append {
-            _.setCharacterEncoding("UTF-8")
-        }
+      // set the character enconding to UTF-8
+      LiftRules.early.append {
+          _.setCharacterEncoding("UTF-8")
+      }
 
-        ResourceServer.allow {
-            case "css" :: "js" :: _ => true
-        }
+      ResourceServer.allow {
+          case "css" :: "js" :: _ => true
+      }
 
       // where to search snippet
       LiftRules.addToPackages("pt.cnbc.wikimodels")
@@ -84,7 +81,8 @@ class Boot {
              Menu(Loc("helpMath", List("help","helpMath"), "Help Math", Hidden))) ::
         Menu(Loc("administrator", List("administrator","index"), "Administrator", Hidden, loggedIn)) ::
         //entries for new brows/edit model in the same page
-        Menu(Loc("browseEditM", List("modele","indexe"), "Browse/Edit Model", Hidden, loggedIn)) ::
+        Menu(Loc("listMModels", List("modele","indexe"), "List Models", Hidden, loggedIn)) ::
+        Menu(Loc("editModel", List("modele","edit"), "Edit Model", Hidden, loggedIn)) ::
         User.sitemap
 
         // Build SiteMap
@@ -95,8 +93,12 @@ class Boot {
 
         // URL rewritess the pages, it is used for the bookmarks
         LiftRules.statelessRewrite.append {
+          //NOTE: these redirects make the model metaId available to SBMLForm snippets.
           case RewriteRequest(ParsePath("model"::model::Nil,"",_,false),_,_) => {
             RewriteResponse(ParsePath( "modele"::"indexe"::Nil,"xhtml",true, false), Map("modelMetaId" -> model), true)
+          }
+          case RewriteRequest(ParsePath("model"::model::"edit"::Nil,"",_,false),_,_) => {
+            RewriteResponse(ParsePath( "modele"::"edit"::Nil, "html", true, false), Map("modelMetaId" -> model), true )
           }
 
           /* code written by Gonçalo

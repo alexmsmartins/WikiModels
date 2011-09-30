@@ -16,10 +16,15 @@
     </lift:snippet>
   </div>
   <div id='content'>
+    <lift:msgs />
+
 
     <div class="lift:SBMLModelSnip:modelMetaId">
-      <h1>Model with metaId <span id="mMetaId"></span> . <input type="button" onclick="window.location.href=window.location.href+'/edit'" name="edit" value="Edit!!">Edit</input> </h1>
+      <h1>Model with metaId <span id="mMetaId"></span> . <input type="button" onclick="window.location.href=window.location.href+'/edit'" name="edit" value="Edit">Edit</input> </h1>
     </div>
+      <div class="lift:SBMLForm.visualizeModel">
+      </div>
+
     <div class="lift:SBMLModelSnip:entireModelInXML">
       <span id="xmlmodel"></span>
     </div>

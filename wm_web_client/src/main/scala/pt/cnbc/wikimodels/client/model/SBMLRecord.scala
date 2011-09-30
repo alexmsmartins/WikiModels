@@ -55,7 +55,8 @@ trait SBMLElement[MyType <: SBMLElement[MyType]] extends Element with RestRecord
   /**
    * CRUD operation for reading a REST Record
    */
-  override def readRestRec(url:String):Box[MyType] = {
+  override def readRestRec(_metaid:String):Box[MyType] = {
+    this.metaid = _metaid
     User.restfulConnection.getRequest(relativeURL)
     User.restfulConnection.getStatusCode match {
       case 200 => clean_? = false;Full(this)//read went ok
