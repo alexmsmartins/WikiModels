@@ -26,13 +26,11 @@ import javax.ws.rs.core.SecurityContext
 import javax.ws.rs.core.Response
 import javax.ws.rs.core.UriInfo
 
-import scala.collection.mutable.Map
-import scala.collection.mutable.HashMap
-
 import pt.cnbc.wikimodels.dataModel.FunctionDefinition
 import pt.cnbc.wikimodels.dataAccess.FunctionDefinitionsDAO
 import pt.cnbc.wikimodels.exceptions.BadFormatException
 import pt.cnbc.wikimodels.security.SecurityContextFactory
+import pt.cnbc.wikimodels.dataVisitors.SBML2BeanConverter
 
 
 class FunctionDefinitionResource(sbmlModelResource:String) extends RESTResource {
@@ -47,7 +45,7 @@ class FunctionDefinitionResource(sbmlModelResource:String) extends RESTResource 
     @Path("{functionDefinitionid}")//: [a-zA-Z][a-zA-Z_0-9]}")
     def get(@PathParam("functionDefinitionid") functionDefinitionResource:String
     ):String = {
-        val username:String = security.getUserPrincipal().getName()
+        val username:String = security.getUserPrincipal.getName
 
         Console.print("GET verb was used in functionDefinition " + functionDefinitionResource)
         if(secContext.isAuthorizedTo(username,
@@ -58,14 +56,14 @@ class FunctionDefinitionResource(sbmlModelResource:String) extends RESTResource 
                 val functionDefinition = dao.loadFunctionDefinition(functionDefinitionResource)
                 if(functionDefinition != null &&
                    functionDefinition.metaid == functionDefinitionResource){
-                    functionDefinition.toXML.toString
+                    functionDefinition.toXML.toString()
                 } else {
                     throw new WebApplicationException(Response.Status.NOT_FOUND)
                 }
             } catch {
                 case e:WebApplicationException => throw e
                 case e:Exception => {
-                        e.printStackTrace
+                        e.printStackTrace()
                         throw throw new WebApplicationException(
                             Response.Status.BAD_REQUEST)
                     }
@@ -84,18 +82,17 @@ class FunctionDefinitionResource(sbmlModelResource:String) extends RESTResource 
     @POST
     @Consumes(Array("application/xml"))
     def post(requestContent:InputStream) = {
-        val username = security.getUserPrincipal().getName()
+        val username = security.getUserPrincipal.getName
         Console.print("POST verb was used in user " + username)
 
-        var ret = ""
-        if(secContext.isAuthorizedTo(username,
+      if(secContext.isAuthorizedTo(username,
                                      "POST", "model/" + sbmlModelResource +
                                      "/functionDefinition/" ) ){
             val functionDefinitionMetaId =
             try{
                 val dao = new FunctionDefinitionsDAO
                 dao.tryToCreateFunctionDefinitionInModel(sbmlModelResource,
-                    new FunctionDefinition(
+                    SBML2BeanConverter.visitFunctionDefinition(
                         scala.xml.XML.load(requestContent)))
             } catch {
                 case e:Exception => {
@@ -123,11 +120,11 @@ class FunctionDefinitionResource(sbmlModelResource:String) extends RESTResource 
     /**
      * Updates an already created resource
      * According to the REST style architecture the PUT request can be used
-     * to create new reesources. Yet this is only allowed as long as the request
+     * to create new resources. Yet this is only allowed as long as the request
      * remains  idempotent.
      * Yet, creating a new functionDefinition is not an idempotent request since it is
-     * sbuject to verifications and may not result in exactly the sent entity
-     * being created. Ids and other infromation may be modified.
+     * object to verifications and may not result in exactly the sent entity
+     * being created. Ids and other information may be modified.
      */
     @PUT
     @Path("{functionDefinitionid}")//: [a-zA-Z][a-zA-Z_0-9]}")
@@ -146,10 +143,10 @@ class FunctionDefinitionResource(sbmlModelResource:String) extends RESTResource 
             try{
                 val dao = new FunctionDefinitionsDAO
                 //XXX if there are performance problems in this part replace:
-                // - requstcontent:String -> requastcontont:InputStream
+                // - requestcontent:String -> requestcontent:InputStream
                 // - scala.xml.XML.loadString -> scala.xml.XML.load
                 if( dao.updateFunctionDefinition(
-                        new FunctionDefinition(
+                        SBML2BeanConverter.visitFunctionDefinition(
                             scala.xml.XML.loadString(requestContent))) ){
                     Response.ok.build
                 } else {
@@ -179,7 +176,6 @@ class FunctionDefinitionResource(sbmlModelResource:String) extends RESTResource 
         Console.print("DELETE verb was used with user " + username)
         Console.print("DELETE verb was used with functionDefinitionid " + functionDefinitionResource)
 
-        var ret = ""
         if(secContext.isAuthorizedTo(username,
                                      "DELETE", "model/" + sbmlModelResource +
                                      "/functionDefinition/" + functionDefinitionResource ) ){

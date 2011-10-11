@@ -34,6 +34,7 @@ import pt.cnbc.wikimodels.dataModel.Reaction
 import pt.cnbc.wikimodels.dataAccess.ReactionsDAO
 import pt.cnbc.wikimodels.exceptions.BadFormatException
 import pt.cnbc.wikimodels.security.SecurityContextFactory
+import pt.cnbc.wikimodels.dataVisitors.SBML2BeanConverter
 
 
 class ReactionResource(sbmlModelResource:String) extends RESTResource {
@@ -96,7 +97,7 @@ class ReactionResource(sbmlModelResource:String) extends RESTResource {
             try{
                 val dao = new ReactionsDAO
                 dao.tryToCreateReactionInModel(sbmlModelResource,
-                    new Reaction(
+                    SBML2BeanConverter.visitReaction(
                         scala.xml.XML.load(requestContent)))
             } catch {
                 case e:Exception => {
@@ -150,7 +151,7 @@ class ReactionResource(sbmlModelResource:String) extends RESTResource {
                 // - requstcontent:String -> requastcontont:InputStream
                 // - scala.xml.XML.loadString -> scala.xml.XML.load
                 if( dao.updateReaction(
-                        new Reaction(
+                        SBML2BeanConverter.visitReaction(
                             scala.xml.XML.loadString(requestContent))) ){
                     Response.ok.build
                 } else {

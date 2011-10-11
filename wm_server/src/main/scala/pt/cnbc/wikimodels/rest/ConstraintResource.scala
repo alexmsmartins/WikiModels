@@ -33,6 +33,7 @@ import pt.cnbc.wikimodels.dataModel.Constraint
 import pt.cnbc.wikimodels.dataAccess.ConstraintsDAO
 import pt.cnbc.wikimodels.exceptions.BadFormatException
 import pt.cnbc.wikimodels.security.SecurityContextFactory
+import pt.cnbc.wikimodels.dataVisitors.SBML2BeanConverter
 
 
 class ConstraintResource(sbmlModelResource:String) extends RESTResource {
@@ -94,7 +95,7 @@ class ConstraintResource(sbmlModelResource:String) extends RESTResource {
             try{
                 val dao = new ConstraintsDAO
                 dao.tryToCreateConstraintInModel(sbmlModelResource,
-                    new Constraint(
+                    SBML2BeanConverter.visitConstraint(
                         scala.xml.XML.load(requestContent)))
             } catch {
                 case e:Exception => {
@@ -148,7 +149,7 @@ class ConstraintResource(sbmlModelResource:String) extends RESTResource {
                 // - requstcontent:String -> requastcontont:InputStream
                 // - scala.xml.XML.loadString -> scala.xml.XML.load
                 if( dao.updateConstraint(
-                        new Constraint(
+                        SBML2BeanConverter.visitConstraint(
                             scala.xml.XML.loadString(requestContent))) ){
                     Response.ok.build
                 } else {

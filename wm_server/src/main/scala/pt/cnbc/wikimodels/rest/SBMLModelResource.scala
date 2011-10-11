@@ -23,6 +23,7 @@ import pt.cnbc.wikimodels.dataModel.SBMLModel
 import pt.cnbc.wikimodels.dataAccess.SBMLModelsDAO
 import pt.cnbc.wikimodels.exceptions.BadFormatException
 import javax.ws.rs.core.{Response, UriInfo, SecurityContext, Context}
+import pt.cnbc.wikimodels.dataVisitors.SBML2BeanConverter
 
 @Path("/model/")
 class SBMLModelResource extends RESTResource {
@@ -83,7 +84,7 @@ class SBMLModelResource extends RESTResource {
             try{
                 val dao = new SBMLModelsDAO
                 dao.tryToCreateSBMLModel(
-                    new SBMLModel(
+                    SBML2BeanConverter.visitModel(
                         scala.xml.XML.load(requestContent)))
             } catch {
                 case e:Exception => {
@@ -136,7 +137,7 @@ class SBMLModelResource extends RESTResource {
                 // - requstcontent:String -> requastcontont:InputStream
                 // - scala.xml.XML.loadString -> scala.xml.XML.load
                 if( dao.updateSBMLModel(
-                        new SBMLModel(
+                        SBML2BeanConverter.visitModel(
                             scala.xml.XML.loadString(requestContent))) ){
                     Response.ok.build
                 } else {

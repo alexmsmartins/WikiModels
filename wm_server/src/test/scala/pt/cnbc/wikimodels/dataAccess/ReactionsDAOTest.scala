@@ -15,6 +15,7 @@ import scala.xml.Elem
 import pt.cnbc.wikimodels.dataModel.{SBMLModel, Reaction}
 import pt.cnbc.wikimodels.ontology.ManipulatorWrapper
 import pt.cnbc.wikimodels.setup.Setup
+import pt.cnbc.wikimodels.dataVisitors.SBML2BeanConverter
 
 class ReactionsDAOTest {
 
@@ -106,7 +107,7 @@ class ReactionsDAOTest {
 
     //create reaction
     val daoModel = new SBMLModelsDAO()
-    daoModel.tryToCreateSBMLModel(new SBMLModel(modelWReaction),
+    daoModel.tryToCreateSBMLModel(SBML2BeanConverter.visitModel(modelWReaction),
                                   model)
 
     //load reaction
@@ -138,7 +139,7 @@ class ReactionsDAOTest {
     val daoModel = new SBMLModelsDAO()
     if(model==null)
       throw new Exception("4 - Model is null")
-    daoModel.tryToCreateSBMLModel(new SBMLModel(modelWithReactionNoKineticLaw),
+    daoModel.tryToCreateSBMLModel(SBML2BeanConverter.visitModel(modelWithReactionNoKineticLaw),
                                   model)
     //load reaction
     val newSBMLModel = daoModel.deepLoadSBMLModel("metaid_02", model)
@@ -196,7 +197,7 @@ class ReactionsDAOTest {
 
     //create reaction
     val daoModel = new SBMLModelsDAO()
-    daoModel.tryToCreateSBMLModel(new SBMLModel(modelWithReactionNoLocalParameters),
+    daoModel.tryToCreateSBMLModel(SBML2BeanConverter.visitModel(modelWithReactionNoLocalParameters),
                                   model)
 
     //load reaction

@@ -16,6 +16,8 @@ import util._
 import Helpers._
 
 import pt.cnbc.wikimodels.client.model._
+import pt.cnbc.wikimodels.client.record._
+
 import alexmsmartins.log.LoggerWrapper
 
 /**
@@ -33,10 +35,7 @@ class SBMLForm extends DispatchSnippet with LoggerWrapper {
     debug("""Parameter "modelMetaId" « {} """, S.param("modelMetaId"))
 
     selectedModel {
-      SBMLModelRecord
-        .createRecord
-        .readRestRec(
-        S.param("modelMetaId").openTheBox)
+      SBMLModelRecord.readRestRec(S.param("modelMetaId").openTheBox)
     }
   }
 
@@ -52,7 +51,7 @@ class SBMLForm extends DispatchSnippet with LoggerWrapper {
   def saveNewModel(model:SBMLModelRecord):Unit = {
     info("SAVE NEW MODEL with xml {}", model.toXML())
     //metaid is never presented and, by default, we give it the same value as id
-    model.metaid = model.id
+    model.metaIdO.set(model.id)
     model.validate match {
       case Nil => { //no validation errors
         model.metaid = model.id
