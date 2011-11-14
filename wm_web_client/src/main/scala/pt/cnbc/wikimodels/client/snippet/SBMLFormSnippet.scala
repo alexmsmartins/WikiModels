@@ -32,11 +32,16 @@ class SBMLForm extends DispatchSnippet with LoggerWrapper {
   private object selectedModel extends RequestVar[Box[SBMLModelRecord]](Empty)
 
   private def loadSBMLFromPathParam() = {
-    debug("""Parameter "modelMetaId" « {} """, S.param("modelMetaId"))
+    debug("""Parameter "modelMetaId" « {} """, S.param("modelMetaId").openTheBox)
 
     selectedModel {
-      SBMLModelRecord.readRestRec(S.param("modelMetaId").openTheBox)
+      SBMLModelRecord.readRestRec(debug("The modelMetaId in session after calling /model/modemetaid is: {}", S.param("modelMetaId").openTheBox))
     }
+    debug("Loaded model into session: {}", selectedModel.get.openTheBox.toXML )
+    debug("Loaded model into session with metaid {}, id {} and name {}",
+      selectedModel.get.openTheBox.metaid,
+      selectedModel.get.openTheBox.id,
+      selectedModel.get.openTheBox.name)
   }
 
   def dispatch: DispatchIt = {

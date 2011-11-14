@@ -37,7 +37,7 @@ class Boot {
       //Where to search for lift related files. This is the new location
       LiftRules.addToPackages("pt.cnbc.wikimodels.client")
 
-        //TODO: LiftRules.htmlProperties.default.set((r: Req) =>new Html5Properties(r.userAgent))
+      //TODO: LiftRules.htmlProperties.default.set((r: Req) =>new Html5Properties(r.userAgent))
 
       // TODO - i STILL WANT TO FIND OUT WHY THIS DOES NOT WKRK. Something to do wiht the response not returning statuscode 302 to the browser, perhaps
       /*      LiftRules.statefulRewrite.prepend(NamedPF("CreateAndEditRewrite") {

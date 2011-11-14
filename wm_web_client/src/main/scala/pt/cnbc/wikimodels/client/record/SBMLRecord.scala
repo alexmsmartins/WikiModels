@@ -19,6 +19,7 @@ import net.liftweb.http.{S, SHtml}
 import net.liftweb.http.js.jquery.JqJsCmds.DisplayMessage
 import net.liftweb.json.JsonAST.JValue
 import org.sbml.libsbml.SBMLReader
+import pt.cnbc.wikimodels.dataVisitors.SBML2BeanConverter
 
 
 trait SBMLElement[MyType <: SBMLElement[MyType]] extends Element with RestRecord[MyType] {
@@ -59,9 +60,8 @@ trait SBMLElement[MyType <: SBMLElement[MyType]] extends Element with RestRecord
       case 200 =>{
         clean_? = false
         //FIXME this should be replaced by a call to a XML to SBMLElement converter
-        Full ((new SBMLModelRecord).asInstanceOf[MyType] )//read went ok
+        Full ((new SBMLModelRecord(  SBML2BeanConverter.visitModel( content )  )).asInstanceOf[MyType] )//read went ok
       }
-
       case 404 => ParamFailure("Error reading " + this.metaid + ". This element does not exist.", this)
       case status => handleStatusCodes(status, "reading " + sbmlType + " with " + this.metaid)
     }
@@ -95,12 +95,28 @@ trait SBMLElement[MyType <: SBMLElement[MyType]] extends Element with RestRecord
 /**
  * Created by IntelliJ IDEA.
  * User: alex
- * Date: 03-07-2011
+ * Date: 03-07-2011       override def createRestRec():Box[MyType] = {
+    connection.postRequest("/" + this.sbmlType.toLowerCase , this.toXML)
+    connection.getStatusCode match {
+      case 201 => saved_? = true;Full(this)//create went ok
+      case 404 => ParamFailure("Error reading " + this.metaid + ". This element does not exist.", this)
+      case status => handleStatusCodes(status, "creating " + sbmlType + " with " + this.metaid)
+    }
+  }
+
  * Time: 17:37
  * To change this template use File | Settings | File Templates.
  */
 class SBMLModelRecord() extends SBMLModel with SBMLElement[SBMLModelRecord]  {
   type MyType = SBMLModelRecord
+
+  def this(m:SBMLModel) = {
+    this()
+    this.metaid = m.metaid
+    this.id=m.id
+    this.name=m.name
+    this.notes = m.notes
+  }
 
   override def meta = SBMLModelRecord
 
@@ -161,6 +177,8 @@ import scala.xml._
 import net.liftweb.common._
 import net.liftweb.http.{S, SHtml}
 import net.liftweb.record.field._
+import alexmsmartins.log.LoggerWrapper
+import alexmsmartins.log.LoggerWrapper._
 
 //Javascript handling imports
 import _root_.net.liftweb.http.js.{JE,JsCmd,JsCmds}
@@ -169,40 +187,80 @@ import JE.{JsRaw,Str}
 
 import pt.cnbc.wikimodels.client.record.SBMLModelRecord
 
-class MetaId(own:SBMLModelRecord, maxLength: Int) extends StringField[SBMLModelRecord](own, maxLength) with DisplayHTMLWithLabelInOneLine[SBMLModelRecord]{
+class MetaId(own:SBMLModelRecord, maxLength: Int) extends StringField[SBMLModelRecord](own, maxLength)
+with DisplayFormWithLabelInOneLine[SBMLModelRecord] with DisplayHTMLWithLabelInOneLine[SBMLModelRecord]
+with GetSetOnwerField[String, SBMLModelRecord] with LoggerWrapper{
+  var _data:Box[MyType] = Empty
 
-  override def setBox(in: Box[MyType]): Box[MyType] = {
-    super.setBox(in) match {
-      case full:Full[MyType] =>{
-        owner.metaid=full.openTheBox
-        full
-      }
-      case notfull  => notfull
+  override def theData_=(in:Box[MyType]) {
+    _data = in
+    _data match{
+      //if a valid value is set then update the owner class
+      case Full(x) => owner.metaid = x.asInstanceOf[String]
+      case _ => owner.metaid = null //just to make sure the owner does not have valid values when errors occur
     }
   }
 
-  //the MetaId will be generated autimatically from concatenating the ids of any parent entities with '_' in between.
+  override def theData:Box[MyType] = {
+    //if the owner has valid data that was obtained from the wikimodels Server
+    if(owner.metaid != null) {
+      debug("theData with metaid != null is being copied to the record Field.")
+      _data = Full(owner.metaid)
+    } else {
+      _data match {
+        case Empty => {
+          _data = defaultValueBox
+          if (! this.optional_?) owner.metaid = defaultValue
+        }
+        case Full(x) => owner.metaid = x
+      }
+    }
+    _data
+  }
+
+  //the MetaId will be generated from concatenating the ids of any parent entities with '_' in between.
   override def toForm() = Empty
+  //Appears when rendering the form or the visualization
+  override def displayName: String = "Model metaid"
+  override def displayNameHtml = Full(<h3>Metaid</h3>)
+
 }
 
 class Id(own:SBMLModelRecord, maxLength: Int) extends StringField[SBMLModelRecord](own, maxLength)
-with DisplayFormWithLabelInOneLine[SBMLModelRecord] with DisplayHTMLWithLabelInOneLine[SBMLModelRecord]{
+with DisplayFormWithLabelInOneLine[SBMLModelRecord] with DisplayHTMLWithLabelInOneLine[SBMLModelRecord]
+with GetSetOnwerField[String, SBMLModelRecord] with LoggerWrapper{
+  var _data:Box[MyType] = Empty
 
-  override def setBox(in: Box[MyType]): Box[MyType] = {
-    super.setBox(in) match {
-      case full:Full[MyType] =>{
-        owner.id=full.openTheBox
-        full
-      }
-      case notFull  => notFull
+  override def theData_=(in:Box[MyType]) {
+    _data = in
+    _data match{
+      //if a valid value is set then update the owner class
+      case Full(x) => owner.id = x.asInstanceOf[String]
+      case _ => owner.id = null //just to make sure the owner does not have valid values when errors occur
     }
   }
+
+  override def theData:Box[MyType] = {
+    //if the owner has valid data that was obtained from the wikimodels Server
+    if(owner.id != null) {
+      debug("theData with aid != null is being copied to the record Field.")
+      _data = Full(owner.id)
+    } else {
+      _data match {
+        case Empty => {
+          _data = defaultValueBox
+          if (! this.optional_?) owner.id = defaultValue
+        }
+        case Full(x) => owner.id = x
+      }
+    }
+    _data
+  }
+
 
   //Appears when rendering the form or the visualization
   override def displayName: String = "Model id"
   override def displayNameHtml = Full(<h3>Id</h3>)
-
-  override def toForm = super.toForm
 }
 
 /**
@@ -225,10 +283,14 @@ with GetSetOnwerField[String, SBMLModelRecord]{
   override def theData:Box[MyType] = {
     //if the owner has valid data that was obtained from the wikimodels Server
     if(owner.name != null) {
+      debug("theData with name != null is being copied to the record Field.")
       _data = Full(owner.name)
     } else {
       _data match {
-        case Empty => _data = defaultValueBox;if (! this.optional_?) owner.name = defaultValue
+        case Empty => {
+          _data = defaultValueBox
+          if (! this.optional_?) owner.name = defaultValue
+        }
         case Full(x) => owner.name = x
       }
     }
@@ -294,6 +356,10 @@ class Notes(own:SBMLModelRecord, size:Int) extends OptionalTextareaField[SBMLMod
     </li>
     </ul>
   )
+  //Appears when rendering the form or the visualization
+  override def displayName: String = "Model description"
+  override def displayNameHtml = Full(<h3>Description</h3>)
+
 }
 
 //#### Aux Record traits
@@ -323,7 +389,7 @@ trait DisplayFormWithLabelInOneLine[OwnerType <: Record[OwnerType]] extends Owne
     override abstract  def toXHtml: NodeSeq =
     //BIG ERRORS HERE... JUST CHECK http://localhost:9999/model/f
         <div id={uniqueFieldId + "_holder"}>
-          <span for={ uniqueFieldId.openTheBox }>{ displayHtml }:   {this.asString}</span>
+          <span for={ uniqueFieldId.openTheBox }>{ displayHtml }</span>
           {super.toXHtml}
           <lift:msg id={uniqueFieldId.openTheBox}  errorClass="lift_error"/>
         </div>
@@ -366,7 +432,5 @@ trait DisplayFormWithLabelInOneLine[OwnerType <: Record[OwnerType]] extends Owne
     }
 
     override def asString = displayName + "=" + theData.openTheBox
-
-
   }
 }

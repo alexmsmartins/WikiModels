@@ -21,6 +21,7 @@ import alexmsmartins.log.LoggerWrapper
  * To change this template use File | Settings | File Templates.
  */
 class SBMLModelSnip extends LoggerWrapper{
+  //TODO DELETE THIS asap
 
   def modelMetaId = "#mMetaId *" #> S.param("modelMetaId").openOr("<<handling this is a TODO>>")
 
