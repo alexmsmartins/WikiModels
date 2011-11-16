@@ -20,6 +20,7 @@ import net.liftweb.http.js.jquery.JqJsCmds.DisplayMessage
 import net.liftweb.json.JsonAST.JValue
 import org.sbml.libsbml.SBMLReader
 import pt.cnbc.wikimodels.dataVisitors.SBML2BeanConverter
+import visitor.SBMLRecordVisitor
 
 
 trait SBMLElement[MyType <: SBMLElement[MyType]] extends Element with RestRecord[MyType] {
@@ -60,7 +61,7 @@ trait SBMLElement[MyType <: SBMLElement[MyType]] extends Element with RestRecord
       case 200 =>{
         clean_? = false
         //FIXME this should be replaced by a call to a XML to SBMLElement converter
-        Full ((new SBMLModelRecord(  SBML2BeanConverter.visitModel( content )  )).asInstanceOf[MyType] )//read went ok
+        Full ((SBMLRecordVisitor.createSBMLModelRecordFrom(  SBML2BeanConverter.visitModel( content )  )).asInstanceOf[MyType] )//read went ok
       }
       case 404 => ParamFailure("Error reading " + this.metaid + ". This element does not exist.", this)
       case status => handleStatusCodes(status, "reading " + sbmlType + " with " + this.metaid)
@@ -110,14 +111,6 @@ trait SBMLElement[MyType <: SBMLElement[MyType]] extends Element with RestRecord
 class SBMLModelRecord() extends SBMLModel with SBMLElement[SBMLModelRecord]  {
   type MyType = SBMLModelRecord
 
-  def this(m:SBMLModel) = {
-    this()
-    this.metaid = m.metaid
-    this.id=m.id
-    this.name=m.name
-    this.notes = m.notes
-  }
-
   override def meta = SBMLModelRecord
 
   override protected def relativeURLasList = "model" :: metaid :: Nil
@@ -162,12 +155,15 @@ You can add items from any website to your Amazon Wish List with just a few clic
   //  ### can be created directly from a Request containing params with names that match the fields on a Record ( see fromReq ). ###
 }
 
+
+
 //TODO - DELETE IF NOT USED FOR ANYTHING
 object SBMLModelRecord extends SBMLModelRecord with RestMetaRecord[SBMLModelRecord] {
   def apply() = new SBMLModelRecord
   override def fieldOrder = List(metaIdO, idO, nameO, notesO)
   override def fields = fieldOrder
 }
+
 
 }
 
@@ -188,7 +184,7 @@ import JE.{JsRaw,Str}
 import pt.cnbc.wikimodels.client.record.SBMLModelRecord
 
 class MetaId(own:SBMLModelRecord, maxLength: Int) extends StringField[SBMLModelRecord](own, maxLength)
-with DisplayFormWithLabelInOneLine[SBMLModelRecord] with DisplayHTMLWithLabelInOneLine[SBMLModelRecord]
+with DisplayFormWithLabelInOneLine[SBMLModelRecord] with DisplayHTMLWithLabelInOneLine [SBMLModelRecord]
 with GetSetOnwerField[String, SBMLModelRecord] with LoggerWrapper{
   var _data:Box[MyType] = Empty
 
@@ -221,9 +217,11 @@ with GetSetOnwerField[String, SBMLModelRecord] with LoggerWrapper{
   //the MetaId will be generated from concatenating the ids of any parent entities with '_' in between.
   override def toForm() = Empty
   //Appears when rendering the form or the visualization
-  override def displayName: String = "Model metaid"
+  override def name: String = "Model metaid"
   override def displayNameHtml = Full(<h3>Metaid</h3>)
 
+
+  override def toXHtml: NodeSeq = Text(this.value)
 }
 
 class Id(own:SBMLModelRecord, maxLength: Int) extends StringField[SBMLModelRecord](own, maxLength)
@@ -259,8 +257,9 @@ with GetSetOnwerField[String, SBMLModelRecord] with LoggerWrapper{
 
 
   //Appears when rendering the form or the visualization
-  override def displayName: String = "Model id"
+  override def name: String = "Model id"
   override def displayNameHtml = Full(<h3>Id</h3>)
+  override def toXHtml: NodeSeq = Text(this.value)
 }
 
 /**
@@ -300,10 +299,11 @@ with GetSetOnwerField[String, SBMLModelRecord]{
 
 
   //Appears when rendering the form or the visualization
-  override def displayName = "Model name"
+  override def name = "Model name"
   override def displayNameHtml = Full(<h3>Name</h3>)
 
   val msgName: String = S.attr("id_msgs") openOr "messages"
+  override def toXHtml: NodeSeq = Text(this.value)
 }
 
 class Notes(own:SBMLModelRecord, size:Int) extends OptionalTextareaField[SBMLModelRecord](own, size){
@@ -357,9 +357,9 @@ class Notes(own:SBMLModelRecord, size:Int) extends OptionalTextareaField[SBMLMod
     </ul>
   )
   //Appears when rendering the form or the visualization
-  override def displayName: String = "Model description"
+  override def name: String = "Model description"
   override def displayNameHtml = Full(<h3>Description</h3>)
-
+  override def toXHtml: NodeSeq = XML.loadString("<span>" + this.value.getOrElse("No description found!") + "</span>")
 }
 
 //#### Aux Record traits
@@ -389,7 +389,7 @@ trait DisplayFormWithLabelInOneLine[OwnerType <: Record[OwnerType]] extends Owne
     override abstract  def toXHtml: NodeSeq =
     //BIG ERRORS HERE... JUST CHECK http://localhost:9999/model/f
         <div id={uniqueFieldId + "_holder"}>
-          <span for={ uniqueFieldId.openTheBox }>{ displayHtml }</span>
+          <span for={ uniqueFieldId.openTheBox }>{ displayHtml } <p>fkdshfdkshksa</p></span>
           {super.toXHtml}
           <lift:msg id={uniqueFieldId.openTheBox}  errorClass="lift_error"/>
         </div>
