@@ -32,6 +32,7 @@ class SBMLForm extends DispatchSnippet with LoggerWrapper {
   private object selectedModel extends RequestVar[Box[SBMLModelRecord]](Empty)
 
   private def loadSBMLFromPathParam() = {
+    trace("Calling SBMLForm.loadSBMLFromPathParam")
     debug("""Parameter "modelMetaId" « {} """, S.param("modelMetaId").openTheBox)
 
     selectedModel {
@@ -90,7 +91,7 @@ class SBMLForm extends DispatchSnippet with LoggerWrapper {
     debug("EDIT SELECTED MODEL")
     loadSBMLFromPathParam
     selectedModel.is.openTheBox.toForm(saveSelectedModel _ ) ++ <tr>
-                                      <td><a href="/simple/index.html">Cancel</a></td>
+                  NodeSeq                    <td><a href="/simple/index.html">Cancel</a></td>
                                       <td><input type="submit" value="Save"/></td>
                                     </tr>
   }
@@ -102,6 +103,7 @@ class SBMLForm extends DispatchSnippet with LoggerWrapper {
   def visualizeSelectedModel(ns:NodeSeq):NodeSeq = {
     debug("VISUALIZE SELECTED MODEL")
     loadSBMLFromPathParam
+    debug("Loaded selectedModel = " + selectedModel.openTheBox.toXML() )
     selectedModel.map(_.toXHtml) openOr {S.error("Model not found"); redirectTo("/models/")}
   }
 

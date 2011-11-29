@@ -27,6 +27,7 @@
     <jdbc.postgresql.version>8.3-603.jdbc4</jdbc.postgresql.version>
     <!-- this property is used in the submodules and that is the reason for the ".." in the path -->
     <main.dir>${project.basedir}/../localMavenRepo</main.dir>
+    <maven.scala.plugin>2.15.2</maven.scala.plugin>
   </properties>
 
   <packaging>pom</packaging>

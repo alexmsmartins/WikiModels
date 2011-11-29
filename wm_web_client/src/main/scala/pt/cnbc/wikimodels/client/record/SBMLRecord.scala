@@ -1,17 +1,15 @@
-package pt.cnbc.wikimodels.client.record{
-
-/*
- * Copyright (c) 2011. Alexandre Martins. All rights reserved.
- */
-
-//package pt.cnbc.wikimodels.client.model
-
+import net.liftweb.record.Record
+import alexmsmartins.log.LoggerWrapper
+import net.liftweb.common._
+import scala.xml.XML
+import scala.xml.XML._
+import scala.xml.NodeSeq
 import scala.xml._
 import net.liftweb.common._
 import net.liftweb.record._
 import field.{OptionalTextareaField, StringField}
 import pt.cnbc.wikimodels.client.record._
-import pt.cnbc.wikimodels.dataModel.{Element, SBMLModel}
+import pt.cnbc.wikimodels.dataModel._
 import thewebsemantic.vocabulary.Foaf.Person
 import net.liftweb.http.js.jquery.JqJsCmds.DisplayMessage._
 import net.liftweb.util.BindHelpers._
@@ -21,6 +19,13 @@ import net.liftweb.json.JsonAST.JValue
 import org.sbml.libsbml.SBMLReader
 import pt.cnbc.wikimodels.dataVisitors.SBML2BeanConverter
 import visitor.SBMLRecordVisitor
+
+package pt.cnbc.wikimodels.client.record{
+
+/*
+ * Copyright (c) 2011. Alexandre Martins. All rights reserved.
+ */
+
 
 
 trait SBaseRecord[MyType <: SBaseRecord[MyType]] extends Element with RestRecord[MyType] {
@@ -96,15 +101,7 @@ trait SBaseRecord[MyType <: SBaseRecord[MyType]] extends Element with RestRecord
 /**
  * Created by IntelliJ IDEA.
  * User: alex
- * Date: 03-07-2011       override def createRestRec():Box[MyType] = {
-    connection.postRequest("/" + this.sbmlType.toLowerCase , this.toXML)
-    connection.getStatusCode match {
-      case 201 => saved_? = true;Full(this)//create went ok
-      case 404 => ParamFailure("Error reading " + this.metaid + ". This element does not exist.", this)
-      case status => handleStatusCodes(status, "creating " + sbmlType + " with " + this.metaid)
-    }
-  }
-
+ * Date: 03-07-2011       
  * Time: 17:37
  * To change this template use File | Settings | File Templates.
  */
@@ -119,39 +116,20 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord]  {
 
   //  ### can be presented as XHtml, Json, or as a Form. ###
 
-
-    <h4><span id="required_field">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* required fields</span></h4><br/>
-    <lift:ModelTree.render/>
-    <ul id="model_tree" class="treeview-gray">
-      <li><span>
-        <h3>Model ID: <span id="required_field">*</span>
-          <div id="messages"></div>
-        </h3><br/>
-      </span></li>                       [record]
-      <li>
-        <h3>Name of the model:
-          <createDescription:name>
-              <text:model_id/>
-          </createDescription:name>
-        </h3>
-          <br/></li>
-      <li><span><h3>Description of the model:</h3></span>
-          <br/>
-         What Makes Your Wish List Universal?
-You can add items from any website to your Amazon Wish List with just a few clicks, making it easy to keep track of all the gifts you're wishing for, all in one place.
-        <ul>
-          <li><span><createDescription:description/></span><br/></li>
-        </ul>
-      </li>
-    </ul>
-
+  override def toXHtml = {
+    <div>
+      <header>
+        <link type="text/css" rel="stylesheet" href="/css/sbml_present.css"></link>
+      </header>
+      {super.toXHtml}
+    </div>
+  }
 
   //  ### will contain fields which can be listed with allFields. ###
-  object metaIdO extends MetaId(this, 100)
+  object metaIdO extends MetaId(this, 100) 
   object idO extends Id(this, 100)
   object nameO extends Name(this, 100)
   object notesO extends Notes(this, 1000)
-  //override def fieldList = metaIdO :: idO :: nameO :: notesO :: Nil
   //  ### can be created directly from a Request containing params with names that match the fields on a Record ( see fromReq ). ###
 }
 
@@ -164,31 +142,74 @@ object SBMLModelRecord extends SBMLModelRecord with RestMetaRecord[SBMLModelReco
   override def fields = fieldOrder
 }
 
+/**
+ * Created by IntelliJ IDEA.
+ * User: alex
+ * Date: 29-11-2011   
+ * Time: 22:35
+ * To change this template use File | Settings | File Templates.
+ */
+class CompartmentRecord() extends Compartment with SBaseRecord[CompartmentRecord]  {
+  type MyType = CompartmentRecord
+
+  override def meta = CompartmentRecord
+
+  override protected def relativeURLasList = "model" :: metaid :: "Compartment" :: metaid :: Nil
+
+  //  ### can be validated with validate ###
+
+  //  ### can be presented as XHtml, Json, or as a Form. ###
+
+  override def toXHtml = {
+    <div>
+      <header>
+        <link type="text/css" rel="stylesheet" href="/css/sbml_present.css"></link>
+      </header>Nil
+      {super.toXHtml}
+    </div>
+  }
+
+  //  ### will contain fields which can be listed with allFields. ###
+  object metaIdO extends MetaId(this, 100)
+  object idO extends Id(this, 100)
+  object nameO extends Name(this, 100)
+  object notesO extends Notes(this, 1000)
+  override def fields = metaIdO :: idO :: nameO :: notesO :: Nil
+  //  ### can be created directly from a Request containing params with names that match the fields on a Record ( see fromReq ). ###
+}
+
+
+
+//TODO - DELETE IF NOT USED FOR ANYTHING
+object CompartmentRecord extends CompartmentRecord with RestMetaRecord[CompartmentRecord] {
+  def apply() = new CompartmentRecord
+  override def fieldOrder = List(metaIdO, idO, nameO, notesO)
+  override def fields = fieldOrder
+}
 
 }
 
 package net.liftweb.record {
 
-import scala.xml._
 import net.liftweb.common._
 import net.liftweb.http.{S, SHtml}
 import net.liftweb.record.field._
 import alexmsmartins.log.LoggerWrapper
 import alexmsmartins.log.LoggerWrapper._
+import pt.cnbc.wikimodels.client.record.{SBaseRecord, SBMLModelRecord}
 
 //Javascript handling imports
 import _root_.net.liftweb.http.js.{JE,JsCmd,JsCmds}
-import JsCmds._ // For implicits
+import JsCmds._ // For implicifts
 import JE.{JsRaw,Str}
 
-import pt.cnbc.wikimodels.client.record.SBMLModelRecord
 
-class MetaId(own:SBMLModelRecord, maxLength: Int) extends StringField[SBMLModelRecord](own, maxLength)
-with DisplayFormWithLabelInOneLine[SBMLModelRecord] with DisplayHTMLWithLabelInOneLine [SBMLModelRecord]
-with GetSetOnwerField[String, SBMLModelRecord] with LoggerWrapper{
+class MetaId[T <: SBaseRecord[T]](own:T, maxLength: Int) extends StringField[T](own, maxLength) 
+with DisplayFormWithLabelInOneLine[String, T] with DisplayHTMLWithLabelInOneLine[String, T]{
   var _data:Box[MyType] = Empty
 
   override def theData_=(in:Box[MyType]) {
+    trace("Calling MetaId.theData_=" + in)
     _data = in
     _data match{
       //if a valid value is set then update the owner class
@@ -198,9 +219,10 @@ with GetSetOnwerField[String, SBMLModelRecord] with LoggerWrapper{
   }
 
   override def theData:Box[MyType] = {
+    trace("Calling MetaId.theData")
     //if the owner has valid data that was obtained from the wikimodels Server
     if(owner.metaid != null) {
-      debug("theData with metaid != null is being copied to the record Field.")
+      debug("theData with metaid = "+ owner.metaid + " is being copied to the record Field.")
       _data = Full(owner.metaid)
     } else {
       _data match {
@@ -211,25 +233,25 @@ with GetSetOnwerField[String, SBMLModelRecord] with LoggerWrapper{
         case Full(x) => owner.metaid = x
       }
     }
+    trace("MetaId.theData returns " + _data)
     _data
   }
 
   //the MetaId will be generated from concatenating the ids of any parent entities with '_' in between.
   override def toForm() = Empty
   //Appears when rendering the form or the visualization
-  override def name: String = "Model metaid"
-  override def displayNameHtml = Full(<h3>Metaid</h3>)
+  override def name: String = "Metaid"
 
 
-  override def toXHtml: NodeSeq = Text(this.value)
+  //override def toXHtml: NodeSeq = Text(this.value + "xxxxxxx")
 }
 
-class Id(own:SBMLModelRecord, maxLength: Int) extends StringField[SBMLModelRecord](own, maxLength)
-with DisplayFormWithLabelInOneLine[SBMLModelRecord] with DisplayHTMLWithLabelInOneLine[SBMLModelRecord]
-with GetSetOnwerField[String, SBMLModelRecord] with LoggerWrapper{
+class Id[T <: SBaseRecord[T]{var id:String}](own:T, maxLength: Int) extends StringField[T](own, maxLength)
+with DisplayFormWithLabelInOneLine[String, T] with DisplayHTMLWithLabelInOneLine[String, T]{
   var _data:Box[MyType] = Empty
 
   override def theData_=(in:Box[MyType]) {
+    trace("Calling Id.theData_=" + in)
     _data = in
     _data match{
       //if a valid value is set then update the owner class
@@ -239,9 +261,10 @@ with GetSetOnwerField[String, SBMLModelRecord] with LoggerWrapper{
   }
 
   override def theData:Box[MyType] = {
+    trace("Calling Id.theData")
     //if the owner has valid data that was obtained from the wikimodels Server
     if(owner.id != null) {
-      debug("theData with aid != null is being copied to the record Field.")
+      debug("theData with aid = "+ owner.id + " is being copied to the record Field.")
       _data = Full(owner.id)
     } else {
       _data match {
@@ -252,37 +275,38 @@ with GetSetOnwerField[String, SBMLModelRecord] with LoggerWrapper{
         case Full(x) => owner.id = x
       }
     }
+    trace("Id.theData returns " + _data)
     _data
   }
 
 
   //Appears when rendering the form or the visualization
-  override def name: String = "Model id"
-  override def displayNameHtml = Full(<h3>Id</h3>)
-  override def toXHtml: NodeSeq = Text(this.value)
+  override def name: String = "Id"
+  //override def toXHtml: NodeSeq = Text(this.value)
 }
 
 /**
  *
  */
-class Name(own:SBMLModelRecord, maxLength: Int) extends StringField[SBMLModelRecord](own, maxLength)
-with DisplayFormWithLabelInOneLine[SBMLModelRecord] with DisplayHTMLWithLabelInOneLine[SBMLModelRecord]
-with GetSetOnwerField[String, SBMLModelRecord]{
+class Name[T <: SBaseRecord[T]{var name:String}](own:T, maxLength: Int) extends StringField[T](own, maxLength)
+with DisplayFormWithLabelInOneLine[String, T] with DisplayHTMLWithLabelInOneLine[String, T]{
   var _data:Box[MyType] = Empty
 
   override def theData_=(in:Box[MyType]) {
+    trace("Calling Name.theData_=" + in)
     _data = in
     _data match{
       //if a valid value is set then update the owner class
-      case Full(x) => owner.name = x.asInstanceOf[String]
+      case Full(x) => owner.name = x
       case _ => owner.name = null //just to make sure the owner does not have valid values when errors occur
     }
   }
 
   override def theData:Box[MyType] = {
+    trace("Calling Name.theData")
     //if the owner has valid data that was obtained from the wikimodels Server
     if(owner.name != null) {
-      debug("theData with name != null is being copied to the record Field.")
+      debug("theData with name = "+ owner.name + " is being copied to the record Field.")
       _data = Full(owner.name)
     } else {
       _data match {
@@ -293,22 +317,24 @@ with GetSetOnwerField[String, SBMLModelRecord]{
         case Full(x) => owner.name = x
       }
     }
+    trace("Name.theData returns " + _data)
     _data
   }
 
 
 
   //Appears when rendering the form or the visualization
-  override def name = "Model name"
-  override def displayNameHtml = Full(<h3>Name</h3>)
+  override def name = "Name"
 
   val msgName: String = S.attr("id_msgs") openOr "messages"
-  override def toXHtml: NodeSeq = Text(this.value)
+  //override def toXHtml: NodeSeq = Text(this.value)
 }
 
-class Notes(own:SBMLModelRecord, size:Int) extends OptionalTextareaField[SBMLModelRecord](own, size){
+class Notes[T <: SBaseRecord[T]](own:T, size:Int) extends OptionalTextareaField[T](own, size){
+//TODO with DisplayFormWithLabelInOneLine[T] with DisplayHTMLWithLabelInOneLine[T] with GetSetOnwerField[String, T]{
 
   override def setBox(in: Box[MyType]): Box[MyType] = {
+    trace("Calling Notes.setBox")
     super.setBox(in) match {
       case full:Full[MyType] =>{
         owner.notes=full.openTheBox
@@ -357,10 +383,17 @@ class Notes(own:SBMLModelRecord, size:Int) extends OptionalTextareaField[SBMLMod
     </ul>
   )
   //Appears when rendering the form or the visualization
-  override def name: String = "Model description"
-  override def displayNameHtml = Full(<h3>Description</h3>)
-  override def toXHtml: NodeSeq = XML.loadString("<span>" + this.value.getOrElse("No description found!") + "</span>")
+  override def name: String = "Description"
+  override def toXHtml: NodeSeq = {
+    trace("Calling Notes.toXHtml")
+    XML.loadString("<span>" + this.value.getOrElse("No description found!") + "</span>")
+  }
 }
+}
+
+
+package net.liftweb.record{
+
 
 //#### Aux Record traits
 
@@ -374,41 +407,50 @@ class Notes(own:SBMLModelRecord, size:Int) extends OptionalTextareaField[SBMLMod
  *     { control }
  *   </div>
  */
-trait DisplayFormWithLabelInOneLine[OwnerType <: Record[OwnerType]] extends OwnedField[OwnerType] {
-  override abstract def toForm:Box[NodeSeq] =
-    for (id <- uniqueFieldId; control <- super.toForm)
-    yield
-      <span id={id + "_holder"}>
-        <label for={ id }>{ displayHtml }</label>
-        {control}
-        <lift:msg id={id}  errorClass="lift_error"/>
-      </span>
-}
+  trait DisplayFormWithLabelInOneLine[ThisType, OwnerType <: Record[OwnerType]] extends GetSetOnwerField[ThisType, OwnerType] {
+    override abstract def toForm:Box[NodeSeq] = {
+      trace("Calling DisplayFormWithLabelInOneLine.toForm")
+      for (id <- uniqueFieldId; control <- super.toForm)
+      yield
+        <span id={id + "_holder"}>
+          <label for={ id }>{ displayHtml }</label>
+          {control}
+          <lift:msg id={id}  errorClass="lift_error"/>
+        </span>
+    }
+  }
 
-  trait DisplayHTMLWithLabelInOneLine[OwnerType <: Record[OwnerType]] extends OwnedField[OwnerType] {
-    override abstract  def toXHtml: NodeSeq =
-    //BIG ERRORS HERE... JUST CHECK http://localhost:9999/model/f
+  trait DisplayHTMLWithLabelInOneLine[ThisType, OwnerType <: Record[OwnerType]] extends GetSetOnwerField[ThisType, OwnerType] {
+    override def toXHtml: NodeSeq = {
+      trace("Calling DisplayHTMLWithLabelInOneLine.toXHtml")
+    //TODO: BIG ERRORS HERE... JUST CHECK http://localhost:9999/model/f
         <div id={uniqueFieldId + "_holder"}>
-          <span for={ uniqueFieldId.openTheBox }>{ displayHtml } <p>fkdshfdkshksa</p></span>
-          {super.toXHtml}
+          <span for={ uniqueFieldId.openTheBox }>
+            <span class="sbml_field_label">{displayHtml}</span>
+            <span class="sbml_field_content">  {this.valueBox.openTheBox}</span>
+          </span>
           <lift:msg id={uniqueFieldId.openTheBox}  errorClass="lift_error"/>
         </div>
+    }
 
   }
 
   /**
    * Convert the field to a String... usually of the form "displayName=value"
    */
-
-/**
- *
- */
-  trait GetSetOnwerField[ThisType, OwnerType <: Record[OwnerType]] extends OwnedField[OwnerType] with TypedField[ThisType] {
+  trait GetSetOnwerField[ThisType, OwnerType <: Record[OwnerType]] extends OwnedField[OwnerType] with TypedField[ThisType]
+  with LoggerWrapper{
 
     private[record] def theData_=(in:Box[MyType]):Unit
     private[record] def theData:Box[MyType]
 
+    /**
+     * defines if a defalt value should be attributed to this field
+     */
+    needsDefault = false
+
     override def setBox(in: Box[MyType]): Box[MyType] = synchronized {
+      trace("Calling GetSetOnwerField.setBox(" + in + ")")
       needsDefault = false
       theData = in match {
         case _ if !canWrite_?      => Failure(noValueErrorMessage)
@@ -422,13 +464,15 @@ trait DisplayFormWithLabelInOneLine[OwnerType <: Record[OwnerType]] extends Owne
     }
 
     override def valueBox: Box[MyType] = synchronized {
-      if (needsDefault) {
+      trace("Calling GetSetOnwerField.valueBox")
+      if (needsDefault) { //FIXME - THIS CODE CAME FROM THE TypeField trait. Delete it
         needsDefault = false
         theData = defaultValueBox
       }
-
-      if (canRead_?) theData
-      else theData.flatMap(obscure)
+      trace("Data returned is {}",
+        if (canRead_?) theData
+        else theData.flatMap(debug("Data obscured by {}", obscure) )
+      )
     }
 
     override def asString = displayName + "=" + theData.openTheBox
