@@ -116,7 +116,16 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord]  {
 
   //  ### can be presented as XHtml, Json, or as a Form. ###
 
-  override def toXHtml = {
+    /**
+   * Present the model as a form and execute the function on submission of the form
+   *
+   * @param f - the function to execute on form submission
+   *
+   * @return the form
+   */
+  //override def toForm(f: MyType => Unit): NodeSeq = meta.toForm(this) ++ (SHtml.hidden(() => f(this)))
+    
+    override def toXHtml = {
     <div>
       <header>
         <link type="text/css" rel="stylesheet" href="/css/sbml_present.css"></link>
@@ -331,8 +340,6 @@ with DisplayFormWithLabelInOneLine[String, T] with DisplayHTMLWithLabelInOneLine
 }
 
 class Notes[T <: SBaseRecord[T]](own:T, size:Int) extends OptionalTextareaField[T](own, size){
-//TODO with DisplayFormWithLabelInOneLine[T] with DisplayHTMLWithLabelInOneLine[T] with GetSetOnwerField[String, T]{
-
   override def setBox(in: Box[MyType]): Box[MyType] = {
     trace("Calling Notes.setBox")
     super.setBox(in) match {
@@ -345,42 +352,61 @@ class Notes[T <: SBaseRecord[T]](own:T, size:Int) extends OptionalTextareaField[
   }
 
   override def toForm() = Full(
+  <div>
+
+  <link type="text/css" rel="stylesheet" href="/classpath/tree/jquery.treeview.css" />
+
+  <script type="text/javascript" src="/classpath/tree/jquery.treeview.js"></script>
+  {Script(
+    JsRaw("""
+      jQuery(document).ready(function() {jQuery('#'+"model_tree").treeview({"animated": 150});});
+    """))
+  }
   <ul class="treeview-gray" id="model_tree">
+    <head>
+      <!-- TODO: MAKE sure this doesn't get repeated more than once in a page -->
+      <script type="text/javascript" src="/classpath/js/fckeditor/fckeditor.js"></script>
+      {Script(
+        JsRaw("""
+          $(document).ready(function(){
+            var oFCKeditor01 = new FCKeditor( 'descriptionArea' );
+            oFCKeditor01.BasePath = '/classpath/js/fckeditor/' ;
+            oFCKeditor01.ToolbarSet = 'MyTool' ;
+            /*oFCKeditor01.ToolbarSets["Default"] = [
+            ['Cut','Copy','Paste','PasteText','PasteWord'],['Undo','Redo','-','Find','Replace'],
+            ['Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'],
+            ['OrderedList','UnorderedList','-','Outdent','Indent','Blockquote'],
+            ['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],['Link','Unlink'],
+            ['Image','Table','Rule','SpecialChar'],['FontSize','TextColor','BGColor'],['Source','FitWindow']
+            ] ;*/
+            oFCKeditor01.ReplaceTextarea();
+          });
+        """))
+      }
+    </head>
+
     <li><span><h3>Description of the model:</h3></span>
       <br />
       <ul>
-          <li><span><textarea id="descriptionArea" maxlength="20000"></textarea></span><br /></li>
+          <li><span>
+            {
+              SHtml.textarea(
+                valueBox.openOr(""),
+                vv => setBox(
+                  vv.trim match {
+                    case "" => Empty
+                    case x => Full(x)
+                  }
+                ),
+                "id" -> "descriptionArea", "maxlength" -> "20000")
+            }
+          </span><br /></li>
       </ul>
       <!--<script src="../classpath/js/wymeditor/wymeditor/jquery.wymeditor.pack.js" type="text/javascript" />-->
 
-
-      <head>
-        <!-- TODO: MAKE sure this doesn't get repeated more than once in a page -->
-        <script type="text/javascript" src="/classpath/js/fckeditor/fckeditor.js"></script>
-        {
-          Script(
-            JsRaw("""
-              window.onload = function() {
-                  var oFCKeditor01 = new FCKeditor( 'descriptionArea' );
-                  oFCKeditor01.BasePath = '/classpath/js/fckeditor/' ;
-                  oFCKeditor01.ToolbarSet = 'MyTool' ;
-                  /*oFCKeditor01.ToolbarSets[&quot;Default&quot;] = [
-                  /**
-   * setBox overriden
-   */  ['Cut','Copy','Paste','PasteText','PasteWord'],['Undo','Redo','-','Find','Replace'],
-                  ['Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'],
-                  ['OrderedList','UnorderedList','-','Outdent','Indent','Blockquote'],
-                  ['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],['Link','Unlink'],
-                  ['Image','Table','Rule','SpecialChar'],['FontSize','TextColor','BGColor'],['Source','FitWindow']
-                  ] ;*/
-                  oFCKeditor01.ReplaceTextarea();
-              };
-            """)
-          )
-        }
-      </head>
     </li>
     </ul>
+    </div>
   )
   //Appears when rendering the form or the visualization
   override def name: String = "Description"
@@ -413,7 +439,7 @@ package net.liftweb.record{
       for (id <- uniqueFieldId; control <- super.toForm)
       yield
         <span id={id + "_holder"}>
-          <label for={ id }>{ displayHtml }</label>
+          <label for={ id }> <span class="sbml_field_label">{ displayHtml }</span></label>
           {control}
           <lift:msg id={id}  errorClass="lift_error"/>
         </span>

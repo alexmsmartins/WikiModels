@@ -90,10 +90,11 @@ class SBMLForm extends DispatchSnippet with LoggerWrapper {
   def editSelectedModel(ns:NodeSeq):NodeSeq ={
     debug("EDIT SELECTED MODEL")
     loadSBMLFromPathParam
-    selectedModel.is.openTheBox.toForm(saveSelectedModel _ ) ++ <tr>
-                  NodeSeq                    <td><a href="/simple/index.html">Cancel</a></td>
+    selectedModel.is.map( _.toForm(Empty)( saveSelectedModel _ ) ++ <tr>
+                                      <td><a href="/models">Cancel</a></td>
                                       <td><input type="submit" value="Save"/></td>
                                     </tr>
+    ) openOr {error("Model not found"); redirectTo("/models")}
   }
 
   //### Visualize state

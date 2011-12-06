@@ -3,7 +3,7 @@
 import sbt._
 
 class LiftProject(info: ProjectInfo) extends DefaultWebProject(info) {
-  val liftVersion = "2.4-M4"
+  val liftVersion = "2.4-M5"
   val lift = "net.liftweb" %% "lift-mapper" % liftVersion % "compile"
   val liftRecord = "net.liftweb" %% "lift-record" % liftVersion % "compile"
   val liftWidget = "net.liftweb" %% "lift-widgets" % liftVersion % "compile"
