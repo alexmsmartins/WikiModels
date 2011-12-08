@@ -23,7 +23,6 @@ import _root_.pt.cnbc.wikimodels.client.sitemapTweaks._
 class Boot {
     def boot {
 
-      //LiftRules.htmlProperties.default.set((r:Req) => new Html5Properties(r.userAgent))
 
       // set the character enconding to UTF-8
       LiftRules.early.append {
@@ -39,7 +38,7 @@ class Boot {
       //Where to search for lift related files. This is the new location
       LiftRules.addToPackages("pt.cnbc.wikimodels.client")
 
-      //TODO: LiftRules.htmlProperties.default.set((r: Req) =>new Html5Properties(r.userAgent))
+      LiftRules.htmlProperties.default.set((r: Req) =>new XHtmlInHtml5OutProperties(r.userAgent))
 
       // TODO - i STILL WANT TO FIND OUT WHY THIS DOES NOT WKRK. Something to do wiht the response not returning statuscode 302 to the browser, perhaps
       /*      LiftRules.statefulRewrite.prepend(NamedPF("CreateAndEditRewrite") {
@@ -67,9 +66,9 @@ class Boot {
              Menu(ModelPageLoc),
              Menu(Loc("importM", List("models","import"), "[NEW]Import Model", loggedIn)),
              Menu(Loc("browseM", List("models","index"), "Browse Models", loggedIn)),
-             Menu(Loc("browseMm", List("models","browse.xhtml"), "Browse Model", Hidden, loggedIn)),
-             Menu(Loc("editM", List("models","editModel.xhtml"), "Edit Model", Hidden, loggedIn)),
-             Menu(Loc("addM", List("models","addModel.xhtml"), "Add Model", Hidden, loggedIn)) ) ::
+             Menu(Loc("browseMm", List("models","browse.html"), "Browse Model", Hidden, loggedIn)),
+             Menu(Loc("editM", List("models","editModel.html"), "Edit Model", Hidden, loggedIn)),
+             Menu(Loc("addM", List("models","addModel.html"), "Add Model", Hidden, loggedIn)) ) ::
         //Menu(Loc("listM", List("models","list"), "List of Models"))) ::
         Menu(Loc("tags", List("tags"), "Tags")) ::
         Menu(Loc("create_user", List("create_user"), "Create User", Hidden)) ::
@@ -97,7 +96,7 @@ class Boot {
         LiftRules.statelessRewrite.append {
           //NOTE: these redirects make the model metaId available to SBMLForm snippets.
           case RewriteRequest(ParsePath("model"::model::Nil,"",_,false),_,_) => {
-            RewriteResponse(ParsePath( "modele"::"indexe"::Nil,"xhtml",true, false), Map("modelMetaId" -> model), true)
+            RewriteResponse(ParsePath( "modele"::"indexe"::Nil,"html",true, false), Map("modelMetaId" -> model), true)
           }
           case RewriteRequest(ParsePath("model"::model::"edit"::Nil,"",_,false),_,_) => {
             RewriteResponse(ParsePath( "modele"::"edit"::Nil, "html", true, false), Map("modelMetaId" -> model), true )
@@ -105,23 +104,23 @@ class Boot {
 
           /* code written by Gonçalo
             case RewriteRequest(ParsePath(List("model",any,"edit"),_,_,_),_,_) =>
-                RewriteResponse("models" :: "editModel.xhtml" :: Nil)
+                RewriteResponse("models" :: "editModel.html" :: Nil)
             case RewriteRequest(ParsePath(List("model",any,"add",some),_,_,_),_,_) =>
-                RewriteResponse("models" :: "addModel.xhtml" :: Nil)
+                RewriteResponse("models" :: "addModel.html" :: Nil)
             case RewriteRequest(ParsePath(List("model",any),_,_,_),_,_) =>
-                RewriteResponse("models" :: "browse.xhtml" :: Nil)
+                RewriteResponse("models" :: "browse.html" :: Nil)
             case RewriteRequest(ParsePath(List("model",any,"parameter",some),_,_,_),_,_) =>
-                RewriteResponse("models" :: "editModel.xhtml" :: Nil)
+                RewriteResponse("models" :: "editModel.html" :: Nil)
             case RewriteRequest(ParsePath(List("model",any,"species",some),_,_,_),_,_) =>
-                RewriteResponse("models" :: "editModel.xhtml" :: Nil)
+                RewriteResponse("models" :: "editModel.html" :: Nil)
             case RewriteRequest(ParsePath(List("model",any,"functionDefinition",some),_,_,_),_,_) =>
-                RewriteResponse("models" :: "editModel.xhtml" :: Nil)
+                RewriteResponse("models" :: "editModel.html" :: Nil)
             case RewriteRequest(ParsePath(List("model",any,"compartment",some),_,_,_),_,_) =>
-                RewriteResponse("models" :: "editModel.xhtml" :: Nil)
+                RewriteResponse("models" :: "editModel.html" :: Nil)
             case RewriteRequest(ParsePath(List("model",any,"constraint",some),_,_,_),_,_) =>
-                RewriteResponse("models" :: "editModel.xhtml" :: Nil)
+                RewriteResponse("models" :: "editModel.html" :: Nil)
             case RewriteRequest(ParsePath(List("model",any,"reaction",some),_,_,_),_,_) =>
-                RewriteResponse("models" :: "editModel.xhtml" :: Nil)
+                RewriteResponse("models" :: "editModel.html" :: Nil)
                 */
         }
 

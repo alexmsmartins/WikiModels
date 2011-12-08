@@ -373,13 +373,13 @@ class Notes[T <: SBaseRecord[T]](own:T, size:Int) extends OptionalTextareaField[
             <li><span>
               {
                 SHtml.textarea(
-                  "",//valueBox.openOr(""),
-                  vv =>2/* setBox(
+                  valueBox.openOr(""),
+                  vv => setBox(
                     vv.trim match {
                       case "" => Empty
                       case x => Full(x)
                     }
-                  )*/,
+                  ),
                   "id" -> "random", "class" -> "ckeditor", "maxlength" -> "20000")
               }
 
@@ -387,7 +387,6 @@ class Notes[T <: SBaseRecord[T]](own:T, size:Int) extends OptionalTextareaField[
         </ul>
       </li>
       </ul>
-      <textarea class="ckeditor" id="xxx" name="nhfkahshfdsah" maxlength="20000"></textarea>
       </div>
     )
   //Appears when rendering the form or the visualization
