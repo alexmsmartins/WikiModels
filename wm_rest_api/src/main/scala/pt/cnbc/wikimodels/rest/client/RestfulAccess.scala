@@ -29,6 +29,7 @@ import scala.xml.Elem
 import org.apache.http.protocol.HttpContext
 import org.apache.http._
 import org.slf4j.{LoggerFactory, Logger}
+import util.EntityUtils
 
 /**
  * Class which wraps the api to connect to WikiModels or even to another
@@ -83,24 +84,27 @@ class RestfulAccess(val host: String,
     val uri = new URI("http://" + host + ":" + port +
             contextRoot + url)
     val meth = new HttpGet(uri)
-    //try {
-    val response: HttpResponse = httpclient.execute(meth, this.localContext)
-    log.debug("==========After response============")
-    lastStatusLine = response.getStatusLine
-    log.debug("Response's status code was {}", response.getStatusLine())
-    log.debug(response.toString)
-    log.debug("======================")
+    var response: HttpResponse = null
     var xmldoc: Elem = null
-    if (lastStatusLine.getStatusCode == 200) {
-      xmldoc = XML.load(response.getEntity.getContent)
-      log.debug("Response's content was {} ", xmldoc)
+    try {
+      response= httpclient.execute(meth, this.localContext)
+      log.debug("==========After response============")
+      lastStatusLine = response.getStatusLine
+      log.debug("Response's status code was {}", response.getStatusLine())
+      log.debug(response.toString)
       log.debug("======================")
 
+      if (lastStatusLine.getStatusCode == 200) {
+        xmldoc = XML.load(response.getEntity.getContent)
+        log.debug("Response's content was {} ", xmldoc)
+        log.debug("======================")
+
+      }
+    } finally { //cleanup
+      if(response != null )
+        if(response.getEntity != null)
+          EntityUtils.consume(response.getEntity)
     }
-    /*} finally
-      {
-        meth
-      }*/
     xmldoc
   }
 
@@ -110,21 +114,29 @@ class RestfulAccess(val host: String,
             contextRoot + url)
     val meth = new HttpPost(uri)
     this.setRequestEntity(content, meth)
-    val response: HttpResponse = httpclient.execute(meth, this.localContext)
-    log.debug("==========After response============")
-    lastStatusLine = response.getStatusLine
-    log.debug("Response's status code was {}", response.getStatusLine())
-    log.debug(response.toString)
-    // If entity was CREATED(201)
-    if (lastStatusLine.getStatusCode == 201) {
-      val is = response.getEntity.getContent
-      val uriFinal = new URI(response.getFirstHeader("Location").getValue)
-      log.debug("URL location returned by server for created resource is {}", uriFinal)
-      log.debug("======================")
-      uriFinal
-    } else {
-      Console.println("POST request returns null");null
+    var response: HttpResponse = null
+    var uriFinal:URI = null
+    try {
+      response= httpclient.execute(meth, this.localContext)
+      log.debug("==========After response============")
+      lastStatusLine = response.getStatusLine
+      log.debug("Response's status code was {}", response.getStatusLine())
+      log.debug(response.toString)
+      // If entity was CREATED(201)
+      if (lastStatusLine.getStatusCode == 201) {
+        uriFinal = new URI(response.getFirstHeader("Location").getValue)
+        log.debug("URL location returned by server for created resource is {}", uriFinal)
+        log.debug("======================")
+
+      } else {
+        Console.println("POST request returns null");null
+      }
+    } finally { //cleanup
+      if(response != null )
+        if(response.getEntity != null)
+          EntityUtils.consume(response.getEntity)
     }
+    uriFinal
   }
 
 
@@ -134,12 +146,19 @@ class RestfulAccess(val host: String,
             contextRoot + url)
     val meth = new HttpPut(uri)
     this.setRequestEntity(content, meth)
-    val response: HttpResponse = httpclient.execute(meth, this.localContext)
-    log.debug("==========After response============")
-    lastStatusLine = response.getStatusLine
-    log.debug("Response's status code was {}", response.getStatusLine())
-    log.debug(response.toString)
-    log.debug("======================")
+    var response: HttpResponse = null
+    try {
+      response= httpclient.execute(meth, this.localContext)
+      log.debug("==========After response============")
+      lastStatusLine = response.getStatusLine
+      log.debug("Response's status code was {}", response.getStatusLine())
+      log.debug(response.toString)
+      log.debug("======================")
+    } finally { //cleanup
+      if(response != null )
+        if(response.getEntity != null)
+          EntityUtils.consume(response.getEntity)
+    }
   }
 
   def deleteRequest(url: String) = {
@@ -147,12 +166,19 @@ class RestfulAccess(val host: String,
     val uri = new URI("http://" + host + ":" + port +
             contextRoot + url)
     val meth = new HttpDelete(uri)
-    val response: HttpResponse = httpclient.execute(meth, this.localContext)
-    log.debug("==========After response============")
-    lastStatusLine = response.getStatusLine
-    log.debug("Response's status code was {}", response.getStatusLine())
-    log.debug(response.toString)
-    log.debug("======================")
+    var response: HttpResponse = null
+    try {
+      response = httpclient.execute(meth, this.localContext)
+      log.debug("==========After response============")
+      lastStatusLine = response.getStatusLine
+      log.debug("Response's status code was {}", response.getStatusLine())
+      log.debug(response.toString)
+      log.debug("======================")
+    } finally { //cleanup
+      if(response != null )
+        if(response.getEntity != null)
+          EntityUtils.consume(response.getEntity)
+    }
   }
 
   //---StautsLine aaccessors --
