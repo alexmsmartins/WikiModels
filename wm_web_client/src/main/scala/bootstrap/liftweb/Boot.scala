@@ -23,6 +23,8 @@ import _root_.pt.cnbc.wikimodels.client.sitemapTweaks._
 class Boot {
     def boot {
 
+      //LiftRules.htmlProperties.default.set((r:Req) => new Html5Properties(r.userAgent))
+
       // set the character enconding to UTF-8
       LiftRules.early.append {
           _.setCharacterEncoding("UTF-8")

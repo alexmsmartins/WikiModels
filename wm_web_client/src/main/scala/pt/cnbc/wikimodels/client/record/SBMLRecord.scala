@@ -352,62 +352,44 @@ class Notes[T <: SBaseRecord[T]](own:T, size:Int) extends OptionalTextareaField[
   }
 
   override def toForm() = Full(
-  <div>
-
-  <link type="text/css" rel="stylesheet" href="/classpath/tree/jquery.treeview.css" />
-
-  <script type="text/javascript" src="/classpath/tree/jquery.treeview.js"></script>
-  {Script(
-    JsRaw("""
-      jQuery(document).ready(function() {jQuery('#'+"model_tree").treeview({"animated": 150});});
-    """))
-  }
-  <ul class="treeview-gray" id="model_tree">
+    <div>
     <head>
-      <!-- TODO: MAKE sure this doesn't get repeated more than once in a page -->
-      <script type="text/javascript" src="/classpath/js/fckeditor/fckeditor.js"></script>
-      {Script(
-        JsRaw("""
-          $(document).ready(function(){
-            var oFCKeditor01 = new FCKeditor( 'descriptionArea' );
-            oFCKeditor01.BasePath = '/classpath/js/fckeditor/' ;
-            oFCKeditor01.ToolbarSet = 'MyTool' ;
-            /*oFCKeditor01.ToolbarSets["Default"] = [
-            ['Cut','Copy','Paste','PasteText','PasteWord'],['Undo','Redo','-','Find','Replace'],
-            ['Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript'],
-            ['OrderedList','UnorderedList','-','Outdent','Indent','Blockquote'],
-            ['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],['Link','Unlink'],
-            ['Image','Table','Rule','SpecialChar'],['FontSize','TextColor','BGColor'],['Source','FitWindow']
-            ] ;*/
-            oFCKeditor01.ReplaceTextarea();
-          });
-        """))
-      }
+    <link type="text/css" rel="stylesheet" href="/classpath/tree/jquery.treeview.css" />
+    <script type="text/javascript" src="/classpath/tree/jquery.treeview.js"></script>
+    {Script(
+      JsRaw("""
+        jQuery(document).ready(function() {jQuery('#'+"model_tree").treeview({"animated": 150});});
+      """))
+    }
     </head>
+    <ul class="treeview-gray" id="model_tree">
+      <head>
+        <script type="text/javascript" src="/classpath/js/ckeditor/ckeditor.js"></script>
+      </head>
 
-    <li><span><h3>Description of the model:</h3></span>
-      <br />
-      <ul>
-          <li><span>
-            {
-              SHtml.textarea(
-                valueBox.openOr(""),
-                vv => setBox(
-                  vv.trim match {
-                    case "" => Empty
-                    case x => Full(x)
-                  }
-                ),
-                "id" -> "descriptionArea", "maxlength" -> "20000")
-            }
-          </span><br /></li>
+      <li><span><h3>Description of the model:</h3></span>
+        <br />
+        <ul>
+            <li><span>
+              {
+                SHtml.textarea(
+                  "",//valueBox.openOr(""),
+                  vv =>2/* setBox(
+                    vv.trim match {
+                      case "" => Empty
+                      case x => Full(x)
+                    }
+                  )*/,
+                  "id" -> "random", "class" -> "ckeditor", "maxlength" -> "20000")
+              }
+
+            </span><br /></li>
+        </ul>
+      </li>
       </ul>
-      <!--<script src="../classpath/js/wymeditor/wymeditor/jquery.wymeditor.pack.js" type="text/javascript" />-->
-
-    </li>
-    </ul>
-    </div>
-  )
+      <textarea class="ckeditor" id="xxx" name="nhfkahshfdsah" maxlength="20000"></textarea>
+      </div>
+    )
   //Appears when rendering the form or the visualization
   override def name: String = "Description"
   override def toXHtml: NodeSeq = {
