@@ -19,6 +19,7 @@ import net.liftweb.json.JsonAST.JValue
 import org.sbml.libsbml.SBMLReader
 import pt.cnbc.wikimodels.dataVisitors.SBML2BeanConverter
 import visitor.SBMLRecordVisitor
+import scala.collection.JavaConversions._
 
 package pt.cnbc.wikimodels.client.record{
 
@@ -131,6 +132,9 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord]  {
         <link type="text/css" rel="stylesheet" href="/css/sbml_present.css"></link>
       </header>
       {super.toXHtml}
+      <!--{super.listOfCompartments.map(
+        i => scala.xml.Text("")
+      )}-->
     </div>
   }
 
@@ -183,7 +187,7 @@ class CompartmentRecord() extends Compartment with SBaseRecord[CompartmentRecord
   object idO extends Id(this, 100)
   object nameO extends Name(this, 100)
   object notesO extends Notes(this, 1000)
-  override def fields = metaIdO :: idO :: nameO :: notesO :: Nil
+  object spatialDimensions0 extends SpatialDimensions(this)
   //  ### can be created directly from a Request containing params with names that match the fields on a Record ( see fromReq ). ###
 }
 
@@ -192,296 +196,14 @@ class CompartmentRecord() extends Compartment with SBaseRecord[CompartmentRecord
 //TODO - DELETE IF NOT USED FOR ANYTHING
 object CompartmentRecord extends CompartmentRecord with RestMetaRecord[CompartmentRecord] {
   def apply() = new CompartmentRecord
-  override def fieldOrder = List(metaIdO, idO, nameO, notesO)
+  override def fieldOrder = List(metaIdO, idO, nameO, notesO, spatialDimensions0)
   override def fields = fieldOrder
 }
 
 }
 
-package net.liftweb.record {
-
-import net.liftweb.common._
-import net.liftweb.http.{S, SHtml}
-import net.liftweb.record.field._
-import alexmsmartins.log.LoggerWrapper
-import alexmsmartins.log.LoggerWrapper._
-import pt.cnbc.wikimodels.client.record.{SBaseRecord, SBMLModelRecord}
-
-//Javascript handling imports
-import _root_.net.liftweb.http.js.{JE,JsCmd,JsCmds}
-import JsCmds._ // For implicifts
-import JE.{JsRaw,Str}
-
-
-class MetaId[T <: SBaseRecord[T]](own:T, maxLength: Int) extends StringField[T](own, maxLength) 
-with DisplayFormWithLabelInOneLine[String, T] with DisplayHTMLWithLabelInOneLine[String, T]{
-  var _data:Box[MyType] = Empty
-
-  override def theData_=(in:Box[MyType]) {
-    trace("Calling MetaId.theData_=" + in)
-    _data = in
-    _data match{
-      //if a valid value is set then update the owner class
-      case Full(x) => owner.metaid = x.asInstanceOf[String]
-      case _ => owner.metaid = null //just to make sure the owner does not have valid values when errors occur
-    }
-  }
-
-  override def theData:Box[MyType] = {
-    trace("Calling MetaId.theData")
-    //if the owner has valid data that was obtained from the wikimodels Server
-    if(owner.metaid != null) {
-      debug("theData with metaid = "+ owner.metaid + " is being copied to the record Field.")
-      _data = Full(owner.metaid)
-    } else {
-      _data match {
-        case Empty => {
-          _data = defaultValueBox
-          if (! this.optional_?) owner.metaid = defaultValue
-        }
-        case Full(x) => owner.metaid = x
-      }
-    }
-    trace("MetaId.theData returns " + _data)
-    _data
-  }
-
-  //the MetaId will be generated from concatenating the ids of any parent entities with '_' in between.
-  override def toForm() = Empty
-  //Appears when rendering the form or the visualization
-  override def name: String = "Metaid"
-
-
-  //override def toXHtml: NodeSeq = Text(this.value + "xxxxxxx")
-}
-
-class Id[T <: SBaseRecord[T]{var id:String}](own:T, maxLength: Int) extends StringField[T](own, maxLength)
-with DisplayFormWithLabelInOneLine[String, T] with DisplayHTMLWithLabelInOneLine[String, T]{
-  var _data:Box[MyType] = Empty
-
-  override def theData_=(in:Box[MyType]) {
-    trace("Calling Id.theData_=" + in)
-    _data = in
-    _data match{
-      //if a valid value is set then update the owner class
-      case Full(x) => owner.id = x.asInstanceOf[String]
-      case _ => owner.id = null //just to make sure the owner does not have valid values when errors occur
-    }
-  }
-
-  override def theData:Box[MyType] = {
-    trace("Calling Id.theData")
-    //if the owner has valid data that was obtained from the wikimodels Server
-    if(owner.id != null) {
-      debug("theData with aid = "+ owner.id + " is being copied to the record Field.")
-      _data = Full(owner.id)
-    } else {
-      _data match {
-        case Empty => {
-          _data = defaultValueBox
-          if (! this.optional_?) owner.id = defaultValue
-        }
-        case Full(x) => owner.id = x
-      }
-    }
-    trace("Id.theData returns " + _data)
-    _data
-  }
-
-
-  //Appears when rendering the form or the visualization
-  override def name: String = "Id"
-  //override def toXHtml: NodeSeq = Text(this.value)
-}
-
-/**
- *
- */
-class Name[T <: SBaseRecord[T]{var name:String}](own:T, maxLength: Int) extends StringField[T](own, maxLength)
-with DisplayFormWithLabelInOneLine[String, T] with DisplayHTMLWithLabelInOneLine[String, T]{
-  var _data:Box[MyType] = Empty
-
-  override def theData_=(in:Box[MyType]) {
-    trace("Calling Name.theData_=" + in)
-    _data = in
-    _data match{
-      //if a valid value is set then update the owner class
-      case Full(x) => owner.name = x
-      case _ => owner.name = null //just to make sure the owner does not have valid values when errors occur
-    }
-  }
-
-  override def theData:Box[MyType] = {
-    trace("Calling Name.theData")
-    //if the owner has valid data that was obtained from the wikimodels Server
-    if(owner.name != null) {
-      debug("theData with name = "+ owner.name + " is being copied to the record Field.")
-      _data = Full(owner.name)
-    } else {
-      _data match {
-        case Empty => {
-          _data = defaultValueBox
-          if (! this.optional_?) owner.name = defaultValue
-        }
-        case Full(x) => owner.name = x
-      }
-    }
-    trace("Name.theData returns " + _data)
-    _data
-  }
-
-
-
-  //Appears when rendering the form or the visualization
-  override def name = "Name"
-
-  val msgName: String = S.attr("id_msgs") openOr "messages"
-  //override def toXHtml: NodeSeq = Text(this.value)
-}
-
-class Notes[T <: SBaseRecord[T]](own:T, size:Int) extends OptionalTextareaField[T](own, size){
-  override def setBox(in: Box[MyType]): Box[MyType] = {
-    trace("Calling Notes.setBox")
-    super.setBox(in) match {
-      case full:Full[MyType] =>{
-        owner.notes=full.openTheBox
-        full
-      }
-      case notFull  => notFull
-    }
-  }
-
-  override def toForm() = Full(
-    <div>
-    <head>
-    <link type="text/css" rel="stylesheet" href="/classpath/tree/jquery.treeview.css" />
-    <script type="text/javascript" src="/classpath/tree/jquery.treeview.js"></script>
-    {Script(
-      JsRaw("""
-        jQuery(document).ready(function() {jQuery('#'+"model_tree").treeview({"animated": 150});});
-      """))
-    }
-    </head>
-    <ul class="treeview-gray" id="model_tree">
-      <head>
-        <script type="text/javascript" src="/classpath/js/ckeditor/ckeditor.js"></script>
-      </head>
-
-      <li><span><h3>Description of the model:</h3></span>
-        <br />
-        <ul>
-            <li><span>
-              {
-                SHtml.textarea(
-                  valueBox.openOr(""),
-                  vv => setBox(
-                    vv.trim match {
-                      case "" => Empty
-                      case x => Full(x)
-                    }
-                  ),
-                  "id" -> "random", "class" -> "ckeditor", "maxlength" -> "20000")
-              }
-
-            </span><br /></li>
-        </ul>
-      </li>
-      </ul>
-      </div>
-    )
-  //Appears when rendering the form or the visualization
-  override def name: String = "Description"
-  override def toXHtml: NodeSeq = {
-    trace("Calling Notes.toXHtml")
-    XML.loadString("<span>" + this.value.getOrElse("No description found!") + "</span>")
-  }
-}
-}
 
 
 package net.liftweb.record{
 
-
-//#### Aux Record traits
-
-/**
- * Mix in to a field to change its form display to    for (id <- uniqueFieldId; control <- super.toXHtml) yield
- be formatted with the label aside.
- *
- * E.g.
- *   <div id={ id + "_holder" }>
- *     <div><label for={ id }>{ displayName }</label></div>
- *     { control }
- *   </div>
- */
-  trait DisplayFormWithLabelInOneLine[ThisType, OwnerType <: Record[OwnerType]] extends GetSetOnwerField[ThisType, OwnerType] {
-    override abstract def toForm:Box[NodeSeq] = {
-      trace("Calling DisplayFormWithLabelInOneLine.toForm")
-      for (id <- uniqueFieldId; control <- super.toForm)
-      yield
-        <span id={id + "_holder"}>
-          <label for={ id }> <span class="sbml_field_label">{ displayHtml }</span></label>
-          {control}
-          <lift:msg id={id}  errorClass="lift_error"/>
-        </span>
-    }
-  }
-
-  trait DisplayHTMLWithLabelInOneLine[ThisType, OwnerType <: Record[OwnerType]] extends GetSetOnwerField[ThisType, OwnerType] {
-    override def toXHtml: NodeSeq = {
-      trace("Calling DisplayHTMLWithLabelInOneLine.toXHtml")
-    //TODO: BIG ERRORS HERE... JUST CHECK http://localhost:9999/model/f
-        <div id={uniqueFieldId + "_holder"}>
-          <span for={ uniqueFieldId.openTheBox }>
-            <span class="sbml_field_label">{displayHtml}</span>
-            <span class="sbml_field_content">  {this.valueBox.openTheBox}</span>
-          </span>
-          <lift:msg id={uniqueFieldId.openTheBox}  errorClass="lift_error"/>
-        </div>
-    }
-
-  }
-
-  /**
-   * Convert the field to a String... usually of the form "displayName=value"
-   */
-  trait GetSetOnwerField[ThisType, OwnerType <: Record[OwnerType]] extends OwnedField[OwnerType] with TypedField[ThisType]
-  with LoggerWrapper{
-
-    private[record] def theData_=(in:Box[MyType]):Unit
-    private[record] def theData:Box[MyType]
-
-    /**
-     * defines if a defalt value should be attributed to this field
-     */
-    needsDefault = false
-
-    override def setBox(in: Box[MyType]): Box[MyType] = synchronized {
-      trace("Calling GetSetOnwerField.setBox(" + in + ")")
-      needsDefault = false
-      theData = in match {
-        case _ if !canWrite_?      => Failure(noValueErrorMessage)
-        case Full(_)               => set_!(in)
-        case _ if optional_?       => set_!(in)
-        case (f: Failure)          => set_!(f) // preserve failures set in
-        case _                     => Failure(notOptionalErrorMessage)
-      }
-      dirty_?(true)
-      theData
-    }
-
-    override def valueBox: Box[MyType] = synchronized {
-      trace("Calling GetSetOnwerField.valueBox")
-      if (needsDefault) { //FIXME - THIS CODE CAME FROM THE TypeField trait. Delete it
-        needsDefault = false
-        theData = defaultValueBox
-      }
-      trace("Data returned is {}",
-        if (canRead_?) theData
-        else theData.flatMap(debug("Data obscured by {}", obscure) )
-      )
-    }
-
-    override def asString = displayName + "=" + theData.openTheBox
-  }
 }
