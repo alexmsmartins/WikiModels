@@ -3,6 +3,10 @@
 import sbt._
 
 class LiftProject(info: ProjectInfo) extends DefaultWebProject(info) {
+    val mavenLocal = "Local Maven Repository" at "file://"+Path.userHome+"/.m2/repository/"
+    val bryanjswift = "Bryan J Swift Repository" at "http://repos.bryanjswift.com/maven2/"
+    //val junitInterface = "com.novocode" % "junit-interface" % "0.4.0" % "test"
+
   val liftVersion = "2.4-M5"
   val lift = "net.liftweb" %% "lift-mapper" % liftVersion % "compile"
   val liftRecord = "net.liftweb" %% "lift-record" % liftVersion % "compile"
@@ -18,9 +22,6 @@ class LiftProject(info: ProjectInfo) extends DefaultWebProject(info) {
    //val servlet = "javax.servlet" % "servlet-api" % "2.5" % "provided"
    //val junit = "junit" % "junit" % "3.8.1" % "test"    
 
-    val mavenLocal = "Local Maven Repository" at "file://"+Path.userHome+"/.m2/repository/"
-    val bryanjswift = "Bryan J Swift Repository" at "http://repos.bryanjswift.com/maven2/"
-    //val junitInterface = "com.novocode" % "junit-interface" % "0.4.0" % "test"
 
     //chenges port where jetty listens to
     override val jettyPort = 9999

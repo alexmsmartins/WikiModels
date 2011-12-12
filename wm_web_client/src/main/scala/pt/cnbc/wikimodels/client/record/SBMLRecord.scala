@@ -1,5 +1,4 @@
 import net.liftweb.record.Record
-import alexmsmartins.log.LoggerWrapper
 import net.liftweb.common._
 import scala.xml.XML
 import scala.xml.XML._
@@ -10,18 +9,24 @@ import net.liftweb.record._
 import field.{OptionalTextareaField, StringField}
 import pt.cnbc.wikimodels.client.record._
 import pt.cnbc.wikimodels.dataModel._
-import thewebsemantic.vocabulary.Foaf.Person
-import net.liftweb.http.js.jquery.JqJsCmds.DisplayMessage._
 import net.liftweb.util.BindHelpers._
 import net.liftweb.http.{S, SHtml}
-import net.liftweb.http.js.jquery.JqJsCmds.DisplayMessage
 import net.liftweb.json.JsonAST.JValue
 import org.sbml.libsbml.SBMLReader
 import pt.cnbc.wikimodels.dataVisitors.SBML2BeanConverter
 import visitor.SBMLRecordVisitor
 import scala.collection.JavaConversions._
+import alexmsmartins.log.LoggerWrapper
+
+//Javascript handling imports
+import _root_.net.liftweb.http.js.{JE,JsCmd,JsCmds}
+import JsCmds._ // For implicifts
+import JE.{JsRaw,Str}
+
 
 package pt.cnbc.wikimodels.client.record{
+
+
 
 /*
  * Copyright (c) 2011. Alexandre Martins. All rights reserved.
@@ -132,9 +137,155 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord]  {
         <link type="text/css" rel="stylesheet" href="/css/sbml_present.css"></link>
       </header>
       {super.toXHtml}
-      <!--{super.listOfCompartments.map(
-        i => scala.xml.Text("")
-      )}-->
+      <div class="demo cupertino">
+        <div id="accordion1" class="accordion ui-accordion ui-widget ui-helper-reset ui-accordion-icons">
+          <h3 id="accord_c" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
+            <a href="#accord_c" >
+              Compartments
+              <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Add Compartment</button>
+            </a>
+          </h3>
+          <div class="toggle_container">
+            <div id="accordion2" class="block">
+              <h3 id="accord_c_c1" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
+                <a href="#accord_c_c1">
+                  Compartment 1
+                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Edit</button>   <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Delete</button>
+                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Add Species</button>
+                </a>
+              </h3>
+              <div class="toggle_container">
+                <div class="block">
+                  <p>
+                    Mauris mauris ante, blandit et, ultrices a, suscipit eget, quam. Integer
+                    ut neque. Vivamus nisi metus, molestie vel, gravida in, condimentum sit
+                    amet, nunc. Nam a nibh. Donec suscipit eros. Nam mi. Proin viverra leo ut
+                    odio. Curabitur malesuada. Vestibulum a velit eu ante scelerisque vulputate.
+                  </p>
+                </div>
+              </div>
+              <h3 id="accord_c_c2" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
+                <a href="#accord_c_c2">
+                  Compartment 2
+                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Edit</button>   <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Delete</button>   <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Add Species</button>
+                </a>
+              </h3>
+              <div class="toggle_container">
+                <div class="block">
+                  <p>
+                    Sed non urna. Donec et ante. Phasellus eu ligula. Vestibulum sit amet
+                    purus. Vivamus hendrerit, dolor at aliquet laoreet, mauris turpis porttitor
+                    velit, faucibus interdum tellus libero ac justo. Vivamus non quam. In
+                    suscipit faucibus urna.
+                  </p>
+                </div>
+              </div>
+              <h3 id="accord_c_c3" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
+                <a href="#accord_c_c3">Compartment 3
+                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Edit</button>   <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Delete</button>
+                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Add Species</button>
+                </a>
+              </h3>
+              <div class="toggle_container">
+                <div  class="block">
+                  <p>
+                    Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis.
+                    Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero
+                    ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis
+                    lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui.
+                  </p>
+                  <ul>
+                    <li>List item one</li>
+                    <li>List item two</li>
+                    <li>List item three</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <h3 id="accord_s" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
+            <a href="#accord_s">
+              Species
+              <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Add Species</button>
+            </a>
+          </h3>
+          <div  class="toggle_container">
+            <div id="accordion3" class="block">
+              <h3 id="accord_s_s1" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
+                <a href="#accord_s_s1">
+                  Species 1
+                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Edit</button>
+                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Delete</button>
+                </a>
+              </h3>
+              <div class="toggle_container">
+                <div class="block">
+                  <p>
+                    Mauris mauris ante, blandit et, ultrices a, suscipit eget, quam. Integer
+                    ut neque. Vivamus nisi metus, molestie vel, gravida in, condimentum sit
+                    amet, nunc. Nam a nibh. Donec suscipit eros. Nam mi. Proin viverra leo ut
+                    odio. Curabitur malesuada. Vestibulum a velit eu ante scelerisque vulputate.
+                  </p>
+                </div>
+              </div>
+              <h3 id="accord_s_s2" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
+                <a href="#accord_s_s2">
+                  Species 2
+                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Edit</button>
+                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Delete</button>
+                </a>
+              </h3>
+              <div class="toggle_container">
+                <div class="block">
+                  <p>
+                    Sed non urna. Donec et ante. Phasellus eu ligula. Vestibulum sit amet
+                    purus. Vivamus hendrerit, dolor at aliquet laoreet, mauris turpis porttitor
+                    velit, faucibus interdum tellus libero ac justo. Vivamus non quam. In
+                    suscipit faucibus urna.
+                  </p>
+                </div>
+              </div>
+              <h3 id="accord_s_s3" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
+                <a href="#accord_s_s3">
+                  Species 3
+                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Edit</button>
+                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Delete</button>
+                </a>
+              </h3>
+              <div class="toggle_container">
+                <div class="block">
+                  <p>
+                    Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis.
+                    Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero
+                    ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis
+                    lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui.
+                  </p>
+                  <ul>
+                    <li>List item one</li>
+                    <li>List item two</li>
+                    <li>List item three</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        {Script(
+        JsRaw("""
+          jQuery(document).ready(function(){
+          //Hide (Collapse) the toggle containers on load
+          $(".toggle_container").hide();
+
+          //Switch the "Open" and "Close" state per click then slide up/down (depending on open/close state)
+          $("h3.trigger").click(function(){
+            $(this).toggleClass("active").next().slideToggle("slow");
+            return false; //Prevent the browser jump to the link anchor
+          });
+          });
+        """))}
+      </div><!-- End demo -->
     </div>
   }
 
@@ -163,7 +314,6 @@ object SBMLModelRecord extends SBMLModelRecord with RestMetaRecord[SBMLModelReco
  * To change this template use File | Settings | File Templates.
  */
 class CompartmentRecord() extends Compartment with SBaseRecord[CompartmentRecord]  {
-  type MyType = CompartmentRecord
 
   override def meta = CompartmentRecord
 
