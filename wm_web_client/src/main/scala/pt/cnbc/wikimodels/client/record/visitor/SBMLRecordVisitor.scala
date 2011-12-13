@@ -4,7 +4,6 @@ import scala.collection.JavaConversions._
 
 import pt.cnbc.wikimodels.client.record._
 import pt.cnbc.wikimodels.dataModel._
-
 /*
  * Copyright (c) 2011. Alexandre Martins. All rights reserved.
  */
@@ -27,7 +26,7 @@ object SBMLRecordVisitor {
     mr.name = m.name
     mr.notes = m.notes
     if(mr.listOfCompartments != null)
-      mr.listOfCompartments = m.listOfCompartments.map(createSBMLCompartmentRecordFrom(_))
+      mr.listOfCompartmentsRec = Set.empty ++ m.listOfCompartments.map(createSBMLCompartmentRecordFrom(_))
       //TODO - write code for the remaining lists
     mr
   }

@@ -83,8 +83,11 @@ class Boot {
         Menu(Loc("administrator", List("administrator","index"), "Administrator", Hidden, loggedIn)) ::
         //entries for new brows/edit model in the same page
         Menu(Loc("listMModels", List("modele","indexe"), "List Models", Hidden, loggedIn)) ::
-        Menu(Loc("editModel", List("modele","edit"), "Edit Model", Hidden, loggedIn)) ::
-        User.sitemap
+        Menu(Loc("editModel", List("modele","model_edit"), "Edit Model", Hidden, loggedIn)) ::
+        Menu(Loc("viewModel", List("modele","model_view"), "View Model", Hidden, loggedIn)) ::
+        Menu(Loc("editCompartment", List("modele","compartment_edit"), "Edit Comaprtment", Hidden, loggedIn)) ::
+        Menu(Loc("viewCompartment", List("modele","compartment_view"), "View Compartment", Hidden, loggedIn)) ::
+          User.sitemap
 
         // Build SiteMap
         LiftRules.setSiteMap(SiteMap(entries:_*))
@@ -95,11 +98,29 @@ class Boot {
         // URL rewritess the pages, it is used for the bookmarks
         LiftRules.statelessRewrite.append {
           //NOTE: these redirects make the model metaId available to SBMLForm snippets.
+          case RewriteRequest(ParsePath("createmodel"::Nil,"",_,false),_,_) => {
+            RewriteResponse(ParsePath( "modele"::"model_create"::Nil, "html", true, false),
+              Map(), true )
+          }
           case RewriteRequest(ParsePath("model"::model::Nil,"",_,false),_,_) => {
-            RewriteResponse(ParsePath( "modele"::"indexe"::Nil,"html",true, false), Map("modelMetaId" -> model), true)
+            RewriteResponse(ParsePath( "modele"::"model_view"::Nil,"html",true, false),
+              Map("modelMetaId" -> model), true)
           }
           case RewriteRequest(ParsePath("model"::model::"edit"::Nil,"",_,false),_,_) => {
-            RewriteResponse(ParsePath( "modele"::"edit"::Nil, "html", true, false), Map("modelMetaId" -> model), true )
+            RewriteResponse(ParsePath( "modele"::"model_edit"::Nil, "html", true, false),
+              Map("modelMetaId" -> model), true )
+          }
+          case RewriteRequest(ParsePath("model"::model::"createcompartment"::compartment::Nil,"",_,false),_,_) => {
+            RewriteResponse(ParsePath( "modele"::"compartment_create"::Nil, "html", true, false),
+              Map("modelMetaId" -> model), true )
+          }
+          case RewriteRequest(ParsePath("model"::model::"compartment"::compartment::Nil,"",_,false),_,_) => {
+            RewriteResponse(ParsePath( "modele"::"compartment_view"::Nil, "html", true, false),
+              Map("modelMetaId" -> model, "compartmentMetaId" -> compartment), true )
+          }
+          case RewriteRequest(ParsePath("model"::model::"compartment"::compartment::"edit"::Nil,"",_,false),_,_) => {
+            RewriteResponse(ParsePath( "modele"::"compartment_edit"::Nil, "html", true, false),
+              Map("modelMetaId" -> model, "compartmentMetaId" -> compartment), true )
           }
 
           /* code written by Gonçalo

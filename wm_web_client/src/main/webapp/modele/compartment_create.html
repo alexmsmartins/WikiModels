@@ -1,0 +1,32 @@
+<!--
+  ~ Copyright (c) 2011. Alexandre Martins. All rights reserved.
+  -->
+
+<lift:surround with="default" at="content">
+  <lift:HomePage.logInfo>
+    <div id="login">
+      <h1>
+        <lift:HomePage.profile/>
+      </h1>
+      <h1>
+        <lift:Menu.item name="Logout"/>
+      </h1>
+    </div>
+  </lift:HomePage.logInfo>
+    <div id="error_msg">
+        <lift:snippet type="msgs">
+            <lift:error_msg></lift:error_msg>
+            <lift:error_class>errorBox</lift:error_class>
+        </lift:snippet>
+    </div>
+    <div id='content'>
+        <lift:msgs />
+
+    <div class="lift:SBMLModelSnip:compartmentMetaId">
+      <h1>Model with metaId <span id="mMetaId"></span> . <input type="button" onclick="window.location.href=window.location.href+'/..'" name="view" value="View">View</input> </h1>
+    </div>
+      <div class="lift:SBMLForm.editCompartment?form=post">
+      </div>
+        <p></p>
+  </div> <!-- end of content -->
+</lift:surround>

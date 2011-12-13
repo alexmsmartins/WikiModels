@@ -26,11 +26,14 @@ import JE.{JsRaw,Str}
 
 package pt.cnbc.wikimodels.client.record{
 
+import thewebsemantic.RdfProperty
+import collection.mutable.MutableList
+import scala.collection.JavaConversions._
 
 
 /*
- * Copyright (c) 2011. Alexandre Martins. All rights reserved.
- */
+* Copyright (c) 2011. Alexandre Martins. All rights reserved.
+*/
 
 
 
@@ -114,6 +117,24 @@ trait SBaseRecord[MyType <: SBaseRecord[MyType]] extends Element with RestRecord
 class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord]  {
   type MyType = SBMLModelRecord
 
+
+  //listOf definitions for record
+  //TODO - find a better solution to this. Parents' listOfXXX definitions is a big problem
+  var listOfFunctionDefinitionsRec:MutableList[FunctionDefinition] = new MutableList[FunctionDefinition]
+  //var listOfUnitDefinitions:List[ÛnitDefinition] = List()
+  //var listOfCompartmentTypes:List[CompartmentType] = List()
+  //var listOfSpeciesTypes:List[SpeciesType] = List()
+  var listOfCompartmentsRec: Set[CompartmentRecord] = Set.empty[CompartmentRecord]
+  var listOfSpeciesRec: Set[Species] = Set.empty[Species]
+  var listOfParametersRec: Set[Parameter] = Set.empty[Parameter]
+  //var listOfInitialAssignments:List[InitialAssignment] = List()
+  //TODO listOfRules is missing
+  //var listOfRules: java.util.Collection[Rules] = null
+  var listOfConstraintsRec: Set[Constraint] = Set.empty[Constraint]
+  var listOfReactionsRec: Set[Reaction] = Set.empty[Reaction]
+  //var listOfEvents:List[Event] = List()
+
+
   override def meta = SBMLModelRecord
 
   override protected def relativeURLasList = "model" :: metaid :: Nil
@@ -130,7 +151,7 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord]  {
    * @return the form
    */
   //override def toForm(f: MyType => Unit): NodeSeq = meta.toForm(this) ++ (SHtml.hidden(() => f(this)))
-    
+
     override def toXHtml = {
     <div>
       <header>
@@ -146,63 +167,23 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord]  {
             </a>
           </h3>
           <div class="toggle_container">
-            <div id="accordion2" class="block">
+            <div id="accordion2" class="block">{
+              this.listOfCompartmentsRec.map(i => {
               <h3 id="accord_c_c1" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
                 <a href="#accord_c_c1">
-                  Compartment 1
+                  {i.id}
                   <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Edit</button>   <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Delete</button>
                   <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Add Species</button>
                 </a>
               </h3>
               <div class="toggle_container">
-                <div class="block">
-                  <p>
-                    Mauris mauris ante, blandit et, ultrices a, suscipit eget, quam. Integer
-                    ut neque. Vivamus nisi metus, molestie vel, gravida in, condimentum sit
-                    amet, nunc. Nam a nibh. Donec suscipit eros. Nam mi. Proin viverra leo ut
-                    odio. Curabitur malesuada. Vestibulum a velit eu ante scelerisque vulputate.
-                  </p>
+                <div class="block">{
+                    i.toXHtml
+                  }
                 </div>
-              </div>
-              <h3 id="accord_c_c2" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
-                <a href="#accord_c_c2">
-                  Compartment 2
-                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Edit</button>   <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Delete</button>   <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Add Species</button>
-                </a>
-              </h3>
-              <div class="toggle_container">
-                <div class="block">
-                  <p>
-                    Sed non urna. Donec et ante. Phasellus eu ligula. Vestibulum sit amet
-                    purus. Vivamus hendrerit, dolor at aliquet laoreet, mauris turpis porttitor
-                    velit, faucibus interdum tellus libero ac justo. Vivamus non quam. In
-                    suscipit faucibus urna.
-                  </p>
-                </div>
-              </div>
-              <h3 id="accord_c_c3" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
-                <a href="#accord_c_c3">Compartment 3
-                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Edit</button>   <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Delete</button>
-                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Add Species</button>
-                </a>
-              </h3>
-              <div class="toggle_container">
-                <div  class="block">
-                  <p>
-                    Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis.
-                    Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero
-                    ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis
-                    lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui.
-                  </p>
-                  <ul>
-                    <li>List item one</li>
-                    <li>List item two</li>
-                    <li>List item three</li>
-                  </ul>
-                </div>
-              </div>
+              </div>})
+              }
             </div>
-
           </div>
           <h3 id="accord_s" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
             <a href="#accord_s">
