@@ -29,6 +29,7 @@ package pt.cnbc.wikimodels.client.record{
 import thewebsemantic.RdfProperty
 import collection.mutable.MutableList
 import scala.collection.JavaConversions._
+import pt.cnbc.wikimodels.client.snippet.CommentSnip
 
 
 /*
@@ -37,7 +38,7 @@ import scala.collection.JavaConversions._
 
 
 
-trait SBaseRecord[MyType <: SBaseRecord[MyType]] extends Element with RestRecord[MyType] {
+trait SBaseRecord[MyType <: SBaseRecord[MyType]] extends Element with RestRecord[MyType] with CommentSnip {
   self : MyType =>
   import pt.cnbc.wikimodels.snippet.User
   /**
@@ -104,6 +105,10 @@ trait SBaseRecord[MyType <: SBaseRecord[MyType]] extends Element with RestRecord
       case 404 => ParamFailure("Error de[record]leting " + this.metaid + ". This element does not exist.", this)
       case status => handleStatusCodes(status, "deleting "+ sbmlType + " with " + this.metaid)
     }
+  }
+
+  def comments:NodeSeq = {
+    disqusFromMetaId(this.metaid)
   }
 }
 
@@ -267,6 +272,7 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord]  {
           });
         """))}
       </div><!-- End demo -->
+      {this.comments}
     </div>
   }
 
