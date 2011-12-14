@@ -18,6 +18,31 @@ import pt.cnbc.wikimodels.dataModel._
 
 object SBMLRecordVisitor {
 
+  def createModelFrom(mr:SBMLModelRecord) = {
+    val m = new SBMLModel()
+    m.metaid = mr.metaid
+    m.id = mr.id
+    m.name = mr.name
+    m.notes = mr.notes
+    m.listOfCompartments = Set.empty ++ mr.listOfCompartmentsRec.map(createSBMLCompartmentRecordFrom(_))
+    //TODO - write code for the remaining lists
+    mr
+  }
+
+  def createCompartmentFrom(cr: CompartmentRecord):Compartment = {
+    val c = new Compartment()
+    c.metaid = cr.metaid
+    c.id = cr.id
+    c.name = cr.name
+    c.notes = cr.notes
+    c.compartmentType = cr.compartmentType
+    c.spatialDimensions = cr.spatialDimensions
+    c.size = cr.size
+    c.units = cr.units
+    c.outside = cr.outside
+    c.constant = cr.constant
+    c
+  }
 
   def createSBMLModelRecordFrom(m:SBMLModel):SBMLModelRecord = {
     val mr = new SBMLModelRecord()
@@ -45,5 +70,4 @@ object SBMLRecordVisitor {
     cr.constant = c.constant
     cr
   }
-
 }

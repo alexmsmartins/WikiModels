@@ -64,7 +64,8 @@ h3.trigger {
     background: url(h3_trigger_a.gif) no-repeat;
     height: 46px;
     line-height: 46px;
-    width: 800px;
+    width : 100%;
+    /*width: 800px;*/
     font-weight: normal;
     float: left;
 }
@@ -87,4 +88,10 @@ h3.active {background-position: left bottom;} /*--When toggle is triggered, it w
 .toggle_container .block {
     padding: 20px; /*--Padding of Container--*/
     background: url(toggle_block_btm.gif) no-repeat left bottom; /*--Bottom rounded corners--*/
+}
+
+.changeline {
+    width: 100%;
+    display: block;
+    margin: 1% 1% 1% 0;
 }

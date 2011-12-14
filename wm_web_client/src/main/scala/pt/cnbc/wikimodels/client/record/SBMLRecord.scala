@@ -159,16 +159,19 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord]  {
 
     override def toXHtml = {
     <div>
-      <header>
+      <head>
         <link type="text/css" rel="stylesheet" href="/css/sbml_present.css"></link>
-      </header>
+      </head>
       {super.toXHtml}
-      <div class="demo cupertino">
+      <div class="demo cupertino changeline">
         <div id="accordion1" class="accordion ui-accordion ui-widget ui-helper-reset ui-accordion-icons">
-          <h3 id="accord_c" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
+          <h3 id="accord_c" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top changeline">
             <a href="#accord_c" >
               Compartments
-              <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Add Compartment</button>
+              {SHtml.button(Text("Add Compartment"),
+                 () => S.redirectTo(this.relativeURL + "createcompartment" ),
+              "class" ->"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+                )}
             </a>
           </h3>
           <div class="toggle_container">
@@ -190,7 +193,7 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord]  {
               }
             </div>
           </div>
-          <h3 id="accord_s" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
+          <h3 id="accord_s" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top changeline">
             <a href="#accord_s">
               Species
               <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Add Species</button>
@@ -216,7 +219,7 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord]  {
                 </div>
               </div>
               <h3 id="accord_s_s2" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
-                <a href="#accord_s_s2">
+                <a href="#acctoggle_containerord_s_s2">
                   Species 2
                   <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Edit</button>
                   <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Delete</button>
@@ -272,7 +275,7 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord]  {
           });
         """))}
       </div><!-- End demo -->
-      {this.comments}
+      <div class="changeline">{this.comments}</div>
     </div>
   }
 
@@ -312,9 +315,9 @@ class CompartmentRecord() extends Compartment with SBaseRecord[CompartmentRecord
 
   override def toXHtml = {
     <div>
-      <header>
+      <head>
         <link type="text/css" rel="stylesheet" href="/css/sbml_present.css"></link>
-      </header>Nil
+      </head>
       {super.toXHtml}
     </div>
   }
