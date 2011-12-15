@@ -246,7 +246,7 @@ with GetSetOwnerField[ValidSpatialDimensions , T] with LoggerWrapper{
   override def theData:Box[MyType] = {
     trace("Calling SpatialDimensions.theData")
     //if the owner has valid data that was obtained from the wikimodels Server
-    debug("theData with aid = "+ owner.spatialDimensions + " is being copied to the record Field.")
+    debug("theData with spatialDimensions = "+ owner.spatialDimensions + " is being copied to the record Field.")
       _data match {
         case Empty => {
 
@@ -259,15 +259,65 @@ with GetSetOwnerField[ValidSpatialDimensions , T] with LoggerWrapper{
           owner.spatialDimensions = x.id
         }
       }
-    trace("Id.theData returns " + _data)
+    trace("SpatialDimensions.theData returns " + _data)
     _data
   }
 
 
   //Appears when rendering the form or the visualization
-  override def name: String = "Id"
+  override def displayName: String = "SpatialDimensions"
   //override def toXHtml: NodeSeq = Text(this.value)
 }
+
+
+class Constant[T <: SBaseRecord[T]{var constant:Boolean}](own:T) extends BooleanField(own)
+with GetSetOwnerField[Boolean , T] with LoggerWrapper{
+  var _data:Box[MyType] = Empty
+
+  override def theData_=(in:Box[MyType]) {
+    trace("Calling Constant.theData_=" + in)
+    _data = in
+    in match{
+      //if a valid value is set then update the owner class
+      case Full(y) =>{
+        owner.constant = y
+      }
+      case Empty => {
+        owner.constant = Compartment.defaultConstant
+      }
+      case _ =>{
+        owner.constant = true //lets give it a default even in case of error
+        S.error("Strange error when reading the field constant in ")
+      }  
+    }
+  }
+
+  override def theData:Box[MyType] = {
+    trace("Calling Constant.theData")
+    //if the owner has valid data that was obtained from the wikimodels Server
+    debug("theData with constant = "+ owner.constant + " is being copied to the record Field.")
+    _data match {
+      case Empty => {
+        if (! this.optional_?){
+          _data = Full(defaultConstant)
+          owner.constant = Compartment.defaultConstant
+        }
+      }
+      case Full(x) => {
+        owner.constant = x
+      }
+    }
+    trace("Constant.theData returns " + _data)
+    _data
+  }
+
+  //Appears when rendering the form or the visualization
+  override def name: String = "Constant"
+  //override def toXHtml: NodeSeq = Text(this.value)
+}
+
+
+
 
 
 //#### Aux Record traits

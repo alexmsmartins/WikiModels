@@ -26,9 +26,10 @@ import net.liftweb.common._
 import pt.cnbc.wikimodels.rest.client.BasicAuth
 import pt.cnbc.wikimodels.rest.client.RestfulAccess
 import alexmsmartins.log.LoggerWrapper
+import pt.cnbc.wikimodels.controller.SMsg
 
 
-class LogUser extends LoggerWrapper {
+class LogUser extends SMsg with LoggerWrapper {
     def form (xhtml : NodeSeq) : NodeSeq = {
 
         var username = ""

@@ -26,7 +26,7 @@ object SBMLRecordVisitor {
     m.id = mr.id
     m.name = mr.name
     m.notes = mr.notes
-    m.listOfCompartments = Set.empty ++ mr.listOfCompartmentsRec.map(createSBMLCompartmentRecordFrom(_))
+    m.listOfCompartments = Set.empty ++ mr.listOfCompartmentsRec.map(createCompartmentRecordFrom(_))
     //TODO - write code for the remaining lists
     mr
   }
@@ -46,23 +46,24 @@ object SBMLRecordVisitor {
     c
   }
 
-  def createSBMLModelRecordFrom(m:SBMLModel):SBMLModelRecord = {
+  def createModelRecordFrom(m:SBMLModel):SBMLModelRecord = {
     val mr = new SBMLModelRecord()
     mr.metaid = m.metaid
     mr.id = m.id
     mr.name = m.name
     mr.notes = m.notes
     if(mr.listOfCompartments != null)
-      mr.listOfCompartmentsRec = Set.empty ++ m.listOfCompartments.map(createSBMLCompartmentRecordFrom(_))
-    .map(i => {
-        i.parent = Full(mr) //to build complete URLs
-        i
-      })
+      mr.listOfCompartmentsRec = Set.empty ++ m.listOfCompartments.map(createCompartmentRecordFrom(_))
+        .map(i => {
+          i.parent = Full(mr) //to build complete URLs
+          i
+        }
+      )
       //TODO - write code for the remaining lists
     mr
   }
 
-  def createSBMLCompartmentRecordFrom(c: Compartment):CompartmentRecord = {
+  def createCompartmentRecordFrom(c: Compartment):CompartmentRecord = {
     val cr = new CompartmentRecord()
     cr.metaid = c.metaid
     cr.id = c.id

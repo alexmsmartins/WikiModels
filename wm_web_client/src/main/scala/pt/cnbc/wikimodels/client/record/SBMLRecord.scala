@@ -26,10 +26,13 @@ import JE.{JsRaw,Str}
 
 package pt.cnbc.wikimodels.client.record{
 
+  import scala.collection._
+
 import thewebsemantic.RdfProperty
 import collection.mutable.MutableList
 import scala.collection.JavaConversions._
 import pt.cnbc.wikimodels.client.snippet.CommentSnip
+import net.liftweb.common.Box
 
 
 /*
@@ -58,7 +61,7 @@ trait SBaseRecord[MyType <: SBaseRecord[MyType]] extends Element with RestRecord
    * CRUD operation for creating a REST [record]Record
    */
   override def createRestRec():Box[MyType] = {
-    connection.postRequest(relativeURL , this.toXML)
+    connection.postRequest("/model/"+S.param("modelMetaId").openTheBox+"/compartment" , this.toXML)
     connection.getStatusCode match {
       case 201 => saved_? = true;Full(this)//create went ok
       case 404 => ParamFailure("Error creating " + this.sbmlType + " with metaid " + this.metaid + ".", this)
@@ -76,7 +79,7 @@ trait SBaseRecord[MyType <: SBaseRecord[MyType]] extends Element with RestRecord
       case 200 =>{
         clean_? = false
         //FIXME this should be replaced by a call to a XML to SBMLElement converter
-        Full ((SBMLRecordVisitor.createSBMLModelRecordFrom(  SBML2BeanConverter.visitModel( content )  )).asInstanceOf[MyType] )//read went ok
+        Full ((SBMLRecordVisitor.createModelRecordFrom(  SBML2BeanConverter.visitModel( content )  )).asInstanceOf[MyType] )//read went ok
       }
       case 404 => ParamFailure("Error reading " + this.metaid + ". This element does not exist.", this)
       case status => handleStatusCodes(status, "reading " + sbmlType + " with " + this.metaid)
@@ -111,7 +114,7 @@ trait SBaseRecord[MyType <: SBaseRecord[MyType]] extends Element with RestRecord
     disqusFromMetaId(this.metaid)
   }
 
-  var parent:Box[SBaseRecord[_]] = Empty
+  var parent:Box[SBaseRecord[_]]
 }
 
 /**
@@ -178,7 +181,7 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
               "class" ->"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
                 )}</form>
             </a>
-          </h3>
+          </h3>                                                             = Empty
           <div class="toggle_container">
             <div id="accordion2" class="block">{
               this.listOfCompartmentsRec.map(i => {
@@ -267,7 +270,7 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
                     <li>List item two</li>
                     <li>List item three</li>
                   </ul>
-                </div>
+                </div>   Empty
               </div>
             </div>
 
@@ -297,6 +300,8 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
   object nameO extends Name(this, 100)
   object notesO extends Notes(this, 1000)
   //  ### can be created directly from a Request containing params with names that match the fields on a Record ( see fromReq ). ###
+  override def parent:Box[SBaseRecord[_]] = Empty
+  override def parent_=(p:Box[SBaseRecord[_]] ) { debug("Empty def parent SHOULD NOT be called!!!")}
 }
 
 
@@ -319,7 +324,7 @@ class CompartmentRecord() extends Compartment with SBaseRecord[CompartmentRecord
 
   override def meta = CompartmentRecord
 
-  override protected def relativeURLasList = "model" :: metaid :: "Compartment" :: metaid :: Nil
+  override protected def relativeURLasList = "model" :: S.param("modelMetaId").openTheBox :: "Compartment" :: metaid :: Nil
 
   //  ### can be validated with validate ###
 
@@ -331,6 +336,16 @@ class CompartmentRecord() extends Compartment with SBaseRecord[CompartmentRecord
         <link type="text/css" rel="stylesheet" href="/css/sbml_present.css"></link>
       </head>
       {super.toXHtml}
+      <!-- outside can't be a field and so I will make it a form -->
+      {
+        val defaultOption:(Box[CompartmentRecord], String) = (Empty, "[no compartment")
+        val op = parent.openTheBox.
+          listOfCompartmentsRec.
+          filter(_.metaid != this.metaid)
+        val op2 = op.map(i => (Full(i), i.id):(Box[CompartmentRecord], String) )
+        val options = op2.iterator.toList.toSeq
+        SHtml.selectObj(options, Empty, (choice:Box[CompartmentRecord]) => "TODO We shall see!!!!"  )
+      }
     </div>
   }
 
@@ -340,7 +355,16 @@ class CompartmentRecord() extends Compartment with SBaseRecord[CompartmentRecord
   object nameO extends Name(this, 100)
   object notesO extends Notes(this, 1000)
   object spatialDimensions0 extends SpatialDimensions(this)
+  object constantO extends Constant(this)
   //  ### can be created directly from a Request containing params with names that match the fields on a Record ( see fromReq ). ###
+
+  var _parent:Box[SBMLModelRecord] = Empty
+  //TODO isn't there a better way to override a var than THIS?!??! Fucking asInstanceOf
+  override def parent:Box[SBMLModelRecord] = _parent.asInstanceOf[Box[SBMLModelRecord]]
+  override def parent_=(p:Box[SBaseRecord[_]] ):Unit = {
+    _parent = p.asInstanceOf[Box[SBMLModelRecord]]
+  }
+
 }
 
 
