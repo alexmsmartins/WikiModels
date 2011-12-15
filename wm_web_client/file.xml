@@ -1,4 +1,4 @@
-<sbml xmlns="http://www.sbml.org/sbml/level2/version4' level='2' version='4' xmlns:xhtml='http://www.w3.org/1999/xhtml">
+    <sbml xmlns="http://www.sbml.org/sbml/level2/version4' level='2' version='4' xmlns:xhtml='http://www.w3.org/1999/xhtml">
                         <model name="ModelXPTO" id="0001">
                             <notes>
                                 <body>&lt;p style=&quot;text-align: center;&quot;&gt;Some&lt;strong&gt; description&lt;/strong&gt;&lt;/p&gt;

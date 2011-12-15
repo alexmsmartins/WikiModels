@@ -4,9 +4,11 @@ import scala.collection.JavaConversions._
 
 import pt.cnbc.wikimodels.client.record._
 import pt.cnbc.wikimodels.dataModel._
+import net.liftweb.common.Full
+
 /*
- * Copyright (c) 2011. Alexandre Martins. All rights reserved.
- */
+* Copyright (c) 2011. Alexandre Martins. All rights reserved.
+*/
 
 /**
  * Created by IntelliJ IDEA.
@@ -52,6 +54,10 @@ object SBMLRecordVisitor {
     mr.notes = m.notes
     if(mr.listOfCompartments != null)
       mr.listOfCompartmentsRec = Set.empty ++ m.listOfCompartments.map(createSBMLCompartmentRecordFrom(_))
+    .map(i => {
+        i.parent = Full(mr) //to build complete URLs
+        i
+      })
       //TODO - write code for the remaining lists
     mr
   }

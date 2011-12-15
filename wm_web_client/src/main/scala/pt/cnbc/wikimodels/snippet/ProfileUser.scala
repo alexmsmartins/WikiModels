@@ -21,57 +21,61 @@ import pt.cnbc.wikimodels.model._
 
 class ProfileUser {
 
-    def viewUser (xhtml : NodeSeq) : NodeSeq = User.currentUserName match {
-        case Full(user) => {
-                var userRef = "userNew.xml"
-                
-                val userXML = XML.load(userRef)
-                var username = (userXML \\ "user" \ "userName").text
-                var firstName = (userXML \\ "user" \ "firstName").text
-                var surName = (userXML \\ "user" \ "surName").text
-                var title = ""
-                if((userXML \\ "user" \ "title").text != null) {
-                    title = (userXML \\ "user" \ "title").text
-                }
-                var firstEmail = (userXML \\ "user" \ "email").text
-                var alternativeEmail = ""
-                if((userXML \\ "user" \ "alternativeEmail").text != null) {
-                    alternativeEmail = (userXML \\ "user" \ "alternativeEmail").text
-                } else {
-                    alternativeEmail = "Not defined"
-                }
-                var institution = ""
-                if((userXML \\ "user" \ "institution").text != null) {
-                    institution = (userXML \\ "user" \ "institution").text
-                } else {
-                    institution = "Not defined"
-                }
-                var country = ""
-                if((userXML \\ "user" \ "country").text != null) {
-                    country = (userXML \\ "user" \ "country").text
-                } else {
-                    country = "Not defined"
-                }
-                var contact = ""
-                if((userXML \\ "user" \\ "listOfContacts" \ "contact").text != null) {
-                    country = (userXML \\ "user" \ "country").text
-                } else {
-                    contact = "Not defined"
-                }
+  def viewUser (xhtml : NodeSeq) : NodeSeq = User.currentUserName match {
+    case Full(user) => {
+      //TODO replace the reference to userNew.xml by a proper call to WM Server
 
-                bind("userInformation", xhtml,
-                     "username" -> username,
-                     "firstName" -> firstName,
-                     "surName" -> surName,
-                     "title" -> title,
-                     "firstEmail" -> firstEmail,
-                     "alternativeEmail" -> alternativeEmail,
-                     "institution" -> institution,
-                     "country" -> country
-                )
-            }
-        case _ => {
-                Text("")
-            }
+      var userRef = "userNew.xml"
+
+      val userXML = XML.load(userRef)
+
+
+      var username = (userXML \\ "user" \ "userName").text
+      var firstName = (userXML \\ "user" \ "firstName").text
+      var surName = (userXML \\ "user" \ "surName").text
+      var title = ""
+      if((userXML \\ "user" \ "title").text != null) {
+          title = (userXML \\ "user" \ "title").text
+      }
+      var firstEmail = (userXML \\ "user" \ "email").text
+      var alternativeEmail = ""
+      if((userXML \\ "user" \ "alternativeEmail").text != null) {
+          alternativeEmail = (userXML \\ "user" \ "alternativeEmail").text
+      } else {
+          alternativeEmail = "Not defined"
+      }
+      var institution = ""
+      if((userXML \\ "user" \ "institution").text != null) {
+          institution = (userXML \\ "user" \ "institution").text
+      } else {
+          institution = "Not defined"
+      }
+      var country = ""
+      if((userXML \\ "user" \ "country").text != null) {
+          country = (userXML \\ "user" \ "country").text
+      } else {
+          country = "Not defined"
+      }
+      var contact = ""
+      if((userXML \\ "user" \\ "listOfContacts" \ "contact").text != null) {
+          country = (userXML \\ "user" \ "country").text
+      } else {
+          contact = "Not defined"
+      }
+
+      bind("userInformation", xhtml,
+           "username" -> username,
+           "firstName" -> firstName,
+           "surName" -> surName,
+           "title" -> title,
+           "firstEmail" -> firstEmail,
+           "alternativeEmail" -> alternativeEmail,
+           "institution" -> institution,
+           "country" -> country
+      )
     }
+    case _ => {
+            Text("")
+    }
+  }
 }

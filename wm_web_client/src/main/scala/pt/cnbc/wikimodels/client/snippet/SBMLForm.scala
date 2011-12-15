@@ -6,8 +6,8 @@ import scala.xml._
 
 import net.liftweb._
 import common._
-import util.Helpers._
 import http._
+import util.Helpers._
 import sitemap._
 import mapper._
 import S._
@@ -89,8 +89,24 @@ class SBMLForm extends DispatchSnippet with LoggerWrapper {
     compartment.validate match {
       case Nil => { //no validation errors
         compartment.metaid = compartment.id
-        val metaid = compartment.createRestRec().openTheBox.metaid
-        redirectTo("/compartment/" + metaid) //TODO: handle failure in the server (maybe this should be general)
+        compartment.createRestRec() match {
+          case Full(x) => {
+            val metaid = compartment.createRestRec().openTheBox.metaid
+            redirectTo(compartment.relativeURL) //TODO: handle failure in the server (maybe this should be general)
+          }
+          case Empty => {
+            S.error("Strange error. Report this bug please!")
+            selectedCompartment(Full(compartment))
+          }
+          case x:ParamFailure[_] => {
+            S.error(x.messageChain) //TODO check if message chain is the right thing to send to S.error
+            selectedCompartment(Full(compartment))
+          }
+          case x:Failure => {
+            S.error(x.messageChain)
+           selectedCompartment(Full(compartment))
+          }
+        }
       }
       case x => S.error(x); selectedCompartment(Full(compartment))
     }

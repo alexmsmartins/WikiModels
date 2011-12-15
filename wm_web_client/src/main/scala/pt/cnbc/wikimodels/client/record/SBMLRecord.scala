@@ -58,10 +58,10 @@ trait SBaseRecord[MyType <: SBaseRecord[MyType]] extends Element with RestRecord
    * CRUD operation for creating a REST [record]Record
    */
   override def createRestRec():Box[MyType] = {
-    connection.postRequest("/" + this.sbmlType.toLowerCase , this.toXML)
+    connection.postRequest(relativeURL , this.toXML)
     connection.getStatusCode match {
       case 201 => saved_? = true;Full(this)//create went ok
-      case 404 => ParamFailure("Error reading " + this.metaid + ". This element does not exist.", this)
+      case 404 => ParamFailure("Error creating " + this.sbmlType + " with metaid " + this.metaid + ".", this)
       case status => handleStatusCodes(status, "creating " + sbmlType + " with " + this.metaid)
     }
   }
@@ -110,6 +110,8 @@ trait SBaseRecord[MyType <: SBaseRecord[MyType]] extends Element with RestRecord
   def comments:NodeSeq = {
     disqusFromMetaId(this.metaid)
   }
+
+  var parent:Box[SBaseRecord[_]] = Empty
 }
 
 /**
@@ -119,7 +121,7 @@ trait SBaseRecord[MyType <: SBaseRecord[MyType]] extends Element with RestRecord
  * Time: 17:37
  * To change this template use File | Settings | File Templates.
  */
-class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord]  {
+class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with LoggerWrapper {
   type MyType = SBMLModelRecord
 
 
@@ -168,10 +170,13 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord]  {
           <h3 id="accord_c" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top changeline">
             <a href="#accord_c" >
               Compartments
-              {SHtml.button(Text("Add Compartment"),
-                 () => S.redirectTo(this.relativeURL + "createcompartment" ),
+              <form style='display:inline;' >{SHtml.ajaxButton(Text("Add Compartment"),
+                 () => {
+                   debug("Button to add compartment pressed.")
+                   S.redirectTo(this.relativeURL + "/createcompartment" )
+                 },
               "class" ->"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
-                )}
+                )}</form>
             </a>
           </h3>
           <div class="toggle_container">
@@ -196,7 +201,14 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord]  {
           <h3 id="accord_s" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top changeline">
             <a href="#accord_s">
               Species
-              <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Add Species</button>
+              <form style='display:inline;' >{SHtml.ajaxButton(Text("Add Species"),
+                () => {
+                  debug("Button to add species pressed.")
+                  S.redirectTo(this.relativeURL + "/createcompartment" )
+                },
+                "class" ->"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+              )}</form>
+
             </a>
           </h3>
           <div  class="toggle_container">

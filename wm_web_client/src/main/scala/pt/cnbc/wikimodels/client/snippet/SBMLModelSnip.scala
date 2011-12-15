@@ -25,6 +25,9 @@ class SBMLModelSnip extends LoggerWrapper{
 
   def modelMetaId = "#mMetaId *" #> S.param("modelMetaId").openOr("<<handling this is a TODO>>")
 
+  def compartmentMetaId = "#mMetaId *" #> S.param("compartmentMetaId").openOr("<<handling this is a TODO>>")
+
+
   def entireModelInXML = {
     val model = User
       .restfulConnection

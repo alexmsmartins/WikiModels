@@ -307,7 +307,6 @@ trait DisplayHTMLWithLabelInOneLine[ThisType, OwnerType <: Record[OwnerType]] ex
         <lift:msg id={uniqueFieldId.openTheBox}  errorClass="lift_error"/>
     </div>
   }
-
 }
 
 /**

@@ -15,12 +15,13 @@ import _root_.pt.cnbc.wikimodels.tabs.TabsView
 import _root_.pt.cnbc.wikimodels.snippet._
 import _root_.pt.cnbc.wikimodels.client.snippet._
 import _root_.pt.cnbc.wikimodels.client.sitemapTweaks._
+import alexmsmartins.log.LoggerWrapper
 
 /**            s
  * A class that's instantiated early and run.  It allows the application
  * to modify lift's environment
  */
-class Boot {
+class Boot extends LoggerWrapper{
     def boot {
 
 
@@ -83,8 +84,10 @@ class Boot {
         Menu(Loc("administrator", List("administrator","index"), "Administrator", Hidden, loggedIn)) ::
         //entries for new brows/edit model in the same page
         Menu(Loc("listMModels", List("modele","indexe"), "List Models", Hidden, loggedIn)) ::
+        Menu(Loc("createModel", List("modele","model_create"), "Create Model", Hidden, loggedIn)) ::
         Menu(Loc("editModel", List("modele","model_edit"), "Edit Model", Hidden, loggedIn)) ::
         Menu(Loc("viewModel", List("modele","model_view"), "View Model", Hidden, loggedIn)) ::
+        Menu(Loc("createCompartment", List("modele","compartment_create"), "Create Compartment", Hidden, loggedIn)) ::
         Menu(Loc("editCompartment", List("modele","compartment_edit"), "Edit Comaprtment", Hidden, loggedIn)) ::
         Menu(Loc("viewCompartment", List("modele","compartment_view"), "View Compartment", Hidden, loggedIn)) ::
           User.sitemap
@@ -99,26 +102,33 @@ class Boot {
         LiftRules.statelessRewrite.append {
           //NOTE: these redirects make the model metaId available to SBMLForm snippets.
           case RewriteRequest(ParsePath("createmodel"::Nil,"",_,false),_,_) => {
+            trace("RewriteRequest from /createmodel to /modele/model_create.html" )
             RewriteResponse(ParsePath( "modele"::"model_create"::Nil, "html", true, false),
               Map(), true )
           }
           case RewriteRequest(ParsePath("model"::model::Nil,"",_,false),_,_) => {
+            trace("RewriteRequest from /model/"+model+" to /modele/model_view.html" )
             RewriteResponse(ParsePath( "modele"::"model_view"::Nil,"html",true, false),
               Map("modelMetaId" -> model), true)
           }
           case RewriteRequest(ParsePath("model"::model::"edit"::Nil,"",_,false),_,_) => {
+            trace("RewriteRequest from /model/"+model+"/edit to /modele/model_edit.html" )
             RewriteResponse(ParsePath( "modele"::"model_edit"::Nil, "html", true, false),
               Map("modelMetaId" -> model), true )
           }
-          case RewriteRequest(ParsePath("model"::model::"createcompartment"::compartment::Nil,"",_,false),_,_) => {
+          case RewriteRequest(ParsePath("model"::model::"createcompartment"::Nil,"",_,false),_,_) => {
+            trace("RewriteRequest from /model/"
+              +model+"/createcompartment to /modele/compartment_create.html" )
             RewriteResponse(ParsePath( "modele"::"compartment_create"::Nil, "html", true, false),
               Map("modelMetaId" -> model), true )
           }
           case RewriteRequest(ParsePath("model"::model::"compartment"::compartment::Nil,"",_,false),_,_) => {
+            trace("RewriteRequest from /model/"+model+"/compartment"+compartment+" to /modele/compartment_view.html" )
             RewriteResponse(ParsePath( "modele"::"compartment_view"::Nil, "html", true, false),
               Map("modelMetaId" -> model, "compartmentMetaId" -> compartment), true )
           }
           case RewriteRequest(ParsePath("model"::model::"compartment"::compartment::"edit"::Nil,"",_,false),_,_) => {
+            trace("RewriteRequest from /model/"+model+"/compartment"+compartment+"/edit to /modele/compartment_edit.html" )
             RewriteResponse(ParsePath( "modele"::"compartment_edit"::Nil, "html", true, false),
               Map("modelMetaId" -> model, "compartmentMetaId" -> compartment), true )
           }
