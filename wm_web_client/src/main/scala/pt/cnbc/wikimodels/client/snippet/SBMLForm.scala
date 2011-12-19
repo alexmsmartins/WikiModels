@@ -205,7 +205,7 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
       // when the delete button is pressed, call the "deleteUser"
       // function (which is a closure and bound the "user" object
       // in the current content)
-      bind("xmp", ns, "Model " -> (model.metaid),
+      bind("xmp", ns, "modelname " -> (model.id),
       "delete" -> submit("Delete", deleteModel ))
 
       // if the was no ID or the user couldn't be found,
@@ -225,12 +225,12 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
       // when the delete button is pressed, call the "deleteUser"
       // function (which is a closure and bound the "user" object
       // in the current content)
-      bind("xmp", ns, "Compartment " -> (compartment.metaid),
+      bind("xmp", ns, "compartmentname" -> (compartment.id),
         "delete" -> submit("Delete", deleteCompartment ))
 
       // if the was no ID or the user couldn't be found,
       // display an error and redirect
-    }) openOr {S.error(mainMsg, "Compartment not found"); redirectTo("/models/")}
+    }) openOr {S.error(mainMsg, "Compartment not found"); redirectTo("/model"+S.param("modelMetaId"))}
   }
 
 

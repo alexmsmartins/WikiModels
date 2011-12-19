@@ -79,7 +79,9 @@ trait SBaseRecord[MyType <: SBaseRecord[MyType]] extends Element with RestRecord
       case 200 =>{
         clean_? = false
         //FIXME this should be replaced by a call to a XML to SBMLElement converter
-        Full ((SBMLRecordVisitor.createModelRecordFrom(  SBML2BeanConverter.visitModel( content )  )).asInstanceOf[MyType] )//read went ok
+        val loadedRecord:Box[MyType] =  Full ((SBMLRecordVisitor.createModelRecordFrom(  SBML2BeanConverter.visitModel( content )  )).asInstanceOf[MyType] )//read went ok
+        debug("Read of " + loadedRecord + "aaa" )
+        loadedRecord
       }
       case 404 => ParamFailure("Error reading " + this.metaid + ". This element does not exist.", this)
       case status => handleStatusCodes(status, "reading " + sbmlType + " with " + this.metaid)
@@ -134,7 +136,7 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
   //var listOfUnitDefinitions:List[ÛnitDefinition] = List()
   //var listOfCompartmentTypes:List[CompartmentType] = List()
   //var listOfSpeciesTypes:List[SpeciesType] = List()
-  var listOfCompartmentsRec: Set[CompartmentRecord] = Set.empty[CompartmentRecord]
+  var listOfCompartmentsRec: List[CompartmentRecord] = Nil
   var listOfSpeciesRec: Set[Species] = Set.empty[Species]
   var listOfParametersRec: Set[Parameter] = Set.empty[Parameter]
   //var listOfInitialAssignments:List[InitialAssignment] = List()
@@ -172,24 +174,36 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
         <div id="accordion1" class="accordion ui-accordion ui-widget ui-helper-reset ui-accordion-icons">
           <h3 id="accord_c" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top changeline">
             <a href="#accord_c" >
-              Compartments
+              {this.listOfCompartmentsRec.size} Compartments
               <form style='display:inline;' >{SHtml.ajaxButton(Text("Add Compartment"),
                  () => {
-                   debug("Button to add compartment pressed.")
+                   debug("Button to add compartment, pressed.")
                    S.redirectTo(this.relativeURL + "/createcompartment" )
                  },
               "class" ->"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
                 )}</form>
             </a>
-          </h3>                                                             = Empty
+          </h3>
           <div class="toggle_container">
-            <div id="accordion2" class="block">{
+            <div id={this.metaid} class="block">{
               this.listOfCompartmentsRec.map(i => {
               <h3 id="accord_c_c1" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
                 <a href="#accord_c_c1">
                   {i.id}
-                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Edit</button>   <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Delete</button>
-                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Add Species</button>
+                  <form style='display:inline;' >{SHtml.ajaxButton(Text("Add Compartment"),
+                    () => {
+                      debug("Button to edit compartment, pressed.")
+                      S.redirectTo(i.relativeURL + "/edit" )
+                    },
+                    "class" ->"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+                  )}</form>
+                  <form style='display:inline;' >{SHtml.ajaxButton(Text("Delete"),
+                    () => {
+                      debug("Button to delete compartment, pressed.")
+                      S.redirectTo(i.relativeURL )
+                    },
+                    "class" ->"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+                  )}</form>
                 </a>
               </h3>
               <div class="toggle_container">
@@ -207,7 +221,7 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
               <form style='display:inline;' >{SHtml.ajaxButton(Text("Add Species"),
                 () => {
                   debug("Button to add species pressed.")
-                  S.redirectTo(this.relativeURL + "/createcompartment" )
+                  S.redirectTo(this.relativeURL + "/createspecies" )
                 },
                 "class" ->"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
               )}</form>
@@ -270,11 +284,313 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
                     <li>List item two</li>
                     <li>List item three</li>
                   </ul>
-                </div>   Empty
+                </div>
               </div>
             </div>
 
           </div>
+
+
+          <h3 id="accord_s" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top changeline">
+            <a href="#accord_s">
+              Parameters
+              <form style='display:inline;' >{SHtml.ajaxButton(Text("Add Parameters"),
+                () => {
+                  debug("Button to add parameters pressed.")
+                  S.redirectTo(this.relativeURL + "/createparameter" )
+                },
+                "class" ->"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+              )}</form>
+
+            </a>
+          </h3>
+          <div  class="toggle_container">
+            <div id="accordion3" class="block">
+              <h3 id="accord_s_s1" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
+                <a href="#accord_s_s1">
+                  Parameter 1
+                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Edit</button>
+                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Delete</button>
+                </a>
+              </h3>
+              <div class="toggle_container">
+                <div class="block">
+                  <p>
+                    Mauris mauris ante, blandit et, ultrices a, suscipit eget, quam. Integer
+                    ut neque. Vivamus nisi metus, molestie vel, gravida in, condimentum sit
+                    amet, nunc. Nam a nibh. Donec suscipit eros. Nam mi. Proin viverra leo ut
+                    odio. Curabitur malesuada. Vestibulum a velit eu ante scelerisque vulputate.
+                  </p>
+                </div>
+              </div>
+              <h3 id="accord_s_s2" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
+                <a href="#acctoggle_containerord_s_s2">
+                  Parameter 2
+                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Edit</button>
+                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Delete</button>
+                </a>
+              </h3>
+              <div class="toggle_container">
+                <div class="block">
+                  <p>
+                    Sed non urna. Donec et ante. Phasellus eu ligula. Vestibulum sit amet
+                    purus. Vivamus hendrerit, dolor at aliquet laoreet, mauris turpis porttitor
+                    velit, faucibus interdum tellus libero ac justo. Vivamus non quam. In
+                    suscipit faucibus urna.
+                  </p>
+                </div>
+              </div>
+              <h3 id="accord_s_s3" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
+                <a href="#accord_s_s3">
+                  Parameter 3
+                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Edit</button>
+                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Delete</button>
+                </a>
+              </h3>
+              <div class="toggle_container">
+                <div class="block">
+                  <p>
+                    Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis.
+                    Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero
+                    ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis
+                    lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui.
+                  </p>
+                  <ul>
+                    <li>List item one</li>
+                    <li>List item two</li>
+                    <li>List item three</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <h3 id="accord_s" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top changeline">
+            <a href="#accord_s">
+              Function definitions
+              <form style='display:inline;' >{SHtml.ajaxButton(Text("Add Function definition"),
+                () => {
+                  debug("Button to add function definition pressed.")
+                  S.redirectTo(this.relativeURL + "/createfunctiondefinition" )
+                },
+                "class" ->"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+              )}</form>
+
+            </a>
+          </h3>
+          <div  class="toggle_container">
+            <div id="accordion3" class="block">
+              <h3 id="accord_s_s1" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
+                <a href="#accord_s_s1">
+                  Function definition 1
+                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Edit</button>
+                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Delete</button>
+                </a>
+              </h3>
+              <div class="toggle_container">
+                <div class="block">
+                  <p>
+                    Mauris mauris ante, blandit et, ultrices a, suscipit eget, quam. Integer
+                    ut neque. Vivamus nisi metus, molestie vel, gravida in, condimentum sit
+                    amet, nunc. Nam a nibh. Donec suscipit eros. Nam mi. Proin viverra leo ut
+                    odio. Curabitur malesuada. Vestibulum a velit eu ante scelerisque vulputate.
+                  </p>
+                </div>
+              </div>
+              <h3 id="accord_s_s2" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
+                <a href="#acctoggle_containerord_s_s2">
+                  Function definition 2
+                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Edit</button>
+                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Delete</button>
+                </a>
+              </h3>
+              <div class="toggle_container">
+                <div class="block">
+                  <p>
+                    Sed non urna. Donec et ante. Phasellus eu ligula. Vestibulum sit amet
+                    purus. Vivamus hendrerit, dolor at aliquet laoreet, mauris turpis porttitor
+                    velit, faucibus interdum tellus libero ac justo. Vivamus non quam. In
+                    suscipit faucibus urna.
+                  </p>
+                </div>
+              </div>
+              <h3 id="accord_s_s3" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
+                <a href="#accord_s_s3">
+                  Function definition 3
+                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Edit</button>
+                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Delete</button>
+                </a>
+              </h3>
+              <div class="toggle_container">
+                <div class="block">
+                  <p>
+                    Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis.
+                    Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero
+                    ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis
+                    lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui.
+                  </p>
+                  <ul>
+                    <li>List item one</li>
+                    <li>List item two</li>
+                    <li>List item three</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <h3 id="accord_s" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top changeline">
+            <a href="#accord_s">
+              Constraints
+              <form style='display:inline;' >{SHtml.ajaxButton(Text("Add Constraint"),
+                () => {
+                  debug("Button to add constraint pressed.")
+                  S.redirectTo(this.relativeURL + "/createconstraint" )
+                },
+                "class" ->"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+              )}</form>
+
+            </a>
+          </h3>
+          <div  class="toggle_container">
+            <div id="accordion3" class="block">
+              <h3 id="accord_s_s1" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
+                <a href="#accord_s_s1">
+                  Constraint 1
+                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Edit</button>
+                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Delete</button>
+                </a>
+              </h3>
+              <div class="toggle_container">
+                <div class="block">
+                  <p>
+                    Mauris mauris ante, blandit et, ultrices a, suscipit eget, quam. Integer
+                    ut neque. Vivamus nisi metus, molestie vel, gravida in, condimentum sit
+                    amet, nunc. Nam a nibh. Donec suscipit eros. Nam mi. Proin viverra leo ut
+                    odio. Curabitur malesuada. Vestibulum a velit eu ante scelerisque vulputate.
+                  </p>
+                </div>
+              </div>
+              <h3 id="accord_s_s2" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
+                <a href="#acctoggle_containerord_s_s2">
+                  Constraint 2
+                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Edit</button>
+                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Delete</button>
+                </a>
+              </h3>
+              <div class="toggle_container">
+                <div class="block">
+                  <p>
+                    Sed non urna. Donec et ante. Phasellus eu ligula. Vestibulum sit amet
+                    purus. Vivamus hendrerit, dolor at aliquet laoreet, mauris turpis porttitor
+                    velit, faucibus interdum tellus libero ac justo. Vivamus non quam. In
+                    suscipit faucibus urna.
+                  </p>
+                </div>
+              </div>
+              <h3 id="accord_s_s3" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
+                <a href="#accord_s_s3">
+                  Constraint 3
+                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Edit</button>
+                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Delete</button>
+                </a>
+              </h3>
+              <div class="toggle_container">
+                <div class="block">
+                  <p>
+                    Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis.
+                    Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero
+                    ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis
+                    lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui.
+                  </p>
+                  <ul>
+                    <li>List item one</li>
+                    <li>List item two</li>
+                    <li>List item three</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <h3 id="accord_s" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top changeline">
+            <a href="#accord_s">
+              Reactions
+              <form style='display:inline;' >{SHtml.ajaxButton(Text("Add reaction"),
+                () => {
+                  debug("Button to add reactions pressed.")
+                  S.redirectTo(this.relativeURL + "/createreaction" )
+                },
+                "class" ->"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+              )}</form>
+
+            </a>
+          </h3>
+          <div  class="toggle_container">
+            <div id="accordion3" class="block">
+              <h3 id="accord_s_s1" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
+                <a href="#accord_s_s1">
+                  Reaction 1
+                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Edit</button>
+                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Delete</button>
+                </a>
+              </h3>
+              <div class="toggle_container">
+                <div class="block">
+                  <p>
+                    Mauris mauris ante, blandit et, ultrices a, suscipit eget, quam. Integer
+                    ut neque. Vivamus nisi metus, molestie vel, gravida in, condimentum sit
+                    amet, nunc. Nam a nibh. Donec suscipit eros. Nam mi. Proin viverra leo ut
+                    odio. Curabitur malesuada. Vestibulum a velit eu ante scelerisque vulputate.
+                  </p>
+                </div>
+              </div>
+              <h3 id="accord_s_s2" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
+                <a href="#acctoggle_containerord_s_s2">
+                  Reaction 2
+                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Edit</button>
+                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Delete</button>
+                </a>
+              </h3>
+              <div class="toggle_container">
+                <div class="block">
+                  <p>
+                    Sed non urna. Donec et ante. Phasellus eu ligula. Vestibulum sit amet
+                    purus. Vivamus hendrerit, dolor at aliquet laoreet, mauris turpis porttitor
+                    velit, faucibus interdum tellus libero ac justo. Vivamus non quam. In
+                    suscipit faucibus urna.
+                  </p>
+                </div>
+              </div>
+              <h3 id="accord_s_s3" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
+                <a href="#accord_s_s3">
+                  Reaction 3
+                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Edit</button>
+                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Delete</button>
+                </a>
+              </h3>
+              <div class="toggle_container">
+                <div class="block">
+                  <p>
+                    Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis.
+                    Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero
+                    ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis
+                    lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui.
+                  </p>
+                  <ul>
+                    <li>List item one</li>
+                    <li>List item two</li>
+                    <li>List item three</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
         </div>
         {Script(
         JsRaw("""
@@ -353,9 +669,10 @@ class CompartmentRecord() extends Compartment with SBaseRecord[CompartmentRecord
   object metaIdO extends MetaId(this, 100)
   object idO extends Id(this, 100)
   object nameO extends Name(this, 100)
-  object notesO extends Notes(this, 1000)
   object spatialDimensions0 extends SpatialDimensions(this)
   object constantO extends Constant(this)
+  //object sizeO extends Size(this)
+  object notesO extends Notes(this, 1000)
   //  ### can be created directly from a Request containing params with names that match the fields on a Record ( see fromReq ). ###
 
   var _parent:Box[SBMLModelRecord] = Empty
@@ -372,7 +689,7 @@ class CompartmentRecord() extends Compartment with SBaseRecord[CompartmentRecord
 //TODO - DELETE IF NOT USED FOR ANYTHING
 object CompartmentRecord extends CompartmentRecord with RestMetaRecord[CompartmentRecord] {
   def apply() = new CompartmentRecord
-  override def fieldOrder = List(metaIdO, idO, nameO, notesO, spatialDimensions0)
+  override def fieldOrder = List(metaIdO, idO, nameO, spatialDimensions0, constantO, /*sizeO,*/ notesO)
   override def fields = fieldOrder
 }
 

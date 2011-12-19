@@ -15,6 +15,12 @@ class FooProject(info: ProjectInfo) extends DefaultWebProject(info) {
     val mavenLocal = "Local Maven Repository" at "file://"+Path.userHome+"/.m2/repository/"
     val bryanjswift = "Bryan J Swift Repository" at "http://repos.bryanjswift.com/maven2/"
     //val junitInterface = "com.novocode" % "junit-interface" % "0.4.0" % "test"
+
+    //chenges port where jetty listens to
+    override val jettyPort = 9998
+    //Stop file change detection (While using JRebel)
+    override def scanDirectories = Nil
+
   }
 
 

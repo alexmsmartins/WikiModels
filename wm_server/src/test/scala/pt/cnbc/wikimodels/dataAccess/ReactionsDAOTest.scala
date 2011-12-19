@@ -16,6 +16,7 @@ import pt.cnbc.wikimodels.dataModel.{SBMLModel, Reaction}
 import pt.cnbc.wikimodels.ontology.ManipulatorWrapper
 import pt.cnbc.wikimodels.setup.Setup
 import pt.cnbc.wikimodels.dataVisitors.SBML2BeanConverter
+import pt.cnbc.wikimodels.dataAccess._
 
 class ReactionsDAOTest {
 

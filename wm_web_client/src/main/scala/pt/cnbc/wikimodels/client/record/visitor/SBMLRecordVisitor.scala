@@ -5,6 +5,7 @@ import scala.collection.JavaConversions._
 import pt.cnbc.wikimodels.client.record._
 import pt.cnbc.wikimodels.dataModel._
 import net.liftweb.common.Full
+import alexmsmartins.log.LoggerWrapper
 
 /*
 * Copyright (c) 2011. Alexandre Martins. All rights reserved.
@@ -18,7 +19,7 @@ import net.liftweb.common.Full
  * To change this template use File | Settings | File Templates.
  */
 
-object SBMLRecordVisitor {
+object SBMLRecordVisitor extends LoggerWrapper {
 
   def createModelFrom(mr:SBMLModelRecord) = {
     val m = new SBMLModel()
@@ -52,13 +53,16 @@ object SBMLRecordVisitor {
     mr.id = m.id
     mr.name = m.name
     mr.notes = m.notes
-    if(mr.listOfCompartments != null)
-      mr.listOfCompartmentsRec = Set.empty ++ m.listOfCompartments.map(createCompartmentRecordFrom(_))
+    if(m.listOfCompartments != null)
+      debug("Loaded listOfCompartments has size " + m.listOfCompartments.size)
+      mr.listOfCompartmentsRec = m.listOfCompartments.map(createCompartmentRecordFrom(_)).toList
         .map(i => {
           i.parent = Full(mr) //to build complete URLs
           i
         }
       )
+      Console.println("Copied listOfCompartmentsRec has size " + mr.listOfCompartmentsRec.size)
+      mr.listOfCompartments = m.listOfCompartments
       //TODO - write code for the remaining lists
     mr
   }

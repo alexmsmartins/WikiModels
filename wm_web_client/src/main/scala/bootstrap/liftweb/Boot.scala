@@ -116,6 +116,11 @@ class Boot extends LoggerWrapper{
             RewriteResponse(ParsePath( "modele"::"model_edit"::Nil, "html", true, false),
               Map("modelMetaId" -> model), true )
           }
+          case RewriteRequest(ParsePath("model"::model::"delete"::Nil,"",_,false),_,_) => {
+            trace("RewriteRequest from /model/"+model+"/delete to /modele/model_delete.html" )
+            RewriteResponse(ParsePath( "modele"::"model_delete"::Nil, "html", true, false),
+              Map("modelMetaId" -> model), true )
+          }
           case RewriteRequest(ParsePath("model"::model::"createcompartment"::Nil,"",_,false),_,_) => {
             trace("RewriteRequest from /model/"
               +model+"/createcompartment to /modele/compartment_create.html" )
@@ -131,6 +136,27 @@ class Boot extends LoggerWrapper{
             trace("RewriteRequest from /model/"+model+"/compartment"+compartment+"/edit to /modele/compartment_edit.html" )
             RewriteResponse(ParsePath( "modele"::"compartment_edit"::Nil, "html", true, false),
               Map("modelMetaId" -> model, "compartmentMetaId" -> compartment), true )
+          }
+          case RewriteRequest(ParsePath("model"::model::"compartment"::compartment::"delete"::Nil,"",_,false),_,_) => {
+            trace("RewriteRequest from /model/"+model+"/compartment"+compartment+"/delete to /modele/compartment_delete.html" )
+            RewriteResponse(ParsePath( "modele"::"compartment_delete"::Nil, "html", true, false),
+              Map("modelMetaId" -> model, "compartmentMetaId" -> compartment), true )
+          }
+
+
+
+
+          //These redirects make the comments available to everyone
+          //They detect a path that ends with /comments
+          case RewriteRequest(ParsePath("model"::commented::"comments"::Nil,"",_,false),_,_) => {
+            trace("RewriteRequest from /model/"+commented+"/comments to /modele/model_comments.html" )
+            RewriteResponse(ParsePath( "modele"::"model_comments"::Nil, "html", true, false),
+              Map("commentedMetaId" -> commented), true )
+          }
+          case RewriteRequest(ParsePath("model"::model::childType::commented::"comments"::Nil,"",_,false),_,_) => {
+            trace("RewriteRequest from /model/"+model+"/"+childType+"/"+commented+"/delete to /modele/child_comments.html" )
+            RewriteResponse(ParsePath( "modele"::"child_comments"::Nil, "html", true, false),
+              Map("modelMetaId" -> model, "childType" -> childType, "commentedMetaId" -> commented), true )
           }
 
           /* code written by Gonçalo

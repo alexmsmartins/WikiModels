@@ -9,6 +9,7 @@ import pt.cnbc.wikimodels.client.record._
 import pt.cnbc.wikimodels.dataModel.Compartment._
 import pt.cnbc.wikimodels.dataModel.ValidSpatialDimensions._
 import pt.cnbc.wikimodels.dataModel.{ValidSpatialDimensions, Compartment}
+import net.liftweb.util.FieldError
 
 //Javascript handling imports
 import _root_.net.liftweb.http.js.{JE,JsCmd,JsCmds}
@@ -61,6 +62,10 @@ with DisplayFormWithLabelInOneLine[String, T] with DisplayHTMLWithLabelInOneLine
 class Id[T <: SBaseRecord[T]{var id:String}](own:T, maxLength: Int) extends StringField[T](own, maxLength)
 with DisplayFormWithLabelInOneLine[String, T] with DisplayHTMLWithLabelInOneLine[String, T]{
   var _data:Box[MyType] = Empty
+
+  override def validate:List[FieldError] = {
+      super.validate
+  }
 
   override def theData_=(in:Box[MyType]) {
     trace("Calling Id.theData_=" + in)
@@ -225,7 +230,7 @@ with GetSetOwnerField[String, T]{
 // class SpatialDimensions[T <: CompartmentRecord](own:T) extends EnumField(own, ValidSpatialDimensions)
 
 class SpatialDimensions[T <: SBaseRecord[T]{var spatialDimensions:Int}](own:T) extends EnumField(own, ValidSpatialDimensions)
-with GetSetOwnerField[ValidSpatialDimensions , T] with LoggerWrapper{
+with DisplayFormWithLabelInOneLine[ValidSpatialDimensions, T] with DisplayHTMLWithLabelInOneLine[ValidSpatialDimensions, T] with LoggerWrapper{
   var _data:Box[MyType] = Empty
 
   override def theData_=(in:Box[MyType]) {
@@ -271,7 +276,7 @@ with GetSetOwnerField[ValidSpatialDimensions , T] with LoggerWrapper{
 
 
 class Constant[T <: SBaseRecord[T]{var constant:Boolean}](own:T) extends BooleanField(own)
-with GetSetOwnerField[Boolean , T] with LoggerWrapper{
+with DisplayFormWithLabelInOneLine[Boolean, T] with DisplayHTMLWithLabelInOneLine[Boolean, T] with LoggerWrapper{
   var _data:Box[MyType] = Empty
 
   override def theData_=(in:Box[MyType]) {
@@ -317,7 +322,53 @@ with GetSetOwnerField[Boolean , T] with LoggerWrapper{
 }
 
 
+class Size[T <: SBaseRecord[T]{var size:java.lang.Double}](own:T) extends OptionalDoubleField(own)
+with DisplayFormWithLabelInOneLine[Double, T] with DisplayHTMLWithLabelInOneLine[Double, T] with LoggerWrapper{
+  // * There is a strong reason to use both java.lang.Double and scala.Double here
+  // * doun't change this wothout knowing what to do with the client and server code when there is no size value
+  var _data:Box[MyType] = Empty
 
+  override def theData_=(in:Box[MyType]) {
+    trace("Calling Size.theData_=" + in)
+    _data = in
+    in match{
+      //if a valid value is set then update the owner class
+      case Full(y) =>{
+        owner.size = y.asInstanceOf[java.lang.Double]
+      }
+      case Empty => {
+        owner.size = null
+      }
+      case _ =>{
+        owner.size = 38383838.3838 //lets give it a default even in case of error
+        S.error("Strange error when reading the field size in ")
+      }
+    }
+  }
+
+  override def theData:Box[MyType] = {
+    trace("Calling Size.theData")
+    //if the owner has valid data that was obtained from the wikimodels Server
+    debug("theData with size = "+ owner.size + " is being copied to the record Field.")
+    _data match {
+      case Empty => {
+        if (! this.optional_?){ //this should never happen
+          _data = Empty
+          owner.size = null
+        }
+      }
+      case Full(x) => {
+        owner.size = x.asInstanceOf[java.lang.Double]
+      }
+    }
+    trace("Constant.theData returns " + _data)
+    _data
+  }
+
+  //Appears when rendering the form or the visualization
+  override def name: String = "Constant"
+  //override def toXHtml: NodeSeq = Text(this.value)
+}
 
 
 //#### Aux Record traits

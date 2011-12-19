@@ -13,6 +13,7 @@ import com.hp.hpl.jena.rdf.model.ModelFactory
 import pt.cnbc.wikimodels.setup.Setup
 import pt.cnbc.wikimodels.dataModel.SBMLModel
 import pt.cnbc.wikimodels.dataVisitors.SBML2BeanConverter
+import pt.cnbc.wikimodels.dataAccess._
 
 class SBMLModelsDAOTest {
 

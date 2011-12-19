@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<!--
+  ~ Copyright (c) 2011. Alexandre Martins. All rights reserved.
+  -->
+
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+<lift:surround with="default" at="content">
+    <form class="lift:sbmlform.deleteModel?form=post">
+        Do you really want to delete model <xmp:modelname></xmp:modelname>
+        <a href="/models">No</a> <xmp:delete></xmp:delete>
+    </form>
+</lift:surround>
+</body>
+</html>

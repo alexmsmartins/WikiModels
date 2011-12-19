@@ -1,4 +1,13 @@
 <!--suppress XmlUnboundNsPrefix -->
 <lift:surround with="default" at="content">
+    <div class="lift:msgs?showAll=true">
+        <lift:error_msg>Error!  The details are:</lift:error_msg>
+        <lift:error_class>errorBox</lift:error_class>
+        <lift:warning_msg>Whoops, I had a problem:</lift:warning_msg>
+        <lift:warning_class>warningBox</lift:warning_class>
+        <lift:notice_msg>Note:</lift:notice_msg>
+        <lift:notice_class>noticeBox</lift:notice_class>
+    </div>
+
     <lift:HomePage.mainPage />
 </lift:surround>
