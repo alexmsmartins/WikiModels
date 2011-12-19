@@ -156,7 +156,16 @@ with GetSetOwnerField[String, T]{
     _data = in
     _data match{
       //if a valid value is set then update the owner class
+      //TODO put the entities conversion in their own class
       case Full(x) => owner.notes = x
+        .replace("&nbsp;", " &#160;")
+        .replace("&igrave;", "&#236;")
+        .replace("&egrave;", "&#232;")
+        .replace("&Egrave;", "&#200;")
+        .replace("&nbsp;", " &#160;")
+        .replace("&nbsp;", " &#160;")
+        .replace("&nbsp;", " &#160;")
+        .replace("&nbsp;", " &#160;")
       case _ => owner.notes = null //just to make sure the owner does not have valid values when errors occur
     }
   }

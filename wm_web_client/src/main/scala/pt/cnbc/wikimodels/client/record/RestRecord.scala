@@ -38,11 +38,14 @@ trait RestRecord[MyType <: RestRecord[MyType]] extends Record[MyType] {
    * This only represents the relative URL from the roomt
    */
   def relativeURL = relativeURLasList mkString("/","/","")
+  def relativeCreationURL = relativeCreationURLasList mkString("/","/","")
 
   /**
    * Lift friendly representation of a URL.
    */
   protected def relativeURLasList:List[String]
+  
+  protected def relativeCreationURLasList:List[String]
 
   /**
    * returns Failure boxes for all types of umpredicted status codes that come within a response to WikiModels Server

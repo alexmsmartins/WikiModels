@@ -26,9 +26,8 @@ import JE.{JsRaw,Str}
 
 package pt.cnbc.wikimodels.client.record{
 
-  import scala.collection._
+import scala.collection._
 
-import thewebsemantic.RdfProperty
 import collection.mutable.MutableList
 import scala.collection.JavaConversions._
 import pt.cnbc.wikimodels.client.snippet.CommentSnip
@@ -44,6 +43,7 @@ import net.liftweb.common.Box
 trait SBaseRecord[MyType <: SBaseRecord[MyType]] extends Element with RestRecord[MyType] with CommentSnip {
   self : MyType =>
   import pt.cnbc.wikimodels.snippet.User
+  
   /**
    * informs if the fields of this record have information or not
    */
@@ -61,7 +61,7 @@ trait SBaseRecord[MyType <: SBaseRecord[MyType]] extends Element with RestRecord
    * CRUD operation for creating a REST [record]Record
    */
   override def createRestRec():Box[MyType] = {
-    connection.postRequest("/model/"+S.param("modelMetaId").openTheBox+"/compartment" , this.toXML)
+    connection.postRequest(relativeCreationURL, this.toXML)
     connection.getStatusCode match {
       case 201 => saved_? = true;Full(this)//create went ok
       case 404 => ParamFailure("Error creating " + this.sbmlType + " with metaid " + this.metaid + ".", this)
@@ -150,6 +150,7 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
   override def meta = SBMLModelRecord
 
   override protected def relativeURLasList = "model" :: metaid :: Nil
+  override protected def relativeCreationURLasList = "model" :: Nil
 
   //  ### can be validated with validate ###
 
@@ -640,7 +641,9 @@ class CompartmentRecord() extends Compartment with SBaseRecord[CompartmentRecord
 
   override def meta = CompartmentRecord
 
-  override protected def relativeURLasList = "model" :: S.param("modelMetaId").openTheBox :: "Compartment" :: metaid :: Nil
+  override protected def relativeURLasList = "model" :: S.param("modelMetaId").openTheBox :: "compartment" :: metaid :: Nil
+  override protected def relativeCreationURLasList = "model" :: S.param("modelMetaId").openTheBox :: "compartment" :: Nil
+
 
   //  ### can be validated with validate ###
 
