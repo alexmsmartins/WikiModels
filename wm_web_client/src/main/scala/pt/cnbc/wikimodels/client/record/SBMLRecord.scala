@@ -61,9 +61,14 @@ trait SBaseRecord[MyType <: SBaseRecord[MyType]] extends Element with RestRecord
    * CRUD operation for creating a REST [record]Record
    */
   override def createRestRec():Box[MyType] = {
-    connection.postRequest(relativeCreationURL, this.toXML)
+    val url = connection.postRequest(relativeCreationURL, this.toXML)
     connection.getStatusCode match {
-      case 201 => saved_? = true;Full(this)//create went ok
+      case 201 => {
+        saved_? = true
+        //the server may modify the metaid to avoid clashes
+        this.metaid = url.toString.split("/").last
+        Full(this)//create went ok
+      }
       case 404 => ParamFailure("Error creating " + this.sbmlType + " with metaid " + this.metaid + ".", this)
       case status => handleStatusCodes(status, "creating " + sbmlType + " with " + this.metaid)
     }

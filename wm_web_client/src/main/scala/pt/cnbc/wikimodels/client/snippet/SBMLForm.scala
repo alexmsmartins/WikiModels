@@ -30,6 +30,8 @@ import pt.cnbc.wikimodels.controller.SMsg
  * Time: 16:28
  */
 class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
+  //TODO check if selectedXXX can be merged and refactor all the methods that call it. Then, replace this ->
+  //TODO <- by a justification for not doing the refactoring if that is the case
   private object selectedModel extends RequestVar[Box[SBMLModelRecord]](Empty)
   private object selectedCompartment extends RequestVar[Box[CompartmentRecord]](Empty)
 
@@ -67,8 +69,23 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
     model.validate match {
       case Nil => { //no validation errors
         model.metaid = model.id
-        val metaid = model.createRestRec().openTheBox.metaid
-        redirectTo("/model/" + metaid) //TODO: handle failure in the server (maybe this should be general)
+        model.createRestRec() match {
+          case Full(x) => {
+            redirectTo(model.relativeURL) //TODO: handle failure in the server (maybe this should be general)
+          }
+          case Empty => {
+            S.error(mainMsg, "Strange error when creating a new "+ model.sbmlType +". Report this bug please!")
+            selectedModel(Full(model))
+          }
+          case x:ParamFailure[_] => {
+            S.error(mainMsg, x.messageChain) //TODO check if message chain is the right thing to send to S.error
+            selectedModel(Full(model))
+          }
+          case x:Failure => {
+            S.error(mainMsg, x.messageChain)
+            selectedModel(Full(model))
+          }
+        }
       }
       case x => {
         x.foreach(f => S.error(mainMsg, "Error in " + f.field.uniqueFieldId + ": "+f.msg  ))
@@ -96,11 +113,10 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
         compartment.metaid = compartment.id
         compartment.createRestRec() match {
           case Full(x) => {
-            val metaid = compartment.createRestRec().openTheBox.metaid
             redirectTo(compartment.relativeURL) //TODO: handle failure in the server (maybe this should be general)
           }
           case Empty => {
-            S.error(mainMsg, "Strange error. Report this bug please!")
+            S.error(mainMsg, "Strange error when creating a new compartment "+ compartment.sbmlType +". Report this bug please!")
             selectedCompartment(Full(compartment))
           }
           case x:ParamFailure[_] => {
