@@ -279,7 +279,7 @@ with DisplayFormWithLabelInOneLine[ValidSpatialDimensions, T] with DisplayHTMLWi
 
 
   //Appears when rendering the form or the visualization
-  override def displayName: String = "SpatialDimensions"
+  override def name: String = "Spatial dimensions"
   //override def toXHtml: NodeSeq = Text(this.value)
 }
 

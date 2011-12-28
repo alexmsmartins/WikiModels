@@ -179,15 +179,16 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
       <div class="demo cupertino changeline">
         <div id="accordion1" class="accordion ui-accordion ui-widget ui-helper-reset ui-accordion-icons">
           <h3 id="accord_c" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top changeline">
-            <a href="#accord_c" >
+            <a href="#accord_c">
               {this.listOfCompartmentsRec.size} Compartments
-              <form style='display:inline;' >{SHtml.ajaxButton(Text("Add Compartment"),
-                 () => {
+              <form style='display:inline;' >{SHtml.ajaxButton(
+                Text("Add Compartment"),
+                () => {
                    debug("Button to add compartment, pressed.")
                    S.redirectTo(this.relativeURL + "/createcompartment" )
-                 },
-              "class" ->"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
-                )}</form>
+                },
+                "class" ->"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+              )}</form>
             </a>
           </h3>
           <div class="toggle_container">

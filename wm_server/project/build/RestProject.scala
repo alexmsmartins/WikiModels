@@ -18,6 +18,7 @@ class RestProject(info: ProjectInfo) extends DefaultWebProject(info) {
       val javanet2Repo = "maven2-repository.dev.java.net" at "http://download.java.net/maven/2"
       val javanet1Repo = "maven-repository.dev.java.net" at "http://download.java.net/maven/1"
       val javax = "javax.resource" % "connector-api" % "1.5" % "provided"
+      val wm_sbjsbml = "pt.cnbc.wikimodels" % "wm_libjsbml" % "0.1-SNAPSHOT"
       val wm_setup = "pt.cnbc.wikimodels" % "wm_setup" % "0.1-SNAPSHOT"
 
 
