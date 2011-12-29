@@ -143,7 +143,11 @@ class Boot extends LoggerWrapper{
               Map("modelMetaId" -> model, "compartmentMetaId" -> compartment), true )
           }
 
-
+          //TODO redirects for species
+          //TODO redirects for parameter
+          //TODO redirects for function definition
+          //TODO redirects for constraint
+          //TODO redirects for reaction
 
 
           //These redirects make the comments available to everyone

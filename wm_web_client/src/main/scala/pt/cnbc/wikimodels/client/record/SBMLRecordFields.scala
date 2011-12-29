@@ -231,7 +231,14 @@ with GetSetOwnerField[String, T]{
   override def name: String = "Description"
   override def toXHtml: NodeSeq = {
     trace("Calling Notes.toXHtml")
-    XML.loadString("<span>" + this.value.getOrElse("No description found!") + "</span>")
+      //TODO: this method is almost equal to with DisplayHTMLWithLabelInOneLine[String, T]. Refactor to use that instead if possible
+      <div id={uniqueFieldId + "_holder"}>
+        <span for={ uniqueFieldId.openTheBox }>
+          <span class="sbml_field_label">{displayHtml}</span>
+          <span class="sbml_field_content">  {XML.loadString( this.value.getOrElse("No description found!") )}</span>
+        </span>
+          <lift:msg id={uniqueFieldId.openTheBox}  errorClass="lift_error"/>
+      </div>
   }
 }
 

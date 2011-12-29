@@ -137,18 +137,18 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
 
   //listOf definitions for record
   //TODO - find a better solution to this. Parents' listOfXXX definitions is a big problem
-  var listOfFunctionDefinitionsRec:MutableList[FunctionDefinition] = new MutableList[FunctionDefinition]
+  var listOfFunctionDefinitionsRec:List[FunctionDefinitionRecord] = Nil
   //var listOfUnitDefinitions:List[ÛnitDefinition] = List()
   //var listOfCompartmentTypes:List[CompartmentType] = List()
   //var listOfSpeciesTypes:List[SpeciesType] = List()
   var listOfCompartmentsRec: List[CompartmentRecord] = Nil
-  var listOfSpeciesRec: Set[Species] = Set.empty[Species]
-  var listOfParametersRec: Set[Parameter] = Set.empty[Parameter]
+  var listOfSpeciesRec: List[SpeciesRecord] = Nil
+  var listOfParametersRec: List[ParameterRecord] = Nil
   //var listOfInitialAssignments:List[InitialAssignment] = List()
   //TODO listOfRules is missing
   //var listOfRules: java.util.Collection[Rules] = null
-  var listOfConstraintsRec: Set[Constraint] = Set.empty[Constraint]
-  var listOfReactionsRec: Set[Reaction] = Set.empty[Reaction]
+  var listOfConstraintsRec: List[ConstraintRecord] = Nil
+  //var listOfReactionsRec: List[ReactionRecord] = Nil
   //var listOfEvents:List[Event] = List()
 
 
@@ -192,12 +192,12 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
             </a>
           </h3>
           <div class="toggle_container">
-            <div id={this.metaid} class="block">{
+            <div id="accordion_c" class="block">{
               this.listOfCompartmentsRec.map(i => {
-              <h3 id="accord_c_c1" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
-                <a href="#accord_c_c1">
+              <h3 id={"accord_c_"+i.metaid} class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
+                <a href={"#accord_c_"+i.metaid}>
                   {i.id}
-                  <form style='display:inline;' >{SHtml.ajaxButton(Text("Add Compartment"),
+                  <form style='display:inline;' >{SHtml.ajaxButton(Text("Edit"),
                     () => {
                       debug("Button to edit compartment, pressed.")
                       S.redirectTo(i.relativeURL + "/edit" )
@@ -224,7 +224,7 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
           </div>
           <h3 id="accord_s" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top changeline">
             <a href="#accord_s">
-              Species
+              {this.listOfSpeciesRec.size} Species
               <form style='display:inline;' >{SHtml.ajaxButton(Text("Add Species"),
                 () => {
                   debug("Button to add species pressed.")
@@ -236,71 +236,40 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
             </a>
           </h3>
           <div  class="toggle_container">
-            <div id="accordion3" class="block">
-              <h3 id="accord_s_s1" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
-                <a href="#accord_s_s1">
-                  Species 1
-                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Edit</button>
-                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Delete</button>
-                </a>
-              </h3>
-              <div class="toggle_container">
-                <div class="block">
-                  <p>
-                    Mauris mauris ante, blandit et, ultrices a, suscipit eget, quam. Integer
-                    ut neque. Vivamus nisi metus, molestie vel, gravida in, condimentum sit
-                    amet, nunc. Nam a nibh. Donec suscipit eros. Nam mi. Proin viverra leo ut
-                    odio. Curabitur malesuada. Vestibulum a velit eu ante scelerisque vulputate.
-                  </p>
-                </div>
-              </div>
-              <h3 id="accord_s_s2" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
-                <a href="#acctoggle_containerord_s_s2">
-                  Species 2
-                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Edit</button>
-                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Delete</button>
-                </a>
-              </h3>
-              <div class="toggle_container">
-                <div class="block">
-                  <p>
-                    Sed non urna. Donec et ante. Phasellus eu ligula. Vestibulum sit amet
-                    purus. Vivamus hendrerit, dolor at aliquet laoreet, mauris turpis porttitor
-                    velit, faucibus interdum tellus libero ac justo. Vivamus non quam. In
-                    suscipit faucibus urna.
-                  </p>
-                </div>
-              </div>
-              <h3 id="accord_s_s3" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
-                <a href="#accord_s_s3">
-                  Species 3
-                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Edit</button>
-                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Delete</button>
-                </a>
-              </h3>
-              <div class="toggle_container">
-                <div class="block">
-                  <p>
-                    Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis.
-                    Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero
-                    ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis
-                    lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui.
-                  </p>
-                  <ul>
-                    <li>List item one</li>
-                    <li>List item two</li>
-                    <li>List item three</li>
-                  </ul>
-                </div>
-              </div>
+            <div id="accordion_s" class="block">{
+              this.listOfSpeciesRec.map(i => {
+                <h3 id={"accord_s_"+i.metaid} class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
+                  <a href={"#accord_s_"+i.metaid}>
+                    {i.id}
+                    <form style='display:inline;' >{SHtml.ajaxButton(Text("Edit"),
+                      () => {
+                        debug("Button to edit species, pressed.")
+                        S.redirectTo(i.relativeURL + "/edit" )
+                      },
+                      "class" ->"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+                    )}</form>
+                    <form style='display:inline;' >{SHtml.ajaxButton(Text("Delete"),
+                      () => {
+                        debug("Button to delete species, pressed.")
+                        S.redirectTo(i.relativeURL )
+                      },
+                      "class" ->"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+                    )}</form>
+                  </a>
+                </h3>
+                  <div class="toggle_container">
+                    <div class="block">{
+                      i.toXHtml
+                      }
+                    </div>
+                  </div>})
+              }
             </div>
-
           </div>
 
-
-          <h3 id="accord_s" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top changeline">
-            <a href="#accord_s">
-              Parameters
+          <h3 id="accord_p" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top changeline">
+            <a href="#accord_p">
+              {this.listOfParametersRec.size} Parameters
               <form style='display:inline;' >{SHtml.ajaxButton(Text("Add Parameters"),
                 () => {
                   debug("Button to add parameters pressed.")
@@ -312,70 +281,40 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
             </a>
           </h3>
           <div  class="toggle_container">
-            <div id="accordion3" class="block">
-              <h3 id="accord_s_s1" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
-                <a href="#accord_s_s1">
-                  Parameter 1
-                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Edit</button>
-                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Delete</button>
-                </a>
-              </h3>
-              <div class="toggle_container">
-                <div class="block">
-                  <p>
-                    Mauris mauris ante, blandit et, ultrices a, suscipit eget, quam. Integer
-                    ut neque. Vivamus nisi metus, molestie vel, gravida in, condimentum sit
-                    amet, nunc. Nam a nibh. Donec suscipit eros. Nam mi. Proin viverra leo ut
-                    odio. Curabitur malesuada. Vestibulum a velit eu ante scelerisque vulputate.
-                  </p>
-                </div>
-              </div>
-              <h3 id="accord_s_s2" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
-                <a href="#acctoggle_containerord_s_s2">
-                  Parameter 2
-                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Edit</button>
-                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Delete</button>
-                </a>
-              </h3>
-              <div class="toggle_container">
-                <div class="block">
-                  <p>
-                    Sed non urna. Donec et ante. Phasellus eu ligula. Vestibulum sit amet
-                    purus. Vivamus hendrerit, dolor at aliquet laoreet, mauris turpis porttitor
-                    velit, faucibus interdum tellus libero ac justo. Vivamus non quam. In
-                    suscipit faucibus urna.
-                  </p>
-                </div>
-              </div>
-              <h3 id="accord_s_s3" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
-                <a href="#accord_s_s3">
-                  Parameter 3
-                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Edit</button>
-                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Delete</button>
-                </a>
-              </h3>
-              <div class="toggle_container">
-                <div class="block">
-                  <p>
-                    Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis.
-                    Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero
-                    ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis
-                    lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui.
-                  </p>
-                  <ul>
-                    <li>List item one</li>
-                    <li>List item two</li>
-                    <li>List item three</li>
-                  </ul>
-                </div>
-              </div>
+            <div id="accordion_p" class="block">{
+              this.listOfParametersRec.map(i => {
+                <h3 id={"accord_p_"+i.metaid} class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
+                  <a href={"#accord_p_"+i.metaid}>
+                    {i.id}
+                    <form style='display:inline;' >{SHtml.ajaxButton(Text("Edit"),
+                      () => {
+                        debug("Button to edit parameter, pressed.")
+                        S.redirectTo(i.relativeURL + "/edit" )
+                      },
+                      "class" ->"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+                    )}</form>
+                    <form style='display:inline;' >{SHtml.ajaxButton(Text("Delete"),
+                      () => {
+                        debug("Button to delete parameter, pressed.")
+                        S.redirectTo(i.relativeURL )
+                      },
+                      "class" ->"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+                    )}</form>
+                  </a>
+                </h3>
+                  <div class="toggle_container">
+                    <div class="block">{
+                      i.toXHtml
+                      }
+                    </div>
+                  </div>})
+              }
             </div>
-
           </div>
 
-          <h3 id="accord_s" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top changeline">
-            <a href="#accord_s">
-              Function definitions
+          <h3 id="accord_fd" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top changeline">
+            <a href="#accord_fd">
+              {this.listOfFunctionDefinitionsRec.size} Function Definition
               <form style='display:inline;' >{SHtml.ajaxButton(Text("Add Function definition"),
                 () => {
                   debug("Button to add function definition pressed.")
@@ -387,74 +326,44 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
             </a>
           </h3>
           <div  class="toggle_container">
-            <div id="accordion3" class="block">
-              <h3 id="accord_s_s1" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
-                <a href="#accord_s_s1">
-                  Function definition 1
-                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Edit</button>
-                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Delete</button>
-                </a>
-              </h3>
-              <div class="toggle_container">
-                <div class="block">
-                  <p>
-                    Mauris mauris ante, blandit et, ultrices a, suscipit eget, quam. Integer
-                    ut neque. Vivamus nisi metus, molestie vel, gravida in, condimentum sit
-                    amet, nunc. Nam a nibh. Donec suscipit eros. Nam mi. Proin viverra leo ut
-                    odio. Curabitur malesuada. Vestibulum a velit eu ante scelerisque vulputate.
-                  </p>
-                </div>
-              </div>
-              <h3 id="accord_s_s2" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
-                <a href="#acctoggle_containerord_s_s2">
-                  Function definition 2
-                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Edit</button>
-                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Delete</button>
-                </a>
-              </h3>
-              <div class="toggle_container">
-                <div class="block">
-                  <p>
-                    Sed non urna. Donec et ante. Phasellus eu ligula. Vestibulum sit amet
-                    purus. Vivamus hendrerit, dolor at aliquet laoreet, mauris turpis porttitor
-                    velit, faucibus interdum tellus libero ac justo. Vivamus non quam. In
-                    suscipit faucibus urna.
-                  </p>
-                </div>
-              </div>
-              <h3 id="accord_s_s3" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
-                <a href="#accord_s_s3">
-                  Function definition 3
-                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Edit</button>
-                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Delete</button>
-                </a>
-              </h3>
-              <div class="toggle_container">
-                <div class="block">
-                  <p>
-                    Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis.
-                    Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero
-                    ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis
-                    lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui.
-                  </p>
-                  <ul>
-                    <li>List item one</li>
-                    <li>List item two</li>
-                    <li>List item three</li>
-                  </ul>
-                </div>
-              </div>
+            <div id="accordion_fd" class="block">{
+              this.listOfFunctionDefinitionsRec.map(i => {
+                <h3 id={"accord_fd_"+i.metaid} class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
+                  <a href={"#accord_fd_"+i.metaid}>
+                    {i.id}
+                    <form style='display:inline;' >{SHtml.ajaxButton(Text("Edit"),
+                      () => {
+                        debug("Button to edit function definition, pressed.")
+                        S.redirectTo(i.relativeURL + "/edit" )
+                      },
+                      "class" ->"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+                    )}</form>
+                    <form style='display:inline;' >{SHtml.ajaxButton(Text("Delete"),
+                      () => {
+                        debug("Button to delete function definition, pressed.")
+                        S.redirectTo(i.relativeURL )
+                      },
+                      "class" ->"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+                    )}</form>
+                  </a>
+                </h3>
+                  <div class="toggle_container">
+                    <div class="block">{
+                      i.toXHtml
+                      }
+                    </div>
+                  </div>})
+              }
             </div>
-
           </div>
 
-          <h3 id="accord_s" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top changeline">
-            <a href="#accord_s">
-              Constraints
-              <form style='display:inline;' >{SHtml.ajaxButton(Text("Add Constraint"),
+          <h3 id="accord_c" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top changeline">
+            <a href="#accord_c">
+              {this.listOfConstraintsRec.size} Constraints
+              <form style='display:inline;' >{SHtml.ajaxButton(Text("Add Constraints"),
                 () => {
-                  debug("Button to add constraint pressed.")
-                  S.redirectTo(this.relativeURL + "/createconstraint" )
+                  debug("Button to add constraints pressed.")
+                  S.redirectTo(this.relativeURL + "/createconstraints" )
                 },
                 "class" ->"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
               )}</form>
@@ -462,66 +371,81 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
             </a>
           </h3>
           <div  class="toggle_container">
-            <div id="accordion3" class="block">
-              <h3 id="accord_s_s1" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
-                <a href="#accord_s_s1">
-                  Constraint 1
-                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Edit</button>
-                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Delete</button>
-                </a>
-              </h3>
-              <div class="toggle_container">
-                <div class="block">
-                  <p>
-                    Mauris mauris ante, blandit et, ultrices a, suscipit eget, quam. Integer
-                    ut neque. Vivamus nisi metus, molestie vel, gravida in, condimentum sit
-                    amet, nunc. Nam a nibh. Donec suscipit eros. Nam mi. Proin viverra leo ut
-                    odio. Curabitur malesuada. Vestibulum a velit eu ante scelerisque vulputate.
-                  </p>
-                </div>
-              </div>
-              <h3 id="accord_s_s2" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
-                <a href="#acctoggle_containerord_s_s2">
-                  Constraint 2
-                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Edit</button>
-                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Delete</button>
-                </a>
-              </h3>
-              <div class="toggle_container">
-                <div class="block">
-                  <p>
-                    Sed non urna. Donec et ante. Phasellus eu ligula. Vestibulum sit amet
-                    purus. Vivamus hendrerit, dolor at aliquet laoreet, mauris turpis porttitor
-                    velit, faucibus interdum tellus libero ac justo. Vivamus non quam. In
-                    suscipit faucibus urna.
-                  </p>
-                </div>
-              </div>
-              <h3 id="accord_s_s3" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
-                <a href="#accord_s_s3">
-                  Constraint 3
-                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Edit</button>
-                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Delete</button>
-                </a>
-              </h3>
-              <div class="toggle_container">
-                <div class="block">
-                  <p>
-                    Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis.
-                    Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero
-                    ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis
-                    lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui.
-                  </p>
-                  <ul>
-                    <li>List item one</li>
-                    <li>List item two</li>
-                    <li>List item three</li>
-                  </ul>
-                </div>
-              </div>
+            <div id="accordion3" class="block">{
+              this.listOfConstraintsRec.map(i => {
+                <h3 id={"accord_c_"+i.metaid} class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
+                  <a href={"#accord_c_"+i.metaid}>
+                    {i.id}
+                    <form style='display:inline;' >{SHtml.ajaxButton(Text("Edit"),
+                      () => {
+                        debug("Button to edit constraints, pressed.")
+                        S.redirectTo(i.relativeURL + "/edit" )
+                      },
+                      "class" ->"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+                    )}</form>
+                    <form style='display:inline;' >{SHtml.ajaxButton(Text("Delete"),
+                      () => {
+                        debug("Button to delete constraints, pressed.")
+                        S.redirectTo(i.relativeURL )
+                      },
+                      "class" ->"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+                    )}</form>
+                  </a>
+                </h3>
+                  <div class="toggle_container">
+                    <div class="block">{
+                      i.toXHtml
+                      }
+                    </div>
+                  </div>})
+              }
             </div>
-
           </div>
+
+          <!--<h3 id="accord_r" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top changeline">
+            <a href="#accord_r">
+              {this.listOfReactionsRec.size} Species
+              <form style='display:inline;' >{SHtml.ajaxButton(Text("Add Species"),
+                () => {
+                  debug("Button to add reaction pressed.")
+                  S.redirectTo(this.relativeURL + "/createreaction" )
+                },
+                "class" ->"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+              )}</form>
+
+            </a>
+          </h3>
+          <div  class="toggle_container">
+            <div id="accordion_r" class="block">{
+              this.listOfReactionsRec.map(i => {
+                <h3 id={"accord_r_"+i.metaid} class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
+                  <a href={"#accord_r_"+i.metaid}>
+                    {i.id}
+                    <form style='display:inline;' >{SHtml.ajaxButton(Text("Edit"),
+                      () => {
+                        debug("Button to edit reaction, pressed.")
+                        S.redirectTo(i.relativeURL + "/edit" )
+                      },
+                      "class" ->"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+                    )}</form>
+                    <form style='display:inline;' >{SHtml.ajaxButton(Text("Delete"),
+                      () => {
+                        debug("Button to delete reaction, pressed.")
+                        S.redirectTo(i.relativeURL )
+                      },
+                      "class" ->"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+                    )}</form>
+                  </a>
+                </h3>
+                  <div class="toggle_container">
+                    <div class="block">{
+                      i.toXHtml
+                      }
+                    </div>
+                  </div>})
+              }
+            </div>
+          </div>-->
 
           <h3 id="accord_s" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top changeline">
             <a href="#accord_s">
@@ -702,8 +626,275 @@ object CompartmentRecord extends CompartmentRecord with RestMetaRecord[Compartme
   override def fields = fieldOrder
 }
 
+/**
+ * Created by IntelliJ IDEA.
+ * @author Alexandre Martins
+ * Date: 29-12-2011
+ * Time: 22:35
+ * To change this template use File | Settings | File Templates.
+ */
+class SpeciesRecord() extends Species with SBaseRecord[SpeciesRecord]  {
+
+  override def meta = SpeciesRecord
+
+  override protected def relativeURLasList = "model" :: S.param("modelMetaId").openTheBox :: "species" :: metaid :: Nil
+  override protected def relativeCreationURLasList = "model" :: S.param("modelMetaId").openTheBox :: "species" :: Nil
+
+
+  //  ### can be validated with validate ###
+
+  //  ### can be presented as XHtml, Json, or as a Form. ###
+
+  override def toXHtml = {
+    <div>
+      <head>
+        <link type="text/css" rel="stylesheet" href="/css/sbml_present.css"></link>
+      </head>
+      {super.toXHtml}
+    </div>
+  }
+
+  //  ### will contain fields which can be listed with allFields. ###
+  object metaIdO extends MetaId(this, 100)
+  object idO extends Id(this, 100)
+  object nameO extends Name(this, 100)
+  object notesO extends Notes(this, 1000)
+  //  ### can be created directly from a Request containing params with names that match the fields on a Record ( see fromReq ). ###
+
+  var _parent:Box[SBMLModelRecord] = Empty
+  //TODO isn't there a better way to override a var than THIS?!??! Fucking asInstanceOf
+  override def parent:Box[SBMLModelRecord] = _parent.asInstanceOf[Box[SBMLModelRecord]]
+  override def parent_=(p:Box[SBaseRecord[_]] ):Unit = {
+    _parent = p.asInstanceOf[Box[SBMLModelRecord]]
+  }
+
 }
 
+
+
+//TODO - DELETE IF NOT USED FOR ANYTHING
+object SpeciesRecord extends SpeciesRecord with RestMetaRecord[SpeciesRecord] {
+  def apply() = new SpeciesRecord
+  override def fieldOrder = List(metaIdO, idO, nameO, /*sizeO,*/ notesO)
+  override def fields = fieldOrder
+}
+
+
+/**
+ * Created by IntelliJ IDEA.
+ * @author Alexandre Martins
+ * Date: 29-12-2011
+ * Time: 22:35
+ * To change this template use File | Settings | File Templates.
+ */
+class ParameterRecord() extends Parameter with SBaseRecord[ParameterRecord]  {
+
+  override def meta = ParameterRecord
+
+  override protected def relativeURLasList = "model" :: S.param("modelMetaId").openTheBox :: "parameter" :: metaid :: Nil
+  override protected def relativeCreationURLasList = "model" :: S.param("modelMetaId").openTheBox :: "parameter" :: Nil
+
+
+  //  ### can be validated with validate ###
+
+  //  ### can be presented as XHtml, Json, or as a Form. ###
+
+  override def toXHtml = {
+    <div>
+      <head>
+        <link type="text/css" rel="stylesheet" href="/css/sbml_present.css"></link>
+      </head>
+      {super.toXHtml}
+    </div>
+  }
+
+  //  ### will contain fields which can be listed with allFields. ###
+  object metaIdO extends MetaId(this, 100)
+  object idO extends Id(this, 100)
+  object nameO extends Name(this, 100)
+  object notesO extends Notes(this, 1000)
+  //  ### can be created directly from a Request containing params with names that match the fields on a Record ( see fromReq ). ###
+
+  var _parent:Box[SBMLModelRecord] = Empty
+  //TODO isn't there a better way to override a var than THIS?!??! Fucking asInstanceOf
+  override def parent:Box[SBMLModelRecord] = _parent.asInstanceOf[Box[SBMLModelRecord]]
+  override def parent_=(p:Box[SBaseRecord[_]] ):Unit = {
+    _parent = p.asInstanceOf[Box[SBMLModelRecord]]
+  }
+
+}
+
+
+
+//TODO - DELETE IF NOT USED FOR ANYTHING
+object ParameterRecord extends ParameterRecord with RestMetaRecord[ParameterRecord] {
+  def apply() = new ParameterRecord
+  override def fieldOrder = List(metaIdO, idO, nameO, /*sizeO,*/ notesO)
+  override def fields = fieldOrder
+}
+
+/**
+ * Created by IntelliJ IDEA.
+ * @author Alexandre Martins
+ * Date: 29-12-2011
+ * Time: 22:35
+ * To change this template use File | Settings | File Templates.
+ */
+class FunctionDefinitionRecord() extends FunctionDefinition with SBaseRecord[FunctionDefinitionRecord]  {
+
+  override def meta = FunctionDefinitionRecord
+
+  override protected def relativeURLasList = "model" :: S.param("modelMetaId").openTheBox :: "functiondefinition" :: metaid :: Nil
+  override protected def relativeCreationURLasList = "model" :: S.param("modelMetaId").openTheBox :: "functiondefinition" :: Nil
+
+
+  //  ### can be validated with validate ###
+
+  //  ### can be presented as XHtml, Json, or as a Form. ###
+
+  override def toXHtml = {
+    <div>
+      <head>
+        <link type="text/css" rel="stylesheet" href="/css/sbml_present.css"></link>
+      </head>
+      {super.toXHtml}
+    </div>
+  }
+
+  //  ### will contain fields which can be listed with allFields. ###
+  object metaIdO extends MetaId(this, 100)
+  object idO extends Id(this, 100)
+  object nameO extends Name(this, 100)
+  object notesO extends Notes(this, 1000)
+  //  ### can be created directly from a Request containing params with names that match the fields on a Record ( see fromReq ). ###
+
+  var _parent:Box[SBMLModelRecord] = Empty
+  //TODO isn't there a better way to override a var than THIS?!??! Fucking asInstanceOf
+  override def parent:Box[SBMLModelRecord] = _parent.asInstanceOf[Box[SBMLModelRecord]]
+  override def parent_=(p:Box[SBaseRecord[_]] ):Unit = {
+    _parent = p.asInstanceOf[Box[SBMLModelRecord]]
+  }
+
+}
+
+
+
+//TODO - DELETE IF NOT USED FOR ANYTHING
+object FunctionDefinitionRecord extends FunctionDefinitionRecord with RestMetaRecord[FunctionDefinitionRecord] {
+  def apply() = new FunctionDefinitionRecord
+  override def fieldOrder = List(metaIdO, idO, nameO, /*sizeO,*/ notesO)
+  override def fields = fieldOrder
+}
+
+/**
+ * Created by IntelliJ IDEA.
+ * @author Alexandre Martins
+ * Date: 29-12-2011
+ * Time: 22:35
+ * To change this template use File | Settings | File Templates.
+ */
+class ConstraintRecord() extends Constraint with SBaseRecord[ConstraintRecord]  {
+
+  override def meta = ConstraintRecord
+
+  override protected def relativeURLasList = "model" :: S.param("modelMetaId").openTheBox :: "constraint" :: metaid :: Nil
+  override protected def relativeCreationURLasList = "model" :: S.param("modelMetaId").openTheBox :: "constraint" :: Nil
+
+
+  //  ### can be validated with validate ###
+
+  //  ### can be presented as XHtml, Json, or as a Form. ###
+
+  override def toXHtml = {
+    <div>
+      <head>
+        <link type="text/css" rel="stylesheet" href="/css/sbml_present.css"></link>
+      </head>
+      {super.toXHtml}
+    </div>
+  }
+
+  //  ### will contain fields which can be listed with allFields. ###
+  object metaIdO extends MetaId(this, 100)
+  object idO extends Id(this, 100)
+  object nameO extends Name(this, 100)
+  object notesO extends Notes(this, 1000)
+  //  ### can be created directly from a Request containing params with names that match the fields on a Record ( see fromReq ). ###
+
+  var _parent:Box[SBMLModelRecord] = Empty
+  //TODO isn't there a better way to override a var than THIS?!??! Fucking asInstanceOf
+  override def parent:Box[SBMLModelRecord] = _parent.asInstanceOf[Box[SBMLModelRecord]]
+  override def parent_=(p:Box[SBaseRecord[_]] ):Unit = {
+    _parent = p.asInstanceOf[Box[SBMLModelRecord]]
+  }
+
+}
+
+
+
+//TODO - DELETE IF NOT USED FOR ANYTHING
+object ConstraintRecord extends ConstraintRecord with RestMetaRecord[ConstraintRecord] {
+  def apply() = new ConstraintRecord
+  override def fieldOrder = List(metaIdO, idO, nameO, /*sizeO,*/ notesO)
+  override def fields = fieldOrder
+}
+
+
+/**
+ * Created by IntelliJ IDEA.
+ * @author Alexandre Martins
+ * Date: 29-12-2011
+ * Time: 22:35
+ * To change this template use File | Settings | File Templates.
+ */
+class ReactionRecord() extends Reaction with SBaseRecord[ReactionRecord]  {
+
+  override def meta = ReactionRecord
+
+  override protected def relativeURLasList = "model" :: S.param("modelMetaId").openTheBox :: "reaction" :: metaid :: Nil
+  override protected def relativeCreationURLasList = "model" :: S.param("modelMetaId").openTheBox :: "reaction" :: Nil
+
+
+  //  ### can be validated with validate ###
+
+  //  ### can be presented as XHtml, Json, or as a Form. ###
+
+  override def toXHtml = {
+    <div>
+      <head>
+        <link type="text/css" rel="stylesheet" href="/css/sbml_present.css"></link>
+      </head>
+      {super.toXHtml}
+    </div>
+  }
+
+  //  ### will contain fields which can be listed with allFields. ###
+  object metaIdO extends MetaId(this, 100)
+  object idO extends Id(this, 100)
+  object nameO extends Name(this, 100)
+  object notesO extends Notes(this, 1000)
+  //  ### can be created directly from a Request containing params with names that match the fields on a Record ( see fromReq ). ###
+
+  var _parent:Box[SBMLModelRecord] = Empty
+  //TODO isn't there a better way to override a var than THIS?!??! Fucking asInstanceOf
+  override def parent:Box[SBMLModelRecord] = _parent.asInstanceOf[Box[SBMLModelRecord]]
+  override def parent_=(p:Box[SBaseRecord[_]] ):Unit = {
+    _parent = p.asInstanceOf[Box[SBMLModelRecord]]
+  }
+
+}
+
+
+
+//TODO - DELETE IF NOT USED FOR ANYTHING
+object ReactionRecord extends ReactionRecord with RestMetaRecord[ReactionRecord] {
+  def apply() = new ReactionRecord
+  override def fieldOrder = List(metaIdO, idO, nameO, /*sizeO,*/ notesO)
+  override def fields = fieldOrder
+}
+
+
+}
 
 
 package net.liftweb.record{
