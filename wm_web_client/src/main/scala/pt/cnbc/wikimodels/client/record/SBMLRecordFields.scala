@@ -382,7 +382,7 @@ with DisplayFormWithLabelInOneLine[Double, T] with DisplayHTMLWithLabelInOneLine
   }
 
   //Appears when rendering the form or the visualization
-  override def name: String = "Constant"
+  override def name: String = "Size"
   //override def toXHtml: NodeSeq = Text(this.value)
 }
 
@@ -419,7 +419,7 @@ trait DisplayHTMLWithLabelInOneLine[ThisType, OwnerType <: Record[OwnerType]] ex
     <div id={uniqueFieldId + "_holder"}>
       <span for={ uniqueFieldId.openTheBox }>
         <span class="sbml_field_label">{displayHtml}</span>
-        <span class="sbml_field_content">  {this.valueBox.openTheBox}</span>
+        <span class="sbml_field_content">  {this.valueBox openOr "-- not defined --" }</span>
       </span>
         <lift:msg id={uniqueFieldId.openTheBox}  errorClass="lift_error"/>
     </div>

@@ -109,7 +109,7 @@ class Boot extends LoggerWrapper{
           case RewriteRequest(ParsePath("model"::model::Nil,"",_,false),_,_) => {
             trace("RewriteRequest from /model/"+model+" to /modele/model_view.html" )
             RewriteResponse(ParsePath( "modele"::"model_view"::Nil,"html",true, false),
-              Map("modelMetaId" -> model), true)
+              Map("modelMetaId" -> model ), true)
           }
           case RewriteRequest(ParsePath("model"::model::"edit"::Nil,"",_,false),_,_) => {
             trace("RewriteRequest from /model/"+model+"/edit to /modele/model_edit.html" )

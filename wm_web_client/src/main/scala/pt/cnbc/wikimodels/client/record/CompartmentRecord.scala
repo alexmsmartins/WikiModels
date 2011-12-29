@@ -8,6 +8,7 @@ import pt.cnbc.wikimodels.dataModel.Compartment
 import net.liftweb.common._
 import net.liftweb.http.{SHtml, S}
 import net.liftweb.record._
+import xml.NodeSeq
 
 /**
  * TODO: Please document.
@@ -40,6 +41,12 @@ class CompartmentRecord() extends Compartment with SBaseRecord[CompartmentRecord
         <link type="text/css" rel="stylesheet" href="/css/sbml_present.css"></link>
       </head>
       {super.toXHtml}
+    </div>
+  }
+  
+  override def toForm(f:CompartmentRecord => Unit):NodeSeq = {
+    <div id="compartment_toform">
+      {super.toForm(f)}
       <!-- outside can't be a field and so I will make it a form -->
       {
       val defaultOption:(Box[CompartmentRecord], String) = (Empty, "[no compartment")
@@ -52,14 +59,14 @@ class CompartmentRecord() extends Compartment with SBaseRecord[CompartmentRecord
       }
     </div>
   }
-
+  
   //  ### will contain fields which can be listed with allFields. ###
   object metaIdO extends MetaId(this, 100)
   object idO extends Id(this, 100)
   object nameO extends Name(this, 100)
   object spatialDimensions0 extends SpatialDimensions(this)
   object constantO extends Constant(this)
-  //object sizeO extends Size(this)
+  object sizeO extends Size(this)
   object notesO extends Notes(this, 1000)
   //  ### can be created directly from a Request containing params with names that match the fields on a Record ( see fromReq ). ###
 
@@ -77,6 +84,6 @@ class CompartmentRecord() extends Compartment with SBaseRecord[CompartmentRecord
 //TODO - DELETE IF NOT USED FOR ANYTHING
 object CompartmentRecord extends CompartmentRecord with RestMetaRecord[CompartmentRecord] {
   def apply() = new CompartmentRecord
-  override def fieldOrder = List(metaIdO, idO, nameO, spatialDimensions0, constantO, /*sizeO,*/ notesO)
+  override def fieldOrder = List(metaIdO, idO, nameO, spatialDimensions0, constantO, sizeO, notesO)
   override def fields = fieldOrder
 }

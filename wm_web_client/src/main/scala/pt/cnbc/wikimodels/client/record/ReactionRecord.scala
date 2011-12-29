@@ -47,10 +47,7 @@ class ReactionRecord() extends Reaction with SBaseRecord[ReactionRecord]  {
   override def parent_=(p:Box[SBaseRecord[_]] ):Unit = {
     _parent = p.asInstanceOf[Box[SBMLModelRecord]]
   }
-
 }
-
-
 
 //TODO - DELETE IF NOT USED FOR ANYTHING
 object ReactionRecord extends ReactionRecord with RestMetaRecord[ReactionRecord] {
