@@ -17,29 +17,29 @@
 
 
     <!-- javascript -->
-    <script type="text/javascript" src="/classpath/tabs/js/jquery-ui-1.7.2.custom.min.js"/>
+    <script type="text/javascript" src="/classpath/tabs/js/jquery-ui-1.7.2.custom.min.js"></script>
     <script src="/classpath/js/ASCIIMathML.js" type="text/javascript"></script>
     <script src="/classpath/js/jquery.cookie.js" type="text/javascript"></script>
     <script src="/classpath/tree/jquery.treeview.js" type="text/javascript"></script>
-    <script src="/classpath/js/functions.js" type="text/javascript" />
+    <script src="/classpath/js/functions.js" type="text/javascript" ></script>
     <script src="/classpath/js/fckeditor/fckeditor.js" type="text/javascript"></script>
     <script src="/classpath/tablesorter/jquery.tablesorter.js" type="text/javascript"></script>
     <script src="/classpath/js/popup.js" type="text/javascript"></script>
-    <script type="text/javascript" src="/classpath/math/json2.js"/>
-    <script type="text/javascript" src="/classpath/math/tokens.js"/>
-    <script type="text/javascript" src="/classpath/math/parse.js"/>
-    <script type="text/javascript" src="/classpath/math/math-exceptions.js"/>
-    <script type="text/javascript" src="/classpath/math/math-templates.js"/>
-    <script type="text/javascript" src="/classpath/math/math-categories.js"/>
-    <script type="text/javascript" src="/classpath/math/math-utils.js"/>
-    <script type="text/javascript" src="/classpath/math/math-infer.js"/>
-    <script type="text/javascript" src="/classpath/math/math-node.js"/>
-    <script type="text/javascript" src="/classpath/math/math-model.js"/>
-    <script type="text/javascript" src="/classpath/math/math-parser.js"/>
-    <script type="text/javascript" src="/classpath/math/math-position.js"/>
-    <script type="text/javascript" src="/classpath/math/math-render.js"/>
-    <script type="text/javascript" src="/classpath/math/math-input.js"/>
-    <script type="text/javascript" src="/classpath/math/math-editor.js"/>
+    <script type="text/javascript" src="/classpath/math/json2.js"></script>
+    <script type="text/javascript" src="/classpath/math/tokens.js"></script>
+    <script type="text/javascript" src="/classpath/math/parse.js"></script>
+    <script type="text/javascript" src="/classpath/math/math-exceptions.js"></script>
+    <script type="text/javascript" src="/classpath/math/math-templates.js"></script>
+    <script type="text/javascript" src="/classpath/math/math-categories.js"></script>
+    <script type="text/javascript" src="/classpath/math/math-utils.js"></script>
+    <script type="text/javascript" src="/classpath/math/math-infer.js"></script>
+    <script type="text/javascript" src="/classpath/math/math-node.js"></script>
+    <script type="text/javascript" src="/classpath/math/math-model.js"></script>
+    <script type="text/javascript" src="/classpath/math/math-parser.js"></script>
+    <script type="text/javascript" src="/classpath/math/math-position.js"></script>
+    <script type="text/javascript" src="/classpath/math/math-render.js"></script>
+    <script type="text/javascript" src="/classpath/math/math-input.js"></script>
+    <script type="text/javascript" src="/classpath/math/math-editor.js"></script>
     <script type="text/javascript">
             //<![CDATA[
             Ext.onReady(function(){
@@ -77,7 +77,7 @@
             //]]>
         </script>
 
-        <script id="jquery" src="/classpath/js/jquery.js" type="text/javascript" />
+        <script id="jquery" src="/classpath/js/jquery.js" type="text/javascript" ></script>
         <script type="text/javascript">
             window.onload = function() {
                 document.getElementById("username").focus();
@@ -90,12 +90,16 @@
 
     </head>
     <body>
-        <lift:msg/>
+            <lift:msgs>
+                <lift:error_msg></lift:error_msg>
+                <lift:error_class>errorBox</lift:error_class>
+            </lift:msgs>
         <div id="header">
             <div id="logo">
                 <a href="/index">
                     <img title="WikiModels Logo" width="300px" height="100px" src="/classpath/images/Logotipo02.png"></img>
-                </a><h2>Live models</h2>
+                </a>
+                <h2>Live models</h2>
             </div>
             <div id="search">
                 <form action="" method="get">
@@ -117,11 +121,11 @@
                         </h1>
                     </div>
                 </lift:HomePage.logInfo>
-                <div id="error_msg">
-                    <lift:snippet type="msgs">
-                        <lift:error_msg></lift:error_msg>
-                        <lift:error_class>errorBox</lift:error_class>
-                    </lift:snippet>
+                <div id="xerror_msg">
+                                        <lift:snippet type="msgs" >
+                                            <lift:error_msg></lift:error_msg>
+                                            <lift:error_class>errorBox</lift:error_class>
+                                        </lift:snippet>
                 </div>
                 <lift:bind name="content" />
             </div>

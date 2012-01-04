@@ -1,8 +1,3 @@
-import net.liftweb.record.Record
-import net.liftweb.common._
-import scala.xml.XML
-import scala.xml.XML._
-import scala.xml.NodeSeq
 import scala.xml._
 import net.liftweb.common._
 import net.liftweb.record._
@@ -11,11 +6,6 @@ import pt.cnbc.wikimodels.client.record._
 import pt.cnbc.wikimodels.dataModel._
 import net.liftweb.util.BindHelpers._
 import net.liftweb.http.{S, SHtml}
-import net.liftweb.json.JsonAST.JValue
-import org.sbml.libsbml.SBMLReader
-import pt.cnbc.wikimodels.dataVisitors.SBML2BeanConverter
-import visitor.SBMLRecordVisitor
-import scala.collection.JavaConversions._
 import alexmsmartins.log.LoggerWrapper
 
 //Javascript handling imports
@@ -26,12 +16,10 @@ import JE.{JsRaw,Str}
 
 package pt.cnbc.wikimodels.client.record{
 
-import scala.collection._
-
-import collection.mutable.MutableList
-import scala.collection.JavaConversions._
 import pt.cnbc.wikimodels.client.snippet.CommentSnip
 import net.liftweb.common.Box
+import pt.cnbc.wikimodels.sbmlVisitors.dataVisitors.SBML2BeanConverter
+import visitor.SBMLRecordVisitor
 
 
 /*
@@ -181,7 +169,7 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
           <h3 id="accord_c" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top changeline">
             <a href="#accord_c">
               {this.listOfCompartmentsRec.size} Compartments
-              <form style='display:inline;' >{SHtml.ajaxButton(
+              <form style='display:inline;' >{SHtml.button(
                 Text("Add Compartment"),
                 () => {
                    debug("Button to add compartment, pressed.")
@@ -197,14 +185,14 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
               <h3 id={"accord_c_"+i.metaid} class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
                 <a href={"#accord_c_"+i.metaid}>
                   {i.id}
-                  <form style='display:inline;' >{SHtml.ajaxButton(Text("Edit"),
+                  <form style='display:inline;' >{SHtml.button(Text("Edit"),
                     () => {
                       debug("Button to edit compartment, pressed.")
                       S.redirectTo(i.relativeURL + "/edit" )
                     },
                     "class" ->"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
                   )}</form>
-                  <form style='display:inline;' >{SHtml.ajaxButton(Text("Delete"),
+                  <form style='display:inline;' >{SHtml.button(Text("Delete"),
                     () => {
                       debug("Button to delete compartment, pressed.")
                       S.redirectTo(i.relativeURL )
@@ -225,7 +213,7 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
           <h3 id="accord_s" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top changeline">
             <a href="#accord_s">
               {this.listOfSpeciesRec.size} Species
-              <form style='display:inline;' >{SHtml.ajaxButton(Text("Add Species"),
+              <form style='display:inline;' >{SHtml.button(Text("Add Species"),
                 () => {
                   debug("Button to add species pressed.")
                   S.redirectTo(this.relativeURL + "/createspecies" )
@@ -241,14 +229,14 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
                 <h3 id={"accord_s_"+i.metaid} class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
                   <a href={"#accord_s_"+i.metaid}>
                     {i.id}
-                    <form style='display:inline;' >{SHtml.ajaxButton(Text("Edit"),
+                    <form style='display:inline;' >{SHtml.button(Text("Edit"),
                       () => {
                         debug("Button to edit species, pressed.")
                         S.redirectTo(i.relativeURL + "/edit" )
                       },
                       "class" ->"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
                     )}</form>
-                    <form style='display:inline;' >{SHtml.ajaxButton(Text("Delete"),
+                    <form style='display:inline;' >{SHtml.button(Text("Delete"),
                       () => {
                         debug("Button to delete species, pressed.")
                         S.redirectTo(i.relativeURL )
@@ -270,7 +258,7 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
           <h3 id="accord_p" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top changeline">
             <a href="#accord_p">
               {this.listOfParametersRec.size} Parameters
-              <form style='display:inline;' >{SHtml.ajaxButton(Text("Add Parameters"),
+              <form style='display:inline;' >{SHtml.button(Text("Add Parameters"),
                 () => {
                   debug("Button to add parameters pressed.")
                   S.redirectTo(this.relativeURL + "/createparameter" )
@@ -286,14 +274,14 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
                 <h3 id={"accord_p_"+i.metaid} class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
                   <a href={"#accord_p_"+i.metaid}>
                     {i.id}
-                    <form style='display:inline;' >{SHtml.ajaxButton(Text("Edit"),
+                    <form style='display:inline;' >{SHtml.button(Text("Edit"),
                       () => {
                         debug("Button to edit parameter, pressed.")
                         S.redirectTo(i.relativeURL + "/edit" )
                       },
                       "class" ->"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
                     )}</form>
-                    <form style='display:inline;' >{SHtml.ajaxButton(Text("Delete"),
+                    <form style='display:inline;' >{SHtml.button(Text("Delete"),
                       () => {
                         debug("Button to delete parameter, pressed.")
                         S.redirectTo(i.relativeURL )
@@ -315,7 +303,7 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
           <h3 id="accord_fd" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top changeline">
             <a href="#accord_fd">
               {this.listOfFunctionDefinitionsRec.size} Function Definition
-              <form style='display:inline;' >{SHtml.ajaxButton(Text("Add Function definition"),
+              <form style='display:inline;' >{SHtml.button(Text("Add Function definition"),
                 () => {
                   debug("Button to add function definition pressed.")
                   S.redirectTo(this.relativeURL + "/createfunctiondefinition" )
@@ -331,14 +319,14 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
                 <h3 id={"accord_fd_"+i.metaid} class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
                   <a href={"#accord_fd_"+i.metaid}>
                     {i.id}
-                    <form style='display:inline;' >{SHtml.ajaxButton(Text("Edit"),
+                    <form style='display:inline;' >{SHtml.button(Text("Edit"),
                       () => {
                         debug("Button to edit function definition, pressed.")
                         S.redirectTo(i.relativeURL + "/edit" )
                       },
                       "class" ->"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
                     )}</form>
-                    <form style='display:inline;' >{SHtml.ajaxButton(Text("Delete"),
+                    <form style='display:inline;' >{SHtml.button(Text("Delete"),
                       () => {
                         debug("Button to delete function definition, pressed.")
                         S.redirectTo(i.relativeURL )
@@ -360,7 +348,7 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
           <h3 id="accord_c" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top changeline">
             <a href="#accord_c">
               {this.listOfConstraintsRec.size} Constraints
-              <form style='display:inline;' >{SHtml.ajaxButton(Text("Add Constraints"),
+              <form style='display:inline;' >{SHtml.button(Text("Add Constraints"),
                 () => {
                   debug("Button to add constraints pressed.")
                   S.redirectTo(this.relativeURL + "/createconstraints" )
@@ -376,14 +364,14 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
                 <h3 id={"accord_c_"+i.metaid} class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
                   <a href={"#accord_c_"+i.metaid}>
                     {i.id}
-                    <form style='display:inline;' >{SHtml.ajaxButton(Text("Edit"),
+                    <form style='display:inline;' >{SHtml.button(Text("Edit"),
                       () => {
                         debug("Button to edit constraints, pressed.")
                         S.redirectTo(i.relativeURL + "/edit" )
                       },
                       "class" ->"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
                     )}</form>
-                    <form style='display:inline;' >{SHtml.ajaxButton(Text("Delete"),
+                    <form style='display:inline;' >{SHtml.button(Text("Delete"),
                       () => {
                         debug("Button to delete constraints, pressed.")
                         S.redirectTo(i.relativeURL )
@@ -405,7 +393,7 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
           <!--<h3 id="accord_r" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top changeline">
             <a href="#accord_r">
               {this.listOfReactionsRec.size} Species
-              <form style='display:inline;' >{SHtml.ajaxButton(Text("Add Species"),
+              <form style='display:inline;' >{SHtml.button(Text("Add Species"),
                 () => {
                   debug("Button to add reaction pressed.")
                   S.redirectTo(this.relativeURL + "/createreaction" )
@@ -421,14 +409,14 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
                 <h3 id={"accord_r_"+i.metaid} class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
                   <a href={"#accord_r_"+i.metaid}>
                     {i.id}
-                    <form style='display:inline;' >{SHtml.ajaxButton(Text("Edit"),
+                    <form style='display:inline;' >{SHtml.button(Text("Edit"),
                       () => {
                         debug("Button to edit reaction, pressed.")
                         S.redirectTo(i.relativeURL + "/edit" )
                       },
                       "class" ->"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
                     )}</form>
-                    <form style='display:inline;' >{SHtml.ajaxButton(Text("Delete"),
+                    <form style='display:inline;' >{SHtml.button(Text("Delete"),
                       () => {
                         debug("Button to delete reaction, pressed.")
                         S.redirectTo(i.relativeURL )
@@ -450,7 +438,7 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
           <h3 id="accord_s" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top changeline">
             <a href="#accord_s">
               Reactions
-              <form style='display:inline;' >{SHtml.ajaxButton(Text("Add reaction"),
+              <form style='display:inline;' >{SHtml.button(Text("Add reaction"),
                 () => {
                   debug("Button to add reactions pressed.")
                   S.redirectTo(this.relativeURL + "/createreaction" )

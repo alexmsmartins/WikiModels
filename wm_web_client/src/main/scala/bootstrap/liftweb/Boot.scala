@@ -39,6 +39,9 @@ class Boot extends LoggerWrapper{
       //Where to search for lift related files. This is the new location
       LiftRules.addToPackages("pt.cnbc.wikimodels.client")
 
+      //TODO - solve java.lang.ClassCastException: net.liftweb.http.RewriteRequest cannot be cast to net.liftweb.http.Req before uncommenting the following line
+      //LiftRules.docType.default.set((r:Req) => Full(DocType.html5))
+
       LiftRules.htmlProperties.default.set((r: Req) =>new XHtmlInHtml5OutProperties(r.userAgent))
 
       // TODO - i STILL WANT TO FIND OUT WHY THIS DOES NOT WKRK. Something to do wiht the response not returning statuscode 302 to the browser, perhaps

@@ -37,7 +37,7 @@ class LogUser extends SMsg with LoggerWrapper {
 
         def authenticate () = {
             var ra:RestfulAccess = null
-            if (username.length == 0) {
+            if (username.trim.length == 0) {
                 S.error("Username missing")
             } else if (password.length == 0) {
                 S.error("Password missing")
@@ -52,7 +52,6 @@ class LogUser extends SMsg with LoggerWrapper {
                 } else {
                     S.error("Error in username or password")
                 }
-
             }
         }
         bind("entry", xhtml,

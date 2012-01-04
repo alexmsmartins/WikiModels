@@ -7,7 +7,7 @@ class LiftProject(info: ProjectInfo) extends DefaultWebProject(info) {
     val bryanjswift = "Bryan J Swift Repository" at "http://repos.bryanjswift.com/maven2/"
     //val junitInterface = "com.novocode" % "junit-interface" % "0.4.0" % "test"
 
-  val liftVersion = "2.4-M5"
+  val liftVersion = "2.4-RC1"
   val lift = "net.liftweb" %% "lift-mapper" % liftVersion % "compile"
   val liftRecord = "net.liftweb" %% "lift-record" % liftVersion % "compile"
   val liftWidget = "net.liftweb" %% "lift-widgets" % liftVersion % "compile"
