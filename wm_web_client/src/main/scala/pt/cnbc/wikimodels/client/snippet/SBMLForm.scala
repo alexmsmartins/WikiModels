@@ -74,21 +74,21 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
             redirectTo(model.relativeURL) //TODO: handle failure in the server (maybe this should be general)
           }
           case Empty => {
-            S.error(mainMsg, "Strange error when creating a new "+ model.sbmlType +". Report this bug please!")
+            S.error(mainMsgId, "Strange error when creating a new "+ model.sbmlType +". Report this bug please!")
             selectedModel(Full(model))
           }
           case x:ParamFailure[_] => {
-            S.error(mainMsg, x.messageChain) //TODO check if message chain is the right thing to send to S.error
+            S.error(mainMsgId, x.messageChain) //TODO check if message chain is the right thing to send to S.error
             selectedModel(Full(model))
           }
           case x:Failure => {
-            S.error(mainMsg, x.messageChain)
+            S.error(mainMsgId, x.messageChain)
             selectedModel(Full(model))
           }
         }
       }
       case x => {
-        x.foreach(f => S.error(mainMsg, "Error in " + f.field.uniqueFieldId + ": "+f.msg  ))
+        x.foreach(f => S.error(mainMsgId, "Error in " + f.field.uniqueFieldId + ": "+f.msg  ))
         selectedModel(Full(model))
       }
     }
@@ -116,21 +116,21 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
             redirectTo(compartment.relativeURL) //TODO: handle failure in the server (maybe this should be general)
           }
           case Empty => {
-            S.error(mainMsg, "Strange error when creating a new compartment "+ compartment.sbmlType +". Report this bug please!")
+            S.error(mainMsgId, "Strange error when creating a new compartment "+ compartment.sbmlType +". Report this bug please!")
             selectedCompartment(Full(compartment))
           }
           case x:ParamFailure[_] => {
-            S.error(mainMsg, x.messageChain) //TODO check if message chain is the right thing to send to S.error
+            S.error(mainMsgId, x.messageChain) //TODO check if message chain is the right thing to send to S.error
             selectedCompartment(Full(compartment))
           }
           case x:Failure => {
-            S.error(mainMsg, x.messageChain)
+            S.error(mainMsgId, x.messageChain)
             selectedCompartment(Full(compartment))
           }
         }
       }
       case x =>{
-        x.foreach(f => S.error(mainMsg, "Error in " + f.field.uniqueFieldId + ": "+f.msg  ))
+        x.foreach(f => S.error(mainMsgId, "Error in " + f.field.uniqueFieldId + ": "+f.msg  ))
         selectedCompartment(Full(compartment))
       }
     }
@@ -152,7 +152,7 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
     model.validate match {
       case Nil => model.updateRestRec(); redirectTo("/model/" + model.metaid) //TODO: handle the possibility that the server does not accept the change (maybe this should be general)
       case x => {
-        x.foreach(f => S.error(mainMsg, "Error in " + f.field.uniqueFieldId + ": "+f.msg  ))
+        x.foreach(f => S.error(mainMsgId, "Error in " + f.field.uniqueFieldId + ": "+f.msg  ))
         selectedModel(Full(model))
       }
     }
@@ -165,7 +165,7 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
                                       <td><a href="/models">Cancel</a></td>
                                       <td><input type="submit" value="Save"/></td>
                                     </tr>
-    ) openOr {S.error(mainMsg, "Model not found"); redirectTo("/models")}
+    ) openOr {S.error(mainMsgId, "Model not found"); redirectTo("/models")}
   }
 
   def saveSelectedCompartment(compartment:CompartmentRecord):Unit = {
@@ -173,7 +173,7 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
     compartment.validate match {
       case Nil => compartment.updateRestRec(); redirectTo("/compartment/" + compartment.metaid) //TODO: handle the possibility that the server does not accept the change (maybe this should be general)
       case x =>{
-        x.foreach(f => S.error(mainMsg, "Error in " + f.field.uniqueFieldId + ": "+f.msg  ))
+        x.foreach(f => S.error(mainMsgId, "Error in " + f.field.uniqueFieldId + ": "+f.msg  ))
         selectedCompartment(Full(compartment))
       }
     }
@@ -186,7 +186,7 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
       <td><a href="/models">Cancel</a></td>
       <td><input type="submit" value="Save"/></td>
     </tr>
-    ) openOr {S.error(mainMsg, "Compartment not found"); redirectTo("/models")}
+    ) openOr {S.error(mainMsgId, "Compartment not found"); redirectTo("/models")}
   }
 
   //### Visualize state
@@ -197,14 +197,14 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
     debug("VISUALIZE SELECTED MODEL")
     loadSBMLFromPathParam
     debug("Loaded selectedModel = " + selectedModel.openTheBox.toXML )
-    selectedModel.map(_.toXHtml) openOr {S.error(mainMsg,"Model not found"); redirectTo("/models/")}
+    selectedModel.map(_.toXHtml) openOr {S.error(mainMsgId,"Model not found"); redirectTo("/models/")}
   }
 
   def visualizeSelectedCompartment(ns:NodeSeq):NodeSeq = {
     debug("VISUALIZE SELECTED MODEL")
     loadSBMLFromPathParam
     debug("Loaded selectedModel = " + selectedCompartment.openTheBox.toXML )
-    selectedCompartment.map(_.toXHtml) openOr {S.error(mainMsg,"Compartment not found"); redirectTo("/models/")}
+    selectedCompartment.map(_.toXHtml) openOr {S.error(mainMsgId,"Compartment not found"); redirectTo("/models/")}
   }
 
   //### delete state
@@ -226,7 +226,7 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
 
       // if the was no ID or the user couldn't be found,
       // display an error and redirect
-    }) openOr {S.error(mainMsg, "Model not found"); redirectTo("/models/")}
+    }) openOr {S.error(mainMsgId, "Model not found"); redirectTo("/models/")}
   }
 
   def confirmAndDeleteSelectedCompartment(ns:NodeSeq):NodeSeq = {
@@ -246,7 +246,7 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
 
       // if the was no ID or the user couldn't be found,
       // display an error and redirect
-    }) openOr {S.error(mainMsg, "Compartment not found"); redirectTo("/model"+S.param("modelMetaId"))}
+    }) openOr {S.error(mainMsgId, "Compartment not found"); redirectTo("/model"+S.param("modelMetaId"))}
   }
 
 

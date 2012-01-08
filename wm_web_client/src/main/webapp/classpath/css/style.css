@@ -159,11 +159,25 @@ br.both{
 }
 
 /* Messages */
-#error_msg .errorBox {
-    text-align:right; position:relative; top:-130px; font-size:85%; font-weight:bold; color: #ff0000;
+.noticeBox {
+    background-color: green;
 }
 
-#error_msg .errorBox li {
+.warningBox {
+    background-color: yellow;
+}
+
+.errorBox  {
+    background-color: red;
+    color: #f0f000;
+}
+#error_msg{
+    float: right;
+}
+
+.errorBox, #error_msg span {
+    background-color: transparent;
+    text-align: right; position:relative; top:-130px; font-size:85%; font-weight:bold; color: #ff0000;
     list-style-type:none;
 }
 

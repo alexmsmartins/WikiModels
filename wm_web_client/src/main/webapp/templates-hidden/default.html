@@ -90,10 +90,6 @@
 
     </head>
     <body>
-            <lift:msgs>
-                <lift:error_msg></lift:error_msg>
-                <lift:error_class>errorBox</lift:error_class>
-            </lift:msgs>
         <div id="header">
             <div id="logo">
                 <a href="/index">
@@ -121,12 +117,19 @@
                         </h1>
                     </div>
                 </lift:HomePage.logInfo>
-                <div id="xerror_msg">
-                                        <lift:snippet type="msgs" >
-                                            <lift:error_msg></lift:error_msg>
-                                            <lift:error_class>errorBox</lift:error_class>
-                                        </lift:snippet>
+                <div id="error_msg">
+                    <lift:snippet type="msg" id="login_msg"></lift:snippet>
                 </div>
+                <lift:msgs>
+                    <lift:error_msg></lift:error_msg>
+                    <lift:error_class>error</lift:error_class>
+                    <lift:notice_msg></lift:notice_msg>
+                    <lift:notice_class>notice</lift:notice_class>
+                    <lift:warning_msg></lift:warning_msg>
+                    <lift:warning_class>warning</lift:warning_class>
+                </lift:msgs>
+                <br></br>
+                <br></br>
                 <lift:bind name="content" />
             </div>
         </div>

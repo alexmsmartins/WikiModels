@@ -16,8 +16,8 @@ package pt.cnbc.wikimodels.controller
  */
 trait SMsg { //extends Enumeration {
   //####### S.error fields #######
-  val loginMsg = "loginMsg"
-  val mainMsg = "mainMsg"
+  val loginMsgId = "login_msg"
+  val mainMsgId = "main_msg"
   //####### S.warning fields #######
   //####### S.notice fields #######
 

@@ -27,7 +27,7 @@ class MathParser extends RegexParsers with PackratParsers with MathParserHandler
 
   lazy val Function   :PackratParser[MME]= ident~"("~Parameters~")"^^{ case i~"("~par~")" => {handleFunction(i, par)}}
 
-  lazy val Parameters :PackratParser[List[MME]]= repsep(Expr,",") //no need to put anythin else here
+  lazy val Parameters :PackratParser[List[MME]]= repsep(Expr,",") //no need to put anything else here
 
   lazy val Power      :PackratParser[MME]= Base~"^"~Exponent^^{ case b~"^"~e => new Apply(Exponentiation,  List(b, e) ) }
 

@@ -38,9 +38,9 @@ class LogUser extends SMsg with LoggerWrapper {
         def authenticate () = {
             var ra:RestfulAccess = null
             if (username.trim.length == 0) {
-                S.error("Username missing")
+                S.error(loginMsgId, "Username missing")
             } else if (password.length == 0) {
-                S.error("Password missing")
+                S.error(loginMsgId, "Password missing")
             } else {
                 //TODO: these constants related to the server URL should be refactored to a configuration file
                 ra = new RestfulAccess("localhost", 8080, "/wm_server/resources", username, password, BasicAuth.startWithBasicAuth)
@@ -50,7 +50,7 @@ class LogUser extends SMsg with LoggerWrapper {
                     User.UserName(Full(username))
                     User.restfulConnection = ra
                 } else {
-                    S.error("Error in username or password")
+                    S.error(loginMsgId, "Error in username or password")
                 }
             }
         }

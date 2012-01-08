@@ -13,15 +13,3 @@
 .root {
     display: block;
 }
-
-#lift__noticesContainer___notice {
-    background-color: green;
-}
-
-#lift__noticesContainer___warning {
-    background-color: yellow;
-}
-
-#lift__noticesContainer___error {
-    background-color: red;
-}
