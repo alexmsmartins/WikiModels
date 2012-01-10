@@ -165,7 +165,7 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
   def saveSelectedModel(model:SBMLModelRecord):Unit = {
     debug("SAVE SELECTED MODEL")
     model.validate match {
-      case Nil => model.updateRestRec(); redirectTo("/model/" + model.metaid) //TODO: handle the possibility that the server does not accept the change (maybe this should be general)
+      case Nil => model.updateRestRec(); redirectTo(model.relativeURL) //TODO: handle the possibility that the server does not accept the change (maybe this should be general)
       case x => {
         x.foreach(f => S.error(mainMsgId, "Error in " + f.field.uniqueFieldId + ": "+f.msg  ))
         selectedModel(Full(model))
@@ -186,7 +186,7 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
   def saveSelectedCompartment(compartment:CompartmentRecord):Unit = {
     debug("SAVE SELECTED COMPARTMENT")
     compartment.validate match {
-      case Nil => compartment.updateRestRec(); redirectTo("/compartment/" + compartment.metaid) //TODO: handle the possibility that the server does not accept the change (maybe this should be general)
+      case Nil => compartment.updateRestRec(); redirectTo(compartment.relativeURL) //TODO: handle the possibility that the server does not accept the change (maybe this should be general)
       case x =>{
         x.foreach(f => S.error(mainMsgId, "Error in " + f.field.uniqueFieldId + ": "+f.msg  ))
         selectedCompartment(Full(compartment))

@@ -23,7 +23,7 @@ import pt.cnbc.wikimodels.dataModel.SBMLModel
 import pt.cnbc.wikimodels.dataAccess.SBMLModelsDAO
 import pt.cnbc.wikimodels.exceptions.BadFormatException
 import javax.ws.rs.core.{Response, UriInfo, SecurityContext, Context}
-import pt.cnbc.wikimodels.dataVisitors.SBML2BeanConverter
+import pt.cnbc.wikimodels.sbmlVisitors.SBML2BeanConverter
 
 @Path("/model/")
 class SBMLModelResource extends RESTResource {

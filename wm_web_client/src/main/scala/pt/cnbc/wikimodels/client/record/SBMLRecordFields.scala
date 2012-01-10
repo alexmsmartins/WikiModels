@@ -370,16 +370,20 @@ with DisplayFormWithLabelInOneLine[Double, T] with DisplayHTMLWithLabelInOneLine
   override def theData:Box[MyType] = {
     trace("Calling Size.theData")
     //if the owner has valid data that was obtained from the wikimodels Server
-    debug("theData with size = "+ owner.size + " is being copied to the record Field.")
-    _data match {
-      case Empty => {
-        if ( this.optional_?){
-          _data = Empty
-          owner.size = null
+    if(owner.size != null){
+      _data = Full(owner.size)
+    } else {
+      debug("theData with size = "+ owner.size + " is being copied to the record Field.")
+      _data match {
+        case Empty => {
+          if ( this.optional_?){
+            _data = Empty
+            owner.size = null
+          }
         }
-      }
-      case Full(x) => {
-        owner.size = x.asInstanceOf[java.lang.Double]
+        case Full(x) => {
+          owner.size = x.asInstanceOf[java.lang.Double]
+        }
       }
     }
     trace("Constant.theData returns " + _data)
@@ -458,7 +462,7 @@ with LoggerWrapper{
   /**
    * defines if a default value should be attributed to this field
    */
-  //needsDefault = false
+  needsDefault = false
 
   override def setBox(in: Box[MyType]): Box[MyType] = synchronized {
     trace("Calling GetSetOnwerField.setBox(" + in + ")")
@@ -476,7 +480,7 @@ with LoggerWrapper{
 
   override def valueBox: Box[MyType] = synchronized {
     trace("Calling GetSetOnwerField.valueBox")
-    if (needsDefault) { //FIXME - THIS CODE CAME FROM THE TypeField trait. Delete it
+    if (needsDefault && !optional_?) { //FIXME - THIS CODE CAME FROM THE TypeField trait. Delete it
       needsDefault = false
       theData = defaultValueBox
     }

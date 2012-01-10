@@ -33,7 +33,7 @@ import pt.cnbc.wikimodels.dataModel.Species
 import pt.cnbc.wikimodels.dataAccess.SpeciessDAO
 import pt.cnbc.wikimodels.exceptions.BadFormatException
 import pt.cnbc.wikimodels.security.SecurityContextFactory
-import pt.cnbc.wikimodels.dataVisitors.SBML2BeanConverter
+import pt.cnbc.wikimodels.sbmlVisitors.SBML2BeanConverter
 
 
 class SpeciesResource(sbmlModelResource:String) extends RESTResource {

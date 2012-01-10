@@ -34,7 +34,7 @@ import pt.cnbc.wikimodels.dataModel.Reaction
 import pt.cnbc.wikimodels.dataAccess.ParametersDAO
 import pt.cnbc.wikimodels.exceptions.BadFormatException
 import pt.cnbc.wikimodels.security.SecurityContextFactory
-import pt.cnbc.wikimodels.dataVisitors.SBML2BeanConverter
+import pt.cnbc.wikimodels.sbmlVisitors.SBML2BeanConverter
 
 
 class ParameterResource(sbmlModelResource:String) extends RESTResource {

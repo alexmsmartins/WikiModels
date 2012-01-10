@@ -33,7 +33,7 @@ import pt.cnbc.wikimodels.dataModel.Constraint
 import pt.cnbc.wikimodels.dataAccess.ConstraintsDAO
 import pt.cnbc.wikimodels.exceptions.BadFormatException
 import pt.cnbc.wikimodels.security.SecurityContextFactory
-import pt.cnbc.wikimodels.dataVisitors.SBML2BeanConverter
+import pt.cnbc.wikimodels.sbmlVisitors.SBML2BeanConverter
 
 
 class ConstraintResource(sbmlModelResource:String) extends RESTResource {

@@ -30,7 +30,7 @@ import pt.cnbc.wikimodels.dataModel.FunctionDefinition
 import pt.cnbc.wikimodels.dataAccess.FunctionDefinitionsDAO
 import pt.cnbc.wikimodels.exceptions.BadFormatException
 import pt.cnbc.wikimodels.security.SecurityContextFactory
-import pt.cnbc.wikimodels.dataVisitors.SBML2BeanConverter
+import pt.cnbc.wikimodels.sbmlVisitors.SBML2BeanConverter
 
 
 class FunctionDefinitionResource(sbmlModelResource:String) extends RESTResource {
