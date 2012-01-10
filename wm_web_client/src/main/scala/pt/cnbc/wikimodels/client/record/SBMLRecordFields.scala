@@ -180,7 +180,7 @@ with GetSetOwnerField[String, T]{
     } else {
       _data match {
         case Empty => {
-          _data = defaultValueBox
+          _data = Empty
           if (! this.optional_?) owner.notes = null
         }
         case Full(x) => owner.notes = x
@@ -237,9 +237,9 @@ with GetSetOwnerField[String, T]{
         <span for={ uniqueFieldId.openTheBox }>
           <span class="sbml_field_label">{displayHtml}</span>
           <span class="sbml_field_content">
-            {this.value match{
-              case None => Text("-- no description available -- ")
-              case Some(content) => XML.loadString( content )}
+            {this.valueBox match{
+              case Empty => Text("-- no description available -- ")
+              case Full(content) => XML.loadString( content )}
             }</span>
         </span>
           <lift:msg id={uniqueFieldId.openTheBox}  errorClass="lift_error"/>

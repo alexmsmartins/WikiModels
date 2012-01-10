@@ -27,7 +27,6 @@ import visitor.RecordFromSBML
 */
 
 
-
 trait SBaseRecord[MyType <: SBaseRecord[MyType]] extends Element with RestRecord[MyType] with CommentSnip {
   self : MyType =>
   import pt.cnbc.wikimodels.snippet.User
@@ -118,11 +117,10 @@ trait SBaseRecord[MyType <: SBaseRecord[MyType]] extends Element with RestRecord
 }
 
 /**
- * Created by IntelliJ IDEA.
- * User: alex
- * Date: 03-07-2011       
+ * TODO: Please document.
+ * @author: Alexandre Martins
+ * Date: 03-07-2011
  * Time: 17:37
- * To change this template use File | Settings | File Templates.
  */
 class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with LoggerWrapper {
   type MyType = SBMLModelRecord

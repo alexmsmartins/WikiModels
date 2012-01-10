@@ -9,6 +9,7 @@ import net.liftweb.common._
 import net.liftweb.http.{SHtml, S}
 import net.liftweb.record._
 import xml.NodeSeq
+import alexmsmartins.log.LoggerWrapper
 
 /**
  * TODO: Please document.
@@ -23,7 +24,7 @@ import xml.NodeSeq
  * Time: 22:35
  * To change this template use File | Settings | File Templates.
  */
-class CompartmentRecord() extends Compartment with SBaseRecord[CompartmentRecord]  {
+class CompartmentRecord() extends Compartment with SBaseRecord[CompartmentRecord] with LoggerWrapper {
 
   override def meta = CompartmentRecord
 
@@ -36,25 +37,29 @@ class CompartmentRecord() extends Compartment with SBaseRecord[CompartmentRecord
   //  ### can be presented as XHtml, Json, or as a Form. ###
 
   override def toXHtml = {
+    trace("Calling CompartmentRecord.toXHtml")
     <div>
       <head>
         <link type="text/css" rel="stylesheet" href="/css/sbml_present.css"></link>
       </head>
       {super.toXHtml}
+
     </div>
   }
   
   override def toForm(f:CompartmentRecord => Unit):NodeSeq = {
-    <div id="compartment_toform">
+    trace("Calling CompartmentRecord.toForm( "+f+" )")
+    <div class="compartment_toform">
       {super.toForm(f)}
       <!-- outside can't be a field and so I will make it a form -->
       {
       val defaultOption:(Box[CompartmentRecord], String) = (Empty, "[no compartment")
       val op = parent.openTheBox.
         listOfCompartmentsRec.
-        filter(_.metaid != this.metaid)
+          filter(_.metaid != this.metaid).
+          filter(_.spatialDimensions != 0)
       val op2 = op.map(i => (Full(i), i.id):(Box[CompartmentRecord], String) )
-      val options = op2.iterator.toList.toSeq
+      val options = (List(Empty -> "no compartment") ::: op2.iterator.toList).toSeq
       SHtml.selectObj(options, Empty, (choice:Box[CompartmentRecord]) => "TODO We shall see!!!!"  )
       }
     </div>

@@ -1,11 +1,10 @@
 package pt.cnbc.wikimodels.dataAccess
 
 /**
- * Created by IntelliJ IDEA.
- * User: alex
+ * TODO: Please document.
+ * @author: Alexandre Martins
  * Date: 22/Mai/2010
  * Time: 0:58:07
- * To change this template use File | Settings | File Templates.
  */
 import org.junit._
 import Assert._

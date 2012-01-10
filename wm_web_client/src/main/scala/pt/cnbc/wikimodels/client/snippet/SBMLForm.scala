@@ -50,12 +50,18 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
   }
 
   private def loadCompartmentFromPathParam() = {
-    trace("Calling SBMLForm.loadSBMLModelFromPathParam")
+    trace("Calling SBMLForm.loadCompartmentFromPathParam")
     debug("""Parameter "compartmentMetaId" « {} """, S.param("compartmentMetaId").openTheBox)
 
     selectedCompartment {
       CompartmentRecord.readRestRec(debug("The compartmentMetaId in session after calling /model/modemetaid/compartment/compartmentMetaId is: {}", S.param("compartmentMetaId").openTheBox))
     }
+
+    //TODO this might be optimizable by turning the parent field into a lazy field and the interface buttons that need it into ajax buttons
+    selectedModel {
+      SBMLModelRecord.readRestRec(debug("The modelMetaId in session after calling /model/modemetaid is: {}", S.param("modelMetaId").openTheBox))
+    }
+    selectedCompartment.get.openTheBox.parent = selectedModel.get
     debug("Loaded compartment into session: {}", selectedCompartment.get.openTheBox.toXML )
     debug("Loaded model into session with metaid {}, id {} and name {}",
       selectedCompartment.get.openTheBox.metaid,
@@ -197,7 +203,7 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
   def editSelectedCompartment(ns:NodeSeq):NodeSeq ={
     debug("EDIT SELECTED COMPARTMENT")
     loadCompartmentFromPathParam
-    selectedCompartment.is.map( _.toForm(Empty)( saveSelectedCompartment _ ) ++ <tr>
+    selectedCompartment.is.map( _.toForm( saveSelectedCompartment _ ) ++ <tr>
       <td><a href="/models">Cancel</a></td>
       <td><input type="submit" value="Save"/></td>
     </tr>
