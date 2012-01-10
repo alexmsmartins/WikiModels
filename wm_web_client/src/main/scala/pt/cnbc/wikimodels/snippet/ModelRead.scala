@@ -66,7 +66,8 @@ class ModelRead extends LoggerWrapper {
                                         <input title="Export" type="submit" onclick={"window.location.href='/model/"+ (fun \ "@metaid") +"/export'"}></input>
                                       </form> -->
                                       <a href={"/model/"+(fun \ "@metaid")+"/edit"}>Edit</a> /
-                                      <a href={"/model/"+(fun \ "@metaid")+"/export"}>Export</a>
+                                      <a href={"/model/"+(fun \ "@metaid")+"/export"}>Export</a> /
+                                      <a href={"/model/"+(fun \ "@metaid")+"/delete"}>Delete</a>
                                     </td>
                                 </tr>
                             </tbody>
