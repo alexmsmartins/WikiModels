@@ -10,6 +10,7 @@ import net.liftweb.http.js.{JsExp, JsObj}
 import net.liftweb.common._
 import pt.cnbc.wikimodels.snippet.User
 import net.liftweb.mapper.Mapper
+import alexmsmartins.log.LoggerWrapper
 
 
 //  because of WriteConcern
@@ -21,7 +22,7 @@ import net.liftweb.mapper.Mapper
  * Time: 16:49
  */
 
-trait RestRecord[MyType <: RestRecord[MyType]] extends Record[MyType] {
+trait RestRecord[MyType <: RestRecord[MyType]] extends Record[MyType] with LoggerWrapper{
   self : MyType =>
 
   def connection = User.restfulConnection
@@ -37,7 +38,7 @@ trait RestRecord[MyType <: RestRecord[MyType]] extends Record[MyType] {
    * The protocol, host, port and path of the RESTful service were already defined when making the connection.
    * This only represents the relative URL from the roomt
    */
-  def relativeURL = relativeURLasList mkString("/","/","")
+  def relativeURL = debug("Relative URL is {}", relativeURLasList mkString("/","/",""))
   def relativeCreationURL = relativeCreationURLasList mkString("/","/","")
 
   /**

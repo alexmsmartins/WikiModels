@@ -10,6 +10,7 @@ import pt.cnbc.wikimodels.dataModel.Compartment._
 import pt.cnbc.wikimodels.dataModel.ValidSpatialDimensions._
 import pt.cnbc.wikimodels.dataModel.{ValidSpatialDimensions, Compartment}
 import net.liftweb.util.FieldError
+import net.liftweb.util.ControlHelpers._
 
 //Javascript handling imports
 import _root_.net.liftweb.http.js.{JE,JsCmd,JsCmds}
@@ -341,7 +342,7 @@ with DisplayFormWithLabelInOneLine[Boolean, T] with DisplayHTMLWithLabelInOneLin
 class Size[T <: SBaseRecord[T]{var size:java.lang.Double}](own:T) extends OptionalDoubleField(own)
 with DisplayFormWithLabelInOneLine[Double, T] with DisplayHTMLWithLabelInOneLine[Double, T] with LoggerWrapper{
   // * There is a strong reason to use both java.lang.Double and scala.Double here
-  // * doun't change this wothout knowing what to do with the client and server code when there is no size value
+  // * Do not change this without knowing what to do with the client and server code when there is no size value
   var _data:Box[MyType] = Empty
 
   override def theData_=(in:Box[MyType]) {
@@ -356,7 +357,7 @@ with DisplayFormWithLabelInOneLine[Double, T] with DisplayHTMLWithLabelInOneLine
         owner.size = null
       }
       case _ =>{
-        owner.size = 38383838.3838 //lets give it a default even in case of error
+        owner.size = null //lets give it a default even in case of error
         S.error("Strange error when reading the field size in ")
       }
     }
@@ -368,7 +369,7 @@ with DisplayFormWithLabelInOneLine[Double, T] with DisplayHTMLWithLabelInOneLine
     debug("theData with size = "+ owner.size + " is being copied to the record Field.")
     _data match {
       case Empty => {
-        if (! this.optional_?){ //this should never happen
+        if ( this.optional_?){
           _data = Empty
           owner.size = null
         }
@@ -380,6 +381,12 @@ with DisplayFormWithLabelInOneLine[Double, T] with DisplayHTMLWithLabelInOneLine
     trace("Constant.theData returns " + _data)
     _data
   }
+
+  override def setFromString(s: String): Box[Double] = s match {
+    case "" if optional_? => setBox(Empty)
+    case _ =>setBox(tryo(java.lang.Double.parseDouble(s)))
+  }
+
 
   //Appears when rendering the form or the visualization
   override def name: String = "Size"
@@ -445,9 +452,9 @@ with LoggerWrapper{
   private[record] def theData:Box[MyType]
 
   /**
-   * defines if a defalt value should be attributed to this field
+   * defines if a default value should be attributed to this field
    */
-  needsDefault = false
+  //needsDefault = false
 
   override def setBox(in: Box[MyType]): Box[MyType] = synchronized {
     trace("Calling GetSetOnwerField.setBox(" + in + ")")

@@ -131,17 +131,17 @@ class Boot extends LoggerWrapper{
               Map("modelMetaId" -> model), true )
           }
           case RewriteRequest(ParsePath("model"::model::"compartment"::compartment::Nil,"",_,false),_,_) => {
-            trace("RewriteRequest from /model/"+model+"/compartment"+compartment+" to /modele/compartment_view.html" )
+            trace("RewriteRequest from /model/"+model+"/compartment/"+compartment+" to /modele/compartment_view.html" )
             RewriteResponse(ParsePath( "modele"::"compartment_view"::Nil, "html", true, false),
               Map("modelMetaId" -> model, "compartmentMetaId" -> compartment), true )
           }
           case RewriteRequest(ParsePath("model"::model::"compartment"::compartment::"edit"::Nil,"",_,false),_,_) => {
-            trace("RewriteRequest from /model/"+model+"/compartment"+compartment+"/edit to /modele/compartment_edit.html" )
+            trace("RewriteRequest from /model/"+model+"/compartment/"+compartment+"/edit to /modele/compartment_edit.html" )
             RewriteResponse(ParsePath( "modele"::"compartment_edit"::Nil, "html", true, false),
               Map("modelMetaId" -> model, "compartmentMetaId" -> compartment), true )
           }
           case RewriteRequest(ParsePath("model"::model::"compartment"::compartment::"delete"::Nil,"",_,false),_,_) => {
-            trace("RewriteRequest from /model/"+model+"/compartment"+compartment+"/delete to /modele/compartment_delete.html" )
+            trace("RewriteRequest from /model/"+model+"/compartment/"+compartment+"/delete to /modele/compartment_delete.html" )
             RewriteResponse(ParsePath( "modele"::"compartment_delete"::Nil, "html", true, false),
               Map("modelMetaId" -> model, "compartmentMetaId" -> compartment), true )
           }

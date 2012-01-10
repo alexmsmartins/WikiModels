@@ -19,7 +19,7 @@ package pt.cnbc.wikimodels.client.record{
 import pt.cnbc.wikimodels.client.snippet.CommentSnip
 import net.liftweb.common.Box
 import pt.cnbc.wikimodels.sbmlVisitors.dataVisitors.SBML2BeanConverter
-import visitor.SBMLRecordVisitor
+import visitor.RecordFromSBML
 
 
 /*
@@ -72,7 +72,12 @@ trait SBaseRecord[MyType <: SBaseRecord[MyType]] extends Element with RestRecord
       case 200 =>{
         clean_? = false
         //FIXME this should be replaced by a call to a XML to SBMLElement converter
-        val loadedRecord:Box[MyType] =  Full ((SBMLRecordVisitor.createModelRecordFrom(  SBML2BeanConverter.visitModel( content )  )).asInstanceOf[MyType] )//read went ok
+        val loadedRecord:Box[MyType] =
+          Full(
+            RecordFromSBML.createRecordFrom(
+              SBML2BeanConverter.visit( content )
+            ).asInstanceOf[MyType]
+          )//read went ok
         debug("Read of " + loadedRecord + "aaa" )
         loadedRecord
       }

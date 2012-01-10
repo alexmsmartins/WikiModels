@@ -6,6 +6,7 @@ import pt.cnbc.wikimodels.client.record._
 import pt.cnbc.wikimodels.dataModel._
 import net.liftweb.common.Full
 import alexmsmartins.log.LoggerWrapper
+import pt.cnbc.wikimodels.exceptions.NotImplementedException
 
 /*
 * Copyright (c) 2011. Alexandre Martins. All rights reserved.
@@ -19,7 +20,16 @@ import alexmsmartins.log.LoggerWrapper
  * To change this template use File | Settings | File Templates.
  */
 
-object SBMLRecordVisitor extends LoggerWrapper {
+object SBMLFromRecord extends LoggerWrapper {
+
+  def createSBMLElementFrom(er:SBaseRecord[_]) =  {
+    er match {
+      case SBMLModelRecord => createModelFrom(_)
+      case CompartmentRecord => createCompartmentFrom(_)
+      case _ => new NotImplementedException("ERROR: Method create" + er.sbmlType + "From(_) not implemented yet")
+
+    }
+  }
 
   def createModelFrom(mr:SBMLModelRecord) = {
     val m = new SBMLModel()
@@ -27,7 +37,7 @@ object SBMLRecordVisitor extends LoggerWrapper {
     m.id = mr.id
     m.name = mr.name
     m.notes = mr.notes
-    m.listOfCompartments = Set.empty ++ mr.listOfCompartmentsRec.map(createCompartmentRecordFrom(_))
+    m.listOfCompartments = Set.empty ++ mr.listOfCompartmentsRec.map(createCompartmentFrom(_))
     //TODO - write code for the remaining lists
     mr
   }
@@ -45,6 +55,17 @@ object SBMLRecordVisitor extends LoggerWrapper {
     c.outside = cr.outside
     c.constant = cr.constant
     c
+  }
+}
+
+object RecordFromSBML extends LoggerWrapper {
+
+  def createRecordFrom(er:Element) =  {
+    er match {
+      case m:SBMLModel => createModelRecordFrom(m)
+      case c:Compartment => createCompartmentRecordFrom(c)
+      case _ => throw new NotImplementedException("ERROR: Method create" + er.sbmlType + "From(_) not implemented yet")
+    }
   }
 
   def createModelRecordFrom(m:SBMLModel):SBMLModelRecord = {

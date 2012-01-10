@@ -35,8 +35,8 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
   private object selectedModel extends RequestVar[Box[SBMLModelRecord]](Empty)
   private object selectedCompartment extends RequestVar[Box[CompartmentRecord]](Empty)
 
-  private def loadSBMLFromPathParam() = {
-    trace("Calling SBMLForm.loadSBMLFromPathParam")
+  private def loadSBMLModelFromPathParam() = {
+    trace("Calling SBMLForm.loadSBMLModelFromPathParam")
     debug("""Parameter "modelMetaId" « {} """, S.param("modelMetaId").openTheBox)
 
     selectedModel {
@@ -48,6 +48,21 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
       selectedModel.get.openTheBox.id,
       selectedModel.get.openTheBox.name)
   }
+
+  private def loadCompartmentFromPathParam() = {
+    trace("Calling SBMLForm.loadSBMLModelFromPathParam")
+    debug("""Parameter "compartmentMetaId" « {} """, S.param("compartmentMetaId").openTheBox)
+
+    selectedCompartment {
+      CompartmentRecord.readRestRec(debug("The compartmentMetaId in session after calling /model/modemetaid/compartment/compartmentMetaId is: {}", S.param("compartmentMetaId").openTheBox))
+    }
+    debug("Loaded compartment into session: {}", selectedCompartment.get.openTheBox.toXML )
+    debug("Loaded model into session with metaid {}, id {} and name {}",
+      selectedCompartment.get.openTheBox.metaid,
+      selectedCompartment.get.openTheBox.id,
+      selectedCompartment.get.openTheBox.name)
+  }
+
 
   def dispatch: DispatchIt = {
     case "createModel" => createNewModel
@@ -160,7 +175,7 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
 
   def editSelectedModel(ns:NodeSeq):NodeSeq ={
     debug("EDIT SELECTED MODEL")
-    loadSBMLFromPathParam
+    loadSBMLModelFromPathParam
     selectedModel.is.map( _.toForm(Empty)( saveSelectedModel _ ) ++ <tr>
                                       <td><a href="/models">Cancel</a></td>
                                       <td><input type="submit" value="Save"/></td>
@@ -181,7 +196,7 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
 
   def editSelectedCompartment(ns:NodeSeq):NodeSeq ={
     debug("EDIT SELECTED COMPARTMENT")
-    loadSBMLFromPathParam
+    loadCompartmentFromPathParam
     selectedCompartment.is.map( _.toForm(Empty)( saveSelectedCompartment _ ) ++ <tr>
       <td><a href="/models">Cancel</a></td>
       <td><input type="submit" value="Save"/></td>
@@ -195,14 +210,14 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
 
   def visualizeSelectedModel(ns:NodeSeq):NodeSeq = {
     debug("VISUALIZE SELECTED MODEL")
-    loadSBMLFromPathParam
+    loadSBMLModelFromPathParam
     debug("Loaded selectedModel = " + selectedModel.openTheBox.toXML )
     selectedModel.map(_.toXHtml) openOr {S.error(mainMsgId,"Model not found"); redirectTo("/models/")}
   }
 
   def visualizeSelectedCompartment(ns:NodeSeq):NodeSeq = {
     debug("VISUALIZE SELECTED MODEL")
-    loadSBMLFromPathParam
+    loadCompartmentFromPathParam
     debug("Loaded selectedModel = " + selectedCompartment.openTheBox.toXML )
     selectedCompartment.map(_.toXHtml) openOr {S.error(mainMsgId,"Compartment not found"); redirectTo("/models/")}
   }

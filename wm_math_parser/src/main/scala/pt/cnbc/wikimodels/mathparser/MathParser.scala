@@ -37,13 +37,13 @@ class MathParser extends RegexParsers with PackratParsers with MathParserHandler
                                            Atom |
                                            "("~>Expr<~")"
 
-  //in this rule, parser order is importatnt
+  //in this rule, parser order is important
   lazy val Atom       :PackratParser[MME]= decimalNumber~"e"~decimalNumber^^{case x~"E"~y => new Cn(x::y::Nil, "e-notation")} |
                                            decimalNumber^^(x => new Cn(x::Nil, "real")) |
                                            wholeNumber^^{x => new Cn(x::Nil, "integer")} |
                                            ident^^(x => new Ci(x))
 
-  //-- these methods where taken from JAvaTokenParser and adapted to this grammars needs
+  //-- these methods where taken from JavaTokenParser and adapted to this grammars needs
 
   def ident: Parser[String] =
     """[a-zA-Z_]\w*""".r
