@@ -4,13 +4,13 @@ import net.liftweb.common._
 import net.liftweb.http.{S, SHtml}
 import net.liftweb.record.field._
 import alexmsmartins.log.LoggerWrapper
-import scala.xml.{XML, NodeSeq}
 import pt.cnbc.wikimodels.client.record._
 import pt.cnbc.wikimodels.dataModel.Compartment._
 import pt.cnbc.wikimodels.dataModel.ValidSpatialDimensions._
 import pt.cnbc.wikimodels.dataModel.{ValidSpatialDimensions, Compartment}
 import net.liftweb.util.FieldError
 import net.liftweb.util.ControlHelpers._
+import xml.{Text, XML, NodeSeq}
 
 //Javascript handling imports
 import _root_.net.liftweb.http.js.{JE,JsCmd,JsCmds}
@@ -181,7 +181,7 @@ with GetSetOwnerField[String, T]{
       _data match {
         case Empty => {
           _data = defaultValueBox
-          if (! this.optional_?) owner.notes = defaultValue
+          if (! this.optional_?) owner.notes = null
         }
         case Full(x) => owner.notes = x
       }
@@ -236,7 +236,11 @@ with GetSetOwnerField[String, T]{
       <div id={uniqueFieldId + "_holder"}>
         <span for={ uniqueFieldId.openTheBox }>
           <span class="sbml_field_label">{displayHtml}</span>
-          <span class="sbml_field_content">  {XML.loadString( this.value.getOrElse("No description found!") )}</span>
+          <span class="sbml_field_content">
+            {this.value match{
+              case None => Text("-- no description available -- ")
+              case Some(content) => XML.loadString( content )}
+            }</span>
         </span>
           <lift:msg id={uniqueFieldId.openTheBox}  errorClass="lift_error"/>
       </div>
