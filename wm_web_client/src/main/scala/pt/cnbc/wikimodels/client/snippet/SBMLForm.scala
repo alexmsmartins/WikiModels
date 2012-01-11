@@ -232,42 +232,48 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
 
   def confirmAndDeleteSelectedModel(ns:NodeSeq):NodeSeq = {
     debug("CONFIRM DELETE SELECTED MODEL")
-    (for(model <- selectedModel.is) yield {
-       def deleteModel():NodeSeq = {
-        notice("Model "+ model.metaid +" deleted")
-        model.deleteRestRec()
+    val model = new SBMLModelRecord
+    model.metaid = S.param("modelMetaId").get
+    def deleteModel():NodeSeq = {
+        model.deleteRestRec() match {
+          case full:Full[_] => S.notice(mainMsgId, "Model "+ model.metaid +" deleted")
+          case fail:Failure => S.error(mainMsgId, fail.msg)
+          case Empty => S.error(mainMsgId, "THIS IS A BUG")
+        }
         redirectTo("/models/")
-      }
-      // bind the incoming XHTML to a "delete" button.
-      // when the delete button is pressed, call the "deleteUser"
-      // function (which is a closure and bound the "user" object
-      // in the current content)
-      bind("xmp", ns, "modelname " -> (model.id),
-      "delete" -> submit("Delete", deleteModel ))
+    }
+    // bind the incoming XHTML to a "delete" button.
+    // when the delete button is pressed, call the "deleteUser"
+    // function (which is a closure and bound the "user" object
+    // in the current content)
+    bind("xmp", ns, "modelname " -> (model.id),
+    "delete" -> submit("Delete", deleteModel ))
 
-      // if the was no ID or the user couldn't be found,
-      // display an error and redirect
-    }) openOr {S.error(mainMsgId, "Model not found"); redirectTo("/models/")}
+    // if the was no ID or the user couldn't be found,
+    // display an error and redirect
   }
 
   def confirmAndDeleteSelectedCompartment(ns:NodeSeq):NodeSeq = {
     debug("CONFIRM DELETE SELECTED COMPARTMENT")
-    (for(compartment <- selectedCompartment.is) yield {
-      def deleteCompartment():NodeSeq = {
-        notice("Compartment "+ compartment.metaid +" deleted")
-        compartment.deleteRestRec()
-        redirectTo("/models/")
+    val compartment = new CompartmentRecord
+    compartment.metaid = S.param("compartmentMetaId").get
+    def deleteCompartment():NodeSeq = {
+      compartment.deleteRestRec() match {
+        case full:Full[_] => S.notice(mainMsgId, "Compartment "+ compartment.metaid +" deleted")
+        case fail:Failure => S.error(mainMsgId, fail.msg)
+        case Empty => S.error(mainMsgId, "THIS IS A BUG")
       }
-      // bind the incoming XHTML to a "delete" button.
-      // when the delete button is pressed, call the "deleteUser"
-      // function (which is a closure and bound the "user" object
-      // in the current content)
-      bind("xmp", ns, "compartmentname" -> (compartment.id),
-        "delete" -> submit("Delete", deleteCompartment ))
+      redirectTo("/model/" + S.param("modelMetaId") )
+    }
+    // bind the incoming XHTML to a "delete" button.
+    // when the delete button is pressed, call the "deleteUser"
+    // function (which is a closure and bound the "user" object
+    // in the current content)
+    bind("xmp", ns, "compartmentname" -> (compartment.id),
+      "delete" -> submit("Delete", deleteCompartment ))
 
-      // if the was no ID or the user couldn't be found,
-      // display an error and redirect
-    }) openOr {S.error(mainMsgId, "Compartment not found"); redirectTo("/model"+S.param("modelMetaId"))}
+    // if the was no ID or the user couldn't be found,
+    // display an error and redirect
   }
 
 

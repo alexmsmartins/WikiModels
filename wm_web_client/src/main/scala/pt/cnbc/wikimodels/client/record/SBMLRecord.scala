@@ -198,7 +198,7 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
                   <form style='display:inline;' >{SHtml.button(Text("Delete"),
                     () => {
                       debug("Button to delete compartment, pressed.")
-                      S.redirectTo(i.relativeURL )
+                      S.redirectTo(i.relativeURL + "/delete" )
                     },
                     "class" ->"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
                   )}</form>
@@ -242,7 +242,7 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
                     <form style='display:inline;' >{SHtml.button(Text("Delete"),
                       () => {
                         debug("Button to delete species, pressed.")
-                        S.redirectTo(i.relativeURL )
+                        S.redirectTo(i.relativeURL + "/delete" )
                       },
                       "class" ->"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
                     )}</form>
@@ -287,7 +287,7 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
                     <form style='display:inline;' >{SHtml.button(Text("Delete"),
                       () => {
                         debug("Button to delete parameter, pressed.")
-                        S.redirectTo(i.relativeURL )
+                        S.redirectTo(i.relativeURL + "/delete" )
                       },
                       "class" ->"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
                     )}</form>
@@ -332,7 +332,7 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
                     <form style='display:inline;' >{SHtml.button(Text("Delete"),
                       () => {
                         debug("Button to delete function definition, pressed.")
-                        S.redirectTo(i.relativeURL )
+                        S.redirectTo(i.relativeURL + "/delete" )
                       },
                       "class" ->"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
                     )}</form>
@@ -377,7 +377,7 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
                     <form style='display:inline;' >{SHtml.button(Text("Delete"),
                       () => {
                         debug("Button to delete constraints, pressed.")
-                        S.redirectTo(i.relativeURL )
+                        S.redirectTo(i.relativeURL + "/delete" )
                       },
                       "class" ->"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
                     )}</form>

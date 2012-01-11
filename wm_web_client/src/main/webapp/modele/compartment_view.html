@@ -1,24 +1,35 @@
+<!DOCTYPE html>
 <!--
   ~ Copyright (c) 2011. Alexandre Martins. All rights reserved.
   -->
 
+<html>
+<body>
 <lift:surround with="default" at="content">
-  <div id='content'>
-    <div class="lift:SBMLModelSnip:modelMetaId">
-      <h1>Model with metaId <span id="mMetaId"></span> . <input type="button" onclick="window.location.href=window.location.href+'/edit'" name="edit" value="Edit">Edit</input> </h1>
-    </div>
-      <div class="lift:SBMLForm.visualizeModel">
-      </div>
+    <div id='content'>
+        <div class="lift:SBMLModelSnip:modelMetaId">
+            <h1>Model with metaId <span id="mMetaId"></span> . <input type="button"
+                                                                      onclick="window.location.href=window.location.href+'/edit'"
+                                                                      name="edit" value="Edit">Edit</input> </h1>
+        </div>
+        <div class="lift:SBMLForm.visualizeModel">
+        </div>
 
-    <div class="lift:SBMLModelSnip:entireModelInXML">
-      <span id="xmlmodel"></span>
+        <div class="lift:SBMLModelSnip:entireModelInXML">
+            <span id="xmlmodel"></span>
+        </div>
+        <br/>
+        <br/>
+
+        <div class="ui-widget">
+            <div class="lift:SBMLModelSnip.modelMetaIdToAttr">
+                <input id="tags" input:val=""/>
+            </div>
+            <!--end of lift:SBMLModelSnip:modelMetaIdToAttr-->
+        </div>
+        <!-- end of ui-widget -->
     </div>
-    <br/>
-    <br/>
-    <div class="ui-widget">
-      <div class="lift:SBMLModelSnip.modelMetaIdToAttr">
-        <input id="tags" input:val=""/>
-      </div> <!--end of lift:SBMLModelSnip:modelMetaIdToAttr-->
-    </div> <!-- end of ui-widget -->
-  </div> <!-- end of content -->
+    <!-- end of content -->
 </lift:surround>
+</body>
+</html>

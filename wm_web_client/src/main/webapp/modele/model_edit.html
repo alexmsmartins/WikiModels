@@ -1,15 +1,23 @@
+<!DOCTYPE html>
 <!--
   ~ Copyright (c) 2011. Alexandre Martins. All rights reserved.
   -->
 
+<html>
+<body>
 <lift:surround with="default" at="content">
     <div id='content'>
-    <div class="lift:SBMLModelSnip:modelMetaId">
-      <h1>Model with metaId <span id="mMetaId"></span> . <input type="button" onclick="window.location.href=window.location.href+'/..'" name="view" value="View">View</input> </h1>
-    </div>
-      <div class="lift:SBMLForm.editModel?form=post">
-      </div>
+        <div class="lift:SBMLModelSnip:modelMetaId">
+            <h1>Model with metaId <span id="mMetaId"></span> . <input type="button"
+                                                                      onclick="window.location.href=window.location.href+'/..'"
+                                                                      name="view" value="View">View</input> </h1>
+        </div>
+        <div class="lift:SBMLForm.editModel?form=post">
+        </div>
 
         <p></p>
-  </div> <!-- end of content -->
+    </div>
+    <!-- end of content -->
 </lift:surround>
+</body>
+</html>

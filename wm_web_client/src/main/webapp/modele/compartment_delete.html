@@ -4,14 +4,13 @@
   -->
 
 <html>
-<head>
-    <title></title>
-</head>
 <body>
 <lift:surround with="default" at="content">
-    <form class="lift:sbmlform.deleteCompartment?form=post">
-        Do you really want to delete compartment <xmp:compartmentname></xmp:compartmentname>
-        <a href="/models">No</a> <xmp:delete></xmp:delete>
+    <form class="lift:SBMLForm.deleteCompartment?form=post">
+        Do you really want to delete compartment
+        <xmp:compartmentname></xmp:compartmentname>
+        <a href="/models">No</a>
+        <xmp:delete></xmp:delete>
     </form>
 </lift:surround>
 </body>
