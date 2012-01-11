@@ -47,6 +47,7 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
       selectedModel.get.openTheBox.metaid,
       selectedModel.get.openTheBox.id,
       selectedModel.get.openTheBox.name)
+    selectedModel.is
   }
 
   private def loadCompartmentFromPathParam() = {
@@ -67,6 +68,7 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
       selectedCompartment.get.openTheBox.metaid,
       selectedCompartment.get.openTheBox.id,
       selectedCompartment.get.openTheBox.name)
+    selectedCompartment.is
   }
 
 
@@ -118,7 +120,7 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
   def createNewModel(ns:NodeSeq):NodeSeq = {
     info("CREATE SELECTED MODEL")
     selectedModel.is.openOr(SBMLModelRecord.createRecord)
-      .toForm(Empty)(saveNewModel _) ++ <tr>
+      .toForm(saveNewModel _) ++ <tr>
       <td><a href="/models">Cancel</a></td>
       <td><input type="submit" name="create" value="Create"/></td>
     </tr>
@@ -159,9 +161,10 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
 
   def createNewCompartment(ns:NodeSeq):NodeSeq = {
     info("CREATE SELECTED COMPARTMENT")
-    selectedCompartment.is.openOr(CompartmentRecord.createRecord)
-      .toForm(Empty)(saveNewCompartment _) ++ <tr>
-      <td><a href="/models">Cancel</a></td>
+    val c = selectedCompartment.is.openOr(CompartmentRecord.createRecord)
+    c.parent = loadSBMLModelFromPathParam()
+    c.toForm(saveNewCompartment _) ++ <tr>
+      <td><a href={"/model/" + S.param("modelMetaId").get}>Cancel</a></td>
       <td><input type="submit" name="create" value="Create"/></td>
     </tr>
   }
@@ -182,8 +185,8 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
   def editSelectedModel(ns:NodeSeq):NodeSeq ={
     debug("EDIT SELECTED MODEL")
     loadSBMLModelFromPathParam
-    selectedModel.is.map( _.toForm(Empty)( saveSelectedModel _ ) ++ <tr>
-                                      <td><a href="/models">Cancel</a></td>
+    selectedModel.is.map( _.toForm( saveSelectedModel _ ) ++ <tr>
+                                      <td><a href={"/model/" + S.param("modelMetaId").get}>Cancel</a></td>
                                       <td><input type="submit" value="Save"/></td>
                                     </tr>
     ) openOr {S.error(mainMsgId, "Model not found"); redirectTo("/models")}
@@ -204,7 +207,7 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
     debug("EDIT SELECTED COMPARTMENT")
     loadCompartmentFromPathParam
     selectedCompartment.is.map( _.toForm( saveSelectedCompartment _ ) ++ <tr>
-      <td><a href="/models">Cancel</a></td>
+      <td><a href={"/model/" + S.param("modelMetaId").get}>Cancel</a></td>
       <td><input type="submit" value="Save"/></td>
     </tr>
     ) openOr {S.error(mainMsgId, "Compartment not found"); redirectTo("/models")}
