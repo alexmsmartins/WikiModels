@@ -90,9 +90,11 @@ class Boot extends LoggerWrapper{
         Menu(Loc("createModel", List("modele","model_create"), "Create Model", Hidden, loggedIn)) ::
         Menu(Loc("editModel", List("modele","model_edit"), "Edit Model", Hidden, loggedIn)) ::
         Menu(Loc("viewModel", List("modele","model_view"), "View Model", Hidden, loggedIn)) ::
+        Menu(Loc("deleteModel", List("modele","model_delete"), "Delete Model", Hidden, loggedIn)) ::
         Menu(Loc("createCompartment", List("modele","compartment_create"), "Create Compartment", Hidden, loggedIn)) ::
         Menu(Loc("editCompartment", List("modele","compartment_edit"), "Edit Comaprtment", Hidden, loggedIn)) ::
         Menu(Loc("viewCompartment", List("modele","compartment_view"), "View Compartment", Hidden, loggedIn)) ::
+        Menu(Loc("deleteCompartment", List("modele","compartment_delete"), "Delete Compartment", Hidden, loggedIn)) ::
           User.sitemap
 
         // Build SiteMap

@@ -36,7 +36,7 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
   private object selectedCompartment extends RequestVar[Box[CompartmentRecord]](Empty)
 
   private def loadSBMLModelFromPathParam() = {
-    trace("Calling SBMLForm.loadSBMLModelFromPathParam")
+    trace("Cconfcalling SBMLForm.loadSBMLModelFromPathParam")
     debug("""Parameter "modelMetaId" « {} """, S.param("modelMetaId").openTheBox)
 
     selectedModel {
