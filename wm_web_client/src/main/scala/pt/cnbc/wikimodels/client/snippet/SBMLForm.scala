@@ -34,9 +34,10 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
   //TODO <- by a justification for not doing the refactoring if that is the case
   private object selectedModel extends RequestVar[Box[SBMLModelRecord]](Empty)
   private object selectedCompartment extends RequestVar[Box[CompartmentRecord]](Empty)
+  private object selectedSpecies extends RequestVar[Box[SpeciesRecord]](Empty)
 
   private def loadSBMLModelFromPathParam() = {
-    trace("Cconfcalling SBMLForm.loadSBMLModelFromPathParam")
+    trace("calling SBMLForm.loadSBMLModelFromPathParam")
     debug("""Parameter "modelMetaId" « {} """, S.param("modelMetaId").openTheBox)
 
     selectedModel {
@@ -71,6 +72,26 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
     selectedCompartment.is
   }
 
+  private def loadSpeciesFromPathParam() = {
+    trace("Calling SBMLForm.loadSpeciesFromPathParam")
+    debug("""Parameter "speciesMetaId" « {} """, S.param("speciesMetaId").openTheBox)
+
+    selectedSpecies {
+      SpeciesRecord.readRestRec(debug("The speciesMetaId in session after calling /model/modemetaid/species/speciesMetaId is: {}", S.param("speciesMetaId").openTheBox))
+    }
+
+    //TODO this might be optimizable by turning the parent field into a lazy field and the interface buttons that need it into ajax buttons
+    selectedModel {
+      SBMLModelRecord.readRestRec(debug("The modelMetaId in session after calling /model/modemetaid is: {}", S.param("modelMetaId").openTheBox))
+    }
+    selectedSpecies.get.openTheBox.parent = selectedModel.get
+    debug("Loaded species into session: {}", selectedSpecies.get.openTheBox.toXML )
+    debug("Loaded model into session with metaid {}, id {} and name {}",
+      selectedSpecies.get.openTheBox.metaid,
+      selectedSpecies.get.openTheBox.id,
+      selectedSpecies.get.openTheBox.name)
+    selectedSpecies.is
+  }
 
   def dispatch: DispatchIt = {
     case "createModel" => createNewModel
@@ -81,6 +102,11 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
     case "editCompartment" => editSelectedCompartment
     case "visualizeCompartment" => visualizeSelectedCompartment
     case "deleteCompartment" => confirmAndDeleteSelectedCompartment
+    case "createSpecies" => createNewSpecies
+    case "editSpecies" => editSelectedSpecies
+    case "visualizeSpecies" => visualizeSelectedSpecies
+    case "deleteSpecies" => confirmAndDeleteSelectedSpecies
+
   }
 
   //### Create state
@@ -169,6 +195,49 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
     </tr>
   }
 
+  def saveNewSpecies(species:SpeciesRecord):
+  Unit = {
+    info("SAVE NEW SPECIES with xml {}", species.toXML)
+    //metaid is never presented and, by default, we give it the same value as id
+    species.metaIdO.set(species.id)
+    species.validate match {
+      case Nil => { //no validation errors
+        species.metaid = species.id
+        species.createRestRec() match {
+          case Full(x) => {
+            redirectTo(species.relativeURL) //TODO: handle failure in the server (maybe this should be general)
+          }
+          case Empty => {
+            S.error(mainMsgId, "Strange error when creating a new species "+ species.sbmlType +". Report this bug please!")
+            selectedSpecies(Full(species))
+          }
+          case x:ParamFailure[_] => {
+            S.error(mainMsgId, x.messageChain) //TODO check if message chain is the right thing to send to S.error
+            selectedSpecies(Full(species))
+          }
+          case x:Failure => {
+            S.error(mainMsgId, x.messageChain)
+            selectedSpecies(Full(species))
+          }
+        }
+      }
+      case x =>{
+        x.foreach(f => S.error(mainMsgId, "Error in " + f.field.uniqueFieldId + ": "+f.msg  ))
+        selectedSpecies(Full(species))
+      }
+    }
+  }
+
+  def createNewSpecies(ns:NodeSeq):NodeSeq = {
+    info("CREATE SELECTED SPECIES")
+    val s = selectedSpecies.is.openOr(SpeciesRecord.createRecord)
+    s.parent = loadSBMLModelFromPathParam()
+    s.toForm(saveNewSpecies _) ++ <tr>
+      <td><a href={"/model/" + S.param("modelMetaId").get}>Cancel</a></td>
+      <td><input type="submit" name="create" value="Create"/></td>
+    </tr>
+  }
+
   //### Edit state
 
   def saveSelectedModel(model:SBMLModelRecord):Unit = {
@@ -213,6 +282,27 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
     ) openOr {S.error(mainMsgId, "Compartment not found"); redirectTo("/models")}
   }
 
+  def saveSelectedSpecies(species:SpeciesRecord):Unit = {
+    debug("SAVE SELECTED SPECIES")
+    species.validate match {
+      case Nil => species.updateRestRec(); redirectTo(species.relativeURL) //TODO: handle the possibility that the server does not accept the change (maybe this should be general)
+      case x =>{
+        x.foreach(f => S.error(mainMsgId, "Error in " + f.field.uniqueFieldId + ": "+f.msg  ))
+        selectedSpecies(Full(species))
+      }
+    }
+  }
+
+  def editSelectedSpecies(ns:NodeSeq):NodeSeq ={
+    debug("EDIT SELECTED SPECIES")
+    loadSpeciesFromPathParam
+    selectedSpecies.is.map( _.toForm( saveSelectedSpecies _ ) ++ <tr>
+      <td><a href={"/model/" + S.param("modelMetaId").get}>Cancel</a></td>
+      <td><input type="submit" value="Save"/></td>
+    </tr>
+    ) openOr {S.error(mainMsgId, "Species not found"); redirectTo("/models")}
+  }
+
   //### Visualize state
    case class ParamModelMetaIDInfo(theMetaId:String)
    //TODO val menu = Menu.param[ParamModelMetaIDInfo]("model", "model", s => Full(s),encoder: T => String)
@@ -225,11 +315,19 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
   }
 
   def visualizeSelectedCompartment(ns:NodeSeq):NodeSeq = {
-    debug("VISUALIZE SELECTED MODEL")
+    debug("VISUALIZE SELECTED COMPARTMENT")
     loadCompartmentFromPathParam
-    debug("Loaded selectedModel = " + selectedCompartment.openTheBox.toXML )
+    debug("Loaded selectedCompartment = " + selectedCompartment.openTheBox.toXML )
     selectedCompartment.map(_.toXHtml) openOr {S.error(mainMsgId,"Compartment not found"); redirectTo("/models/")}
   }
+
+  def visualizeSelectedSpecies(ns:NodeSeq):NodeSeq = {
+    debug("VISUALIZE SELECTED SPECIES")
+    loadSpeciesFromPathParam()
+    debug("Loaded selectedSpecies= " + selectedSpecies.openTheBox.toXML )
+    selectedSpecies.map(_.toXHtml) openOr {S.error(mainMsgId,"Species not found"); redirectTo("/models/")}
+  }
+
 
   //### delete state
 
@@ -279,6 +377,28 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
     // display an error and redirect
   }
 
+  def confirmAndDeleteSelectedSpecies(ns:NodeSeq):NodeSeq = {
+    debug("CONFIRM DELETE SELECTED SPECIES")
+    val species = new SpeciesRecord
+    species.metaid = S.param("speciesMetaId").get
+    def deleteSpecies():NodeSeq = {
+      species.deleteRestRec() match {
+        case full:Full[_] => S.notice(mainMsgId, "Species "+ species.metaid +" deleted")
+        case fail:Failure => S.error(mainMsgId, fail.msg)
+        case Empty => S.error(mainMsgId, "THIS IS A BUG")
+      }
+      redirectTo("/model/" + S.param("modelMetaId") )
+    }
+    // bind the incoming XHTML to a "delete" button.
+    // when the delete button is pressed, call the "deleteUser"
+    // function (which is a closure and bound the "user" object
+    // in the current content)
+    bind("xmp", ns, "speciesname" -> (species.id),
+      "delete" -> submit("Delete", deleteSpecies ))
+
+    // if the was no ID or the user couldn't be found,
+    // display an error and redirect
+  }
 
   var somevar: Int = 0
 

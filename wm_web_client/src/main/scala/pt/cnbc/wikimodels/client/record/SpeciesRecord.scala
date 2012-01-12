@@ -5,9 +5,11 @@
 package pt.cnbc.wikimodels.client.record
 
 import pt.cnbc.wikimodels.dataModel.Species
-import net.liftweb.http.S
-import net.liftweb.record.{Notes, Name, Id, MetaId}
-import net.liftweb.common.{Empty, Box}
+import xml.NodeSeq
+import net.liftweb.common.Full._
+import net.liftweb.http.{SHtml, S}
+import net.liftweb.record._
+import net.liftweb.common.{Full, Empty, Box}
 
 /** TODO: Please document.
  *  @author: Alexandre Martins
@@ -27,11 +29,29 @@ class SpeciesRecord() extends Species with SBaseRecord[SpeciesRecord]  {
   //  ### can be presented as XHtml, Json, or as a Form. ###
 
   override def toXHtml = {
+    trace("Calling SpeciesRecord.toXHtml")
     <div>
       <head>
         <link type="text/css" rel="stylesheet" href="/css/sbml_present.css"></link>
       </head>
       {super.toXHtml}
+
+    </div>
+  }
+
+  override def toForm(f:SpeciesRecord => Unit):NodeSeq = {
+    trace("Calling SpeciesRecord.toForm( "+f+" )")
+    <div class="species_toform">
+      {super.toForm(f)}
+      <!-- outside can't be a field and so I will make it a form -->
+      {
+      val defaultOption:(Box[SpeciesRecord], String) = (Empty, "[no species")
+      val op = parent.openTheBox.
+        listOfSpeciesRec
+      val op2 = op.map(i => (Full(i), i.id):(Box[SpeciesRecord], String) )
+      val options = (List(Empty -> "no species") ::: op2.iterator.toList).toSeq
+      SHtml.selectObj(options, Empty, (choice:Box[SpeciesRecord]) => "TODO We shall see!!!!"  )
+      }
     </div>
   }
 
@@ -39,6 +59,7 @@ class SpeciesRecord() extends Species with SBaseRecord[SpeciesRecord]  {
   object metaIdO extends MetaId(this, 100)
   object idO extends Id(this, 100)
   object nameO extends Name(this, 100)
+  object constantO extends Constant(this)
   object notesO extends Notes(this, 1000)
   //  ### can be created directly from a Request containing params with names that match the fields on a Record ( see fromReq ). ###
 

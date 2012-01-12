@@ -95,6 +95,10 @@ class Boot extends LoggerWrapper{
         Menu(Loc("editCompartment", List("modele","compartment_edit"), "Edit Comaprtment", Hidden, loggedIn)) ::
         Menu(Loc("viewCompartment", List("modele","compartment_view"), "View Compartment", Hidden, loggedIn)) ::
         Menu(Loc("deleteCompartment", List("modele","compartment_delete"), "Delete Compartment", Hidden, loggedIn)) ::
+        Menu(Loc("createSpecies", List("modele","species_create"), "Create Species", Hidden, loggedIn)) ::
+        Menu(Loc("editSpecies", List("modele","species_edit"), "Edit Species", Hidden, loggedIn)) ::
+        Menu(Loc("viewSpecies", List("modele","species_view"), "View Species", Hidden, loggedIn)) ::
+        Menu(Loc("deleteSpecies", List("modele","species_delete"), "Delete Species", Hidden, loggedIn)) ::
           User.sitemap
 
         // Build SiteMap
@@ -147,8 +151,27 @@ class Boot extends LoggerWrapper{
             RewriteResponse(ParsePath( "modele"::"compartment_delete"::Nil, "html", true, false),
               Map("modelMetaId" -> model, "compartmentMetaId" -> compartment), true )
           }
-
-          //TODO redirects for species
+          case RewriteRequest(ParsePath("model"::model::"createspecies"::Nil,"",_,false),_,_) => {
+            trace("RewriteRequest from /model/"
+              +model+"/createspecies to /modele/species_create.html" )
+            RewriteResponse(ParsePath( "modele"::"species_create"::Nil, "html", true, false),
+              Map("modelMetaId" -> model), true )
+          }
+          case RewriteRequest(ParsePath("model"::model::"species"::species::Nil,"",_,false),_,_) => {
+            trace("RewriteRequest from /model/"+model+"/species/"+species+" to /modele/species_view.html" )
+            RewriteResponse(ParsePath( "modele"::"species_view"::Nil, "html", true, false),
+              Map("modelMetaId" -> model, "speciesMetaId" -> species), true )
+          }
+          case RewriteRequest(ParsePath("model"::model::"species"::species::"edit"::Nil,"",_,false),_,_) => {
+            trace("RewriteRequest from /model/"+model+"/species/"+species+"/edit to /modele/species_edit.html" )
+            RewriteResponse(ParsePath( "modele"::"species_edit"::Nil, "html", true, false),
+              Map("modelMetaId" -> model, "speciesMetaId" -> species), true )
+          }
+          case RewriteRequest(ParsePath("model"::model::"species"::species::"delete"::Nil,"",_,false),_,_) => {
+            trace("RewriteRequest from /model/"+model+"/species/"+species+"/delete to /modele/species_delete.html" )
+            RewriteResponse(ParsePath( "modele"::"species_delete"::Nil, "html", true, false),
+              Map("modelMetaId" -> model, "speciesMetaId" -> species), true )
+          }
           //TODO redirects for parameter
           //TODO redirects for function definition
           //TODO redirects for constraint
