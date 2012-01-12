@@ -6,6 +6,7 @@ package pt.cnbc.wikimodels.client.record
 
 import pt.cnbc.wikimodels.dataModel.Compartment
 import net.liftweb.common._
+import net.liftweb.common
 import net.liftweb.http.{SHtml, S}
 import net.liftweb.record._
 import xml.NodeSeq
@@ -13,16 +14,9 @@ import alexmsmartins.log.LoggerWrapper
 
 /**
  * TODO: Please document.
- * @author: alex
- * Date: 29-12-2011
- * Time: 16:45
- */
-/**
- * Created by IntelliJ IDEA.
- * User: alex
+ * @author: Alexandre Martins
  * Date: 29-11-2011
  * Time: 22:35
- * To change this template use File | Settings | File Templates.
  */
 class CompartmentRecord() extends Compartment with SBaseRecord[CompartmentRecord] with LoggerWrapper {
 
@@ -53,14 +47,21 @@ class CompartmentRecord() extends Compartment with SBaseRecord[CompartmentRecord
       {super.toForm(f)}
       <!-- outside can't be a field and so I will make it a form -->
       {
-      val defaultOption:(Box[CompartmentRecord], String) = (Empty, "[no compartment")
-      val op = parent.openTheBox.
-        listOfCompartmentsRec.
-          filter(_.metaid != this.metaid).
-          filter(_.spatialDimensions != 0)
-      val op2 = op.map(i => (Full(i), i.id):(Box[CompartmentRecord], String) )
-      val options = (List(Empty -> "no compartment") ::: op2.iterator.toList).toSeq
-      SHtml.selectObj(options, Empty, (choice:Box[CompartmentRecord]) => "TODO We shall see!!!!"  )
+        val defaultOption:(Box[CompartmentRecord], String) = (Empty, "[no compartment")
+        val op = parent.openTheBox.
+          listOfCompartmentsRec.
+            filter(_.metaid != this.metaid).
+            filter(_.spatialDimensions != 0)
+        val defaultOp = parent.openTheBox.listOfCompartmentsRec.filter( _.id == outside ).headOption
+        val opWithId = op.map(i => (i, i.id):(CompartmentRecord, String) )
+        val options = (List((null , "no compartment")) ::: opWithId.toList).toSeq
+        SHtml.selectObj(options, Box.option2Box(defaultOp),
+          (choice:CompartmentRecord ) => {
+            choice match {
+              case null => outside = null
+              case c => outside = c.id
+            }
+          })
       }
     </div>
   }

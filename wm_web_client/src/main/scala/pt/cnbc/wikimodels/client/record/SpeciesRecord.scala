@@ -45,12 +45,19 @@ class SpeciesRecord() extends Species with SBaseRecord[SpeciesRecord]  {
       {super.toForm(f)}
       <!-- outside can't be a field and so I will make it a form -->
       {
-      val defaultOption:(Box[SpeciesRecord], String) = (Empty, "[no species")
+      val defaultOption:(Box[CompartmentRecord], String) = (Empty, "[no compartment")
       val op = parent.openTheBox.
-        listOfSpeciesRec
-      val op2 = op.map(i => (Full(i), i.id):(Box[SpeciesRecord], String) )
-      val options = (List(Empty -> "no species") ::: op2.iterator.toList).toSeq
-      SHtml.selectObj(options, Empty, (choice:Box[SpeciesRecord]) => "TODO We shall see!!!!"  )
+        listOfCompartmentsRec
+      val defaultOp = parent.openTheBox.listOfCompartmentsRec.filter( _.id == compartment ).headOption
+      val opWithId = op.map(i => (i, i.id):(CompartmentRecord, String) )
+      val options = (List((null , "no compartment")) ::: opWithId.toList).toSeq
+      SHtml.selectObj(options, Box.option2Box(defaultOp),
+        (choice:CompartmentRecord ) => {
+          choice match {
+            case null => compartment = null
+            case c => compartment = c.id
+          }
+        })
       }
     </div>
   }
