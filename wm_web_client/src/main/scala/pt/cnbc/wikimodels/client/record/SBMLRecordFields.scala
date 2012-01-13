@@ -221,7 +221,112 @@ with GetSetOwnerField[String, T]{
                 ),
                 "id" -> "random", "class" -> "ckeditor", "maxlength" -> "20000")
               }
+              {Script(JsRaw(
+              """
+          //FIXME this peice of code is not being executed. Make it work and check for notes errors afterwards.
+          alert("CkEditor with XHTML configuration is is loading!");
+          CKEDITOR.replace( 'editor1',
+					{
+						/*
+						 * Style sheet for the contents
+						 */
+						contentsCss : '/classpath/js/ckeditor/_samples/assets/output_xhtml.css',
 
+						/*
+						 * Core styles.
+						 */
+						coreStyles_bold	: { element : 'span', attributes : {'class': 'Bold'} },
+						coreStyles_italic	: { element : 'span', attributes : {'class': 'Italic'}},
+						coreStyles_underline	: { element : 'span', attributes : {'class': 'Underline'}},
+						coreStyles_strike	: { element : 'span', attributes : {'class': 'StrikeThrough'}, overrides : 'strike' },
+
+						coreStyles_subscript : { element : 'span', attributes : {'class': 'Subscript'}, overrides : 'sub' },
+						coreStyles_superscript : { element : 'span', attributes : {'class': 'Superscript'}, overrides : 'sup' },
+
+						/*
+						 * Font face
+						 */
+						// List of fonts available in the toolbar combo. Each font definition is
+						// separated by a semi-colon (;). We are using class names here, so each font
+						// is defined by {Combo Label}/{Class Name}.
+						font_names : 'Comic Sans MS/FontComic;Courier New/FontCourier;Times New Roman/FontTimes',
+
+						// Define the way font elements will be applied to the document. The "span"
+						// element will be used. When a font is selected, the font name defined in the
+						// above list is passed to this definition with the name "Font", being it
+						// injected in the "class" attribute.
+						// We must also instruct the editor to replace span elements that are used to
+						// set the font (Overrides).
+						font_style :
+						{
+								element		: 'span',
+								attributes		: { 'class' : '#(family)' }
+						},
+
+						/*
+						 * Font sizes.
+						 */
+						fontSize_sizes : 'Smaller/FontSmaller;Larger/FontLarger;8pt/FontSmall;14pt/FontBig;Double Size/FontDouble',
+						fontSize_style :
+							{
+								element		: 'span',
+								attributes	: { 'class' : '#(size)' }
+							} ,
+
+						/*
+						 * Font colors.
+						 */
+						colorButton_enableMore : false,
+
+						colorButton_colors : 'FontColor1/FF9900,FontColor2/0066CC,FontColor3/F00',
+						colorButton_foreStyle :
+							{
+								element : 'span',
+								attributes : { 'class' : '#(color)' }
+							},
+
+						colorButton_backStyle :
+							{
+								element : 'span',
+								attributes : { 'class' : '#(color)BG' }
+							},
+
+						/*
+						 * Indentation.
+						 */
+						indentClasses : ['Indent1', 'Indent2', 'Indent3'],
+
+						/*
+						 * Paragraph justification.
+						 */
+						justifyClasses : [ 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyFull' ],
+
+						/*
+						 * Styles combo.
+						 */
+						stylesSet :
+								[
+									{ name : 'Strong Emphasis', element : 'strong' },
+									{ name : 'Emphasis', element : 'em' },
+
+									{ name : 'Computer Code', element : 'code' },
+									{ name : 'Keyboard Phrase', element : 'kbd' },
+									{ name : 'Sample Text', element : 'samp' },
+									{ name : 'Variable', element : 'var' },
+
+									{ name : 'Deleted Text', element : 'del' },
+									{ name : 'Inserted Text', element : 'ins' },
+
+									{ name : 'Cited Work', element : 'cite' },
+									{ name : 'Inline Quotation', element : 'q' }
+								]
+
+					});
+
+
+              	"""
+              ) //end of JsRaw
+              )}
             </span><br /></li>
           </ul>
         </li>
@@ -239,7 +344,14 @@ with GetSetOwnerField[String, T]{
           <span class="sbml_field_content">
             {this.valueBox match{
               case Empty => Text("-- no description available -- ")
-              case Full(content) => XML.loadString( content )}
+              case Full(content) =>{
+                try{
+                  XML.loadString( content )
+                } catch{
+                  //FIXME replace this hack by something more general
+                  case _ => XML.loadString( "<root>"+content+"</root>" ).child
+                }
+              }}
             }</span>
         </span>
           <lift:msg id={uniqueFieldId.openTheBox}  errorClass="lift_error"/>
