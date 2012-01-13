@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<!--
+  ~ Copyright (c) 2012. Alexandre Martins. All rights reserved.
+  -->
+
+<html>
+<body>
+<lift:surround with="default" at="content">
+    <div id='content'>
+        <div class="lift:SBMLModelSnip:parameterMetaId">
+            <h1>Parameter with metaId <span id="mMetaId"></span> . <input type="button"
+                                                                      onclick="window.location.href=window.location.href+'/..'"
+                                                                      name="view" value="View">View</input> </h1>
+        </div>
+        <div class="lift:SBMLForm.editParameter?form=post">
+        </div>
+        <p></p>
+    </div>
+    <!-- end of content -->
+</lift:surround>
+</body>
+</html>

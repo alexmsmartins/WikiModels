@@ -85,20 +85,42 @@ class Boot extends LoggerWrapper{
         Menu(Loc("help", List("help","index"), "Help"),
              Menu(Loc("helpMath", List("help","helpMath"), "Help Math", Hidden))) ::
         Menu(Loc("administrator", List("administrator","index"), "Administrator", Hidden, loggedIn)) ::
-        //entries for new brows/edit model in the same page
+        //entries for new brows/edit model
         Menu(Loc("listMModels", List("modele","indexe"), "List Models", Hidden, loggedIn)) ::
         Menu(Loc("createModel", List("modele","model_create"), "Create Model", Hidden, loggedIn)) ::
         Menu(Loc("editModel", List("modele","model_edit"), "Edit Model", Hidden, loggedIn)) ::
         Menu(Loc("viewModel", List("modele","model_view"), "View Model", Hidden, loggedIn)) ::
         Menu(Loc("deleteModel", List("modele","model_delete"), "Delete Model", Hidden, loggedIn)) ::
+        //entries for new brows/edit compartment
         Menu(Loc("createCompartment", List("modele","compartment_create"), "Create Compartment", Hidden, loggedIn)) ::
         Menu(Loc("editCompartment", List("modele","compartment_edit"), "Edit Comaprtment", Hidden, loggedIn)) ::
         Menu(Loc("viewCompartment", List("modele","compartment_view"), "View Compartment", Hidden, loggedIn)) ::
         Menu(Loc("deleteCompartment", List("modele","compartment_delete"), "Delete Compartment", Hidden, loggedIn)) ::
+        //entries for new brows/edit species
         Menu(Loc("createSpecies", List("modele","species_create"), "Create Species", Hidden, loggedIn)) ::
         Menu(Loc("editSpecies", List("modele","species_edit"), "Edit Species", Hidden, loggedIn)) ::
         Menu(Loc("viewSpecies", List("modele","species_view"), "View Species", Hidden, loggedIn)) ::
         Menu(Loc("deleteSpecies", List("modele","species_delete"), "Delete Species", Hidden, loggedIn)) ::
+        //entries for new brows/edit paramenter
+        Menu(Loc("createParameter", List("modele","parameter_create"), "Create Parameter", Hidden, loggedIn)) ::
+        Menu(Loc("editParameter", List("modele","parameter_edit"), "Edit Parameter", Hidden, loggedIn)) ::
+        Menu(Loc("viewParameter", List("modele","parameter_view"), "View Parameter", Hidden, loggedIn)) ::
+        Menu(Loc("deleteParameter", List("modele","parameter_delete"), "Delete Parameter", Hidden, loggedIn)) ::
+        //entries for new brows/edit function definition
+        Menu(Loc("createFunctionDefinition", List("modele","function_definition_create"), "Create Function Definition", Hidden, loggedIn)) ::
+        Menu(Loc("editFunctionDefinition", List("modele","function_definition_edit"), "Edit Function Definition", Hidden, loggedIn)) ::
+        Menu(Loc("viewFunctionDefinition", List("modele","function_definition_view"), "View Function Definition", Hidden, loggedIn)) ::
+        Menu(Loc("deleteFunctionDefinition", List("modele","function_definition_delete"), "Delete Function Definition", Hidden, loggedIn)) ::
+        //entries for new brows/edit constraint
+        Menu(Loc("createConstraint", List("modele","constraint_create"), "Create Constraint", Hidden, loggedIn)) ::
+        Menu(Loc("editConstraint", List("modele","constraint_edit"), "Edit Constraint", Hidden, loggedIn)) ::
+        Menu(Loc("viewConstraint", List("modele","constraint_view"), "View Constraint", Hidden, loggedIn)) ::
+        Menu(Loc("deleteConstraint", List("modele","constraint_delete"), "Delete Constraint", Hidden, loggedIn)) ::
+        //entries for new brows/edit reaction
+        Menu(Loc("createReaction", List("modele","reaction_create"), "Create Reaction", Hidden, loggedIn)) ::
+        Menu(Loc("editReaction", List("modele","reaction_edit"), "Edit Reaction", Hidden, loggedIn)) ::
+        Menu(Loc("viewReaction", List("modele","reaction_view"), "View Reaction", Hidden, loggedIn)) ::
+        Menu(Loc("deleteReaction", List("modele","reaction_delete"), "Delete Reaction", Hidden, loggedIn)) ::
           User.sitemap
 
         // Build SiteMap
@@ -110,6 +132,7 @@ class Boot extends LoggerWrapper{
         // URL rewritess the pages, it is used for the bookmarks
         LiftRules.statelessRewrite.append {
           //NOTE: these redirects make the model metaId available to SBMLForm snippets.
+          //redirects for model
           case RewriteRequest(ParsePath("createmodel"::Nil,"",_,false),_,_) => {
             trace("RewriteRequest from /createmodel to /modele/model_create.html" )
             RewriteResponse(ParsePath( "modele"::"model_create"::Nil, "html", true, false),
@@ -130,6 +153,7 @@ class Boot extends LoggerWrapper{
             RewriteResponse(ParsePath( "modele"::"model_delete"::Nil, "html", true, false),
               Map("modelMetaId" -> model), true )
           }
+          //redirects for compartment
           case RewriteRequest(ParsePath("model"::model::"createcompartment"::Nil,"",_,false),_,_) => {
             trace("RewriteRequest from /model/"
               +model+"/createcompartment to /modele/compartment_create.html" )
@@ -151,6 +175,7 @@ class Boot extends LoggerWrapper{
             RewriteResponse(ParsePath( "modele"::"compartment_delete"::Nil, "html", true, false),
               Map("modelMetaId" -> model, "compartmentMetaId" -> compartment), true )
           }
+          //redirects for species
           case RewriteRequest(ParsePath("model"::model::"createspecies"::Nil,"",_,false),_,_) => {
             trace("RewriteRequest from /model/"
               +model+"/createspecies to /modele/species_create.html" )
@@ -172,10 +197,94 @@ class Boot extends LoggerWrapper{
             RewriteResponse(ParsePath( "modele"::"species_delete"::Nil, "html", true, false),
               Map("modelMetaId" -> model, "speciesMetaId" -> species), true )
           }
-          //TODO redirects for parameter
-          //TODO redirects for function definition
-          //TODO redirects for constraint
-          //TODO redirects for reaction
+          //redirects for parameter
+          case RewriteRequest(ParsePath("model"::model::"createparameter"::Nil,"",_,false),_,_) => {
+            trace("RewriteRequest from /model/"
+              +model+"/createparameter to /modele/parameter_create.html" )
+            RewriteResponse(ParsePath( "modele"::"parameter_create"::Nil, "html", true, false),
+              Map("parameterMetaId" -> model), true )
+          }
+          case RewriteRequest(ParsePath("model"::model::"parameter"::parameter::Nil,"",_,false),_,_) => {
+            trace("RewriteRequest from /model/"+model+"/parameter/"+parameter+" to /modele/parameter_view.html" )
+            RewriteResponse(ParsePath( "modele"::"parameter_view"::Nil, "html", true, false),
+              Map("modelMetaId" -> model, "parameterMetaId" -> parameter), true )
+          }
+          case RewriteRequest(ParsePath("model"::model::"parameter"::parameter::"edit"::Nil,"",_,false),_,_) => {
+            trace("RewriteRequest from /model/"+model+"/parameter/"+parameter+"/edit to /modele/parameter_edit.html" )
+            RewriteResponse(ParsePath( "modele"::"parameter_edit"::Nil, "html", true, false),
+              Map("modelMetaId" -> model, "parameterMetaId" -> parameter), true )
+          }
+          case RewriteRequest(ParsePath("model"::model::"parameter"::parameter::"delete"::Nil,"",_,false),_,_) => {
+            trace("RewriteRequest from /model/"+model+"/parameter/"+parameter+"/delete to /modele/parameter_delete.html" )
+            RewriteResponse(ParsePath( "modele"::"parameter_delete"::Nil, "html", true, false),
+              Map("modelMetaId" -> model, "parameterMetaId" -> parameter), true )
+          }
+          //redirects for function definition
+          case RewriteRequest(ParsePath("model"::model::"createfunctionDefinition"::Nil,"",_,false),_,_) => {
+            trace("RewriteRequest from /model/"
+              +model+"/createfunctionDefinition to /modele/function_definition_create.html" )
+            RewriteResponse(ParsePath( "modele"::"function_definition_create"::Nil, "html", true, false),
+              Map("functionDefinitionMetaId" -> model), true )
+          }
+          case RewriteRequest(ParsePath("model"::model::"functiondefinition"::functionDefinition::Nil,"",_,false),_,_) => {
+            trace("RewriteRequest from /model/"+model+"/functiondefinition/"+functionDefinition+" to /modele/functiondefinition_view.html" )
+            RewriteResponse(ParsePath( "modele"::"function_definition_view"::Nil, "html", true, false),
+              Map("modelMetaId" -> model, "functionDefinitionMetaId" -> functionDefinition), true )
+          }
+          case RewriteRequest(ParsePath("model"::model::"functiondefinition"::functionDefinition::"edit"::Nil,"",_,false),_,_) => {
+            trace("RewriteRequest from /model/"+model+"/functiondefinition/"+functionDefinition+"/edit to /modele/functiondefinition_edit.html" )
+            RewriteResponse(ParsePath( "modele"::"function_definition_edit"::Nil, "html", true, false),
+              Map("modelMetaId" -> model, "functionDefinitionMetaId" -> functionDefinition), true )
+          }
+          case RewriteRequest(ParsePath("model"::model::"functiondefinition"::functionDefinition::"delete"::Nil,"",_,false),_,_) => {
+            trace("RewriteRequest from /model/"+model+"/functiondefinition/"+functionDefinition+"/delete to /modele/functiondefinition_delete.html" )
+            RewriteResponse(ParsePath( "modele"::"function_definition_delete"::Nil, "html", true, false),
+              Map("modelMetaId" -> model, "functionDefinitionMetaId" -> functionDefinition), true )
+          }
+          //redirects for constraint
+          case RewriteRequest(ParsePath("model"::model::"createconstraint"::Nil,"",_,false),_,_) => {
+            trace("RewriteRequest from /model/"
+              +model+"/createconstraint to /modele/constraint_create.html" )
+            RewriteResponse(ParsePath( "modele"::"constraint_create"::Nil, "html", true, false),
+              Map("constraintMetaId" -> model), true )
+          }
+          case RewriteRequest(ParsePath("model"::model::"constraint"::constraint::Nil,"",_,false),_,_) => {
+            trace("RewriteRequest from /model/"+model+"/constraint/"+constraint+" to /modele/constraint_view.html" )
+            RewriteResponse(ParsePath( "modele"::"constraint_view"::Nil, "html", true, false),
+              Map("modelMetaId" -> model, "constraintMetaId" -> constraint), true )
+          }
+          case RewriteRequest(ParsePath("model"::model::"constraint"::constraint::"edit"::Nil,"",_,false),_,_) => {
+            trace("RewriteRequest from /model/"+model+"/constraint/"+constraint+"/edit to /modele/constraint_edit.html" )
+            RewriteResponse(ParsePath( "modele"::"constraint_edit"::Nil, "html", true, false),
+              Map("modelMetaId" -> model, "constraintMetaId" -> constraint), true )
+          }
+          case RewriteRequest(ParsePath("model"::model::"constraint"::constraint::"delete"::Nil,"",_,false),_,_) => {
+            trace("RewriteRequest from /model/"+model+"/constraint/"+constraint+"/delete to /modele/constraint_delete.html" )
+            RewriteResponse(ParsePath( "modele"::"constraint_delete"::Nil, "html", true, false),
+              Map("modelMetaId" -> model, "constraintMetaId" -> constraint), true )
+          }
+          //redirects for reaction
+          case RewriteRequest(ParsePath("model"::model::"createreaction"::Nil,"",_,false),_,_) => {
+            trace("RewriteRequest from /model/"
+              +model+"/createreaction to /modele/reaction_create.html" )
+            RewriteResponse(ParsePath( "modele"::"reaction_create"::Nil, "html", true, false),
+              Map("reactionMetaId" -> model), true )
+          }
+          case RewriteRequest(ParsePath("model"::model::"reaction"::reaction::Nil,"",_,false),_,_) => {
+            trace("RewriteRequest from /model/"+model+"/reaction/"+reaction+" to /modele/reaction_view.html" )
+            RewriteResponse(ParsePath( "modele"::"reaction_view"::Nil, "html", true, false),
+              Map("modelMetaId" -> model, "reactionMetaId" -> reaction), true )
+          }
+          case RewriteRequest(ParsePath("model"::model::"reaction"::reaction::"edit"::Nil,"",_,false),_,_) => {
+            trace("RewriteRequest from /model/"+model+"/reaction/"+reaction+"/edit to /modele/reaction_edit.html" )
+            RewriteResponse(ParsePath( "modele"::"reaction_edit"::Nil, "html", true, false),
+              Map("modelMetaId" -> model, "reactionMetaId" -> reaction), true )
+          }
+          case RewriteRequest(ParsePath("model"::model::"reaction"::reaction::"delete"::Nil,"",_,false),_,_) => {
+            trace("RewriteRequest from /model/"+model+"/reaction/"+reaction+"/delete to /modele/reaction_delete.html" )
+            RewriteResponse(ParsePath( "modele"::"reaction_delete"::Nil, "html", true, false),
+              Map("modelMetaId" -> model, "reactionMetaId" -> reaction), true )
+          }
 
 
           //These redirects make the comments available to everyone

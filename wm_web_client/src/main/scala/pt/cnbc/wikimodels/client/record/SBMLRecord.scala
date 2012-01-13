@@ -139,7 +139,7 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
   //TODO listOfRules is missing
   //var listOfRules: java.util.Collection[Rules] = null
   var listOfConstraintsRec: List[ConstraintRecord] = Nil
-  //var listOfReactionsRec: List[ReactionRecord] = Nil
+  var listOfReactionsRec: List[ReactionRecord] = Nil
   //var listOfEvents:List[Event] = List()
 
 
@@ -169,6 +169,7 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
       {super.toXHtml}
       <div class="demo cupertino changeline">
         <div id="accordion1" class="accordion ui-accordion ui-widget ui-helper-reset ui-accordion-icons">
+
           <h3 id="accord_c" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top changeline">
             <a href="#accord_c">
               {this.listOfCompartmentsRec.size} Compartments
@@ -213,6 +214,7 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
               }
             </div>
           </div>
+
           <h3 id="accord_s" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top changeline">
             <a href="#accord_s">
               {this.listOfSpeciesRec.size} Species
@@ -348,8 +350,8 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
             </div>
           </div>
 
-          <h3 id="accord_c" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top changeline">
-            <a href="#accord_c">
+          <h3 id="accord_ct" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top changeline">
+            <a href="#accord_ct">
               {this.listOfConstraintsRec.size} Constraints
               <form style='display:inline;' >{SHtml.button(Text("Add Constraints"),
                 () => {
@@ -364,8 +366,8 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
           <div  class="toggle_container">
             <div id="accordion3" class="block">{
               this.listOfConstraintsRec.map(i => {
-                <h3 id={"accord_c_"+i.metaid} class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
-                  <a href={"#accord_c_"+i.metaid}>
+                <h3 id={"accord_ct_"+i.metaid} class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
+                  <a href={"#accord_ct_"+i.metaid}>
                     {i.id}
                     <form style='display:inline;' >{SHtml.button(Text("Edit"),
                       () => {
@@ -393,20 +395,20 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
             </div>
           </div>
 
-          <!--<h3 id="accord_r" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top changeline">
+          <h3 id="accord_r" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top changeline">
             <a href="#accord_r">
-              {this.listOfReactionsRec.size} Species
-              <form style='display:inline;' >{SHtml.button(Text("Add Species"),
+              {this.listOfReactionsRec.size} Reactions
+              <form style='display:inline;' >{SHtml.button(
+                Text("Add Reaction"),
                 () => {
-                  debug("Button to add reaction pressed.")
+                  debug("Button to add reaction, pressed.")
                   S.redirectTo(this.relativeURL + "/createreaction" )
                 },
                 "class" ->"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
               )}</form>
-
             </a>
           </h3>
-          <div  class="toggle_container">
+          <div class="toggle_container">
             <div id="accordion_r" class="block">{
               this.listOfReactionsRec.map(i => {
                 <h3 id={"accord_r_"+i.metaid} class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
@@ -422,7 +424,7 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
                     <form style='display:inline;' >{SHtml.button(Text("Delete"),
                       () => {
                         debug("Button to delete reaction, pressed.")
-                        S.redirectTo(i.relativeURL )
+                        S.redirectTo(i.relativeURL + "/delete" )
                       },
                       "class" ->"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
                     )}</form>
@@ -436,81 +438,6 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
                   </div>})
               }
             </div>
-          </div>-->
-
-          <h3 id="accord_s" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top changeline">
-            <a href="#accord_s">
-              Reactions
-              <form style='display:inline;' >{SHtml.button(Text("Add reaction"),
-                () => {
-                  debug("Button to add reactions pressed.")
-                  S.redirectTo(this.relativeURL + "/createreaction" )
-                },
-                "class" ->"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
-              )}</form>
-
-            </a>
-          </h3>
-          <div  class="toggle_container">
-            <div id="accordion3" class="block">
-              <h3 id="accord_s_s1" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
-                <a href="#accord_s_s1">
-                  Reaction 1
-                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Edit</button>
-                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Delete</button>
-                </a>
-              </h3>
-              <div class="toggle_container">
-                <div class="block">
-                  <p>
-                    Mauris mauris ante, blandit et, ultrices a, suscipit eget, quam. Integer
-                    ut neque. Vivamus nisi metus, molestie vel, gravida in, condimentum sit
-                    amet, nunc. Nam a nibh. Donec suscipit eros. Nam mi. Proin viverra leo ut
-                    odio. Curabitur malesuada. Vestibulum a velit eu ante scelerisque vulputate.
-                  </p>
-                </div>
-              </div>
-              <h3 id="accord_s_s2" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
-                <a href="#acctoggle_containerord_s_s2">
-                  Reaction 2
-                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Edit</button>
-                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Delete</button>
-                </a>
-              </h3>
-              <div class="toggle_container">
-                <div class="block">
-                  <p>
-                    Sed non urna. Donec et ante. Phasellus eu ligula. Vestibulum sit amet
-                    purus. Vivamus hendrerit, dolor at aliquet laoreet, mauris turpis porttitor
-                    velit, faucibus interdum tellus libero ac justo. Vivamus non quam. In
-                    suscipit faucibus urna.
-                  </p>
-                </div>
-              </div>
-              <h3 id="accord_s_s3" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
-                <a href="#accord_s_s3">
-                  Reaction 3
-                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Edit</button>
-                  <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only">Delete</button>
-                </a>
-              </h3>
-              <div class="toggle_container">
-                <div class="block">
-                  <p>
-                    Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis.
-                    Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero
-                    ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis
-                    lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui.
-                  </p>
-                  <ul>
-                    <li>List item one</li>
-                    <li>List item two</li>
-                    <li>List item three</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
           </div>
 
         </div>

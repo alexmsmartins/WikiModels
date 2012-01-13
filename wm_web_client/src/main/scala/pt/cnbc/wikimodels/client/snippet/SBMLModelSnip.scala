@@ -22,11 +22,19 @@ import alexmsmartins.log.LoggerWrapper
 class SBMLModelSnip extends LoggerWrapper{
   //TODO DELETE THIS asap
 
-  def modelMetaId = "#mMetaId *" #> S.param("modelMetaId").openOr("<<handling this is a TODO>>")
+  def modelMetaId = "#mMetaId *" #> S.param("modelMetaId").openOr("<<handling this is a TODO>>")    //TODO HANDLE ERROR HERE
 
-  def compartmentMetaId = "#mMetaId *" #> S.param("compartmentMetaId").openOr("<<handling this is a TODO>>")
+  def compartmentMetaId = "#mMetaId *" #> S.param("compartmentMetaId").openOr("<<handling this is a TODO>>")     //TODO HANDLE ERROR HERE
 
-  def speciesMetaId = "#mMetaId *" #> S.param("speciesMetaId").openOr("<<handling this is a TODO>>")
+  def speciesMetaId = "#mMetaId *" #> S.param("speciesMetaId").openOr("<<handling this is a TODO>>")     //TODO HANDLE ERROR HERE
+
+  def parameterMetaId = "#mMetaId *" #> S.param("parameterMetaId").openOr("<<handling this is a TODO>>")  //TODO HANDLE ERROR HERE
+
+  def functionDefinitionMetaId = "#mMetaId *" #> S.param("functionDefinitionMetaId").openOr("<<handling this is a TODO>>")      //TODO HANDLE ERROR HERE
+
+  def constraintMetaId = "#mMetaId *" #> S.param("constraintMetaId").openOr("<<handling this is a TODO>>")       //TODO HANDLE ERROR HERE
+
+  def reactionMetaId = "#mMetaId *" #> S.param("reactionMetaId").openOr("<<handling this is a TODO>>")        //TODO HANDLE ERROR HERE
 
 
   def entireModelInXML = {
