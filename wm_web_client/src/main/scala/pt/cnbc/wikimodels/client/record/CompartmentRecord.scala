@@ -71,7 +71,7 @@ class CompartmentRecord() extends Compartment with SBaseRecord[CompartmentRecord
   object idO extends Id(this, 100)
   object nameO extends Name(this, 100)
   object spatialDimensions0 extends SpatialDimensions(this)
-  object constantO extends Constant(this)
+  object constantO extends CConstant(this)
   object sizeO extends Size(this)
   object notesO extends Notes(this, 1000)
   //  ### can be created directly from a Request containing params with names that match the fields on a Record ( see fromReq ). ###

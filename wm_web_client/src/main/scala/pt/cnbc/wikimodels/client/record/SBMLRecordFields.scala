@@ -7,10 +7,10 @@ import alexmsmartins.log.LoggerWrapper
 import pt.cnbc.wikimodels.client.record._
 import pt.cnbc.wikimodels.dataModel.Compartment._
 import pt.cnbc.wikimodels.dataModel.ValidSpatialDimensions._
-import pt.cnbc.wikimodels.dataModel.{ValidSpatialDimensions, Compartment}
 import net.liftweb.util.FieldError
 import net.liftweb.util.ControlHelpers._
 import xml.{Text, XML, NodeSeq}
+import pt.cnbc.wikimodels.dataModel.{Species, ValidSpatialDimensions, Compartment}
 
 //Javascript handling imports
 import _root_.net.liftweb.http.js.{JE,JsCmd,JsCmds}
@@ -407,10 +407,14 @@ with DisplayFormWithLabelInOneLine[ValidSpatialDimensions, T] with DisplayHTMLWi
   //override def toXHtml: NodeSeq = Text(this.value)
 }
 
-
-class Constant[T <: SBaseRecord[T]{var constant:Boolean}](own:T) extends BooleanField(own)
-with DisplayFormWithLabelInOneLine[Boolean, T] with DisplayHTMLWithLabelInOneLine[Boolean, T] with LoggerWrapper{
+trait UIMandatoryBooleanField[OwnerType <: SBaseRecord[OwnerType]]  extends Field[Boolean, OwnerType] with MandatoryTypedField[Boolean] with BooleanTypedField
+with DisplayFormWithLabelInOneLine[Boolean, OwnerType] with DisplayHTMLWithLabelInOneLine[Boolean, OwnerType]
+with LoggerWrapper{
   var _data:Box[MyType] = Empty
+
+  def ownerField_=(value:Boolean)
+  def ownerField:Boolean
+  def defaultFieldValue:Boolean
 
   override def theData_=(in:Box[MyType]) {
     trace("Calling Constant.theData_=" + in)
@@ -418,13 +422,13 @@ with DisplayFormWithLabelInOneLine[Boolean, T] with DisplayHTMLWithLabelInOneLin
     in match{
       //if a valid value is set then update the owner class
       case Full(y) =>{
-        owner.constant = y
+        ownerField = y
       }
       case Empty => {
-        owner.constant = Compartment.defaultConstant
+        ownerField = Compartment.defaultConstant
       }
       case _ =>{
-        owner.constant = true //lets give it a default even in case of error
+        ownerField = true //lets give it a default even in case of error
         S.error("Strange error when reading the field constant in ")
       }  
     }
@@ -433,16 +437,16 @@ with DisplayFormWithLabelInOneLine[Boolean, T] with DisplayHTMLWithLabelInOneLin
   override def theData:Box[MyType] = {
     trace("Calling Constant.theData")
     //if the owner has valid data that was obtained from the wikimodels Server
-    debug("theData with constant = "+ owner.constant + " is being copied to the record Field.")
+    debug("theData with " + name.toLowerCase +" "+ ownerField + " is being copied to the record Field.")
     _data match {
       case Empty => {
         if (! this.optional_?){
           _data = Full(defaultConstant)
-          owner.constant = Compartment.defaultConstant
+          ownerField = defaultFieldValue
         }
       }
       case Full(x) => {
-        owner.constant = x
+        ownerField = x
       }
     }
     trace("Constant.theData returns " + _data)
@@ -454,6 +458,39 @@ with DisplayFormWithLabelInOneLine[Boolean, T] with DisplayHTMLWithLabelInOneLin
   //override def toXHtml: NodeSeq = Text(this.value)
 }
 
+class CConstant[OwnerType <: SBaseRecord[OwnerType]{var constant:Boolean}](rec:OwnerType) extends UIMandatoryBooleanField[OwnerType]{
+  def owner = rec
+  override def ownerField_=(value:Boolean) = owner.constant = value
+  override def ownerField:Boolean = owner.constant
+  override def defaultFieldValue = Compartment.defaultConstant
+
+  def defaultValue = Compartment.defaultConstant
+
+  override def name: String = "Constant"
+}
+
+
+class BoundaryCondition[OwnerType <: SBaseRecord[OwnerType]{var constant:Boolean}](rec:OwnerType) extends UIMandatoryBooleanField[OwnerType]{
+  def owner = rec
+  override def ownerField_=(value:Boolean) = owner.constant = value
+  override def ownerField:Boolean = owner.constant
+  override def defaultFieldValue = Compartment.defaultConstant
+
+  def defaultValue = Species.defaultBoundaryCondition
+
+  override def name: String = "BoundaryCondition"
+}
+
+class SConstant[OwnerType <: SBaseRecord[OwnerType]{var constant:Boolean}](rec:OwnerType) extends UIMandatoryBooleanField[OwnerType]{
+  def owner = rec
+  override def ownerField_=(value:Boolean) = owner.constant = value
+  override def ownerField:Boolean = owner.constant
+  override def defaultFieldValue = Compartment.defaultConstant
+
+  def defaultValue = Species.defaultConstant
+
+  override def name: String = "Constant"
+}
 
 
 trait UIOptionalDoubleField[OwnerType <: SBaseRecord[OwnerType]] extends Field[Double,OwnerType] with OptionalTypedField[Double] with DoubleTypedField
@@ -469,7 +506,7 @@ trait UIOptionalDoubleField[OwnerType <: SBaseRecord[OwnerType]] extends Field[D
   def ownerField:java.lang.Double
 
   override def theData_=(in:Box[MyType]) {
-    trace("Calling Size.theData_=" + in)
+    trace("Calling UIOptionalDoubleField.theData_=" + in)
     _data = in
     in match{
       //if a valid value is set then update the owner class
@@ -487,12 +524,12 @@ trait UIOptionalDoubleField[OwnerType <: SBaseRecord[OwnerType]] extends Field[D
   }
 
   override def theData:Box[MyType] = {
-    trace("Calling Size.theData")
+    trace("Calling UIOptionalDoubleField.theData")
     //if the owner has valid data that was obtained from the wikimodels Server
     if(ownerField != null){
       _data = Full(ownerField)
     } else {
-      debug("theData with size = "+ ownerField + " is being copied to the record Field.")
+      debug("theData with " + name.toLowerCase +" "+ ownerField + " is being copied to the record Field.")
       _data match {
         case Empty => {
           if ( this.optional_?){
