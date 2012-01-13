@@ -14,11 +14,10 @@ import xml.{Elem, NodeSeq, Text}
 import alexmsmartins.log.LoggerWrapper
 
 /**
- * Created by IntelliJ IDEA.
- * User: alex
+ * TODO: Please document.
+ * @author Alexandre Martins
  * Date: 25-04-2011
  * Time: 3:59
- * To change this template use File | Settings | File Templates.
  */
 class SBMLModelSnip extends LoggerWrapper{
   //TODO DELETE THIS asap
@@ -26,6 +25,8 @@ class SBMLModelSnip extends LoggerWrapper{
   def modelMetaId = "#mMetaId *" #> S.param("modelMetaId").openOr("<<handling this is a TODO>>")
 
   def compartmentMetaId = "#mMetaId *" #> S.param("compartmentMetaId").openOr("<<handling this is a TODO>>")
+
+  def speciesMetaId = "#mMetaId *" #> S.param("speciesMetaId").openOr("<<handling this is a TODO>>")
 
 
   def entireModelInXML = {

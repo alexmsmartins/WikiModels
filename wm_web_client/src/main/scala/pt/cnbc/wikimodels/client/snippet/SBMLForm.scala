@@ -364,7 +364,7 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
         case fail:Failure => S.error(mainMsgId, fail.msg)
         case Empty => S.error(mainMsgId, "THIS IS A BUG")
       }
-      redirectTo("/model/" + S.param("modelMetaId") )
+      redirectTo("/model/" + S.param("modelMetaId").openTheBox )
     }
     // bind the incoming XHTML to a "delete" button.
     // when the delete button is pressed, call the "deleteUser"
@@ -387,7 +387,7 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
         case fail:Failure => S.error(mainMsgId, fail.msg)
         case Empty => S.error(mainMsgId, "THIS IS A BUG")
       }
-      redirectTo("/model/" + S.param("modelMetaId") )
+      redirectTo("/model/" + S.param("modelMetaId").openTheBox )
     }
     // bind the incoming XHTML to a "delete" button.
     // when the delete button is pressed, call the "deleteUser"

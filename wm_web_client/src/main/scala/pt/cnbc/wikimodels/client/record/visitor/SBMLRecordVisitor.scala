@@ -64,6 +64,8 @@ object RecordFromSBML extends LoggerWrapper {
     er match {
       case m:SBMLModel => createModelRecordFrom(m)
       case c:Compartment => createCompartmentRecordFrom(c)
+      case s:Species => createSpeciesRecordFrom(s)
+      //TODO - write code for the remaining sbml types
       case _ => throw new NotImplementedException("ERROR: Method create" + er.sbmlType + "From(_) not implemented yet")
     }
   }
@@ -74,7 +76,8 @@ object RecordFromSBML extends LoggerWrapper {
     mr.id = m.id
     mr.name = m.name
     mr.notes = m.notes
-    if(m.listOfCompartments != null)
+
+    if(m.listOfCompartments != null){
       debug("Loaded listOfCompartments has size " + m.listOfCompartments.size)
       mr.listOfCompartmentsRec = m.listOfCompartments.map(createCompartmentRecordFrom(_)).toList
         .map(i => {
@@ -84,7 +87,21 @@ object RecordFromSBML extends LoggerWrapper {
       )
       Console.println("Copied listOfCompartmentsRec has size " + mr.listOfCompartmentsRec.size)
       mr.listOfCompartments = m.listOfCompartments
-      //TODO - write code for the remaining lists
+    }
+
+    if(m.listOfSpecies != null){
+      debug("Loaded listOfCompartments has size " + m.listOfSpecies.size)
+      mr.listOfSpeciesRec = m.listOfSpecies.map(createSpeciesRecordFrom(_)).toList
+        .map(i => {
+        i.parent = Full(mr) //to build complete URLs
+        i
+      }
+      )
+      Console.println("Copied listOfCompartmentsRec has size " + mr.listOfCompartmentsRec.size)
+      mr.listOfCompartments = m.listOfCompartments
+    }
+
+    //TODO - write code for the remaining lists
     mr
   }
 
@@ -102,4 +119,20 @@ object RecordFromSBML extends LoggerWrapper {
     cr.constant = c.constant
     cr
   }
+
+  def createSpeciesRecordFrom(s: Species):SpeciesRecord = {
+    val sr = new SpeciesRecord()
+    sr.metaid = s.metaid
+    sr.id = s.id
+    sr.name = s.name
+    sr.notes = s.notes
+    sr.compartment= s.compartment
+    sr.initialAmount = s.initialAmount
+    sr.initialConcentration = s.initialConcentration
+    sr.boundaryCondition = s.boundaryCondition
+    sr.constant = s.constant
+    sr
+  }
+
+  //TODO WIRTE VISITING FUNCTIONS for the remaining SBML entities
 }

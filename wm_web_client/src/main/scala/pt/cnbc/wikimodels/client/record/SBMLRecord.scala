@@ -18,7 +18,7 @@ package pt.cnbc.wikimodels.client.record{
 
 import pt.cnbc.wikimodels.client.snippet.CommentSnip
 import net.liftweb.common.Box
-import pt.cnbc.wikimodels.sbmlVisitors.dataVisitors.SBML2BeanConverter
+import pt.cnbc.wikimodels.sbmlVisitors.SBML2BeanConverter
 import visitor.RecordFromSBML
 
 

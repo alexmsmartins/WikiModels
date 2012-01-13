@@ -343,11 +343,18 @@ with DisplayFormWithLabelInOneLine[Boolean, T] with DisplayHTMLWithLabelInOneLin
 }
 
 
-class Size[T <: SBaseRecord[T]{var size:java.lang.Double}](own:T) extends OptionalDoubleField(own)
-with DisplayFormWithLabelInOneLine[Double, T] with DisplayHTMLWithLabelInOneLine[Double, T] with LoggerWrapper{
+
+trait UIOptionalDoubleField[OwnerType <: SBaseRecord[OwnerType]] extends Field[Double,OwnerType] with OptionalTypedField[Double] with DoubleTypedField
+  with DisplayFormWithLabelInOneLine[Double, OwnerType] with DisplayHTMLWithLabelInOneLine[Double,OwnerType]
+  with LoggerWrapper {
+
+
   // * There is a strong reason to use both java.lang.Double and scala.Double here
   // * Do not change this without knowing what to do with the client and server code when there is no size value
   var _data:Box[MyType] = Empty
+
+  def ownerField_=(value:java.lang.Double)
+  def ownerField:java.lang.Double
 
   override def theData_=(in:Box[MyType]) {
     trace("Calling Size.theData_=" + in)
@@ -355,13 +362,13 @@ with DisplayFormWithLabelInOneLine[Double, T] with DisplayHTMLWithLabelInOneLine
     in match{
       //if a valid value is set then update the owner class
       case Full(y) =>{
-        owner.size = y.asInstanceOf[java.lang.Double]
+        ownerField = y.asInstanceOf[java.lang.Double]
       }
       case Empty => {
-        owner.size = null
+        ownerField = null
       }
       case _ =>{
-        owner.size = null //lets give it a default even in case of error
+        ownerField = null //lets give it a default even in case of error
         S.error("Strange error when reading the field size in ")
       }
     }
@@ -370,19 +377,19 @@ with DisplayFormWithLabelInOneLine[Double, T] with DisplayHTMLWithLabelInOneLine
   override def theData:Box[MyType] = {
     trace("Calling Size.theData")
     //if the owner has valid data that was obtained from the wikimodels Server
-    if(owner.size != null){
-      _data = Full(owner.size)
+    if(ownerField != null){
+      _data = Full(ownerField)
     } else {
-      debug("theData with size = "+ owner.size + " is being copied to the record Field.")
+      debug("theData with size = "+ ownerField + " is being copied to the record Field.")
       _data match {
         case Empty => {
           if ( this.optional_?){
             _data = Empty
-            owner.size = null
+            ownerField = null
           }
         }
         case Full(x) => {
-          owner.size = x.asInstanceOf[java.lang.Double]
+          ownerField = x.asInstanceOf[java.lang.Double]
         }
       }
     }
@@ -397,9 +404,42 @@ with DisplayFormWithLabelInOneLine[Double, T] with DisplayHTMLWithLabelInOneLine
 
 
   //Appears when rendering the form or the visualization
-  override def name: String = "Size"
-  //override def toXHtml: NodeSeq = Text(this.value)
 }
+
+/**
+ * Compartment size
+ */
+class Size[OwnerType <: SBaseRecord[OwnerType]{var size:java.lang.Double}](rec:OwnerType)
+  extends UIOptionalDoubleField[OwnerType]  {
+  def owner = rec
+  override def ownerField_=(value:java.lang.Double) = owner.size = value
+  override def ownerField:java.lang.Double = owner.size
+  override def name: String = "Size"
+}
+
+/**
+ * Species initialAmount
+ */
+class InitialAmount[OwnerType <: SBaseRecord[OwnerType]{var initialAmount:java.lang.Double}](rec:OwnerType)
+  extends UIOptionalDoubleField[OwnerType]  {
+  def owner = rec
+  override def ownerField_=(value:java.lang.Double) = owner.initialAmount = value
+  override def ownerField:java.lang.Double = owner.initialAmount
+  override def name: String = "InitialAmount"
+}
+
+/**
+ * Species initialConcentration
+ */
+class InitialConcentration[OwnerType <: SBaseRecord[OwnerType]{var initialConcentration:java.lang.Double}](rec:OwnerType)
+  extends UIOptionalDoubleField[OwnerType]  {
+  def owner = rec
+  override def ownerField_=(value:java.lang.Double) = owner.initialConcentration = value
+  override def ownerField:java.lang.Double = owner.initialConcentration
+  override def name: String = "InitialConcentration"
+}
+
+
 
 
 //#### Aux Record traits

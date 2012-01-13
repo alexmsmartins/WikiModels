@@ -68,6 +68,8 @@ class SpeciesRecord() extends Species with SBaseRecord[SpeciesRecord]  {
   object nameO extends Name(this, 100)
   object constantO extends Constant(this)
   object notesO extends Notes(this, 1000)
+  object initialAmount0 extends InitialAmount(this)
+  object initialConcentration0 extends InitialConcentration(this)
   //  ### can be created directly from a Request containing params with names that match the fields on a Record ( see fromReq ). ###
 
   var _parent:Box[SBMLModelRecord] = Empty
@@ -84,6 +86,6 @@ class SpeciesRecord() extends Species with SBaseRecord[SpeciesRecord]  {
 //TODO - DELETE IF NOT USED FOR ANYTHING
 object SpeciesRecord extends SpeciesRecord with RestMetaRecord[SpeciesRecord] {
   def apply() = new SpeciesRecord
-  override def fieldOrder = List(metaIdO, idO, nameO, /*sizeO,*/ notesO)
+  override def fieldOrder = List(metaIdO, idO, nameO, initialAmount0, initialConcentration0, notesO)
   override def fields = fieldOrder
 }
