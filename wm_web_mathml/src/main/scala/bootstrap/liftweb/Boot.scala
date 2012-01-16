@@ -10,7 +10,6 @@ import Helpers._
 import _root_.net.liftweb.mapper.{DB, ConnectionManager, Schemifier, DefaultConnectionIdentifier, StandardDBVendor}
 import _root_.java.sql.{Connection, DriverManager}
 import _root_.pt.cnbc.wikimodels.model._
-import tools.nsc.doc.model.comment.Link
 
 /**
  * A class that's instantiated early and run.  It allows the application

@@ -30,9 +30,9 @@ class MathMLEditTest extends MathMLEdit {
   def processTextAreaGivesExceptionInInitializerError() {
     val parser = MathParser()
     var formula = "2+2"
-    log.info("MathMLEdit with asciiFormula = " + asciiFormula.is)
-    log.info("MathMLEdit with formula = " + formula)
-    log.info("MathMLEdit.render() processTextArea() with MathML = " + mathmlFormula.is)
+    Console.println("MathMLEdit with asciiFormula = " + asciiFormula.is)
+    Console.println("MathMLEdit with formula = " + formula)
+    Console.println("MathMLEdit.render() processTextArea() with MathML = " + mathmlFormula.is)
     val result = parser.parseAll(parser.Expr, formula)
     result match {
       case parser.Success(_,_) => {
@@ -47,7 +47,7 @@ class MathMLEditTest extends MathMLEdit {
         fail("Parser failed!")
       }
       case parser.Error(_,_) => {
-        log.error(result)
+        Console.println("Error in parser -> \n" + result)
         fail("Parser failed with strange error!")
       }
     }

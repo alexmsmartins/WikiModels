@@ -54,7 +54,7 @@ class MathMLEdit extends DispatchSnippet {
   import pt.cnbc.wikimodels.mathml.elements.{Cn, Ci, Apply, MathMLElem, Operator, CSymbol, Sep}
   import pt.cnbc.wikimodels.mathml.elements.Operator._
 
-  val log = Logger(this getClass)
+  //val log = Logger(this getClass)
 
   def dispatch: DispatchIt = {
     case "render" => render _
@@ -66,8 +66,8 @@ class MathMLEdit extends DispatchSnippet {
       import scala.util.parsing.combinator._
       import net.liftweb.common.{Failure => _}
       val parser = MathParser()
-      log.info("MathMLEdit.render().processTextArea() with formula = " + asciiFormula.is)
-      log.info("MathMLEdit.render() processTextArea() with MathML = " + mathmlFormula.is)
+      Console.println("MathMLEdit.render().processTextArea() with formula = " + asciiFormula.is)
+      Console.println("MathMLEdit.render() processTextArea() with MathML = " + mathmlFormula.is)
       val result = parser.parseAll(parser.Expr, asciiFormula.is)
       result match {
         case parser.Success(_,_) => {
@@ -82,7 +82,7 @@ class MathMLEdit extends DispatchSnippet {
             "id" -> "formula2", "mode" -> "display") )
         }
         case parser.Failure(_,_) => {
-          log.info("Error parsing " + asciiFormula.is + "\n" + result)
+          Console.println("Error parsing " + asciiFormula.is + "\n" + result)
           errorMessage.set(result.toString)
           successfulPerse.set(false)
           def errorBeautifier(f:parser.Failure) = {
@@ -95,15 +95,15 @@ class MathMLEdit extends DispatchSnippet {
           }</div> </p>)
         }
         case parser.Error(_,_) => {
-          log.error(result)
+          Console.println("Error in Parser -> \n" + result)
           errorMessage.set("There was a fatal error. No useful error messages are available.")
           successfulPerse.set(false)
         }
       }
     }
-    log.info("MathMLEdit.render() before bind() with formula = " + asciiFormula.is)
-    log.info("MathMLEdit.render() before bind() with MathML = " + mathmlFormula.is)
-    log.info("MathMLEdit.render() before bind() with ErroBoxL = " + errorHtml.is)
+    Console.println("MathMLEdit.render() before bind() with formula = " + asciiFormula.is)
+    Console.println("MathMLEdit.render() before bind() with MathML = " + mathmlFormula.is)
+    Console.println("MathMLEdit.render() before bind() with ErroBoxL = " + errorHtml.is)
 
     xhtml.bind("editor",
       "formula" -> SHtml.textarea(asciiFormula.is, {asciiFormula set _}, "class" -> "asciimath_input" ),

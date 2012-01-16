@@ -4,7 +4,10 @@ import sbt._
 
 class FooProject(info: ProjectInfo) extends DefaultWebProject(info) {
 
-   val lift = "net.liftweb" %% "lift-mapper" % "2.2" % "compile"
+    val liftVersion = "2.4-RC1"
+
+   val lift = "net.liftweb" %% "lift-mapper" % liftVersion % "compile"
+
    val jetty6 = "org.mortbay.jetty" % "jetty" % "6.1.25" % "test"
    val h2 = "com.h2database" % "h2" % "1.2.121" % "runtime"
    // alternately use derby
