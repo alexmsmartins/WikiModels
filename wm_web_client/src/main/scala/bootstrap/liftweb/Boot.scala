@@ -17,7 +17,7 @@ import _root_.pt.cnbc.wikimodels.client.snippet._
 import _root_.pt.cnbc.wikimodels.client.sitemapTweaks._
 import alexmsmartins.log.LoggerWrapper
 
-/**            s
+/**
  * A class that's instantiated early and run.  It allows the application
  * to modify lift's environment
  */
@@ -202,7 +202,7 @@ class Boot extends LoggerWrapper{
             trace("RewriteRequest from /model/"
               +model+"/createparameter to /modele/parameter_create.html" )
             RewriteResponse(ParsePath( "modele"::"parameter_create"::Nil, "html", true, false),
-              Map("parameterMetaId" -> model), true )
+              Map("modelMetaId" -> model), true )
           }
           case RewriteRequest(ParsePath("model"::model::"parameter"::parameter::Nil,"",_,false),_,_) => {
             trace("RewriteRequest from /model/"+model+"/parameter/"+parameter+" to /modele/parameter_view.html" )
@@ -220,11 +220,11 @@ class Boot extends LoggerWrapper{
               Map("modelMetaId" -> model, "parameterMetaId" -> parameter), true )
           }
           //redirects for function definition
-          case RewriteRequest(ParsePath("model"::model::"createfunctionDefinition"::Nil,"",_,false),_,_) => {
+          case RewriteRequest(ParsePath("model"::model::"createfunctiondefinition"::Nil,"",_,false),_,_) => {
             trace("RewriteRequest from /model/"
               +model+"/createfunctionDefinition to /modele/function_definition_create.html" )
             RewriteResponse(ParsePath( "modele"::"function_definition_create"::Nil, "html", true, false),
-              Map("functionDefinitionMetaId" -> model), true )
+              Map("modelMetaId" -> model), true )
           }
           case RewriteRequest(ParsePath("model"::model::"functiondefinition"::functionDefinition::Nil,"",_,false),_,_) => {
             trace("RewriteRequest from /model/"+model+"/functiondefinition/"+functionDefinition+" to /modele/functiondefinition_view.html" )
@@ -246,7 +246,7 @@ class Boot extends LoggerWrapper{
             trace("RewriteRequest from /model/"
               +model+"/createconstraint to /modele/constraint_create.html" )
             RewriteResponse(ParsePath( "modele"::"constraint_create"::Nil, "html", true, false),
-              Map("constraintMetaId" -> model), true )
+              Map("modelMetaId" -> model), true )
           }
           case RewriteRequest(ParsePath("model"::model::"constraint"::constraint::Nil,"",_,false),_,_) => {
             trace("RewriteRequest from /model/"+model+"/constraint/"+constraint+" to /modele/constraint_view.html" )
@@ -268,7 +268,7 @@ class Boot extends LoggerWrapper{
             trace("RewriteRequest from /model/"
               +model+"/createreaction to /modele/reaction_create.html" )
             RewriteResponse(ParsePath( "modele"::"reaction_create"::Nil, "html", true, false),
-              Map("reactionMetaId" -> model), true )
+              Map("modelMetaId" -> model), true )
           }
           case RewriteRequest(ParsePath("model"::model::"reaction"::reaction::Nil,"",_,false),_,_) => {
             trace("RewriteRequest from /model/"+model+"/reaction/"+reaction+" to /modele/reaction_view.html" )

@@ -65,6 +65,10 @@ object RecordFromSBML extends LoggerWrapper {
       case m:SBMLModel => createModelRecordFrom(m)
       case c:Compartment => createCompartmentRecordFrom(c)
       case s:Species => createSpeciesRecordFrom(s)
+      case p:Parameter => createParameterRecordFrom(p)
+      case fd:FunctionDefinition => createFunctionDefinitionRecordFrom(fd)
+      case ct:Constraint => createConstraintRecordFrom(ct)
+      case r:Reaction => createReactionRecordFrom(r)
       //TODO - write code for the remaining sbml types
       case _ => throw new NotImplementedException("ERROR: Method create" + er.sbmlType + "From(_) not implemented yet")
     }
@@ -85,21 +89,70 @@ object RecordFromSBML extends LoggerWrapper {
           i
         }
       )
-      Console.println("Copied listOfCompartmentsRec has size " + mr.listOfCompartmentsRec.size)
-      mr.listOfCompartments = m.listOfCompartments
+      debug("Finished copying list")
+      debug("ListOfCompartmentsRec has size " + mr.listOfCompartmentsRec.size)
     }
 
     if(m.listOfSpecies != null){
-      debug("Loaded listOfCompartments has size " + m.listOfSpecies.size)
+      debug("Loaded listOfSpecies has size " + m.listOfSpecies.size)
       mr.listOfSpeciesRec = m.listOfSpecies.map(createSpeciesRecordFrom(_)).toList
         .map(i => {
         i.parent = Full(mr) //to build complete URLs
         i
       }
       )
-      Console.println("Copied listOfCompartmentsRec has size " + mr.listOfCompartmentsRec.size)
-      mr.listOfCompartments = m.listOfCompartments
+      debug("Finished copying list")
+      debug("ListOfSpeciesRec has size " + mr.listOfSpeciesRec.size)
     }
+
+    if(m.listOfParameters != null){
+      debug("Loaded listOfParameters has size " + m.listOfParameters.size)
+      mr.listOfParametersRec = m.listOfParameters.map(createParameterRecordFrom(_)).toList
+        .map(i => {
+        i.parent = Full(mr) //to build complete URLs
+        i
+      }
+      )
+      debug("Finished copying list")
+      debug("listOfParametersRec has size " + mr.listOfParametersRec.size)
+    }
+
+    if(m.listOfFunctionDefinitions != null){
+      debug("Loaded listOfFunctionDefinitions has size " + m.listOfFunctionDefinitions.size)
+      mr.listOfFunctionDefinitionsRec = m.listOfFunctionDefinitions.map(createFunctionDefinitionRecordFrom(_)).toList
+        .map(i => {
+        i.parent = Full(mr) //to build complete URLs
+        i
+      }
+      )
+      debug("Finished copying list")
+      debug("listOfFunctionDefinitionsRec has size " + mr.listOfFunctionDefinitionsRec.size)
+    }
+
+    if(m.listOfConstraints != null){
+      debug("Loaded listOfConstraints has size " + m.listOfConstraints.size)
+      mr.listOfConstraintsRec = m.listOfConstraints.map(createConstraintRecordFrom(_)).toList
+        .map(i => {
+        i.parent = Full(mr) //to build complete URLs
+        i
+      }
+      )
+      debug("Finished copying list")
+      debug("listOfConstraintsRec has size " + mr.listOfConstraintsRec.size)
+    }
+
+    if(m.listOfReactions != null){
+      debug("Loaded listOfReactions has size " + m.listOfReactions.size)
+      mr.listOfReactionsRec = m.listOfReactions.map(createReactionRecordFrom(_)).toList
+        .map(i => {
+        i.parent = Full(mr) //to build complete URLs
+        i
+      }
+      )
+      debug("Finished copying list")
+      debug("listOfReactionsRec has size " + mr.listOfReactionsRec.size)
+    }
+
 
     //TODO - write code for the remaining lists
     mr
@@ -129,10 +182,119 @@ object RecordFromSBML extends LoggerWrapper {
     sr.compartment= s.compartment
     sr.initialAmount = s.initialAmount
     sr.initialConcentration = s.initialConcentration
+    sr.substanceUnits = s.substanceUnits
+    sr.hasOnlySubstanceUnits = s.hasOnlySubstanceUnits
     sr.boundaryCondition = s.boundaryCondition
     sr.constant = s.constant
     sr
   }
 
-  //TODO WIRTE VISITING FUNCTIONS for the remaining SBML entities
+  def createParameterRecordFrom(p: Parameter):ParameterRecord = {
+    val pr = new ParameterRecord()
+    pr.metaid = p.metaid
+    pr.id = p.id
+    pr.name = p.name
+    pr.notes = p.notes
+    pr.value = p.value
+    pr.units = p.units
+    pr.constant = p.constant
+    pr
+  }
+
+  def createFunctionDefinitionRecordFrom(fd: FunctionDefinition):FunctionDefinitionRecord = {
+    val fdr = new FunctionDefinitionRecord()
+    fdr.metaid = fd.metaid
+    fdr.id = fd.id
+    fdr.name = fd.name
+    fdr.notes = fd.notes
+    fdr.math = fdr.math
+    fdr
+  }
+
+  def createConstraintRecordFrom(ct: Constraint):ConstraintRecord = {
+    val ctr = new ConstraintRecord()
+    ctr.metaid = ct.metaid
+    ctr.id = ct.id
+    ctr.name = ct.name
+    ctr.notes = ct.notes
+    ctr.math = ct.math
+    ctr.message = ct.message
+    ctr
+  }
+
+  def createReactionRecordFrom(r: Reaction):ReactionRecord = {
+    val rr = new ReactionRecord()
+    rr.metaid = r.metaid
+    rr.id = r.id
+    rr.name = r.name
+    rr.notes = r.notes
+    rr.reversible = r.reversible
+    rr.fast = r.fast
+
+    /* TODO complete the conversion from species to speciesReference
+    if(r.listOfReactants != null){
+      debug("Loaded listOfReactants has size " + r.listOfReactants.size)
+      rr.listOfReactantsRec = r.listOfReactants.map(createReactionRecordFrom(_)).toList
+        .map(i => {
+        i.parent = Full(rr) //to build complete URLs
+        i
+      }
+      )
+      debug("Finished copying list")
+      debug("listOfReactantsRec has size " + rr.listOfReactantsRec.size)
+    }
+
+
+    var listOfProducts:java.util.Collection[SpeciesReference] = null
+    if(r.listOfProducts != null){
+      debug("Loaded listOfProducts has size " + r.listOfProducts.size)
+      rr.listOfProductsRec = r.listOfProducts.map(createReactionRecordFrom(_)).toList
+        .map(i => {
+        i.parent = Full(rr) //to build complete URLs
+        i
+      }
+      )
+      debug("Finished copying list")
+      debug("listOfProductsRec has size " + rr.listOfProductsRec.size)
+    }
+
+    var listOfModifiers:java.util.Collection[ModifierSpeciesReference] = null
+    if(r.listOfModifiers != null){
+      debug("Loaded listOfModifiers has size " + r.listOfModifiers.size)
+      rr.listOfModifiersRec = r.listOfModifiers.map(createReactionRecordFrom(_)).toList
+        .map(i => {
+        i.parent = Full(rr) //to build complete URLs
+        i
+      }
+      )
+      debug("Finished copying list")
+      debug("listOfModifiersRec has size " + rr.listOfModifiersRec.size)
+    }*/
+
+    rr.kineticLawRec = createKineticLawRecordFrom(r.kineticLaw)
+
+    rr
+  }
+
+  def createKineticLawRecordFrom(kl:KineticLaw) = {
+    val klr = new KineticLawRecord()
+    klr.metaid = kl.metaid
+    klr.notes = kl.notes
+    klr.math = kl.math
+
+    if(kl.listOfParameters != null){
+      debug("Loaded listOfParameters has size " + kl.listOfParameters.size)
+      klr.listOfParametersRec = kl.listOfParameters.map(createParameterRecordFrom(_)).toList
+        .map(i => {
+        i.parent = Full(klr) //to build complete URLs
+        i
+      }
+      )
+      debug("Finished copying list")
+      debug("listOfParametersRec has size " + klr.listOfParametersRec.size)
+    }
+    klr
+  }
+
+  //TODO WRITE VISITING FUNCTIONS for the remaining SBML entities
 }

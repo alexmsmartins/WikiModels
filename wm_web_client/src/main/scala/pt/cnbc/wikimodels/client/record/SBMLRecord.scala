@@ -356,7 +356,7 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
               <form style='display:inline;' >{SHtml.button(Text("Add Constraints"),
                 () => {
                   debug("Button to add constraints pressed.")
-                  S.redirectTo(this.relativeURL + "/createconstraints" )
+                  S.redirectTo(this.relativeURL + "/createconstraint" )
                 },
                 "class" ->"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
               )}</form>
@@ -364,7 +364,7 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
             </a>
           </h3>
           <div  class="toggle_container">
-            <div id="accordion3" class="block">{
+            <div id="accordion_ct" class="block">{
               this.listOfConstraintsRec.map(i => {
                 <h3 id={"accord_ct_"+i.metaid} class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
                   <a href={"#accord_ct_"+i.metaid}>

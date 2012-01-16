@@ -4,7 +4,7 @@
 
 package pt.cnbc.wikimodels.client.record
 
-import pt.cnbc.wikimodels.dataModel.Reaction
+import pt.cnbc.wikimodels.dataModel._
 import net.liftweb.http.S
 import net.liftweb.record.{Notes, Name, Id, MetaId}
 import net.liftweb.common.{Empty, Box}
@@ -14,6 +14,15 @@ import net.liftweb.common.{Empty, Box}
  *  Date: 29-12-2011
  *  Time: 17:13 */
 class ReactionRecord() extends Reaction with SBaseRecord[ReactionRecord]  {
+
+  //listOf definitions for record
+  //TODO - find a better solution to this. Parents' listOfXXX definitions is a big problem
+  //TODO CHANGE SpeciesReference too a record version
+  var listOfReactantsRec:List[SpeciesReference] = Nil
+  var listOfProductsRec:List[SpeciesReference] = Nil
+  var listOfModifiersRec:List[ModifierSpeciesReference] = Nil
+  var kineticLawRec:KineticLawRecord = null //optional
+
 
   override def meta = ReactionRecord
 

@@ -98,7 +98,7 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
   }
 
   private def loadParameterFromPathParam() = {
-    trace("Calling SBMLForm.loadParameterFromPathParam")
+    trace("Calling SBMLForm.loadBootParameterFromPathParam")
     debug("""Parameter "parameterMetaId" « {} """, S.param("parameterMetaId").openTheBox)
 
     selectedParameter {

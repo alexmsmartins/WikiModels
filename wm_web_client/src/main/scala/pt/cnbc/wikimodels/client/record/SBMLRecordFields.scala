@@ -5,12 +5,12 @@ import net.liftweb.http.{S, SHtml}
 import net.liftweb.record.field._
 import alexmsmartins.log.LoggerWrapper
 import pt.cnbc.wikimodels.client.record._
-import pt.cnbc.wikimodels.dataModel.Compartment._
-import pt.cnbc.wikimodels.dataModel.ValidSpatialDimensions._
 import net.liftweb.util.FieldError
 import net.liftweb.util.ControlHelpers._
 import xml.{Text, XML, NodeSeq}
-import pt.cnbc.wikimodels.dataModel.{Species, ValidSpatialDimensions, Compartment}
+import pt.cnbc.wikimodels.dataModel._
+import pt.cnbc.wikimodels.dataModel.ValidSpatialDimensions
+import pt.cnbc.wikimodels.dataModel.ValidSpatialDimensions._
 
 //Javascript handling imports
 import _root_.net.liftweb.http.js.{JE,JsCmd,JsCmds}
@@ -224,8 +224,8 @@ with GetSetOwnerField[String, T]{
               {Script(JsRaw(
               """
           //FIXME this peice of code is not being executed. Make it work and check for notes errors afterwards.
-          alert("CkEditor with XHTML configuration is is loading!");
-          CKEDITOR.replace( 'editor1',
+          //alert("CkEditor with XHTML configuration is loading!");
+          CKEDITOR.replace( "editor1",
 					{
 						/*
 						 * Style sheet for the contents
@@ -362,8 +362,10 @@ with GetSetOwnerField[String, T]{
 // TODO - THIS GIVES AN ERROR AND i HAVE NO CLEAR IDEA WHY
 // class SpatialDimensions[T <: CompartmentRecord](own:T) extends EnumField(own, ValidSpatialDimensions)
 
+
 class SpatialDimensions[T <: SBaseRecord[T]{var spatialDimensions:Int}](own:T) extends EnumField(own, ValidSpatialDimensions)
 with DisplayFormWithLabelInOneLine[ValidSpatialDimensions, T] with DisplayHTMLWithLabelInOneLine[ValidSpatialDimensions, T] with LoggerWrapper{
+  import pt.cnbc.wikimodels.dataModel.Compartment._
   var _data:Box[MyType] = Empty
 
   override def theData_=(in:Box[MyType]) {
@@ -425,7 +427,7 @@ with LoggerWrapper{
         ownerField = y
       }
       case Empty => {
-        ownerField = Compartment.defaultConstant
+        ownerField = defaultFieldValue
       }
       case _ =>{
         ownerField = true //lets give it a default even in case of error
@@ -441,7 +443,7 @@ with LoggerWrapper{
     _data match {
       case Empty => {
         if (! this.optional_?){
-          _data = Full(defaultConstant)
+          _data = Full(defaultFieldValue)
           ownerField = defaultFieldValue
         }
       }
@@ -458,6 +460,10 @@ with LoggerWrapper{
   //override def toXHtml: NodeSeq = Text(this.value)
 }
 
+/**
+ * Compartment constant
+ */
+
 class CConstant[OwnerType <: SBaseRecord[OwnerType]{var constant:Boolean}](rec:OwnerType) extends UIMandatoryBooleanField[OwnerType]{
   def owner = rec
   override def ownerField_=(value:Boolean) = owner.constant = value
@@ -470,28 +476,48 @@ class CConstant[OwnerType <: SBaseRecord[OwnerType]{var constant:Boolean}](rec:O
 }
 
 
+
+/**
+ * Species boundaryCondition
+ */
 class BoundaryCondition[OwnerType <: SBaseRecord[OwnerType]{var constant:Boolean}](rec:OwnerType) extends UIMandatoryBooleanField[OwnerType]{
   def owner = rec
   override def ownerField_=(value:Boolean) = owner.constant = value
   override def ownerField:Boolean = owner.constant
-  override def defaultFieldValue = Compartment.defaultConstant
+  override def defaultFieldValue = Species.defaultBoundaryCondition
 
   def defaultValue = Species.defaultBoundaryCondition
 
   override def name: String = "BoundaryCondition"
 }
 
+/**
+ * Species constant
+ */
 class SConstant[OwnerType <: SBaseRecord[OwnerType]{var constant:Boolean}](rec:OwnerType) extends UIMandatoryBooleanField[OwnerType]{
   def owner = rec
   override def ownerField_=(value:Boolean) = owner.constant = value
   override def ownerField:Boolean = owner.constant
-  override def defaultFieldValue = Compartment.defaultConstant
+  override def defaultFieldValue = Species.defaultConstant
 
   def defaultValue = Species.defaultConstant
 
   override def name: String = "Constant"
 }
 
+/**
+ * Parameter constant
+ */
+class PConstant[OwnerType <: SBaseRecord[OwnerType]{var constant:Boolean}](rec:OwnerType) extends UIMandatoryBooleanField[OwnerType]{
+  def owner = rec
+  override def ownerField_=(value:Boolean) = owner.constant = value
+  override def ownerField:Boolean = owner.constant
+  override def defaultFieldValue = Parameter.defaultConstant
+
+  def defaultValue = Parameter.defaultConstant
+
+  override def name: String = "Constant"
+}
 
 trait UIOptionalDoubleField[OwnerType <: SBaseRecord[OwnerType]] extends Field[Double,OwnerType] with OptionalTypedField[Double] with DoubleTypedField
   with DisplayFormWithLabelInOneLine[Double, OwnerType] with DisplayHTMLWithLabelInOneLine[Double,OwnerType]
@@ -518,7 +544,7 @@ trait UIOptionalDoubleField[OwnerType <: SBaseRecord[OwnerType]] extends Field[D
       }
       case _ =>{
         ownerField = null //lets give it a default even in case of error
-        S.error("Strange error when reading the field size in ")
+        S.error("Strange error when reading the field!")
       }
     }
   }
@@ -587,6 +613,18 @@ class InitialConcentration[OwnerType <: SBaseRecord[OwnerType]{var initialConcen
   override def ownerField:java.lang.Double = owner.initialConcentration
   override def name: String = "InitialConcentration"
 }
+
+/**
+ * PArameter value
+ */
+class Value[OwnerType <: SBaseRecord[OwnerType]{var value:java.lang.Double}](rec:OwnerType)
+  extends UIOptionalDoubleField[OwnerType]  {
+  def owner = rec
+  override def ownerField_=(value:java.lang.Double) = owner.value = value
+  override def ownerField:java.lang.Double = owner.value
+  override def name: String = "Value"
+}
+
 
 
 

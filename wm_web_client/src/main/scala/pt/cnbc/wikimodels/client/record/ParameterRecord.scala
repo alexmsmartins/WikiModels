@@ -6,8 +6,8 @@ package pt.cnbc.wikimodels.client.record
 
 import pt.cnbc.wikimodels.dataModel.Parameter
 import net.liftweb.http.S
-import net.liftweb.record.{Notes, Name, Id, MetaId}
 import net.liftweb.common.{Empty, Box}
+import net.liftweb.record._
 
 /** TODO: Please document.
  *  @author: Alexandre Martins
@@ -38,6 +38,7 @@ class ParameterRecord() extends Parameter with SBaseRecord[ParameterRecord]  {
   object metaIdO extends MetaId(this, 100)
   object idO extends Id(this, 100)
   object nameO extends Name(this, 100)
+  object valueO extends Value(this)
   object notesO extends Notes(this, 1000)
   //  ### can be created directly from a Request containing params with names that match the fields on a Record ( see fromReq ). ###
 
@@ -55,6 +56,6 @@ class ParameterRecord() extends Parameter with SBaseRecord[ParameterRecord]  {
 //TODO - DELETE IF NOT USED FOR ANYTHING
 object ParameterRecord extends ParameterRecord with RestMetaRecord[ParameterRecord] {
   def apply() = new ParameterRecord
-  override def fieldOrder = List(metaIdO, idO, nameO, /*sizeO,*/ notesO)
+  override def fieldOrder = List(metaIdO, idO, nameO, valueO, notesO)
   override def fields = fieldOrder
 }
