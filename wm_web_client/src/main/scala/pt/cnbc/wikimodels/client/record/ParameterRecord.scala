@@ -39,6 +39,7 @@ class ParameterRecord() extends Parameter with SBaseRecord[ParameterRecord]  {
   object idO extends Id(this, 100)
   object nameO extends Name(this, 100)
   object valueO extends Value(this)
+  object constantO extends PConstant(this)
   object notesO extends Notes(this, 1000)
   //  ### can be created directly from a Request containing params with names that match the fields on a Record ( see fromReq ). ###
 
@@ -56,6 +57,6 @@ class ParameterRecord() extends Parameter with SBaseRecord[ParameterRecord]  {
 //TODO - DELETE IF NOT USED FOR ANYTHING
 object ParameterRecord extends ParameterRecord with RestMetaRecord[ParameterRecord] {
   def apply() = new ParameterRecord
-  override def fieldOrder = List(metaIdO, idO, nameO, valueO, notesO)
+  override def fieldOrder = List(metaIdO, idO, nameO, valueO, constantO, notesO)
   override def fields = fieldOrder
 }
