@@ -3,14 +3,13 @@ package pt.cnbc.wikimodels.mathparser
 import scala.xml._
 import pt.cnbc.wikimodels.mathml.elements._
 import pt.cnbc.wikimodels.mathml.elements.Operator._
+
 /**
- * Created by IntelliJ IDEA.
- * User: alex
+ * TODO: Please document.
+ * @author Alexandre Martins
  * Date: 7/Dez/2010
  * Time: 18:36:24
- * To change this template use File | Settings | File Templates.
  */
-
 object MathMLPrettyPrinter extends MathParser{
 
   def exprToMathML(expr:String) = toXML(parseAll(Expr, expr).get)

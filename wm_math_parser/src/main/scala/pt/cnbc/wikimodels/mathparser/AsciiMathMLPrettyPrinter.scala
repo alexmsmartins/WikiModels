@@ -4,13 +4,11 @@ import pt.cnbc.wikimodels.mathml.elements._
 import pt.cnbc.wikimodels.mathml.elements.KnownOperators._
 
 /**
- * Created by IntelliJ IDEA.
- * User: alex
+ * TODO: Please document.
+ * @author Alexandre Martins
  * Date: 30-12-2010
  * Time: 18:31
- * To change this template use File | Settings | File Templates.
  */
-
 object AsciiMathMLPrettyPrinter{
 
   def toAsciiMathML(elem:MathMLElem):String = {

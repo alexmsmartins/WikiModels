@@ -4,11 +4,10 @@ import scala.xml.Node
 import scala.xml.Elem
 
 /**
- * Created by IntelliJ IDEA.
- * User: alex
+ * TODO: Please document.
+ * @author Alexandre Martins
  * Date: 30/Set/2010
  * Time: 23:52:15
- * To change this template use File | Settings | File Templates.
  */
 trait MathMLElem
 

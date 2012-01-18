@@ -1,11 +1,10 @@
 package pt.cnbc.wikimodels.mathparser
 
 /**
- * Created by IntelliJ IDEA.
- * User: alex
+ * TODO: Please document.
+ * @author Alexandre Martins
  * Date: 21/Set/2010
  * Time: 19:13:31
- * To change this template use File | Settings | File Templates.
  */
 import org.junit._
 import Assert._
@@ -184,6 +183,16 @@ class MathParserTest extends MathParser {
     //val result = parseAll(Expr, expr)
     //println(result)
     val expr2 = "pi*r^2"
+    val result2 = parseAll(Expr, expr2)
+    assertTrue(parsingWasSuccessful(result2))
+    println(result2)
+    val xml = MathMLPrettyPrinter.toXML(result2.get)
+    println("Expression " + expr2 + " in mathml: " + xml)
+  }
+
+  @Test
+  def sin {
+    val expr2 = "sin(x)"
     val result2 = parseAll(Expr, expr2)
     assertTrue(parsingWasSuccessful(result2))
     println(result2)

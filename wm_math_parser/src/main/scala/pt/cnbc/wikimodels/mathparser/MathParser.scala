@@ -4,9 +4,6 @@ import pt.cnbc.wikimodels.mathml.elements._
 import KnownOperators._
 import util.parsing.combinator.{RegexParsers, PackratParsers, JavaTokenParsers}
 
-/**
- */
-
 class MathParser extends RegexParsers with PackratParsers with MathParserHandlers {
 
   type MME = MathMLElem
@@ -65,6 +62,6 @@ object MathParser{
 trait MathParserHandlers{
   def handleFunction(ident:String, params:List[MathMLElem] ):MathMLElem = {
     println("Operator.validOps contains " + KnownOperators.validOps.size + " predefined operators")
-    KnownOperators.validOps.getOrElse(ident, new Apply(new CSymbol(ident), params ))
+    new Apply(KnownOperators.validOps.getOrElse(ident, new CSymbol(ident) ), params)
   }
 }

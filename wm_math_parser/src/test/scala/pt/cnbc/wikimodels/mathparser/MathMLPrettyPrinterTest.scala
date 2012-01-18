@@ -6,13 +6,11 @@ import junit.framework.Assert._
 
 
 /**
- * Created by IntelliJ IDEA.
- * User: alex
+ * TODO: Please document.
+ * @author Alexandre Martins
  * Date: 22-12-2010
  * Time: 13:51
- * To change this template use File | Settings | File Templates.
  */
-
 class MathMLPrettyPrinterTest extends MathParser{
 
   @Before
@@ -189,5 +187,16 @@ class MathMLPrettyPrinterTest extends MathParser{
     val result2 = parseAll(Expr, expr2)
     assertTrue(parsingWasSuccessful(result2))
     println("the expression " + expr2 + " results in " + MathMLPrettyPrinter.toXML(result2.get))
+  }
+
+  @Test
+  def sin {
+    val expr = "sin(x)"
+    val result = parseAll(Expr, expr)
+    assertTrue(parsingWasSuccessful(result))
+    val xml = MathMLPrettyPrinter.toXML(result.get)
+    println("the expression " + expr + " results in " + xml )
+    assertEquals( (xml \ "apply" \ "sin").head.label, "sin" )
+    assertTrue((xml \ "apply" \ "ci" \ "@type" text) == "real")
   }
 }
