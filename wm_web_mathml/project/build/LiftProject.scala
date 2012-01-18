@@ -19,7 +19,7 @@ class FooProject(info: ProjectInfo) extends DefaultWebProject(info) {
     val bryanjswift = "Bryan J Swift Repository" at "http://repos.bryanjswift.com/maven2/"
     //val junitInterface = "com.novocode" % "junit-interface" % "0.4.0" % "test"
 
-    val wm_sbjsbml = "pt.cnbc.wikimodels" % "wm_libjsbml" % "0.1-SNAPSHOT"
+    val wm_math_parser = "pt.cnbc.wikimodels" % "wm_math_parser" % "0.1-SNAPSHOT"
 
     //chenges port where jetty listens to
     override val jettyPort = 9998

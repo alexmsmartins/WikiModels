@@ -64,15 +64,22 @@
                     /* <![CDATA[ */
                         $.log("MathJax is being configured.");
                         MathJax.Hub.Config({
-                        config: ["MMLorHTML.js"],
-                        extensions: ["tex2jax.js", "mml2jax.js"],
-                        jax: ["input/TeX", "input/MathML"]
+                          config: ["MMLorHTML.js"],
+                          jax: ["input/TeX","input/MathML","output/HTML-CSS","output/NativeMML"],
+                          extensions: ["tex2jax.js","mml2jax.js","MathMenu.js","MathZoom.js"],
+                          TeX: {
+                            extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"]
+                          },
+                          NativeMML: { showMathMenuMSIE: false },
+                          menuSettings: { zoom: "Double-Click" },
+                          errorSettings: { message: ["[Math Error]"] }
                         });
+
                     /* ]]> */
                 </script>
 
                 <script type="text/javascript"
-                        src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+                        src="http://cdn.mathjax.org/mathjax/latest/MathJax.js">
             /* <![CDATA[ */
             $(document).ready(function() {
                 displayResult();
