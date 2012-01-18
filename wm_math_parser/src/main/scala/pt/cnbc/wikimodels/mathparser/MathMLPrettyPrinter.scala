@@ -10,7 +10,7 @@ import pt.cnbc.wikimodels.mathml.elements.Operator._
  * Date: 7/Dez/2010
  * Time: 18:36:24
  */
-object MathMLPrettyPrinter extends MathParser{
+object MathMLPrettyPrinter extends AsciiMathMLParser{
 
   def exprToMathML(expr:String) = toXML(parseAll(Expr, expr).get)
 
@@ -27,6 +27,7 @@ object MathMLPrettyPrinter extends MathParser{
         case Ci(x,"real",_) => <ci type="real">{x}</ci>
         case Cn(content, "real", 10, definitionURL, encoding ) => <cn type="real" base="10">{content}</cn>
         case Cn(content, "integer", 10, definitionURL, encoding ) => <cn type="integer" base="10">{content}</cn>
+        case Cn(x::y, "e-notation",10, definitionURL, encoding ) => <cn type="e-notation" base="10">{x}<sep/>{y}</cn>
         case Operator(name, _, _, definitionURL, encoding) => {
           Elem(null, name,
             new UnprefixedAttribute("definitionURL", Text(definitionURL.getOrElse("")),

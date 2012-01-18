@@ -11,7 +11,7 @@ import junit.framework.Assert._
  * Date: 22-12-2010
  * Time: 13:51
  */
-class MathMLPrettyPrinterTest extends MathParser{
+class MathMLPrettyPrinterTest extends AsciiMathMLParser{
 
   @Before
   def setUp: Unit = {
@@ -51,10 +51,13 @@ class MathMLPrettyPrinterTest extends MathParser{
   @Test
   def scientificNotationTest {
     //TODO add scientific notaiton options to the grammar
-    val expr = "1.03" //"1.03e-23"
+    val expr = "1.03e-23"
     val result = parseAll(Expr, expr)
     assertTrue(parsingWasSuccessful(result))
     println("the expression " + expr + " results in " + MathMLPrettyPrinter.toXML(result.get))
+    val expr2 = "1.03e-2.3"
+    val result2 = parseAll(Expr, expr2)
+    assertFalse(parsingWasSuccessful(result2))
   }
 
   @Test

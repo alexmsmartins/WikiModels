@@ -10,7 +10,7 @@ import org.junit._
 import Assert._
 import scala.util.parsing.combinator._
 
-class MathParserTest extends MathParser {
+class AsciiMathMLParserTest extends AsciiMathMLParser {
 
   @Before
   def setUp: Unit = {
@@ -50,10 +50,15 @@ class MathParserTest extends MathParser {
   @Test
   def scientificNotationTest {
     //TODO add scientific notaiton options to the grammar
-    val expr = "1.03" //"1.03E-23"
+    val expr = "1.03e-23"
     val result = parseAll(Expr, expr)
     assertTrue(parsingWasSuccessful(result))
     println(result)
+    val expr2 = "1.03E-23"
+    val result2 = parseAll(Expr, expr2)
+    assertTrue(parsingWasSuccessful(result2))
+    println(result2)
+
   }
 
   @Test

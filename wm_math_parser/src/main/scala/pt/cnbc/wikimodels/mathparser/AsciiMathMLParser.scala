@@ -4,7 +4,7 @@ import pt.cnbc.wikimodels.mathml.elements._
 import KnownOperators._
 import util.parsing.combinator.{RegexParsers, PackratParsers, JavaTokenParsers}
 
-class MathParser extends RegexParsers with PackratParsers with MathParserHandlers {
+class AsciiMathMLParser extends RegexParsers with PackratParsers with MathParserHandlers {
 
   type MME = MathMLElem
 
@@ -35,7 +35,8 @@ class MathParser extends RegexParsers with PackratParsers with MathParserHandler
                                            "("~>Expr<~")"
 
   //in this rule, parser order is important
-  lazy val Atom       :PackratParser[MME]= decimalNumber~"e"~decimalNumber^^{case x~"E"~y => new Cn(x::y::Nil, "e-notation")} |
+  lazy val Atom       :PackratParser[MME]= (decimalNumber|wholeNumber)~"e"~wholeNumber^^{case x~"e"~y => new Cn(x::y::Nil, "e-notation")} |
+                                           (decimalNumber|wholeNumber)~"E"~wholeNumber^^{case x~"E"~y => new Cn(x::y::Nil, "e-notation")} |
                                            decimalNumber^^(x => new Cn(x::Nil, "real")) |
                                            wholeNumber^^{x => new Cn(x::Nil, "integer")} |
                                            ident^^(x => new Ci(x))
@@ -55,8 +56,8 @@ class MathParser extends RegexParsers with PackratParsers with MathParserHandler
 
 
 }
-object MathParser{
-  def apply() = new MathParser()
+object AsciiMathMLParser{
+  def apply() = new AsciiMathMLParser()
 }
 
 trait MathParserHandlers{

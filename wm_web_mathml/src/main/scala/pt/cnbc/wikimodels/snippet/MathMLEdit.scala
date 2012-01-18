@@ -65,7 +65,7 @@ class MathMLEdit extends DispatchSnippet {
     def processTextArea() {
       import scala.util.parsing.combinator._
       import net.liftweb.common.{Failure => _}
-      val parser = MathParser()
+      val parser = AsciiMathMLParser()
       Console.println("MathMLEdit.render().processTextArea() with formula = " + asciiFormula.is)
       Console.println("MathMLEdit.render() processTextArea() with MathML = " + mathmlFormula.is)
       val result = parser.parseAll(parser.Expr, asciiFormula.is)

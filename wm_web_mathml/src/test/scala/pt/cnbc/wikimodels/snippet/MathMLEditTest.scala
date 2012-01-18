@@ -1,18 +1,16 @@
 package pt.cnbc.wikimodels.snippet
 
 /**
- * Created by IntelliJ IDEA.
- * User: alex
+ * TODO: Please document.
+ * @author Alexandre Martins
  * Date: 12-01-2011
  * Time: 0:33
- * To change this template use File | Settings | File Templates.
  */
-
 
 import org.junit._
 import Assert._
 import scala.util.parsing.combinator._
-import pt.cnbc.wikimodels.mathparser.{MathMLPrettyPrinter, MathParser}
+import pt.cnbc.wikimodels.mathparser.{MathMLPrettyPrinter, AsciiMathMLParser}
 import pt.cnbc.wikimodels.util.XMLHandler
 import net.liftweb.http.DispatchSnippet
 
@@ -28,7 +26,7 @@ class MathMLEditTest extends MathMLEdit {
 
   @Test
   def processTextAreaGivesExceptionInInitializerError() {
-    val parser = MathParser()
+    val parser = AsciiMathMLParser()
     var formula = "2+2"
     Console.println("MathMLEdit with asciiFormula = " + asciiFormula.is)
     Console.println("MathMLEdit with formula = " + formula)

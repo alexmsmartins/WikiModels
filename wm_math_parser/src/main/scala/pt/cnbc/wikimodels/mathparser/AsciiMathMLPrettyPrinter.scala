@@ -17,6 +17,7 @@ object AsciiMathMLPrettyPrinter{
       case Ci(x,"real",_) => x
       case Cn(content, "real", 10, definitionURL, encoding ) => content(0)
       case Cn(content, "integer", 10, definitionURL, encoding ) => content(0)
+      case Cn(x::y, "e-notation",10, definitionURL, encoding ) => x+"e"+y
       case Operator(name, _, _, definitionURL, encoding) => name
       case CSymbol(content, definitionURL, encoding) => content
       case default => throw new RuntimeException( "AsciiMathML conversion of " + default + " is not implemented")
