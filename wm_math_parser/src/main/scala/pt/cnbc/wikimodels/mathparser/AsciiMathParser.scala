@@ -4,7 +4,7 @@ import pt.cnbc.wikimodels.mathml.elements._
 import KnownOperators._
 import util.parsing.combinator.{RegexParsers, PackratParsers, JavaTokenParsers}
 
-class AsciiMathMLParser extends RegexParsers with PackratParsers with MathParserHandlers {
+class AsciiMathParser extends RegexParsers with PackratParsers with AsciiMathParserHandlers {
 
   type MME = MathMLElem
 
@@ -56,11 +56,11 @@ class AsciiMathMLParser extends RegexParsers with PackratParsers with MathParser
 
 
 }
-object AsciiMathMLParser{
-  def apply() = new AsciiMathMLParser()
+object AsciiMathParser{
+  def apply() = new AsciiMathParser()
 }
 
-trait MathParserHandlers{
+trait AsciiMathParserHandlers{
   def handleFunction(ident:String, params:List[MathMLElem] ):MathMLElem = {
     println("Operator.validOps contains " + KnownOperators.validOps.size + " predefined operators")
     new Apply(KnownOperators.validOps.getOrElse(ident, new CSymbol(ident) ), params)

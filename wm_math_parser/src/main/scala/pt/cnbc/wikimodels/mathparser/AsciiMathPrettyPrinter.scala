@@ -9,7 +9,7 @@ import pt.cnbc.wikimodels.mathml.elements.KnownOperators._
  * Date: 30-12-2010
  * Time: 18:31
  */
-object AsciiMathMLPrettyPrinter{
+object AsciiMathPrettyPrinter{
 
   def toAsciiMathML(elem:MathMLElem):String = {
     elem match{

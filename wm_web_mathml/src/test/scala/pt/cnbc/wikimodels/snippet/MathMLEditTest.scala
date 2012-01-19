@@ -10,9 +10,9 @@ package pt.cnbc.wikimodels.snippet
 import org.junit._
 import Assert._
 import scala.util.parsing.combinator._
-import pt.cnbc.wikimodels.mathparser.{MathMLPrettyPrinter, AsciiMathMLParser}
 import pt.cnbc.wikimodels.util.XMLHandler
 import net.liftweb.http.DispatchSnippet
+import pt.cnbc.wikimodels.mathparser.{MathMLPrettyPrinter, AsciiMathParser}
 
 class MathMLEditTest extends MathMLEdit {
 
@@ -26,7 +26,7 @@ class MathMLEditTest extends MathMLEdit {
 
   @Test
   def processTextAreaGivesExceptionInInitializerError() {
-    val parser = AsciiMathMLParser()
+    val parser = AsciiMathParser()
     var formula = "2+2"
     Console.println("MathMLEdit with asciiFormula = " + asciiFormula.is)
     Console.println("MathMLEdit with formula = " + formula)

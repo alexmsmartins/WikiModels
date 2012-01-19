@@ -11,7 +11,7 @@ import junit.framework.Assert._
  * Date: 22-12-2010
  * Time: 13:51
  */
-class MathMLPrettyPrinterTest extends AsciiMathMLParser{
+class AsciiMathPrettyPrinterTest extends AsciiMathParser{
 
   @Before
   def setUp: Unit = {

@@ -10,7 +10,7 @@ import org.junit._
 import Assert._
 import scala.util.parsing.combinator._
 
-class AsciiMathMLParserTest extends AsciiMathMLParser {
+class AsciiMathParserTest extends AsciiMathParser {
 
   @Before
   def setUp: Unit = {

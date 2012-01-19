@@ -10,7 +10,7 @@ import pt.cnbc.wikimodels.mathml.elements.Operator._
  * Date: 7/Dez/2010
  * Time: 18:36:24
  */
-object MathMLPrettyPrinter extends AsciiMathMLParser{
+object MathMLPrettyPrinter extends AsciiMathParser{
 
   def exprToMathML(expr:String) = toXML(parseAll(Expr, expr).get)
 

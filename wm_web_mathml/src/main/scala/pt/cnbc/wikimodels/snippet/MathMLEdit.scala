@@ -23,13 +23,11 @@ import _root_.net.liftweb.util.Helpers._
 import _root_.net.liftweb.util.BindPlus._
 
 /**
- * Created by IntelliJ IDEA.
- * User: alex
+ * TODO: Please document.
+ * @author Alexandre Martins
  * Date: 04-01-2011
  * Time: 14:37
- * To change this template use File | Settings | File Templates.
  */
-
 /**
  * Contains default values for Session Variables.
  * Those are used in a particular context.
@@ -65,7 +63,7 @@ class MathMLEdit extends DispatchSnippet {
     def processTextArea() {
       import scala.util.parsing.combinator._
       import net.liftweb.common.{Failure => _}
-      val parser = AsciiMathMLParser()
+      val parser = AsciiMathParser()
       Console.println("MathMLEdit.render().processTextArea() with formula = " + asciiFormula.is)
       Console.println("MathMLEdit.render() processTextArea() with MathML = " + mathmlFormula.is)
       val result = parser.parseAll(parser.Expr, asciiFormula.is)
