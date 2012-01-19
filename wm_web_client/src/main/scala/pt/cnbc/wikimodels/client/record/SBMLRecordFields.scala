@@ -626,7 +626,7 @@ class Value[OwnerType <: SBaseRecord[OwnerType]{var value:java.lang.Double}](rec
 }
 
 
-class Math[OwnerType <: SBaseRecord[OwnerType]{var math:String}](rec:OwnerType) extends OptionalStringField(rec){
+class Math[OwnerType <: SBaseRecord[OwnerType]{var math:String}](rec:OwnerType) extends OptionalStringField(rec,2000){
 
 }
 
