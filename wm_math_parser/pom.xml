@@ -53,6 +53,11 @@
       <artifactId>scala-library</artifactId>
       <version>${scala.version}</version>
     </dependency>
+      <dependency>
+          <groupId>UsefullScalaStuff</groupId>
+          <artifactId>UsefullScalaStuff</artifactId>
+          <version>0.1</version>
+      </dependency>
   </dependencies>
 
       <build>

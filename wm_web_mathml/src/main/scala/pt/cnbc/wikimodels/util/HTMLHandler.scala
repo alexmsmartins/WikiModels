@@ -3,11 +3,10 @@ package pt.cnbc.wikimodels.util
 import scala.xml._
 
 /**
- * Created by IntelliJ IDEA.
- * User: alex
+ * TODO: Please document.
+ * @author Alexandre Martins
  * Date: 16-01-2011
  * Time: 23:14
- * To change this template use File | Settings | File Templates.
  */
 object HTMLHandler{
 

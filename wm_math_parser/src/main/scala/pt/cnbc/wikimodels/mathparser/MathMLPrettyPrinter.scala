@@ -34,9 +34,11 @@ object MathMLPrettyPrinter extends AsciiMathParser{
               new UnprefixedAttribute("encoding", Text(encoding), Null)),
             TopScope)
         }
-        case CSymbol(content, definitionURL, encoding) => <csymbol content={content} definitionURL={definitionURL} >{content}</csymbol>
+        case CSymbol(content, definitionURL, encoding) => <csymbol encoding={encoding} definitionURL={definitionURL} >{content}</csymbol>
         case Sep() => <sep/>
         case default => throw new RuntimeException( "XML conversion of " + default + " is not implemented")
       }
   }
 }
+
+

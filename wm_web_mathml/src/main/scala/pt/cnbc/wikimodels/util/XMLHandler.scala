@@ -3,13 +3,11 @@ package pt.cnbc.wikimodels.util
 import xml.{Elem, UnprefixedAttribute}
 
 /**
- * Created by IntelliJ IDEA.
- * User: alex
+ * TODO: Please document.
+ * @author Alexandre Martins
  * Date: 11-01-2011
  * Time: 16:37
- * To change this template use File | Settings | File Templates.
  */
-
 object XMLHandler {
   def addAttributes(xml:Elem,a:(String, String)* ) = {
     var xxx = xml

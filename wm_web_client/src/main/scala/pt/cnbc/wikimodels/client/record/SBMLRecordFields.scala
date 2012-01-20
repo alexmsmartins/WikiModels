@@ -163,10 +163,6 @@ with GetSetOwnerField[String, T]{
         .replace("&igrave;", "&#236;")
         .replace("&egrave;", "&#232;")
         .replace("&Egrave;", "&#200;")
-        .replace("&nbsp;", " &#160;")
-        .replace("&nbsp;", " &#160;")
-        .replace("&nbsp;", " &#160;")
-        .replace("&nbsp;", " &#160;")
       case _ => owner.notes = null //just to make sure the owner does not have valid values when errors occur
     }
   }
@@ -322,8 +318,6 @@ with GetSetOwnerField[String, T]{
 								]
 
 					});
-
-
               	"""
               ) //end of JsRaw
               )}

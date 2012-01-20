@@ -3,7 +3,7 @@ package pt.cnbc.wikimodels.mypackage
 import _root_.scala.Console
 import java.io.Console
 
-/** Please document this trait
+/** TODO Please document this class
  *  @author ${USER}
  *  Date: ${DATE}
  *  Time: ${TIME}  */

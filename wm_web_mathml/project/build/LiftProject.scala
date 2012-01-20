@@ -13,11 +13,11 @@ class FooProject(info: ProjectInfo) extends DefaultWebProject(info) {
    // alternately use derby
    //val derby = "org.apache.derby" % "derby" % "10.2.2.0" % "runtime"
    val servlet = "javax.servlet" % "servlet-api" % "2.5" % "provided"
-   //val junit = "junit" % "junit" % "3.8.1" % "test"    
+   val junit = "junit" % "junit" % "4.8.1" % "test"    
 
     val mavenLocal = "Local Maven Repository" at "file://"+Path.userHome+"/.m2/repository/"
     val bryanjswift = "Bryan J Swift Repository" at "http://repos.bryanjswift.com/maven2/"
-    //val junitInterface = "com.novocode" % "junit-interface" % "0.4.0" % "test"
+    val junitInterface = "com.novocode" % "junit-interface" % "0.4.0" % "test"
 
     val wm_math_parser = "pt.cnbc.wikimodels" % "wm_math_parser" % "0.1-SNAPSHOT"
 

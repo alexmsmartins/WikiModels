@@ -9,11 +9,10 @@ import org.slf4j._
 import alexmsmartins.log.LoggerWrapper
 
 /**
- * Created by IntelliJ IDEA.
- * User: alex
+ * TODO: Please document.
+ * @author Alexandre Martins
  * Date: 29-05-2011
  * Time: 19:34
- * To change this template use File | Settings | File Templates.
  */
 object SBMLDocHandler extends LoggerWrapper {
   self  =>
@@ -59,7 +58,7 @@ object SBMLDocHandler extends LoggerWrapper {
 
   /**
    * Removes the lines before the first xml tag since they cant be parsed by <code>scala.xml.XML</code> classes
-   * It is assumed that the XML Decalaration is separated from the rest of the xml document  by a \n
+   * It is assumed that the XML Declaration is separated from the rest of the xml document  by a \n
    */
   def removeXMLHeader(str:String):String = {
     var tempStr = str

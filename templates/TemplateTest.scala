@@ -5,7 +5,7 @@ import org.junit._
 import Assert._
 import java.io.Console
 
-/** Please document this Test
+/** TODO Please document this JUnit test
  *  @author ${USER}
  * Date: ${DATE}
  * Time: ${TIME}  */

@@ -10,7 +10,7 @@ import Helpers._
 
 import scala.xml._
 
-/** Please document this trait
+/** TODO Please document this snippet
  *  @author ${USER}
  *  Date: ${DATE}
  *  Time: ${TIME}  */
