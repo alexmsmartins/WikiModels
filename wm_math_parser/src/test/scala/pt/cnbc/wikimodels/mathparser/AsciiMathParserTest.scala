@@ -201,5 +201,7 @@ class AsciiMathParserTest extends AsciiMathParser {
     val result2 = parseAll(Expr, expr2)
     assertTrue(parsingWasSuccessful(result2))
     println(result2)
+    val xml = MathMLPrettyPrinter.toXML(result2.get)
+    println("Expression " + expr2 + " in mathml: " + xml)
   }
 }

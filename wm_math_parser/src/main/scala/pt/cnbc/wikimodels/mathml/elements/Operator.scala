@@ -89,22 +89,16 @@ object KnownOperators{
   }else{
     Console.println("validOpsLsit is "+validOpsList)
   }
-  validOps ++= validOpsList.map(op => {
-    if(op == null){
-      Console.println("op is null")
-    }else{
-      Console.println("op is "+op.name)
-    }
-    if(op.name == null){
-      Console.println("op.name is null")
-    }else{
-      Console.println("op.name is "+op.name)
-    }
-    (op.name, op)
-  })
-  if(validOps == null){
-    Console.println("validOps is null")
-  }else{
-    Console.println("validOps is "+validOps)
+  validOps ++= validOpsList.map(op => (op.name, op))
+
+  override def toString() = {
+    validOps.map(op => {
+        if(op._1 == null){
+          "op is null\n"
+        }else{
+          "op is "+op._1+"\n"
+        }
+      }
+    ).fold("")((s1,s2) => s1 + s2)
   }
 }
