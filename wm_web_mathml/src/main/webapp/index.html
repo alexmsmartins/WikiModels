@@ -1,68 +1,85 @@
 <lift:surround with="default" at="content">
 
     <div  name="some-div" id="some-div">
-        <script id="mathjax" src="/MathJax/MathJax.js" type="text/javascript" defer="defer">
-        /* <![CDATA[ */
-            MathJax.Hub.Config({
-                config: ["MMLorHTML.js"],
-                extensions: ["tex2jax.js", "mml2jax.js"],
-                jax: ["input/TeX", "input/MathML"]
-            });
-        /* ]]> */
-        </script>
         <script id="xslttransform" type="text/javascript" defer="defer">
-        /* <![CDATA[ */
-          function loadXMLDoc(dname)
+            /* <![CDATA[ */
+            function loadXMLDoc(dname)
             {
-            $.log("Executando loadXMLDoc(dname)")
-            if (window.XMLHttpRequest)
-              {
-              xhttp=new XMLHttpRequest();
-              }
-            else
-              {
-              xhttp=new ActiveXObject("Microsoft.XMLHTTP");
-              }
-            xhttp.open("GET",dname,false);
-            xhttp.send("");
-            return xhttp.responseXML;
+                $.log("Executando loadXMLDoc(dname)")
+                if (window.XMLHttpRequest)
+                {
+                    xhttp=new XMLHttpRequest();
+                }
+                else
+                {
+                    xhttp=new ActiveXObject("Microsoft.XMLHTTP");
+                }
+                xhttp.open("GET",dname,false);
+                xhttp.send("");
+                return xhttp.responseXML;
             }
 
-          function displayResult()
+            function displayResult()
             {
-            xml=loadXMLDoc("mathml_content.xml");
-            if(xml == null)
-	      {
-	      $.log("xml is null");
-	      } else {
-	      $.log("xml not null");
-	      }
+                xml=loadXMLDoc("mathml_content.xml");
+                if(xml == null)
+                {
+                    $.log("xml is null");
+                } else {
+                    $.log("xml not null");
+                }
 
-            xsl=loadXMLDoc("/xslt/mathmlc2p.xsl");
-            if(xsl == null)
-	        {
-              $.log("xslt is null");
-              } else {
-              $.log("xslt not null")
-              }
+                xsl=loadXMLDoc("/xslt/mathmlc2p.xsl");
+                if(xsl == null)
+                {
+                    $.log("xslt is null");
+                } else {
+                    $.log("xslt not null")
+                }
 
-            // code for IE
-            if (window.ActiveXObject)
-              {
-              ex=xml.transformNode(xsl);
-              document.getElementById("formula").innerHTML=ex;
-              }
-            // code for Mozilla, Firefox, Opera, etc.
-            else if (document.implementation && document.implementation.createDocument)
-              {
-              xsltProcessor=new XSLTProcessor();
-              xsltProcessor.importStylesheet(xsl);
-              resultDocument = xsltProcessor.transformToFragment(xml,document);
-              document.getElementById("formula").appendChild(resultDocument);
-              }
+                // code for IE
+                if (window.ActiveXObject)
+                {
+                    ex=xml.transformNode(xsl);
+                    document.getElementById("formula").innerHTML=ex;
+                }
+                // code for Mozilla, Firefox, Opera, etc.
+                else if (document.implementation && document.implementation.createDocument)
+                {
+                    xsltProcessor=new XSLTProcessor();
+                    xsltProcessor.importStylesheet(xsl);
+                    resultDocument = xsltProcessor.transformToFragment(xml,document);
+                    document.getElementById("formula").appendChild(resultDocument);
+                }
             }
-        /* ]]> */
-	</script>
+            /* ]]> */
+        </script>
+        <script type="text/x-mathjax-config">
+            /* <![CDATA[ */
+            $.log("MathJax is being configured.");
+            MathJax.Hub.Config({
+            config: ["MMLorHTML.js"],
+            jax: ["input/TeX","input/MathML","output/HTML-CSS","output/NativeMML"],
+            extensions: ["tex2jax.js","mml2jax.js","MathMenu.js","MathZoom.js"],
+            TeX: {
+            extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"]
+            },
+            NativeMML: { showMathMenuMSIE: false },
+            menuSettings: { zoom: "Double-Click" },
+            errorSettings: { message: ["[Math Error]"] }
+            });
+
+            /* ]]> */
+        </script>
+        <script type="text/javascript"
+                src="http://cdn.mathjax.org/mathjax/latest/MathJax.js">
+            /* <![CDATA[ */
+            $(document).ready(function() {
+                displayResult();
+                $.log("MathJax is executing");
+            });
+            /* ]]> */
+        </script>
         When <math><mi>a</mi><mo>&#x2260;</mo><mn>0</mn></math>,
         there are two solutions to <math>
           <mi>a</mi><msup><mi>x</mi><mn>2</mn></msup>
