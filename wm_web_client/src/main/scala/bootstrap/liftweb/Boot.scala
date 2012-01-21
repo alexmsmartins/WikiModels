@@ -39,6 +39,10 @@ class Boot extends LoggerWrapper{
       //Where to search for lift related files. This is the new location
       LiftRules.addToPackages("pt.cnbc.wikimodels.client")
 
+      //TODO delete this if it is not used anymore
+      //Where to search for lift related files. This is a temp location for the mathml editor
+      LiftRules.addToPackages("pt.cnbc.wikimodels.mathml")
+
       //TODO - solve java.lang.ClassCastException: net.liftweb.http.RewriteRequest cannot be cast to net.liftweb.http.Req before uncommenting the following line
       //LiftRules.docType.default.set((r:Req) => Full(DocType.html5))
 
@@ -121,6 +125,7 @@ class Boot extends LoggerWrapper{
         Menu(Loc("editReaction", List("modele","reaction_edit"), "Edit Reaction", Hidden, loggedIn)) ::
         Menu(Loc("viewReaction", List("modele","reaction_view"), "View Reaction", Hidden, loggedIn)) ::
         Menu(Loc("deleteReaction", List("modele","reaction_delete"), "Delete Reaction", Hidden, loggedIn)) ::
+        Menu(Loc("mathmlEditor", List("mathml"), "MathML Editor", Hidden, loggedIn)) ::
           User.sitemap
 
         // Build SiteMap

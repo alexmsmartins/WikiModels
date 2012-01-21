@@ -34,6 +34,8 @@ class Boot {
     LiftRules.addToPackages("pt.cnbc.wikimodels.mathml")
     Schemifier.schemify(true, Schemifier.infoF _, User)
 
+    LiftRules.htmlProperties.default.set((r: Req) =>new XHtmlInHtml5OutProperties(r.userAgent))
+
     // Build SiteMap
     def sitemap() = SiteMap(
       Menu( Loc("Home", List("index") , "Home") )  :: // Simple menu form

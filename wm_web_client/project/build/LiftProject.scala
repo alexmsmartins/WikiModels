@@ -13,6 +13,7 @@ class LiftProject(info: ProjectInfo) extends DefaultWebProject(info) {
   val liftWidget = "net.liftweb" %% "lift-widgets" % liftVersion % "compile"
   val wm_rest_api = "pt.cnbc.wikimodels" % "wm_rest_api" % "0.1-SNAPSHOT" % "compile"
   val wm_libjsbml = "pt.cnbc.wikimodels" % "wm_libjsbml" % "0.1-SNAPSHOT" % "compile"
+  val wm_math_parser = "pt.cnbc.wikimodels" % "wm_math_parser" % "0.1-SNAPSHOT" % "compile"
   val jetty6 = "org.mortbay.jetty" % "jetty" % "6.1.25" % "test"
   val usefullScalaStuff = "UsefullScalaStuff" % "UsefullScalaStuff" % "0.1" % "compile"
   val slf4jApi = "org.slf4j" % "slf4j-api" % "1.6.1" % "compile"

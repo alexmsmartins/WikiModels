@@ -3,7 +3,6 @@ target/
 project/boot/
 project/build/target/
 lib_managed/
-MathJax/
 wm_library/project/boot/
 wm_library/project/build/target/
 wm_math_parser/project/boot/

@@ -17,70 +17,26 @@
 
 
     <!-- javascript -->
+    <script id="jquery" src="/classpath/jquery.js" type="text/javascript"></script>
+    <script id="json" src="/classpath/json.js" type="text/javascript"></script>
+    <script id="debug" src="js/jquery.debug.js" type="text/javascript">
+        /* <![CDATA[ */
+        DEBUG = true;
+        /* ]]> */
+    </script>
     <script type="text/javascript" src="/classpath/tabs/js/jquery-ui-1.7.2.custom.min.js"></script>
-    <script src="/classpath/js/ASCIIMathML.js" type="text/javascript"></script>
     <script src="/classpath/js/jquery.cookie.js" type="text/javascript"></script>
     <script src="/classpath/tree/jquery.treeview.js" type="text/javascript"></script>
     <script src="/classpath/js/functions.js" type="text/javascript" ></script>
     <script src="/classpath/js/fckeditor/fckeditor.js" type="text/javascript"></script>
     <script src="/classpath/tablesorter/jquery.tablesorter.js" type="text/javascript"></script>
     <script src="/classpath/js/popup.js" type="text/javascript"></script>
-    <script type="text/javascript" src="/classpath/math/json2.js"></script>
-    <script type="text/javascript" src="/classpath/math/tokens.js"></script>
-    <script type="text/javascript" src="/classpath/math/parse.js"></script>
-    <script type="text/javascript" src="/classpath/math/math-exceptions.js"></script>
-    <script type="text/javascript" src="/classpath/math/math-templates.js"></script>
-    <script type="text/javascript" src="/classpath/math/math-categories.js"></script>
-    <script type="text/javascript" src="/classpath/math/math-utils.js"></script>
-    <script type="text/javascript" src="/classpath/math/math-infer.js"></script>
-    <script type="text/javascript" src="/classpath/math/math-node.js"></script>
-    <script type="text/javascript" src="/classpath/math/math-model.js"></script>
-    <script type="text/javascript" src="/classpath/math/math-parser.js"></script>
-    <script type="text/javascript" src="/classpath/math/math-position.js"></script>
-    <script type="text/javascript" src="/classpath/math/math-render.js"></script>
-    <script type="text/javascript" src="/classpath/math/math-input.js"></script>
-    <script type="text/javascript" src="/classpath/math/math-editor.js"></script>
-    <script type="text/javascript">
-            //<![CDATA[
-            Ext.onReady(function(){
-                MathUtil.rootPath = "./";
-                new MathEditor(document.getElementById('editor'));
 
-                var cookie = new Ext.state.CookieProvider();
-                //var value = cookie.get('math-editor-popup-open');
-                //alert("open? "+value);
-                cookie.set('math-editor-popup-open', 'opened');
-
-
-                // Start a simple task that refocuses the window if the parent window was refreshed
-                var task = {
-                    run: function(){
-                        var cookie = new Ext.state.CookieProvider();
-                        var value = cookie.get('math-editor-popup-open');
-                        if('focus' == value) {
-                            cookie.set('math-editor-popup-open', 'opened');
-
-                            window.focus();
-                        }
-                    },
-                    interval: 1000 //1 second
-                }
-                var runner = new Ext.util.TaskRunner();
-                runner.start(task);
-            });
-
-            window.onbeforeunload = function() {
-                var cookie = new Ext.state.CookieProvider();
-                cookie.clear('math-editor-popup-open');
-                //return "Before closing, are you sure you manually Cut or Copied MathML from this page and inserted it into the module?";
-            }
-            //]]>
-        </script>
-
-        <script id="jquery" src="/classpath/js/jquery.js" type="text/javascript" ></script>
         <script type="text/javascript">
             window.onload = function() {
-                document.getElementById("username").focus();
+                if( document.getElementById("username") != null ){
+                    document.getElementById("username").focus();
+                }
             }
         </script>
         <!-- Wikimodels specific js and css -->

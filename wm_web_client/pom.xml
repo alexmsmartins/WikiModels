@@ -110,6 +110,11 @@
         <artifactId>wm_libjsbml</artifactId>
         <version>0.1-SNAPSHOT</version>
     </dependency>
+      <dependency>
+          <groupId>pt.cnbc.wikimodels</groupId>
+          <artifactId>wm_math_parser</artifactId>
+          <version>0.1-SNAPSHOT</version>
+      </dependency>
       <!-- scalaish wrapper around SLF4J -->
       <dependency>
           <groupId>UsefullScalaStuff</groupId>
