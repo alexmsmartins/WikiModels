@@ -31,6 +31,7 @@ class Boot {
 
     // where to search snippet
     LiftRules.addToPackages("pt.cnbc.wikimodels")
+    LiftRules.addToPackages("pt.cnbc.wikimodels.mathml")
     Schemifier.schemify(true, Schemifier.infoF _, User)
 
     // Build SiteMap

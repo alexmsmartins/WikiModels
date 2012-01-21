@@ -1,6 +1,7 @@
-package pt.cnbc.wikimodels.snippet
+package pt.cnbc.wikimodels.mathml.snippet
 
 //--Standard imports --
+
 import _root_.net.liftweb.http._
 import S._
 import _root_.net.liftweb.util._
@@ -41,10 +42,15 @@ object Default{
 }
 
 object asciiFormula extends SessionVar[String](Default.asciiFormula)
+
 object mathmlFormula extends SessionVar[Elem](Default.mathmlFormula)
+
 object mathmlFormulaToSave extends SessionVar[Elem](Default.mathmlFormula)
+
 object successfulPerse extends SessionVar[Boolean](true)
+
 object errorMessage extends SessionVar[String](Default.errorMess)
+
 object errorHtml extends SessionVar[scala.xml.Elem](Default.errorHtml)
 
 class MathMLEdit extends DispatchSnippet {

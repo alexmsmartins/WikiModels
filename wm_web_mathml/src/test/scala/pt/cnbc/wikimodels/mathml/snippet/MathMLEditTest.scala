@@ -1,4 +1,4 @@
-package pt.cnbc.wikimodels.snippet
+package pt.cnbc.wikimodels.mathml.snippet
 
 /**
  * TODO: Please document.
