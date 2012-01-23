@@ -13,13 +13,11 @@ import pt.cnbc.wikimodels.exceptions.NotImplementedException
 */
 
 /**
- * Created by IntelliJ IDEA.
- * User: alex
+ * TODO: Please document.
+ * @author Alexandre Martins
  * Date: 15-11-2011
  * Time: 22:51
- * To change this template use File | Settings | File Templates.
  */
-
 object SBMLFromRecord extends LoggerWrapper {
 
   def createSBMLElementFrom(er:SBaseRecord[_]) =  {
@@ -270,8 +268,8 @@ object RecordFromSBML extends LoggerWrapper {
       debug("Finished copying list")
       debug("listOfModifiersRec has size " + rr.listOfModifiersRec.size)
     }*/
-
-    rr.kineticLawRec = createKineticLawRecordFrom(r.kineticLaw)
+    if(r.kineticLaw != null)
+      rr.kineticLawRec = createKineticLawRecordFrom(r.kineticLaw)
 
     rr
   }

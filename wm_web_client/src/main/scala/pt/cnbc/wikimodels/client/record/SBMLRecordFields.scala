@@ -609,7 +609,7 @@ class InitialConcentration[OwnerType <: SBaseRecord[OwnerType]{var initialConcen
 }
 
 /**
- * PArameter value
+ * Parameter value
  */
 class Value[OwnerType <: SBaseRecord[OwnerType]{var value:java.lang.Double}](rec:OwnerType)
   extends UIOptionalDoubleField[OwnerType]  {
@@ -620,8 +620,40 @@ class Value[OwnerType <: SBaseRecord[OwnerType]{var value:java.lang.Double}](rec
 }
 
 
-class Math[OwnerType <: SBaseRecord[OwnerType]{var math:String}](rec:OwnerType) extends OptionalStringField(rec,2000){
+class Math[OwnerType <: SBaseRecord[OwnerType]{var math:String}](rec:OwnerType) extends StringField(rec,2000)
+with GetSetOwnerField[String,OwnerType]{
+  override def name: String = "Math"
+  var _data:Box[MyType] = Empty
 
+  override def theData_=(in:Box[MyType]) {
+    trace("Calling Notes.theData_=" + in)
+    _data = in
+    _data match{
+      //if a valid value is set then update the owner class
+      //TODO put the entities conversion in their own class
+      case Full(x) => owner.math = x
+      case _ => owner.math = null //just to make sure the owner does not have valid values when errors occur
+    }
+  }
+
+  override def theData:Box[MyType] = {
+    trace("Calling Math.theData")
+    //if the owner has valid data that was obtained from the wikimodels Server
+    if(owner.notes != null) {
+      debug("theData with math = "+ owner.math + " is being copied to the record Field.")
+      _data = Full(owner.math )
+    } else {
+      _data match {
+        case Empty => {
+          _data = Empty
+          if (! this.optional_?) owner.math = null
+        }
+        case Full(x) => owner.math = x
+      }
+    }
+    trace("Math.theData returns " + _data)
+    _data
+  }
 }
 
 
