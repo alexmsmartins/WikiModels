@@ -205,20 +205,19 @@ class AsciiMathParserTest extends AsciiMathParser {
     println("Expression " + expr2 + " in mathml: " + xml)
   }
 
-  //@Test
+  @Test
   def lambda {
-    val expr = "f(x) = x+2"
-    val result = parseAll(Expr, expr)
+    val expr = "(x,y) = x+y+2"
+    val result = parseAll(LambdaExpr, expr)
     assertTrue(parsingWasSuccessful(result))
     println(result)
     val xml = MathMLPrettyPrinter.toXML(result.get)
     println("Expression " + expr2 + " in mathml: " + xml)
-    val expr2 = "f(x) = y+2"
-    val result2 = parseAll(Expr, expr2)
+    val expr2 = "f(x) = x+2"
+    val result2 = parseAll(LambdaExpr, expr2)
     assertFalse(parsingWasSuccessful(result2))
     println(result2)
-    val xml2 = MathMLPrettyPrinter.toXML(result2.get)
-    println("Expression " + expr2 + " in mathml: " + xml2)
+    println("Expression " + expr2 + " failed")
   }
 
   @Test
