@@ -2,7 +2,7 @@ package pt.cnbc.wikimodels.mathparser
 
 import pt.cnbc.wikimodels.mathml.elements._
 import KnownOperators._
-import util.parsing.combinator.{RegexParsers, PackratParsers, JavaTokenParsers}
+import util.parsing.combinator.{RegexParsers, PackratParsers}
 
 class AsciiMathParser extends RegexParsers with PackratParsers with AsciiMathParserHandlers {
 
@@ -11,8 +11,10 @@ class AsciiMathParser extends RegexParsers with PackratParsers with AsciiMathPar
   //check http://rwiki.sciviews.org/doku.php?id=wiki:asciimathml#standard_functions to handle certain cases
   lazy val LambdaExpr :PackratParser[Any]= Function ~ "=" ~ Expr
 
-  //TODO def SimpleExpr  :Parser[Any]= Atom |   
-  lazy val Expr       :PackratParser[MathMLElem]= Expr~"+"~Term^^{ case e~"+"~t => new Apply(Addition, List(e, t))  } |
+
+  lazy val GenExpr    :PackratParser[MME]= Relation | Expr
+
+  lazy val Expr       :PackratParser[MME]= Expr~"+"~Term^^{ case e~"+"~t => new Apply(Addition, List(e, t))  } |
                                            Expr~"-"~Term^^{ case e~"-"~t => new Apply(Subtraction, List(e, t)  ) } |
                                            Term
 
@@ -40,6 +42,16 @@ class AsciiMathParser extends RegexParsers with PackratParsers with AsciiMathPar
                                            decimalNumber^^(x => new Cn(x::Nil, "real")) |
                                            wholeNumber^^{x => new Cn(x::Nil, "integer")} |
                                            ident^^(x => new Ci(x))
+
+  //relation  MathML specification section 4.4.4 Relations
+  lazy val Relation   :Parser[MME]= (Expr~"=="~>Expr) | //4.4.4.1 Equals (eq)
+                                           (Expr~"!="~>Expr) | //4.4.4.2 Not Equals (neq)
+                                           (Expr~">"~>Expr) | //4.4.4.3 Greater than (gt)
+                                           (Expr~"<"~>Expr) | //4.4.4.4 Less Than (lt)
+                                           (Expr~">="~>Expr) | //4.4.4.5 Greater Than or Equal (geq)
+                                           (Expr~"<="~>Expr) | //4.4.4.6 Less Than or Equal (leq)
+                                           (Expr~"_="~>Expr) | //4.4.4.7 Equivalent (equivalent)
+                                           (Expr~"~="~>Expr)  //4.4.4.8 Approximately (approx)
 
   //-- these methods where taken from JavaTokenParser and adapted to this grammars needs
 

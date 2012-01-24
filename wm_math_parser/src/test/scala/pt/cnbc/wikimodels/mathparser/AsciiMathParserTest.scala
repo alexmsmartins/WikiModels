@@ -204,4 +204,60 @@ class AsciiMathParserTest extends AsciiMathParser {
     val xml = MathMLPrettyPrinter.toXML(result2.get)
     println("Expression " + expr2 + " in mathml: " + xml)
   }
+
+  //@Test
+  def lambda {
+    val expr = "f(x) = x+2"
+    val result = parseAll(Expr, expr)
+    assertTrue(parsingWasSuccessful(result))
+    println(result)
+    val xml = MathMLPrettyPrinter.toXML(result.get)
+    println("Expression " + expr2 + " in mathml: " + xml)
+    val expr2 = "f(x) = y+2"
+    val result2 = parseAll(Expr, expr2)
+    assertFalse(parsingWasSuccessful(result2))
+    println(result2)
+    val xml2 = MathMLPrettyPrinter.toXML(result2.get)
+    println("Expression " + expr2 + " in mathml: " + xml2)
+  }
+
+  @Test
+  def eq {
+    val expr2 = "2 == 2"
+    val result2 = parseAll(Relation, expr2)
+    assertTrue(parsingWasSuccessful(result2))
+    println(result2)
+    val xml = MathMLPrettyPrinter.toXML(result2.get)
+    println("Expression " + expr2 + " in mathml: " + xml)
+  }
+
+  @Test
+  def neq {
+    val expr2 = "2!=x"
+    val result2 = parseAll(Relation, expr2)
+    assertTrue(parsingWasSuccessful(result2))
+    println(result2)
+    val xml = MathMLPrettyPrinter.toXML(result2.get)
+    println("Expression " + expr2 + " in mathml: " + xml)
+  }
+
+  @Test
+  def gteq {
+    val expr2 = "2E-2 >= 2"
+    val result2 = parseAll(Relation, expr2)
+    assertTrue(parsingWasSuccessful(result2))
+    println(result2)
+    val xml = MathMLPrettyPrinter.toXML(result2.get)
+    println("Expression " + expr2 + " in mathml: " + xml)
+  }
+
+  @Test
+  def lteq {
+    val expr2 = "2 <= 24+5"
+    val result2 = parseAll(Relation, expr2)
+    assertTrue(parsingWasSuccessful(result2))
+    println(result2)
+    val xml = MathMLPrettyPrinter.toXML(result2.get)
+    println("Expression " + expr2 + " in mathml: " + xml)
+  }
 }
