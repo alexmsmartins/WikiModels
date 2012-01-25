@@ -30,6 +30,20 @@ object AsciiMathPrettyPrinter{
       case Apply(Subtraction, params) => separateWith( params.map(toAsciiMathML(_)), " - " )
       case Apply(Multiplication, params) => separateWith( params.map(toAsciiMathML(_)), " * " )
       case Apply(Division, params) => separateWith( params.map(toAsciiMathML(_)), " / " )
+
+      case Apply(Eq, params)  => separateWith( params.map(toAsciiMathML(_)), " == " )
+      case Apply(Neq, params)  => separateWith( params.map(toAsciiMathML(_)), " != " )
+      case Apply(Gt, params)  => separateWith( params.map(toAsciiMathML(_)), " > " )
+      case Apply(Lt, params)  => separateWith( params.map(toAsciiMathML(_)), " < " )
+      case Apply(Geq, params)  => separateWith( params.map(toAsciiMathML(_)), " >= " )
+      case Apply(Leq, params)  => separateWith( params.map(toAsciiMathML(_)), " <= " )
+
+      case Apply(And, params)  => separateWith( params.map(toAsciiMathML(_)), " + " )
+      case Apply(Or, params)  => separateWith( params.map(toAsciiMathML(_)), " + " )
+      case Apply(Xor, params)  => separateWith( params.map(toAsciiMathML(_)), " + " )
+      case Apply(Not, params)  => " ~" + toAsciiMathML(params.head)
+
+
       case Apply(Exponentiation, params) =>  toAsciiMathML( params(0) ) + "^" + toAsciiMathML( params(1) )
       case Apply(o,params) => toAsciiMathML(o) + "(" + separateWith( params.map(toAsciiMathML(_)), ", " ) +")"
     }

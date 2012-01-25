@@ -9,11 +9,10 @@ case object PositiveInfiniteInt extends InfInt(1,true)
 case object NegativeInfiniteInt extends InfInt(-1,true)
 
 /**
- * Created by IntelliJ IDEA.
- * User: alex
+ * TODO: Please document.
+ * @author Alexandre Martins
  * Date: 10/Out/2010
  * Time: 22:17:34
- * To change this template use File | Settings | File Templates.
  */
 class Operator(val name:String, val minArgs:InfInt, val maxArgs:InfInt, val definitionURL:Option[String]=None, val encoding:String="real") extends Token(name)
 
@@ -32,6 +31,15 @@ object KnownOperators{
   var validOps = Map.empty[String, Operator]
   var validOpsList = List.empty[Operator]
 
+  //------------ relational operators: ------------//
+  case object Eq extends Operator("eq",2,PositiveInfiniteInt)
+  case object Neq  extends Operator("neq",2,2)
+  case object Gt extends Operator("gt",2,PositiveInfiniteInt)
+  case object Lt extends Operator("lt",2,PositiveInfiniteInt)
+  case object Geq extends Operator("geq",2,PositiveInfiniteInt)
+  case object Leq extends Operator("leq",2,PositiveInfiniteInt)
+
+  validOpsList :::= List(Eq, Neq, Gt, Lt, Geq, Leq)
 
   //------------ trugonometric operators ------------//
   case object Sin extends Operator("sin",1,1)
@@ -48,7 +56,6 @@ object KnownOperators{
   case object Coth extends Operator("coth",1,1)
 
   validOpsList :::= List(Sin, Cos, Tan, Sec, Csc, Cot, Sinh, Cosh, Tanh, Sech, Csch, Coth)
-
 
   //arccos, arctan, arcsec, arccsc, arccot, arcsinh, arccosh, arctanh, arcsech, arccsch, arccoth
   case object ArcSin extends Operator("arcsin",1,1)
@@ -84,11 +91,17 @@ object KnownOperators{
   case object Factorial extends Operator("factorial",1,1)
 
   validOpsList :::= List(Addition, Subtraction, Multiplication, Division, Exponentiation, Root, Abs, Exp, Ln, Log, Floor, Ceiling, Factorial)
-  if(validOpsList == null){
-    Console.println("validOpsList is null")
-  }else{
-    Console.println("validOpsLsit is "+validOpsList)
-  }
+
+  //------------ Logical operators ------------//
+
+  //and, or, xor, not
+  case object And extends Operator("and", 2, PositiveInfiniteInt)
+  case object Or extends Operator("or",2,PositiveInfiniteInt)
+  case object Xor extends Operator("xor", 2, PositiveInfiniteInt)
+  case object Not extends Operator("not", 1, 1)
+
+  validOpsList :::= List(And, Or , Xor, Not)
+
   validOps ++= validOpsList.map(op => (op.name, op))
 
   override def toString() = {

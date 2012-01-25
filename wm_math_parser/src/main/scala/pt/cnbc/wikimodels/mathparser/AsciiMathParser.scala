@@ -11,8 +11,7 @@ class AsciiMathParser extends RegexParsers with PackratParsers with AsciiMathPar
   //check http://rwiki.sciviews.org/doku.php?id=wiki:asciimathml#standard_functions to handle certain cases
   lazy val LambdaExpr :PackratParser[MME]= "("~repsep(ident,",")~")" ~ "=" ~> Expr
 
-
-  lazy val GenExpr    :PackratParser[MME]= Relation | Expr
+  lazy val GenExpr    :PackratParser[MME]= Relation | Expr //| Logical
 
   lazy val Expr       :PackratParser[MME]= Expr~"+"~Term^^{ case e~"+"~t => new Apply(Addition, List(e, t))  } |
                                            Expr~"-"~Term^^{ case e~"-"~t => new Apply(Subtraction, List(e, t)  ) } |
@@ -44,14 +43,15 @@ class AsciiMathParser extends RegexParsers with PackratParsers with AsciiMathPar
                                            ident^^(x => new Ci(x))
 
   //relation  MathML specification section 4.4.4 Relations
-  lazy val Relation   :Parser[MME]= (Expr~"=="~>Expr) | //4.4.4.1 Equals (eq)
-                                           (Expr~"!="~>Expr) | //4.4.4.2 Not Equals (neq)
-                                           (Expr~">"~>Expr) | //4.4.4.3 Greater than (gt)
-                                           (Expr~"<"~>Expr) | //4.4.4.4 Less Than (lt)
-                                           (Expr~">="~>Expr) | //4.4.4.5 Greater Than or Equal (geq)
-                                           (Expr~"<="~>Expr) | //4.4.4.6 Less Than or Equal (leq)
-                                           (Expr~"_="~>Expr) | //4.4.4.7 Equivalent (equivalent)
-                                           (Expr~"~="~>Expr)  //4.4.4.8 Approximately (approx)
+  lazy val Relation :PackratParser[MME]=   Expr~"=="~Expr^^{case e1~"=="~e2 => Apply(Eq, e1 :: e2 :: Nil)} | //4.4.4.1 Equals (eq)
+                                           Expr~"!="~Expr^^{case e1~"!="~e2 => Apply(Neq, e1 :: e2 :: Nil)} | //4.4.4.2 Not Equals (neq)
+                                           Expr~">"~Expr^^{case e1~">"~e2 => Apply(Gt, e1 :: e2 :: Nil)}  | //4.4.4.3 Greater than (gt)
+                                           Expr~"<"~Expr^^{case e1~"<"~e2 => Apply(Lt, e1 :: e2 :: Nil)}  | //4.4.4.4 Less Than (lt)
+                                           Expr~">="~Expr^^{case e1~">="~e2 => Apply(Geq, e1 :: e2 :: Nil)}  | //4.4.4.5 Greater Than or Equal (geq)
+                                           Expr~"<="~Expr^^{case e1~"<="~e2 => Apply(Leq, e1 :: e2 :: Nil)}   //4.4.4.6 Less Than or Equal (leq)
+
+
+  //lazy val Logical :
 
   //-- these methods where taken from JavaTokenParser and adapted to this grammars needs
 
@@ -65,7 +65,8 @@ class AsciiMathParser extends RegexParsers with PackratParsers with AsciiMathPar
   def floatingPointNumber: Parser[String] =
     """-?(\d+(\.\d*)?|\d*\.\d+)([eE][+-]?\d+)?[fFdD]?""".r
 
-
+  //TODO exclude words in this list from the "ident" regular expression
+  val reservedWords = "true" :: "false" :: Nil
 
 }
 object AsciiMathParser{

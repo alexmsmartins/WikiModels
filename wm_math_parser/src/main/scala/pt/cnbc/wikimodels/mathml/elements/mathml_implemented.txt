@@ -12,12 +12,14 @@ cn, ci, csymbol, sep
 general:  piecewise, piece, otherwise,
 apply, lambda (the last is restricted to use in FunctionDefinition)
 
-relational operators: eq, neq, gt, lt, geq, leq
+relational operators:
+eq, neq, gt, lt, geq, leq
 
 arithmetic operators:
 plus, minus, times, divide, power, root, abs, exp, ln, log, floor, ceiling, factorial
 
-logical operators: and, or, xor, not
+logical operators:
+and, or, xor, not
 
 qualifiers: degree, bvar, logbase
 
