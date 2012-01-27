@@ -4,7 +4,8 @@ import pt.cnbc.wikimodels.mathml.elements._
 import pt.cnbc.wikimodels.mathml.elements.KnownOperators._
 
 /**
- * TODO: Please document.
+ * AsciiMath syntax loosely based on http://www1.chapman.edu/~jipsen/mathml/asciimathsyntax.html
+ * This is a very simplified syntax that satisfies the SBML restrictions.
  * @author Alexandre Martins
  * Date: 30-12-2010
  * Time: 18:31
@@ -38,9 +39,9 @@ object AsciiMathPrettyPrinter{
       case Apply(Geq, params)  => separateWith( params.map(toAsciiMathML(_)), " >= " )
       case Apply(Leq, params)  => separateWith( params.map(toAsciiMathML(_)), " <= " )
 
-      case Apply(And, params)  => separateWith( params.map(toAsciiMathML(_)), " + " )
-      case Apply(Or, params)  => separateWith( params.map(toAsciiMathML(_)), " + " )
-      case Apply(Xor, params)  => separateWith( params.map(toAsciiMathML(_)), " + " )
+      case Apply(And, params)  => separateWith( params.map(toAsciiMathML(_)), """ /\ """ )
+      case Apply(Or, params)  => separateWith( params.map(toAsciiMathML(_)), """ \/ """ )
+      //xor will be represented as xor(x1, x2)
       case Apply(Not, params)  => " ~" + toAsciiMathML(params.head)
 
 

@@ -41,7 +41,7 @@ class MathMLMatchParserTest {
     val asciiMath = AsciiMathPrettyPrinter.toAsciiMathML(mathMLaST)
     Console.println("AsciiMath generated from AST is " + asciiMath)
     val asciiParser = AsciiMathParser()
-    val roundAST = asciiParser.parseAll(asciiParser.Expr, asciiMath)
+    val roundAST = asciiParser.parseAll(asciiParser.NumExpr, asciiMath)
     Console.println("AST generated from asciimath is " + roundAST)
     val roundMathML = MathMLPrettyPrinter.toXML(roundAST.get)
     Console.println("MathML generated from roundtripped AST is " + roundMathML)

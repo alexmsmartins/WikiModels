@@ -34,7 +34,7 @@ class AsciiMathParserTest extends AsciiMathParser {
   @Test
   def wholeNumberTest {
     val expr = "1"
-    val result = parseAll(Expr, expr)
+    val result = parseAll(NumExpr, expr)
     assertTrue(parsingWasSuccessful(result))
     println(result)
   }
@@ -42,7 +42,7 @@ class AsciiMathParserTest extends AsciiMathParser {
   @Test
   def decimalNumberTest {
     val expr = "-1.03"
-    val result = parseAll(Expr, expr)
+    val result = parseAll(NumExpr, expr)
     assertTrue(parsingWasSuccessful(result))
     println(result)
   }
@@ -51,11 +51,11 @@ class AsciiMathParserTest extends AsciiMathParser {
   def scientificNotationTest {
     //TODO add scientific notaiton options to the grammar
     val expr = "1.03e-23"
-    val result = parseAll(Expr, expr)
+    val result = parseAll(NumExpr, expr)
     assertTrue(parsingWasSuccessful(result))
     println(result)
     val expr2 = "1.03E-23"
-    val result2 = parseAll(Expr, expr2)
+    val result2 = parseAll(NumExpr, expr2)
     assertTrue(parsingWasSuccessful(result2))
     println(result2)
 
@@ -64,7 +64,7 @@ class AsciiMathParserTest extends AsciiMathParser {
   @Test
   def variable {
     val expr = "teta"
-    val result = parseAll(Expr, expr)
+    val result = parseAll(NumExpr, expr)
     assertTrue(parsingWasSuccessful(result))
     println(result)
   }
@@ -72,7 +72,7 @@ class AsciiMathParserTest extends AsciiMathParser {
   @Test
   def simpleSum {
     val expr = "1+2+3+4"
-    val result = this.parseAll(Expr, expr)
+    val result = this.parseAll(NumExpr, expr)
     assertTrue(parsingWasSuccessful(result))
     println(result)
   }
@@ -80,7 +80,7 @@ class AsciiMathParserTest extends AsciiMathParser {
   @Test
   def simpleSum2 {
     val expr = "2+2"
-    val result = this.parseAll(Expr, expr)
+    val result = this.parseAll(NumExpr, expr)
     assertTrue(parsingWasSuccessful(result))
     println(result)
   }
@@ -89,7 +89,7 @@ class AsciiMathParserTest extends AsciiMathParser {
     def severalNotationsSum {
       //TODO COMPLETE SCIENTIFIC NOTAITON
       val expr = "1+2.1+3.1"//+4e2"
-      val result = this.parseAll(Expr, expr)
+      val result = this.parseAll(NumExpr, expr)
       assertTrue(parsingWasSuccessful(result))
       println(result)
     }
@@ -97,7 +97,7 @@ class AsciiMathParserTest extends AsciiMathParser {
   @Test
   def sum {
     val expr = "1+2+x"
-    val result = this.parseAll(Expr, expr)
+    val result = this.parseAll(NumExpr, expr)
     assertTrue(parsingWasSuccessful(result))
     println(result)
   }
@@ -105,7 +105,7 @@ class AsciiMathParserTest extends AsciiMathParser {
   @Test
   def simpleSubtraction {
     val expr = "1-2-3-4"
-    val result = this.parseAll(Expr, expr)
+    val result = this.parseAll(NumExpr, expr)
     assertTrue(parsingWasSuccessful(result))
     println(result)
   }
@@ -113,7 +113,7 @@ class AsciiMathParserTest extends AsciiMathParser {
   @Test
   def simpleSumAndSubtraction {
     val expr = "1+2+3-4"
-    val result = this.parseAll(Expr, expr)
+    val result = this.parseAll(NumExpr, expr)
     assertTrue(parsingWasSuccessful(result))
     println(result)
   }
@@ -121,7 +121,7 @@ class AsciiMathParserTest extends AsciiMathParser {
   @Test
   def sumAndSubtraction {
     val expr = "1+2-x-(x-y+4)"
-    val result = this.parseAll(Expr, expr)
+    val result = this.parseAll(NumExpr, expr)
     assertTrue(parsingWasSuccessful(result))
     println(result)
   }
@@ -129,7 +129,7 @@ class AsciiMathParserTest extends AsciiMathParser {
   @Test
   def simpleMultiplication {
     val expr = "2*x*2+3"
-    val result = this.parseAll(Expr, expr)
+    val result = this.parseAll(NumExpr, expr)
     assertTrue(parsingWasSuccessful(result))
     println(result)
   }
@@ -137,7 +137,7 @@ class AsciiMathParserTest extends AsciiMathParser {
   @Test
   def multiplication {
     val expr = "4-2*x+2*x+3"//"4-2*x+2x+3"
-    val result = this.parseAll(Expr, expr)
+    val result = this.parseAll(NumExpr, expr)
     assertTrue(parsingWasSuccessful(result))
     println(result)
   }
@@ -145,7 +145,7 @@ class AsciiMathParserTest extends AsciiMathParser {
   @Test
   def simpleFraction {
     val expr = "1/(x*y)"
-    val result = this.parseAll(Expr, expr)
+    val result = this.parseAll(NumExpr, expr)
     assertTrue(parsingWasSuccessful(result))
     println(result)
   }
@@ -153,7 +153,7 @@ class AsciiMathParserTest extends AsciiMathParser {
   @Test
   def fraction {
     val expr = "1/(2+x)" //"1/(2x)"
-    val result = this.parseAll(Expr, expr)
+    val result = this.parseAll(NumExpr, expr)
     assertTrue(parsingWasSuccessful(result))
     println(result)
   }
@@ -161,7 +161,7 @@ class AsciiMathParserTest extends AsciiMathParser {
   @Test
   def sqrt {
     val expr = "sqrt(x)"
-    val result = parseAll (Expr, expr)
+    val result = parseAll (NumExpr, expr)
     assertTrue(parsingWasSuccessful(result))
     println(result)
     }
@@ -169,7 +169,7 @@ class AsciiMathParserTest extends AsciiMathParser {
   @Test
   def sqrtInNumerator {
     val expr = "sqrt(2)/2"
-    val result = parseAll (Expr, expr)
+    val result = parseAll (NumExpr, expr)
     assertTrue(parsingWasSuccessful(result))
     println(result)
     }
@@ -177,7 +177,7 @@ class AsciiMathParserTest extends AsciiMathParser {
   @Test
   def exponent {
     val expr = "x^2 + x^(5*y)" //x^2 + x^(5*y)
-    val result = parseAll(Expr, expr)
+    val result = parseAll(NumExpr, expr)
     assertTrue(parsingWasSuccessful(result))
     println(result)
   }
@@ -185,10 +185,10 @@ class AsciiMathParserTest extends AsciiMathParser {
   @Test
   def power {
     //val expr = "(pi)r^2"
-    //val result = parseAll(Expr, expr)
+    //val result = parseAll(NumExpr, expr)
     //println(result)
     val expr2 = "pi*r^2"
-    val result2 = parseAll(Expr, expr2)
+    val result2 = parseAll(NumExpr, expr2)
     assertTrue(parsingWasSuccessful(result2))
     println(result2)
     val xml = MathMLPrettyPrinter.toXML(result2.get)
@@ -198,7 +198,7 @@ class AsciiMathParserTest extends AsciiMathParser {
   @Test
   def sin {
     val expr2 = "sin(x)"
-    val result2 = parseAll(Expr, expr2)
+    val result2 = parseAll(NumExpr, expr2)
     assertTrue(parsingWasSuccessful(result2))
     println(result2)
     val xml = MathMLPrettyPrinter.toXML(result2.get)

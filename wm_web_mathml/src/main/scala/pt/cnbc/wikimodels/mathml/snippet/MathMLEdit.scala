@@ -72,7 +72,7 @@ class MathMLEdit extends DispatchSnippet {
       val parser = AsciiMathParser()
       Console.println("MathMLEdit.render().processTextArea() with formula = " + asciiFormula.is)
       Console.println("MathMLEdit.render() processTextArea() with MathML = " + mathmlFormula.is)
-      val result = parser.parseAll(parser.Expr, asciiFormula.is)
+      val result = parser.parseAll(parser.NumExpr, asciiFormula.is)
       result match {
         case parser.Success(_,_) => {
           mathmlFormulaToSave.set( MathMLPrettyPrinter.toXML(result.get))

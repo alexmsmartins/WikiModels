@@ -12,7 +12,7 @@ import pt.cnbc.wikimodels.mathml.elements.Operator._
  */
 object MathMLPrettyPrinter extends AsciiMathParser{
 
-  def exprToMathML(expr:String) = toXML(parseAll(Expr, expr).get)
+  def exprToMathML(expr:String) = toXML(parseAll(NumExpr, expr).get)
 
   def toXML(elem:MathMLElem):scala.xml.Elem = {
     <math xmlns="http://www.w3.org/1998/Math/MathML">
