@@ -83,7 +83,7 @@ class MathMLEdit extends DispatchSnippet {
           //add necessary parameters for javascript binding
           mathmlFormula.set( XMLHandler.addAttributes(
             mathmlFormulaToSave.is,
-            "id" -> "formula2", "mode" -> "display") )
+            "mode" -> "display") )
         }
         case parser.Failure(_,_) => {
           Console.println("Error parsing " + asciiFormula.is + "\n" + result)

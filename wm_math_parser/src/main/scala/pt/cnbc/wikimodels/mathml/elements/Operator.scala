@@ -96,7 +96,7 @@ object KnownOperators{
 
   //and, or, xor, not
   case object And extends Operator("and", 2, PositiveInfiniteInt)
-  case object Or extends Operator("or",2,PositiveInfiniteInt)
+  case object Or extends Operator("or",2, PositiveInfiniteInt)
   case object Xor extends Operator("xor", 2, PositiveInfiniteInt)
   case object Not extends Operator("not", 1, 1)
 

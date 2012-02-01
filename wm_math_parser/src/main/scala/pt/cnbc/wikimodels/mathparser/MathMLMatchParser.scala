@@ -71,8 +71,6 @@ object MathMLMatchParser{
 
 trait MathMLMatchParserHandlers {
   def handleApply(operator:Elem, params:NodeSeq):Apply = {
-    //TODO handle mathml expression of the form <apply><apply> <inverse/> <sin/> </apply><ci> x </ci></apply>
-
     operator match {
       case op if( op.label == "csymbol") => new Apply(
         CSymbol(op.child.toString), params.map(p => parse(p.asInstanceOf[Elem])).toList

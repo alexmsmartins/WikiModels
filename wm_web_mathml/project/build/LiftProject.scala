@@ -4,7 +4,7 @@ import sbt._
 
 class FooProject(info: ProjectInfo) extends DefaultWebProject(info) {
 
-    val liftVersion = "2.4-RC1"
+    val liftVersion = "2.4"
 
    val lift = "net.liftweb" %% "lift-mapper" % liftVersion % "compile"
 
