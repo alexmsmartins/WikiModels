@@ -38,7 +38,7 @@ object Default{
   val editMessHtml = <p id="parse_success" >Please insert new formula</p>
   val errorMess = "No error"
   val errorHtml = <p id="parse_success" >To start working please edit the AsciiMathML formula below</p>
-  val asciiFormula = "x1+(x2^2/(3*x3))"
+  val asciiFormula = ""
 }
 
 object asciiFormula extends SessionVar[String](Default.asciiFormula)
@@ -46,12 +46,6 @@ object asciiFormula extends SessionVar[String](Default.asciiFormula)
 object mathmlFormula extends SessionVar[Elem](Default.mathmlFormula)
 
 object mathmlFormulaToSave extends SessionVar[Elem](Default.mathmlFormula)
-
-object successfulPerse extends SessionVar[Boolean](true)
-
-object errorMessage extends SessionVar[String](Default.errorMess)
-
-object errorHtml extends SessionVar[scala.xml.Elem](Default.errorHtml)
 
 class MathMLEdit extends DispatchSnippet {
   import _root_.scala.util.parsing.combinator.Parsers
@@ -61,13 +55,15 @@ class MathMLEdit extends DispatchSnippet {
   //val log = Logger(this getClass)
 
   def dispatch: DispatchIt = {
-    case "render" => render _
+    case "render" =>{
+      //S.notice("parsing_error", errorHtml)
+      render _
+    }
     case _ => defaultMethodCall _
   }
 
   def render(xhtml: NodeSeq): NodeSeq = {
     def processTextArea() {
-      import scala.util.parsing.combinator._
       import net.liftweb.common.{Failure => _}
       val parser = AsciiMathParser()
       Console.println("MathMLEdit.render().processTextArea() with formula = " + asciiFormula.is)
@@ -76,8 +72,7 @@ class MathMLEdit extends DispatchSnippet {
       result match {
         case parser.Success(_,_) => {
           mathmlFormulaToSave.set( MathMLPrettyPrinter.toXML(result.get))
-          successfulPerse.set(true)
-          errorHtml.set(<p id="parse_success" class="success">Parsing succeded</p>)
+          S.notice("parsing_error", <p id="parse_success" class="success">Parsing succeded</p>)
           //save
           mathmlFormulaToSave.set( MathMLPrettyPrinter.toXML(result.get))
           //add necessary parameters for javascript binding
@@ -87,33 +82,36 @@ class MathMLEdit extends DispatchSnippet {
         }
         case parser.Failure(_,_) => {
           Console.println("Error parsing " + asciiFormula.is + "\n" + result)
-          errorMessage.set(result.toString)
-          successfulPerse.set(false)
           def errorBeautifier(f:parser.Failure) = {
             ("Line "+f.next.pos.line+" column "+f.next.pos.column+" failure: \n"
               +f.msg+"\n\n"+f.next.pos.longString)
               .replace("string matching regex `\\z'", "End of expression").replace("\n\n","\n")
           }
-          errorHtml.set(<p id="parse_failed" class="error"> Error parsing AsciiMathML.<div class="monospaced">{
-            HTMLHandler.string2html(errorBeautifier(result.asInstanceOf[parser.Failure]))
-          }</div> </p>)
+          S.notice("parsing_error",
+            <span id="parse_failed"> <p  class="error"> Error parsing AsciiMathML.<div class="monospaced">
+              {
+                HTMLHandler.string2html {
+                  errorBeautifier {
+                    result.asInstanceOf[parser.Failure]
+                  }
+                }
+              }
+            </div> </p></span>)
+
         }
         case parser.Error(_,_) => {
           Console.println("Error in Parser -> \n" + result)
-          errorMessage.set("There was a fatal error. No useful error messages are available.")
-          successfulPerse.set(false)
+          S.error("parsing_error", "There was a fatal error. No useful error messages are available.")
         }
       }
     }
     Console.println("MathMLEdit.render() before bind() with formula = " + asciiFormula.is)
     Console.println("MathMLEdit.render() before bind() with MathML = " + mathmlFormula.is)
-    Console.println("MathMLEdit.render() before bind() with ErroBoxL = " + errorHtml.is)
 
     xhtml.bind("editor",
       "formula" -> SHtml.textarea(asciiFormula.is, {asciiFormula set _}, "class" -> "asciimath_input" ),
-      "submit" -> SHtml.submit("Send Formula", processTextArea, "class" -> "left_aligned"))
-      .bind("error",
-      "box" -> errorHtml.is )
+      "submit" -> SHtml.submit("Check Formula", processTextArea, "class" -> "left_aligned"),
+      "save" -> SHtml.submit("Save Formula", () => {}, "class" -> "left_aligned"))
       .bind("visualizer",
       "formulaViz" -> <div class="mathml_output" id="formula"  >{mathmlFormula.is}</div> )
   }

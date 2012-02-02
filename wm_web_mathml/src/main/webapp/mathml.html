@@ -37,17 +37,12 @@
             });
             /* ]]> */
             </script>
-                <lift:ignore>
-                    <!-- TODO LEARN error messages from the framework -->
-                </lift:ignore>
-                <lift:msgs id="parsing_error"/>
 
-                <link rel="stylesheet" type="text/css" href="css/mathml_editor.css"/>
+                <link rel="stylesheet" type="text/css" href="/css/mathml_editor.css"/>
+
+                <div class="lift:Msg?id=parsing_error;errorClass=error"></div>
                 <a href="http://www1.chapman.edu/~jipsen/asciimath.html">To get help in ASCIIMathML syntax click here.</a>
 
-                <error:box>
-                  <span id="box_error_message"></span>
-                </error:box>
 
                    <div>
                     <visualizer:formulaViz>
@@ -65,6 +60,7 @@
                 <br/>
                 <br/>
                 <editor:submit />
+                <editor:save />
             </lift:MathMLEdit>
         </div>
     </div> <!-- end of "some-div"-->

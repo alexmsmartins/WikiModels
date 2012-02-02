@@ -39,7 +39,6 @@ class MathMLEditTest extends MathMLEdit {
         mathmlFormula.set(XMLHandler.addAttributes(
           mathmlFormulaToSave.is,
           "id" -> "formula2", "mode" -> "display"))
-        successfulPerse.set(true)
       }
       case parser.Failure(_,_) => {
         fail("Parser failed!")
