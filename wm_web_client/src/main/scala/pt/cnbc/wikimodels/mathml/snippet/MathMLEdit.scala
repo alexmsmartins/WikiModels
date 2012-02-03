@@ -77,7 +77,7 @@ class MathMLEdit extends DispatchSnippet {
               +f.msg+"\n\n"+f.next.pos.longString)
               .replace("string matching regex `\\z'", "End of expression").replace("\n\n","\n")
           }
-          S.notice("parsing_error",
+          S.error("parsing_error",
             <span id="parse_failed"> <p  class="error"> Error parsing AsciiMathML.<div class="monospaced">
               {
                 HTMLHandler.string2html {

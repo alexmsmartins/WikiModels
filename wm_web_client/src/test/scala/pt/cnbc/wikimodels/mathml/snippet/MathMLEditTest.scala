@@ -31,7 +31,7 @@ class MathMLEditTest extends MathMLEdit {
     Console.println("MathMLEdit with asciiFormula = " + asciiFormula.is)
     Console.println("MathMLEdit with formula = " + formula)
     Console.println("MathMLEdit.render() processTextArea() with MathML = " + mathmlFormula.is)
-    val result = parser.parseAll(parser.Expr, formula)
+    val result = parser.parseAll(parser.NumExpr, formula)
     result match {
       case parser.Success(_,_) => {
         mathmlFormulaToSave.set(MathMLPrettyPrinter.toXML(result.get))
@@ -39,7 +39,6 @@ class MathMLEditTest extends MathMLEdit {
         mathmlFormula.set(XMLHandler.addAttributes(
           mathmlFormulaToSave.is,
           "id" -> "formula2", "mode" -> "display"))
-        successfulPerse.set(true)
       }
       case parser.Failure(_,_) => {
         fail("Parser failed!")
