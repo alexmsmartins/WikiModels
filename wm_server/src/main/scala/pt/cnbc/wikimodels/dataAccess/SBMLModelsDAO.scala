@@ -1,10 +1,3 @@
-/*
- * ModelsDAO.scala
- *
- * To change this template, choose Tools | Template Manager
- * and open the template in the editor.
- * @author Alexandre Martins
- */
 
 package pt.cnbc.wikimodels.dataAccess
 
@@ -19,7 +12,7 @@ import thewebsemantic.RDF2Bean
 import thewebsemantic.Sparql
 
 import scala.Collection
-import scalaj.collection.Imports._
+//import scalaj.collection.Imports._
 import scala.collection.JavaConversions._
 
 import pt.cnbc.wikimodels.dataModel.SBMLModel
@@ -29,6 +22,13 @@ import pt.cnbc.wikimodels.exceptions.BadFormatException
 import pt.cnbc.wikimodels.ontology.ManipulatorWrapper
 import org.slf4j.LoggerFactory
 
+/*
+ * ModelsDAO.scala
+ *
+ * To change this template, choose Tools | Template Manager
+ * and open the template in the editor.
+ * @author Alexandre Martins
+ */
 class SBMLModelsDAO {
 
   /**

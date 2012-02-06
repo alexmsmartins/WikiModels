@@ -11,10 +11,10 @@ import pt.cnbc.wikimodels.setup.Setup
 import pt.cnbc.wikimodels.sbmlVisitors.SBML2BeanConverter
 
 /**TODO: Please document.
- *   @author: alex
+ *  @author Alexandre Martins
  *  Date: 10-01-2012
  *  Time: 7:21 */
-class CompartmentDAOTest {
+class CompartmentsDAOTest {
 
   @Before
   def setUp: Unit = {
