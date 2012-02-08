@@ -21,6 +21,7 @@ class RestProject(info: ProjectInfo) extends DefaultWebProject(info) {
       val wm_sbjsbml = "pt.cnbc.wikimodels" % "wm_libjsbml" % "0.1-SNAPSHOT"
       val wm_setup = "pt.cnbc.wikimodels" % "wm_setup" % "0.1-SNAPSHOT"
 
+      val jettyDepForTest = "org.mortbay.jetty" % "jetty" % "6.1.26"%"test"
 
       //val libsbml = "org.sbml" % "libsbmmlj" % "3.4"
     }

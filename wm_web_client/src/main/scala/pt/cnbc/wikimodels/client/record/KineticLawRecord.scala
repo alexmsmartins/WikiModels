@@ -15,7 +15,7 @@ import net.liftweb.common.{Empty, Box}
  *  Time: 00:41 */
 class KineticLawRecord() extends KineticLaw with SBaseRecord[KineticLawRecord] {
 
-  var listOfParametersRec:List[Parameter] = Nil
+  var listOfParametersRec:List[ParameterRecord] = Nil
 
   override def meta = KineticLawRecord
 

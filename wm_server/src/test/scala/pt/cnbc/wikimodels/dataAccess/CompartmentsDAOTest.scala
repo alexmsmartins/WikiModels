@@ -61,4 +61,41 @@ class CompartmentsDAOTest {
 
   }
 
+  @Test
+  def saveLoadModelWithOneCompartment = {
+    var model = ModelFactory.createDefaultModel
+    model = Setup.saveOntologiesOn(model)
+
+    val xmlModelWith1Compartment =
+      <model metaid="metaid_00000020" name="Izhikevich2004_SpikingNeurons_Class1Excitable" id="model_0000001">
+        <!--order is important according to SBML Specifications-->
+        <notes><p xmlns="http://www.w3.org/1999/xhtml">aaa</p></notes>
+        <listOfCompartments>
+          <compartment id="dsfas" spatialDimensions="3" size="2.0" name="fdsaf" metaid="dsfas" constant="true">
+                 <notes><p xmlns="http://www.w3.org/1999/xhtml">fdasf</p></notes>
+          </compartment>
+        </listOfCompartments>
+      </model>
+
+    //create reaction
+    val daoModel = new SBMLModelsDAO
+    daoModel.createSBMLModel(
+      SBML2BeanConverter.visitModel(xmlModelWith1Compartment),
+      model)
+
+    //load reaction
+    val newModel = daoModel.deepLoadSBMLModel("metaid_00000020", model)
+    val mXMLFinal =newModel.toXML
+
+    //check XML
+    Console.println("Old compartment is " + xmlModelWith1Compartment )
+    Console.println("New model is " + mXMLFinal )
+
+    //check local parameter list
+    assertEquals(newModel.metaid, "metaid_00000020")
+    assertEquals(newModel.listOfCompartments.size, 1)
+    assertEquals((mXMLFinal \ "listOfCompartments" \ "compartment" \ "@metaid") text, "dsfas" )
+
+  }
+
 }

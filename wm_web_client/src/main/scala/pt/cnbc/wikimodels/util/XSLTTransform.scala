@@ -35,8 +35,6 @@ import java.io.{OutputStream, ByteArrayOutputStream, FileOutputStream, InputStre
  *  Time: 12:46 */
 object XSLTTransform extends App {
   def apply(xslt:InputStream) = new XSLTTransform(xslt)
-
-
 }
 
 class XSLTTransform(xslt: InputStream) {
@@ -57,11 +55,7 @@ class XSLTTransform(xslt: InputStream) {
     // (foo.xml) and write the output to a file (foo.out).
     val byte1:ByteArrayOutputStream = new ByteArrayOutputStream();
     transformer.transform(new StreamSource(xml), new StreamResult(byte1));
-
-    val s:String = byte1.toString
-
-    System.out.println("************* The result is in birds.out *************");
-    s
+    byte1.toString
   }
 
 }

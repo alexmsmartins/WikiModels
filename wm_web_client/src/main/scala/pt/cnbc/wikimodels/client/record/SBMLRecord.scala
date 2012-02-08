@@ -19,7 +19,7 @@ package pt.cnbc.wikimodels.client.record{
 import pt.cnbc.wikimodels.client.snippet.CommentSnip
 import net.liftweb.common.Box
 import pt.cnbc.wikimodels.sbmlVisitors.SBML2BeanConverter
-import visitor.RecordFromSBML
+import visitor.{SBMLFromRecord, RecordFromSBML}
 
 
 /*
@@ -89,7 +89,8 @@ trait SBaseRecord[MyType <: SBaseRecord[MyType]] extends Element with RestRecord
    * CRUD operation for updating a REST Record
    */
   override def updateRestRec():Box[MyType] = {
-    User.restfulConnection.putRequest(relativeURL, this.toXML)
+    //FIXME SBMLFromRecord.createSBMLElementFrom(this).asInstanceOf[MyType].toXML IS VERY HACKISH CODE.
+    User.restfulConnection.putRequest(relativeURL, (SBMLFromRecord.createSBMLElementFrom(this)).toXML)
     User.restfulConnection.getStatusCode match {
       case 200 => saved_? = true;Full(this)//update went ok
       case 404 => ParamFailure("Error updateing " + this.metaid + ". This element does not exist.", this)
