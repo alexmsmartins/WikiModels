@@ -7,8 +7,10 @@
 <body>
 <lift:surround with="default" at="content">
     <div id='content'>
-        <div class="lift:SBMLModelSnip:modelMetaId">
-            <h1>Model with metaId <span id="mMetaId"></span> . <input type="button"
+        <a style="position: relative;top: -50px" href="../../">Go back to model.</a>
+        <!-- TODO change this to a vizualization of the element with the associated comments -->
+        <div class="lift:SBMLSnip:parameterMetaId">
+            <h1>Parameter with metaId <span id="pMetaId"></span> . <input type="button"
                                                                       onclick="window.location.href=window.location.href+'/edit'"
                                                                       name="edit" value="Edit">Edit</input> </h1>
         </div>

@@ -7,8 +7,9 @@
 <body>
 <lift:surround with="default" at="content">
     <div id='content'>
+        <a style="position: relative;top: -50px" href="/models/">Go back to list of models.</a>
         <!-- TODO change this to a vizualization of the element with the associated comments -->
-        <div class="lift:SBMLModelSnip:modelMetaId">
+        <div class="lift:SBMLSnip:modelMetaId">
             <h1>Model with metaId <span id="mMetaId"></span> . <input type="button"
                                                                       onclick="window.location.href=window.location.href+'/edit'"
                                                                       name="edit" value="Edit">Edit</input> <input
@@ -18,14 +19,14 @@
         <div class="lift:SBMLForm.visualizeModel">
         </div>
 
-        <div class="lift:SBMLModelSnip:entireModelInXML">
+        <div class="lift:SBMLSnip:entireModelInXML">
             <span id="xmlmodel"></span>
         </div>
         <br/>
         <br/>
 
         <div class="ui-widget">
-            <div class="lift:SBMLModelSnip.modelMetaIdToAttr">
+            <div class="lift:SBMLSnip.modelMetaIdToAttr">
                 <input id="tags" input:val=""/>
             </div>
             <!--end of lift:SBMLModelSnip:modelMetaIdToAttr-->

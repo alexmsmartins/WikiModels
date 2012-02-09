@@ -119,7 +119,7 @@ trait SBaseRecord[MyType <: SBaseRecord[MyType]] extends Element with RestRecord
 
 /**
  * TODO: Please document.
- * @author: Alexandre Martins
+ * @author Alexandre Martins
  * Date: 03-07-2011
  * Time: 17:37
  */
