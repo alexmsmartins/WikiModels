@@ -7,7 +7,7 @@ package pt.cnbc.wikimodels.mathml.snippet
 //--Standard imports --
 
 import _root_.pt.cnbc.wikimodels.mathparser._
-import pt.cnbc.wikimodels.util.{HTMLHandler, XMLHandler}
+import pt.cnbc.wikimodels.util.{XSLTTransform, HTMLHandler, XMLHandler}
 
 //--Standard imports --
 
@@ -42,6 +42,10 @@ object mathmlFormulaToSave extends SessionVar[Elem](Default.mathmlFormula)
 
 class MathMLEdit extends DispatchSnippet {
 
+  val xsltTransform = new XSLTTransform(
+     this.getClass.getClassLoader.getResourceAsStream("mathmlc2p.xsl")
+  )
+
   //val log = Logger(this getClass)
 
   def dispatch: DispatchIt = {
@@ -61,10 +65,13 @@ class MathMLEdit extends DispatchSnippet {
       val result = parser.parseAll(parser.NumExpr, asciiFormula.is)
       result match {
         case parser.Success(_,_) => {
-          mathmlFormulaToSave.set( MathMLPrettyPrinter.toXML(result.get))
+
+          val presentationMathMLAsString = xsltTransform.execute( MathMLPrettyPrinter.toXML(result.get).toString )
+          val presentationMathML = scala.xml.XML.loadString( presentationMathMLAsString)
+          mathmlFormulaToSave.set( presentationMathML)
           S.notice("parsing_error", <p id="parse_success" class="success">Parsing succeded</p>)
           //save
-          mathmlFormulaToSave.set( MathMLPrettyPrinter.toXML(result.get))
+          mathmlFormulaToSave.set( presentationMathML)
           //add necessary parameters for javascript binding
           mathmlFormula.set( XMLHandler.addAttributes(
             mathmlFormulaToSave.is,

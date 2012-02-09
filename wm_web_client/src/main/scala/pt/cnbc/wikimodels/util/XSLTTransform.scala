@@ -26,7 +26,7 @@ package pt.cnbc.wikimodels.util
 
 import javax.xml.transform.{Transformer, TransformerFactory}
 import javax.xml.transform.stream.{StreamResult, StreamSource}
-import java.io.{OutputStream, ByteArrayOutputStream, FileOutputStream, InputStream}
+import java.io._
 
 /** A simple demo of Xalan 1. This code was originally written using
  * Xalan 1.2.2.  It will not work with Xalan 2.
@@ -57,5 +57,9 @@ class XSLTTransform(xslt: InputStream) {
     transformer.transform(new StreamSource(xml), new StreamResult(byte1));
     byte1.toString
   }
+
+  def execute(xml:String):String = execute(
+    new ByteArrayInputStream(xml.getBytes("UTF-8"))
+  )
 
 }
