@@ -25,11 +25,11 @@ main()
  
   #Create the models Knowledgebase
   sudo -n /etc/init.d/postgresql stop
-  sudo -n /etc/init.d/postgresql start 8.3
+  sudo -n /etc/init.d/postgresql start 
   #FIXME the postgresql debian script returns 0 even in cases when it was unsuccessful. Find a workaround for that.
   RETVAL=$?
   [ $RETVAL -eq 0 ] && mvn scala:run
-  [ $RETVAL -ne 0 ] && echo "\nFailure: the Postgres 8.3 Database System could not be started!"
+  [ $RETVAL -ne 0 ] && echo "\nFailure: the Postgres 9.1 Database System could not be started!"
   return $RETVAL
 }
 

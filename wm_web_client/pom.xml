@@ -97,13 +97,11 @@
       <groupId>org.scala-lang</groupId>
       <artifactId>scala-compiler</artifactId>
       <version>${scala.version}</version>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>pt.cnbc.wikimodels</groupId>
       <artifactId>wm_rest_api</artifactId>
       <version>0.1-SNAPSHOT</version>
-      <scope>compile</scope>
     </dependency>
     <dependency>
         <groupId>pt.cnbc.wikimodels</groupId>

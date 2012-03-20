@@ -7,4 +7,4 @@ echo "========================== STARTING DERBY DATABASE =======================
 echo "======================== STARTING POSTGRESQL DATABASE =========================="
 sudo /etc/init.d/postgresql start 8.3
 echo "=============================== STARTING SBT ===================================="
-sbt
+sbt-0.7.7
