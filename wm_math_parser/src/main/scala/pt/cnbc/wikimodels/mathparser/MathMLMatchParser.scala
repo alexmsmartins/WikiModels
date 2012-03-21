@@ -14,7 +14,8 @@ import scala.xml._
  *  @author Alexandre Martins
  *  Date: 18/01/12
  *  Time: 22:31 */
-class MathMLMatchParser extends MathMLMatchParserHandlers{
+class
+MathMLMatchParser extends MathMLMatchParserHandlers{
   type MME = MathMLElem
 
   def convertStringToMathML(xmlStr:String, s:Schema):Elem = {

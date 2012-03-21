@@ -9,10 +9,12 @@
 
         <div>
             <lift:MathMLEdit form="POST">
-                <head>
+            <!-- FIXME recheck the possibility of adding this if there is a way to make it work on webkit
+            FIXME this browser conversion is much faster than the one done on the server side -->
+            <!--    <head>
                 <script id="xslttransform" src="/js/xsltTransformer.js" type="text/javascript">
             </script>
-            </head>
+            </head>-->
                 <script type="text/x-mathjax-config">
                     /* <![CDATA[ */
                         $.log("MathJax is being configured.");
@@ -63,7 +65,7 @@
                 <br/>
                 <br/>
                 <br/>
-                <editor:submit />
+                <editor:check />
                 <editor:save />
             </lift:MathMLEdit>
         </div>

@@ -33,7 +33,6 @@ class FunctionDefinitionRecord() extends FunctionDefinition with SBaseRecord[Fun
         <link type="text/css" rel="stylesheet" href="/css/sbml_present.css"></link>
       </head>
       {super.toXHtml}
-
     </div>
   }
 
@@ -49,7 +48,7 @@ class FunctionDefinitionRecord() extends FunctionDefinition with SBaseRecord[Fun
   object idO extends Id(this, 100)
   object nameO extends Name(this, 100)
   object notesO extends Notes(this, 1000)
-  object matho extends Math(this)
+  object mathO extends Math(this)
   //  ### can be created directly from a Request containing params with names that match the fields on a Record ( see fromReq ). ###
 
   var _parent:Box[SBMLModelRecord] = Empty

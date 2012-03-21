@@ -11,12 +11,15 @@ import xml.{Text, XML, NodeSeq}
 import pt.cnbc.wikimodels.dataModel._
 import pt.cnbc.wikimodels.dataModel.ValidSpatialDimensions
 import pt.cnbc.wikimodels.dataModel.ValidSpatialDimensions._
+import tools.nsc.util.trace
+import pt.cnbc.wikimodels.mathml.elements.MathMLElem
 
 //Javascript handling imports
 import _root_.net.liftweb.http.js.{JE,JsCmd,JsCmds}
 import JsCmds._ // For implicifts
 import JE.{JsRaw,Str}
 
+import scala.util.parsing.combinator.Parsers
 
 class MetaId[T <: SBaseRecord[T]](own:T, maxLength: Int) extends StringField[T](own, maxLength)
 with DisplayFormWithLabelInOneLine[String, T] with DisplayHTMLWithLabelInOneLine[String, T]{
@@ -194,7 +197,7 @@ with GetSetOwnerField[String, T]{
         {Script(
         JsRaw("""
         jQuery(document).ready(function() {jQuery('#'+"model_tree").treeview({"animated": 150});});
-      """))
+          """))
         }
       </head>
       <ul class="treeview-gray" id="model_tree">
@@ -219,8 +222,6 @@ with GetSetOwnerField[String, T]{
               }
               {Script(JsRaw(
               """
-          //FIXME this peice of code is not being executed. Make it work and check for notes errors afterwards.
-          //alert("CkEditor with XHTML configuration is loading!");
           CKEDITOR.replace( "editor1",
 					{
 						/*
@@ -653,6 +654,94 @@ with GetSetOwnerField[String,OwnerType]{
     }
     trace("Math.theData returns " + _data)
     _data
+  }
+
+  override def toForm() = Full(
+    <div>
+      <div id="some-div">
+        <h2>Welcome to WikiModels MathML Editor.</h2>
+
+        <div>
+          <lift:MathMLEdit form="POST">
+          <!-- FIXME recheck the possibility of adding this if there is a way to make it work on webkit
+          FIXME this browser conversion is much faster than the one done on the server side -->
+          <!--    <head><script id="xslttransform" src="/js/xsltTransformer.js" type="text/javascript"></script></head>-->
+          <script type="text/x-mathjax-config">
+              /* <![CDATA[ */
+                      $.log("MathJax is being configured.");
+                      MathJax.Hub.Config({
+              config: ["MMLorHTML.js"],
+              jax: ["input/TeX","input/MathML","output/HTML-CSS","output/NativeMML"],
+              extensions: ["tex2jax.js","mml2jax.js","MathMenu.js","MathZoom.js"],
+              TeX: {
+                extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"]
+              },
+                NativeMML: { showMathMenuMSIE: false },
+                menuSettings: { zoom: "Double-Click" },
+                errorSettings: { message: ["[Math Error]"] }
+              });
+            /* ]]> */
+          </script>
+
+          <script type="text/javascript"
+                  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js">
+            /* <![CDATA[ */
+                    $(document).ready(function() {
+            displayResult();
+            //TODO replace this function call by Sarissa - http://dev.abiss.gr/sarissa/
+            $.log("MathJax is executing");
+            });
+                    /* ]]> */
+          </script>
+
+          <link rel="stylesheet" type="text/css" href="/css/mathml_editor.css"/>
+
+          <div class="lift:Msg?id=parsing_error;errorClass=error"></div>
+          <a href="http://www1.chapman.edu/~jipsen/asciimath.html">To get help in ASCIIMathML syntax click here.</a>
+          <div>
+            <visualizer:formulaViz>
+              <span id="form_viz"></span>
+            </visualizer:formulaViz>
+              <editor:formula/>
+          </div>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <editor:check/>
+        </lift:MathMLEdit>
+        </div>
+      </div> <!-- end of "some-div"-->
+    </div>
+  )
+  //Appears when rendering the form or the visualization
+
+  override def toXHtml: NodeSeq = {
+    trace("Calling Notes.toXHtml")
+    //TODO: this method is almost equal to with DisplayHTMLWithLabelInOneLine[String, T]. Refactor to use that instead if possible
+    <div id={uniqueFieldId + "_holder"}>
+      <span for={ uniqueFieldId.openTheBox }>
+        <span class="sbml_field_label">{displayHtml}</span>
+        <span class="sbml_field_content">
+          {this.valueBox match{
+          case Empty => Text("-- no description available -- ")
+          case Full(content) =>{
+            try{
+              XML.loadString( content )
+            } catch{
+              //FIXME replace this hack by something more general
+              case _ => XML.loadString( "<root>"+content+"</root>" ).child
+            }
+          }}
+          }</span>
+      </span>
+        <lift:msg id={uniqueFieldId.openTheBox}  errorClass="lift_error"/>
+    </div>
   }
 }
 

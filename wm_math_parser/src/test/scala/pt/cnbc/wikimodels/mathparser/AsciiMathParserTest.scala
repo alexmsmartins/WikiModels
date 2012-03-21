@@ -212,7 +212,7 @@ class AsciiMathParserTest extends AsciiMathParser {
     assertTrue(parsingWasSuccessful(result))
     println(result)
     val xml = MathMLPrettyPrinter.toXML(result.get)
-    println("Expression " + expr2 + " in mathml: " + xml)
+    println("Expression " + expr + " in mathml: " + xml)
     val expr2 = "f(x) = x+2"
     val result2 = parseAll(LambdaExpr, expr2)
     assertFalse(parsingWasSuccessful(result2))
