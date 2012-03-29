@@ -6,7 +6,6 @@ package pt.cnbc.wikimodels.client.record
 
 import pt.cnbc.wikimodels.dataModel.Compartment
 import net.liftweb.common._
-import net.liftweb.common
 import net.liftweb.http.{SHtml, S}
 import net.liftweb.record._
 import xml.NodeSeq
@@ -14,7 +13,7 @@ import alexmsmartins.log.LoggerWrapper
 
 /**
  * TODO: Please document.
- * @author: Alexandre Martins
+ * @author Alexandre Martins
  * Date: 29-11-2011
  * Time: 22:35
  */

@@ -13,6 +13,8 @@ import pt.cnbc.wikimodels.dataModel.ValidSpatialDimensions
 import pt.cnbc.wikimodels.dataModel.ValidSpatialDimensions._
 import tools.nsc.util.trace
 import pt.cnbc.wikimodels.mathml.elements.MathMLElem
+import tools.nsc.util.trace
+import tools.nsc.util.trace
 
 //Javascript handling imports
 import _root_.net.liftweb.http.js.{JE,JsCmd,JsCmds}
@@ -319,6 +321,7 @@ with GetSetOwnerField[String, T]{
 								]
 
 					});
+
               	"""
               ) //end of JsRaw
               )}
@@ -353,6 +356,109 @@ with GetSetOwnerField[String, T]{
       </div>
   }
 }
+
+class Message[T <: SBaseRecord[T]{var message:String}](own:T, size:Int) extends OptionalTextareaField[T](own, size)
+with GetSetOwnerField[String, T]{
+  //TODO REFACTOR Record field Message to share more code with Notes field
+  var _data:Box[MyType] = Empty
+
+  override def theData_=(in:Box[MyType]) {
+    trace("Calling Message.theData_=" + in)
+    _data = in
+    _data match{
+      //if a valid value ieditor1s set then update the owner class
+      //TODO put the entities conversion in their own class
+      case Full(x) => owner.message = x
+        .replace("&nbsp;", " &#160;")
+        .replace("&igrave;", "&#236;")
+        .replace("&egrave;", "&#232;")
+        .replace("&Egrave;", "&#200;")
+      case _ => owner.message = null //just to make sure the owner does not have valid values when errors occur
+    }
+  }
+
+  override def theData:Box[MyType] = {
+    trace("Calling Message.theData")
+    //if the owner has valid data that was obtained from the wikimodels Server
+    if(owner.message != null) {
+      debug("theData with message = "+ owner.message + " is being copied to the record Field.")
+      _data = Full(owner.message)
+    } else {
+      _data match {
+        case Empty => {
+          _data = Empty
+          if (! this.optional_?) owner.message = null
+        }
+        case Full(x) => owner.message = x
+      }
+    }
+    trace("Message.theData returns " + _data)
+    _data
+  }
+
+  override def toForm() = Full(
+    <div>
+      <head>
+          <link type="text/css" rel="stylesheet" href="/classpath/tree/jquery.treeview.css" />
+        <script type="text/javascript" src="/classpath/tree/jquery.treeview.js"></script>
+        {Script(
+        JsRaw("""
+        jQuery(document).ready(function() {jQuery('#'+"model_tree").treeview({"animated": 150});});
+          """))
+        }
+      </head>
+      <ul class="treeview-gray" id="model_tree">
+        <head>
+          <script type="text/javascript" src="/classpath/js/ckeditor/ckeditor.js"></script>
+        </head>
+
+        <li><span><h3>Message:</h3></span>
+            <br />
+          <ul>
+            <li><span>
+              {
+              SHtml.textarea(
+                valueBox.openOr(""),
+                vv => setBox(
+                  vv.trim match {
+                    case "" => Empty
+                    case x => Full(x)
+                  }
+                ),
+                "class" -> "ckeditor", "maxlength" -> "20000")
+              }
+            </span><br /></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  )
+  //Appears when rendering the form or the visualization
+  override def name: String = "Message"
+  override def toXHtml: NodeSeq = {
+    trace("Calling Message.toXHtml")
+    //TODO: this method is almost equal to with DisplayHTMLWithLabelInOneLine[String, T]. Refactor to use that instead if possible
+    <div id={uniqueFieldId + "_holder"}>
+      <span for={ uniqueFieldId.openTheBox }>
+        <span class="sbml_field_label">{displayHtml}</span>
+        <span class="sbml_field_content">
+          {this.valueBox match{
+          case Empty => Text("-- no description available -- ")
+          case Full(content) =>{
+            try{
+              XML.loadString( content )
+            } catch{
+              //FIXME replace this hack by something more general
+              case _ => XML.loadString( "<root>"+content+"</root>" ).child
+            }
+          }}
+          }</span>
+      </span>
+        <lift:msg id={uniqueFieldId.openTheBox}  errorClass="lift_error"/>
+    </div>
+  }
+}
+
 
 // TODO - THIS GIVES AN ERROR AND i HAVE NO CLEAR IDEA WHY
 // class SpatialDimensions[T <: CompartmentRecord](own:T) extends EnumField(own, ValidSpatialDimensions)
@@ -627,7 +733,7 @@ with GetSetOwnerField[String,OwnerType]{
   var _data:Box[MyType] = Empty
 
   override def theData_=(in:Box[MyType]) {
-    trace("Calling Notes.theData_=" + in)
+    trace("Calling Math.theData_=" + in)
     _data = in
     _data match{
       //if a valid value is set then update the owner class
@@ -640,7 +746,7 @@ with GetSetOwnerField[String,OwnerType]{
   override def theData:Box[MyType] = {
     trace("Calling Math.theData")
     //if the owner has valid data that was obtained from the wikimodels Server
-    if(owner.notes != null) {
+    if(owner.math != null) {
       debug("theData with math = "+ owner.math + " is being copied to the record Field.")
       _data = Full(owner.math )
     } else {
@@ -746,7 +852,7 @@ with GetSetOwnerField[String,OwnerType]{
 }
 
 
-//#### Aux Record traits
+// Aux Record traits
 
 /**
  * Mix in to a field to change its form display to    for (id <- uniqueFieldId; control <- super.toXHtml) yield

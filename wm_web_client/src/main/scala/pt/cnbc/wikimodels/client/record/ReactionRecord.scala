@@ -11,7 +11,7 @@ import net.liftweb.http.{SHtml, S}
 import scala.xml._
 
 /** TODO: Please document.
- *  @author: Alexandre Martins
+ *  @author Alexandre Martins
  *  Date: 29-12-2011
  *  Time: 17:13 */
 class ReactionRecord() extends Reaction with SBaseRecord[ReactionRecord]  {

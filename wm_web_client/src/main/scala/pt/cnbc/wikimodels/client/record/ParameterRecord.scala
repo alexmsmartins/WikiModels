@@ -10,7 +10,7 @@ import net.liftweb.common.{Empty, Box}
 import net.liftweb.record._
 
 /** TODO: Please document.
- *  @author: Alexandre Martins
+ *  @author Alexandre Martins
  *  Date: 29-12-2011
  *  Time: 17:12 */
 class ParameterRecord() extends Parameter with SBaseRecord[ParameterRecord]  {

@@ -11,7 +11,7 @@ import net.liftweb.common.{Empty, Box}
 import xml.NodeSeq
 
 /** TODO: Please document.
- *  @author: alex
+ *  @author alex
  *  Date: 29-12-2011
  *  Time: 17:11 */
 class FunctionDefinitionRecord() extends FunctionDefinition with SBaseRecord[FunctionDefinitionRecord]  {

@@ -7,12 +7,12 @@ package pt.cnbc.wikimodels.client.record
 import pt.cnbc.wikimodels.dataModel.Species
 import xml.NodeSeq
 import net.liftweb.common.Full._
+import net.liftweb.common.{Full, Empty, Box}
 import net.liftweb.http.{SHtml, S}
 import net.liftweb.record._
-import net.liftweb.common.{Full, Empty, Box}
 
 /** TODO: Please document.
- *  @author: Alexandre Martins
+ *  @author Alexandre Martins
  *  Date: 29-12-2011
  *  Time: 16:49
  *  To change this template use File | Settings | File Templates. */
