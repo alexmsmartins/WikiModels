@@ -51,9 +51,9 @@
 
 
                    <div>
-                    <visualizer:formulaViz>
+                    <editor:formulaViz>
                         <span id="form_viz"></span>
-                    </visualizer:formulaViz>
+                    </editor:formulaViz>
                     <editor:formula/>
                 </div>
                 <br/>
@@ -67,6 +67,12 @@
                 <br/>
                 <editor:check />
                 <editor:save />
+                <script type="text/javascript">
+                    function getTextArea(){
+                        alert("Lets implment ajax check");
+                    }
+                </script>
+                <button onclick="getTextArea()" name="aaaa">Ajex check</button>
             </lift:MathMLEdit>
         </div>
     </div> <!-- end of "some-div"-->

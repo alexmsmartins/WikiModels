@@ -28,6 +28,7 @@ import pt.cnbc.wikimodels.sbmlVisitors.SBML2BeanConverter
 @Path("/model/")
 class SBMLModelResource extends RESTResource {
 
+
     @Context
     var security:SecurityContext = null
     @Context

@@ -24,10 +24,7 @@ import _root_.net.liftweb.util.BindPlus._
  */
 
 
-class MathMLEdit extends MathMLEditT
-
-
-trait MathMLEditT extends DispatchSnippet {
+class MathMLEdit extends DispatchSnippet {
 
   /**
    * Contains default values for Session Variables.
@@ -40,7 +37,7 @@ trait MathMLEditT extends DispatchSnippet {
     val errorHtml = <p id="parse_success" >To start working please edit the AsciiMathML formula below</p>
     val asciiFormula = ""
   }
-  object asciiFormula extends RequestVar[String](Default.asciiFormula)
+  object asciiFormula extends SessionVar[String](Default.asciiFormula)
 
   object mathmlFormula extends SessionVar[Elem](Default.mathmlFormula)
 
@@ -70,17 +67,17 @@ trait MathMLEditT extends DispatchSnippet {
       val result = parser.parseAll(parser.NumExpr, asciiFormula.is)
       result match {
         case parser.Success(_,_) => {
-
-          val presentationMathMLAsString = xsltTransform.execute( MathMLPrettyPrinter.toXML(result.get).toString )
-          val presentationMathML = scala.xml.XML.loadString( presentationMathMLAsString)
-          mathmlFormulaToSave.set( presentationMathML)
+          val contentMathML = MathMLPrettyPrinter.toXML(result.get)
+          val presentationMathML = scala.xml.XML.loadString(
+                xsltTransform.execute( contentMathML.toString ))
           S.notice("parsing_error", <p id="parse_success" class="success">Parsing succeded</p>)
           //save
-          mathmlFormulaToSave.set( presentationMathML)
+          mathmlFormulaToSave.set( contentMathML)
           //add necessary parameters for javascript binding
-          mathmlFormula.set( XMLHandler.addAttributes(
-            mathmlFormulaToSave.is,
-            "mode" -> "display") )
+          mathmlFormula.set(
+            XMLHandler.addAttributes(
+              presentationMathML,
+              "mode" -> "display") )
         }
         case parser.Failure(_,_) => {
           Console.println("Error parsing " + asciiFormula.is + "\n" + result)
@@ -107,9 +104,6 @@ trait MathMLEditT extends DispatchSnippet {
         }
       }
     }
-    def saveTextArea() = {
-
-    }
 
 
     Console.println("MathMLEdit.render() before bind() with formula = " + asciiFormula.is)
@@ -118,8 +112,7 @@ trait MathMLEditT extends DispatchSnippet {
     xhtml.bind("editor",
       "formula" -> SHtml.textarea(asciiFormula.is, {asciiFormula set _}, "class" -> "asciimath_input" ),
       "check" -> SHtml.button("Check Formula", checkTextArea, "class" -> "left_aligned"),
-      "save" -> SHtml.submit("Save Formula", () => {}, "class" -> "left_aligned"))
-      .bind("visualizer",
+      "save" -> SHtml.submit("Save Formula", () => {}, "class" -> "left_aligned"),
       "formulaViz" -> <div class="mathml_output" id="formula"  >{mathmlFormula.is}</div> )
   }
 
