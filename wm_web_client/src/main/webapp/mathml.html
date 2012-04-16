@@ -48,9 +48,10 @@
 
                 <div class="lift:Msg?id=parsing_error;errorClass=error"></div>
                 <a href="http://www1.chapman.edu/~jipsen/asciimath.html">To get help in ASCIIMathML syntax click here.</a>
-
-
-                   <div>
+                  <div>
+                    <head>
+                        <script id="mathml_js" src="/js/mathml_editor.js" type="text/javascript"></script>
+                    </head>
                     <editor:formulaViz>
                         <span id="form_viz"></span>
                     </editor:formulaViz>
@@ -66,13 +67,7 @@
                 <br/>
                 <br/>
                 <editor:check />
-                <editor:save />
-                <script type="text/javascript">
-                    function getTextArea(){
-                        alert("Lets implment ajax check");
-                    }
-                </script>
-                <button onclick="getTextArea()" name="aaaa">Ajex check</button>
+                <editor:ajax_check />
             </lift:MathMLEdit>
         </div>
     </div> <!-- end of "some-div"-->

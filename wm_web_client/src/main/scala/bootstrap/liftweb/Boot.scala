@@ -30,6 +30,8 @@ class Boot extends LoggerWrapper{
           _.setCharacterEncoding("UTF-8")
       }
 
+      LiftRules.jsArtifacts
+
       ResourceServer.allow {
           case "css" :: "js" :: _ => true
       }

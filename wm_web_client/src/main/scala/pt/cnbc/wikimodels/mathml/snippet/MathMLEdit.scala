@@ -4,10 +4,6 @@ package pt.cnbc.wikimodels.mathml.snippet
  * Copyright (c) 2012. Alexandre Martins. All rights reserved.
  */
 
-//--Standard imports --
-
-import _root_.pt.cnbc.wikimodels.mathparser._
-import pt.cnbc.wikimodels.util.{XSLTTransform, HTMLHandler, XMLHandler}
 
 //--Standard imports --
 
@@ -15,6 +11,17 @@ import _root_.net.liftweb.http._
 import _root_.scala.xml.{NodeSeq, Elem}
 import _root_.net.liftweb.util.Helpers._
 import _root_.net.liftweb.util.BindPlus._
+
+import js.JsCmd
+import net.liftweb.http.js.JE._
+import net.liftweb.http.js.jquery.JqJE._
+import net.liftweb.http.SHtml._
+import net.liftweb.util.Helpers._
+import net.liftweb.http.js.JsCmds._
+
+import pt.cnbc.wikimodels.mathparser._
+import pt.cnbc.wikimodels.util.{XSLTTransform, HTMLHandler, XMLHandler}
+
 
 /**
  * TODO: Please document.
@@ -62,9 +69,9 @@ class MathMLEdit extends DispatchSnippet {
     def checkTextArea() {
       import net.liftweb.common.{Failure => _}
       val parser = AsciiMathParser()
-      Console.println("MathMLEdit.render().processTextArea() with formula = " + asciiFormula.is)
-      Console.println("MathMLEdit.render() processTextArea() with MathML = " + mathmlFormula.is)
-      val result = parser.parseAll(parser.NumExpr, asciiFormula.is)
+      Console.println("MathMLEdit.render().checkTextArea() with formula = " + asciiFormula.is)
+      Console.println("MathMLEdit.render() checkTextArea() with MathML = " + mathmlFormula.is)
+      val result = parser.parseAll(parser.GenExpr, asciiFormula.is)
       result match {
         case parser.Success(_,_) => {
           val contentMathML = MathMLPrettyPrinter.toXML(result.get)
@@ -105,14 +112,29 @@ class MathMLEdit extends DispatchSnippet {
       }
     }
 
+    //FIXME this variable should be in a more general place or be removed.
+    val textAreaId = "math_textarea"
+    val ajaxCheckTextArea = () => {
+      JsCrVar("textAreaId",textAreaId)&
+      Call("textAreaContentBy", JsVar("textAreaId"))
+      //TODO get formula from textarea
+
+      // validate the content to sse if its valid AsciiMathML
+
+      //if valid generate athML from formula
+      //         include MathML into the page
+      //         render success message
+      //if not valid render success message
+    }
+
 
     Console.println("MathMLEdit.render() before bind() with formula = " + asciiFormula.is)
     Console.println("MathMLEdit.render() before bind() with MathML = " + mathmlFormula.is)
 
     xhtml.bind("editor",
-      "formula" -> SHtml.textarea(asciiFormula.is, {asciiFormula set _}, "class" -> "asciimath_input" ),
+      "formula" -> SHtml.textarea(asciiFormula.is, {asciiFormula set _}, "class" -> "asciimath_input", "id" -> textAreaId),
       "check" -> SHtml.button("Check Formula", checkTextArea, "class" -> "left_aligned"),
-      "save" -> SHtml.submit("Save Formula", () => {}, "class" -> "left_aligned"),
+      "ajax_check" -> SHtml.ajaxButton("Ajax Check Formula", ajaxCheckTextArea),
       "formulaViz" -> <div class="mathml_output" id="formula"  >{mathmlFormula.is}</div> )
   }
 

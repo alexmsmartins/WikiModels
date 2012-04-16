@@ -321,7 +321,6 @@ with GetSetOwnerField[String, T]{
 								]
 
 					});
-
               	"""
               ) //end of JsRaw
               )}
@@ -763,67 +762,81 @@ with GetSetOwnerField[String,OwnerType]{
   }
 
   override def toForm() = Full(
-    <div>
-      <div id="some-div">
-        <h2>Welcome to WikiModels MathML Editor.</h2>
+    <div id="some-div">
+      <h2>Welcome to WikiModels MathML Editor.</h2>
 
         <div>
           <lift:MathMLEdit form="POST">
-          <!-- FIXME recheck the possibility of adding this if there is a way to make it work on webkit
-          FIXME this browser conversion is much faster than the one done on the server side -->
-          <!--    <head><script id="xslttransform" src="/js/xsltTransformer.js" type="text/javascript"></script></head>-->
-          <script type="text/x-mathjax-config">
+            <!-- FIXME recheck the possibility of adding this if there is a way to make it work on webkit
+              FIXME this browser conversion is much faster than the one done on the server side -->
+            <!--    <head>
+                  <script id="xslttransform" src="/js/xsltTransformer.js" type="text/javascript">
+              </script>
+              </head>-->
+            <script type="text/x-mathjax-config">
               /* <![CDATA[ */
-                      $.log("MathJax is being configured.");
-                      MathJax.Hub.Config({
+                          $.log("MathJax is being configured.");
+                          MathJax.Hub.Config({
               config: ["MMLorHTML.js"],
-              jax: ["input/TeX","input/MathML","output/HTML-CSS","output/NativeMML"],
-              extensions: ["tex2jax.js","mml2jax.js","MathMenu.js","MathZoom.js"],
-              TeX: {
-                extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"]
-              },
-                NativeMML: { showMathMenuMSIE: false },
-                menuSettings: { zoom: "Double-Click" },
-                errorSettings: { message: ["[Math Error]"] }
-              });
-            /* ]]> */
-          </script>
+    jax: ["input/TeX","input/MathML","output/HTML-CSS","output/NativeMML"],
+    extensions: ["tex2jax.js","mml2jax.js","MathMenu.js","MathZoom.js"],
+    TeX: {
+      extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"]
+    },
+    NativeMML: { showMathMenuMSIE: false },
+    menuSettings: { zoom: "Double-Click" },
+    errorSettings: { message: ["[Math Error]"] }
+    });
 
-          <script type="text/javascript"
-                  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js">
-            /* <![CDATA[ */
-                    $(document).ready(function() {
-            displayResult();
-            //TODO replace this function call by Sarissa - http://dev.abiss.gr/sarissa/
-            $.log("MathJax is executing");
-            });
-                    /* ]]> */
-          </script>
+                      /* ]]> */
+    </script>
 
-          <link rel="stylesheet" type="text/css" href="/css/mathml_editor.css"/>
+    <script type="text/javascript"
+            src="http://cdn.mathjax.org/mathjax/latest/MathJax.js">
+      /* <![CDATA[ */
+              $(document).ready(function() {
+      displayResult();
+      //TODO replace this function call by Sarissa - http://dev.abiss.gr/sarissa/
+      $.log("MathJax is executing");
+      });
+              /* ]]> */
+    </script>
 
-          <div class="lift:Msg?id=parsing_error;errorClass=error"></div>
-          <a href="http://www1.chapman.edu/~jipsen/asciimath.html">To get help in ASCIIMathML syntax click here.</a>
-          <div>
-            <visualizer:formulaViz>
-              <span id="form_viz"></span>
-            </visualizer:formulaViz>
-              <editor:formula/>
-          </div>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <editor:check/>
-        </lift:MathMLEdit>
-        </div>
-      </div> <!-- end of "some-div"-->
+      <link rel="stylesheet" type="text/css" href="/css/mathml_editor.css"/>
+
+      <div class="lift:Msg?id=parsing_error;errorClass=error"></div>
+      <a href="http://www1.chapman.edu/~jipsen/asciimath.html">To get help in ASCIIMathML syntax click here.</a>
+
+
+      <div>
+        <editor:formulaViz>
+          <span id="form_viz"></span>
+        </editor:formulaViz>
+          <editor:formula/>
+      </div>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <editor:check />
+        <editor:save />
+      <script type="text/javascript">
+        /* <![CDATA[ */
+        function getTextArea(){
+        alert("Lets implment ajax check");
+        }
+        /* ]]> */
+      </script>
+      <button onclick="getTextArea()" name="aaaa">Ajex check</button>
+    </lift:MathMLEdit>
     </div>
+  <br/>
+  </div>
   )
   //Appears when rendering the form or the visualization
 

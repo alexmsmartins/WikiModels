@@ -39,8 +39,8 @@ class ConstraintRecord() extends Constraint with SBaseRecord[ConstraintRecord]  
   object idO extends Id(this, 100)
   object nameO extends Name(this, 100)
   object notesO extends Notes(this, 1000)
-  //object mathO extends Math(this)
-  object messageO extends Message(this, 100)
+  object mathO extends Math(this)
+  //object messageO extends Message(this, 100)
 
   //  ### can be created directly from a Request containing params with names that match the fields on a Record ( see fromReq ). ###
 

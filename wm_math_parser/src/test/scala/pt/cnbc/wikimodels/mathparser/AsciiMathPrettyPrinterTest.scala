@@ -202,4 +202,6 @@ class AsciiMathPrettyPrinterTest extends AsciiMathParser{
     assertEquals( (xml \ "apply" \ "sin").head.label, "sin" )
     assertTrue((xml \ "apply" \ "ci" \ "@type" text) == "real")
   }
+
+
 }
