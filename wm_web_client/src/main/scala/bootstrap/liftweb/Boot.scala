@@ -40,6 +40,10 @@ class Boot extends LoggerWrapper{
       LiftRules.addToPackages("pt.cnbc.wikimodels")
       //Where to search for lift related files. This is the new location
       LiftRules.addToPackages("pt.cnbc.wikimodels.client")
+      //TODO - delete the reference to the next package before release
+      //Where to search for lift related files. This is the new location
+      LiftRules.addToPackages("experiments")
+
 
       //TODO delete this if it is not used anymore
       //Where to search for lift related files. This is a temp location for the mathml editor
@@ -127,8 +131,10 @@ class Boot extends LoggerWrapper{
         Menu(Loc("editReaction", List("modele","reaction_edit"), "Edit Reaction", Hidden, loggedIn)) ::
         Menu(Loc("viewReaction", List("modele","reaction_view"), "View Reaction", Hidden, loggedIn)) ::
         Menu(Loc("deleteReaction", List("modele","reaction_delete"), "Delete Reaction", Hidden, loggedIn)) ::
+        //TODO - experiences - please delete before release
         Menu(Loc("mathmlEditor", List("mathml"), "MathML Editor", Hidden, loggedIn)) ::
-          User.sitemap
+        Menu(Loc("selectbox_exp", List("selectbox_exp"), "Select Box experiment", Hidden, loggedIn)) ::
+        User.sitemap
 
       // Build SiteMap
       LiftRules.setSiteMap(SiteMap(entries:_*))

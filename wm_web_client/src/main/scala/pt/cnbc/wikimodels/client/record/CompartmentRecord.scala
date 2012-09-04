@@ -46,21 +46,21 @@ class CompartmentRecord() extends Compartment with SBaseRecord[CompartmentRecord
       {super.toForm(f)}
       <!-- outside can't be a field and so I will make it a form -->
       {
-        val defaultOption:(Box[CompartmentRecord], String) = (Empty, "[no compartment")
         val op = parent.openTheBox.
           listOfCompartmentsRec.
             filter(_.metaid != this.metaid).
             filter(_.spatialDimensions != 0)
-        val defaultOp = parent.openTheBox.listOfCompartmentsRec.filter( _.id == outside ).headOption
         val opWithId = op.map(i => (i, i.id):(CompartmentRecord, String) )
         val options = (List((null , "no compartment")) ::: opWithId.toList).toSeq
-        SHtml.selectObj(options, Box.option2Box(defaultOp),
-          (choice:CompartmentRecord ) => {
-            choice match {
-              case null => outside = null
-              case c => outside = c.id
-            }
-          })
+        SHtml.selectObj(options,
+                        Box.option2Box(
+                          parent.openTheBox.listOfCompartmentsRec.filter( _.id == outside ).headOption),
+                        (choice:CompartmentRecord ) => {
+                          choice match {
+                            case null => outside = null
+                            case c => this.outside = c.id
+                          }
+                        })
       }
     </div>
   }

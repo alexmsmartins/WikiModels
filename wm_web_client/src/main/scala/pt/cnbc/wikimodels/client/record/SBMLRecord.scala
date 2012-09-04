@@ -89,6 +89,8 @@ trait SBaseRecord[MyType <: SBaseRecord[MyType]] extends Element with RestRecord
    * CRUD operation for updating a REST Record
    */
   override def updateRestRec():Box[MyType] = {
+    debug("SBaseRecord.pdateRestRec()")
+    debug("RestRec to update is\n==============================\n" + this.toXML + "\n==============================\n")
     //FIXME SBMLFromRecord.createSBMLElementFrom(this).asInstanceOf[MyType].toXML IS VERY HACKISH CODE.
     User.restfulConnection.putRequest(relativeURL, (SBMLFromRecord.createSBMLElementFrom(this)).toXML)
     User.restfulConnection.getStatusCode match {

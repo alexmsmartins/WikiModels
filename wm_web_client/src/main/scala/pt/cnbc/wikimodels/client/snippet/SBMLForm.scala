@@ -545,6 +545,7 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
 
   def saveSelectedCompartment(compartment:CompartmentRecord):Unit = {
     debug("SAVE SELECTED COMPARTMENT")
+    debug("This compartment has an outside with value " + compartment.outside)
     compartment.validate match {
       case Nil => compartment.updateRestRec(); redirectTo(compartment.relativeURL) //TODO: handle the possibility that the server does not accept the change (maybe this should be general)
       case x =>{
