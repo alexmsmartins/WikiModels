@@ -5,6 +5,8 @@ echo "========================= STARTING GLASSFISH DOMAIN ======================
 echo "========================== STARTING DERBY DATABASE ============================="
 ~/glassfish/bin/asadmin start-database --dbhost 0.0.0.0 --dbport 1527 --dbhome ~/tmp
 echo "======================== STARTING POSTGRESQL DATABASE =========================="
-sudo /etc/init.d/postgresql start 8.3
+sudo /etc/init.d/postgresql start 9.1
 echo "=============================== STARTING SBT ===================================="
 sbt-0.7.7
+echo "=============================== END OF SCRIPT ===================================="
+

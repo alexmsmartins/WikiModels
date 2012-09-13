@@ -459,10 +459,6 @@ with GetSetOwnerField[String, T]{
 }
 
 
-// TODO - THIS GIVES AN ERROR AND i HAVE NO CLEAR IDEA WHY
-// class SpatialDimensions[T <: CompartmentRecord](own:T) extends EnumField(own, ValidSpatialDimensions)
-
-
 class SpatialDimensions[T <: SBaseRecord[T]{var spatialDimensions:Int}](own:T) extends EnumField(own, ValidSpatialDimensions)
 with DisplayFormWithLabelInOneLine[ValidSpatialDimensions, T] with DisplayHTMLWithLabelInOneLine[ValidSpatialDimensions, T] with LoggerWrapper{
   import pt.cnbc.wikimodels.dataModel.Compartment._
@@ -563,7 +559,6 @@ with LoggerWrapper{
 /**
  * Compartment constant
  */
-
 class CConstant[OwnerType <: SBaseRecord[OwnerType]{var constant:Boolean}](rec:OwnerType) extends UIMandatoryBooleanField[OwnerType]{
   def owner = rec
   override def ownerField_=(value:Boolean) = owner.constant = value
@@ -575,6 +570,84 @@ class CConstant[OwnerType <: SBaseRecord[OwnerType]{var constant:Boolean}](rec:O
   override def name: String = "Constant"
 }
 
+
+class COutside[ T <: SBaseRecord[T]{var outside:String}](own:T, maxLength: Int) extends OptionalStringField[T](own, maxLength)
+ with DisplayHTMLWithLabelInOneLine[String, T]{
+  var _data:Box[MyType] = Empty
+
+  override def validate:List[FieldError] = {
+    super.validate
+  }
+
+  override def theData_=(in:Box[MyType]) {
+    trace("Calling Outside.theData_=" + in)
+    _data = in
+    _data match{
+      //if a valid value is set then update the owner class
+      case Full(x) => owner.outside = x
+      case _ => owner.outside = null //just to make sure the owner does not have valid values when errors occur
+    }
+  }
+
+  override def theData:Box[MyType] = {
+    trace("Calling Outside.theData")
+    //if the owner has valid data that was obtained from the wikimodels Server
+    if(own.outside != null) {
+      debug("theData with outside = "+ own.outside + " is being copied to the record Field.")
+      _data = Full(own.outside)
+    } else {
+      _data match {
+        case Empty => {
+          _data = defaultValueBox
+          if (! this.optional_?) own.outside = defaultValue
+        }
+        case Full(x) => own.outside = x
+      }
+    }
+    trace("Outside.theData returns " + _data)
+    _data
+  }
+
+
+  //Appears when rendering the form or the visualization
+  override def name: String = "Outside"
+  //override def toXHtml: NodeSeq = Text(this.value)
+
+  override def toForm:Box[NodeSeq] = {
+    trace("Calling DisplayFormWithLabelInOneLine.toForm")
+    for (id <- uniqueFieldId; control <- super.toForm)
+    yield
+      <span id={id + "_holder"}>
+        <label for={ id }> <span class="sbml_field_label">{ displayHtml }</span></label>
+        {
+          val theParent = this.own.parent.openTheBox
+
+          theParent match {
+            case model:SBMLModel => {
+              val op =
+                theParent.asInstanceOf[SBMLModelRecord].listOfCompartmentsRec
+              .filter(_.metaid != this.own.metaid)
+              .filter(_.spatialDimensions != 0)
+            val opWithId = op.map(i => (Full(i), i.id):(Box[CompartmentRecord], String) )
+            val options = (List((Empty , "no compartment")) ::: opWithId.toList).toSeq
+            SHtml.selectObj(options,
+              Full(Box.option2Box(
+                theParent.asInstanceOf[SBMLModelRecord].listOfCompartmentsRec.filter( _.id == this.own.outside ).headOption)),
+              (choice:Box[CompartmentRecord]) =>
+                choice match {
+                  case Empty => this.own.outside = null
+                  case Full(c) => this.own.outside = c.id
+                },
+              ("xxx" -> "yyy"))
+            }
+            case _ => S.error("Only Models as parents of Compartments are implemented!")
+          }
+
+        }
+        <lift:msg id={id}  errorClass="lift_error"/>
+      </span>
+  }
+}
 
 
 /**

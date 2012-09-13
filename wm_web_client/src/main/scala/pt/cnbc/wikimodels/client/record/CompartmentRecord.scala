@@ -4,7 +4,7 @@
 
 package pt.cnbc.wikimodels.client.record
 
-import pt.cnbc.wikimodels.dataModel.Compartment
+import pt.cnbc.wikimodels.dataModel._
 import net.liftweb.common._
 import net.liftweb.http.{SHtml, S}
 import net.liftweb.record._
@@ -36,7 +36,14 @@ class CompartmentRecord() extends Compartment with SBaseRecord[CompartmentRecord
         <link type="text/css" rel="stylesheet" href="/css/sbml_present.css"></link>
       </head>
       {super.toXHtml}
-
+      <!-- outsude field -->
+      <div id={"outside_holder"}>
+        <span for="outside">
+          <span class="sbml_field_label">Outside</span>
+          <span class="sbml_field_content">  {Box.legacyNullTest(this.outside)  openOr "-- not defined --" }</span>
+        </span>
+        <lift:msg id="outside"  errorClass="lift_error"/>
+      </div>
     </div>
   }
   
@@ -44,24 +51,6 @@ class CompartmentRecord() extends Compartment with SBaseRecord[CompartmentRecord
     trace("Calling CompartmentRecord.toForm( "+f+" )")
     <div class="compartment_toform">
       {super.toForm(f)}
-      <!-- outside can't be a field and so I will make it a form -->
-      {
-        val op = parent.openTheBox.
-          listOfCompartmentsRec.
-            filter(_.metaid != this.metaid).
-            filter(_.spatialDimensions != 0)
-        val opWithId = op.map(i => (i, i.id):(CompartmentRecord, String) )
-        val options = (List((null , "no compartment")) ::: opWithId.toList).toSeq
-        SHtml.selectObj(options,
-                        Box.option2Box(
-                          parent.openTheBox.listOfCompartmentsRec.filter( _.id == outside ).headOption),
-                        (choice:CompartmentRecord ) => {
-                          choice match {
-                            case null => outside = null
-                            case c => this.outside = c.id
-                          }
-                        })
-      }
     </div>
   }
   
@@ -73,15 +62,16 @@ class CompartmentRecord() extends Compartment with SBaseRecord[CompartmentRecord
   object constantO extends CConstant(this)
   object sizeO extends Size(this)
   object notesO extends Notes(this, 1000)
+  object outsideO extends COutside(this,100)
+
   //  ### can be created directly from a Request containing params with names that match the fields on a Record ( see fromReq ). ###
 
-  var _parent:Box[SBMLModelRecord] = Empty
+  var _parent:Box[SBaseRecord[_]] = Empty
   //TODO isn't there a better way to override a var than THIS?!??! Fucking asInstanceOf
-  override def parent:Box[SBMLModelRecord] = _parent.asInstanceOf[Box[SBMLModelRecord]]
-  override def parent_=(p:Box[SBaseRecord[_]] ):Unit = {
-    _parent = p.asInstanceOf[Box[SBMLModelRecord]]
+  override def parent:Box[SBaseRecord[_]] = _parent
+  override def parent_=(p:Box[SBaseRecord[_]] ) = {
+    _parent = p
   }
-
 }
 
 
@@ -89,6 +79,6 @@ class CompartmentRecord() extends Compartment with SBaseRecord[CompartmentRecord
 //TODO - DELETE IF NOT USED FOR ANYTHING
 object CompartmentRecord extends CompartmentRecord with RestMetaRecord[CompartmentRecord] {
   def apply() = new CompartmentRecord
-  override def fieldOrder = List(metaIdO, idO, nameO, spatialDimensions0, constantO, sizeO, notesO)
+  override def fieldOrder = List(metaIdO, idO, nameO, spatialDimensions0, constantO, sizeO, outsideO, notesO)
   override def fields = fieldOrder
 }

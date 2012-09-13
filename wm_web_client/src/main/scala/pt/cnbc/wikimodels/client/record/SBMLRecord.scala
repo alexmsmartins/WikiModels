@@ -1,3 +1,5 @@
+package pt.cnbc.wikimodels.client.record{
+
 import scala.xml._
 import net.liftweb.common._
 import net.liftweb.record._
@@ -12,9 +14,6 @@ import alexmsmartins.log.LoggerWrapper
 import _root_.net.liftweb.http.js.{JE,JsCmd,JsCmds}
 import JsCmds._ // For implicifts
 import JE.{JsRaw,Str}
-
-
-package pt.cnbc.wikimodels.client.record{
 
 import pt.cnbc.wikimodels.client.snippet.CommentSnip
 import net.liftweb.common.Box
