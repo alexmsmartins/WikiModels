@@ -570,8 +570,10 @@ class CConstant[OwnerType <: SBaseRecord[OwnerType]{var constant:Boolean}](rec:O
   override def name: String = "Constant"
 }
 
-
-class COutside[ T <: SBaseRecord[T]{var outside:String}](own:T, maxLength: Int) extends OptionalStringField[T](own, maxLength)
+/**
+ * Compartment.outside
+ */
+class COutside[ T <: SBaseRecord[T]{var outside:String}](own:T) extends OptionalStringField[T](own, 100)
  with DisplayHTMLWithLabelInOneLine[String, T]{
   var _data:Box[MyType] = Empty
 
@@ -626,8 +628,8 @@ class COutside[ T <: SBaseRecord[T]{var outside:String}](own:T, maxLength: Int) 
             case model:SBMLModel => {
               val op =
                 theParent.asInstanceOf[SBMLModelRecord].listOfCompartmentsRec
-              .filter(_.metaid != this.own.metaid)
-              .filter(_.spatialDimensions != 0)
+                .filter(_.metaid != this.own.metaid)
+                .filter(_.spatialDimensions != 0)
             val opWithId = op.map(i => (Full(i), i.id):(Box[CompartmentRecord], String) )
             val options = (List((Empty , "no compartment")) ::: opWithId.toList).toSeq
             SHtml.selectObj(options,
@@ -649,6 +651,94 @@ class COutside[ T <: SBaseRecord[T]{var outside:String}](own:T, maxLength: Int) 
   }
 }
 
+
+/**
+ * Species.compartment
+ */
+class SCompartment[ T <: SBaseRecord[T]{var compartment:String}](own:T) extends StringField[T](own, 100)
+with DisplayHTMLWithLabelInOneLine[String, T]{
+  var _data:Box[MyType] = Empty
+
+  override def validate:List[FieldError] = {
+    super.validate
+  }
+
+  override def theData_=(in:Box[MyType]) {
+    trace("Calling SCompartment.theData_=" + in)
+    _data = in
+    _data match{
+      //if a valid value is set then update the owner class
+      case Full(x) => owner.compartment = x
+      case _ => {
+        S.error("No compartment was defined for this species ");
+        owner.compartment = null //just to make sure the owner does not have valid values when errors occur
+      }
+    }
+  }
+
+  override def theData:Box[MyType] = {
+    trace("Calling SComaprtment.theData")
+    //if the owner has valid data that was obtained from the wikimodels Server
+    if(own.compartment != null) {
+      debug("theData with compartment = "+ own.compartment + " is being copied to the record Field.")
+      _data = Full(own.compartment)
+    } else {
+      _data match {
+        case Empty => {
+          _data = defaultValueBox
+          if (! this.optional_?) own.compartment = defaultValue
+        }
+        case Full(x) => own.compartment = x
+      }
+    }
+    trace("SCompartment.theData returns " + _data)
+    _data
+  }
+
+
+  //Appears when rendering the form or the visualization
+  override def name: String = "Compartment"
+  //override def toXHtml: NodeSeq = Text(this.value)
+
+  override def toForm:Box[NodeSeq] = {
+    trace("Calling DisplayFormWithLabelInOneLine.toForm")
+    for (id <- uniqueFieldId; control <- super.toForm)
+    yield
+      <span id={id + "_holder"}>
+        <label for={ id }> <span class="sbml_field_label">{ displayHtml }</span></label>
+        {
+        val theParent = this.own.parent.openTheBox
+
+        theParent match {
+          case model:SBMLModel => {
+            val op =
+              theParent.asInstanceOf[SBMLModelRecord].listOfCompartmentsRec
+            val opWithId = op.map(i => (i, i.id):(CompartmentRecord, String) )
+            // FIXME - since this is a wiki, this might be made optional nonetheless - CHECK IT
+            // val options = (List((Empty , "no compartment")) ::: opWithId.toList).toSeq
+            debug("Species.compartment value is {} before creating select box", this.own.compartment)
+            SHtml.selectObj(
+              opWithId,
+              Box.option2Box(
+                op.filter( _.id == this.own.compartment ).headOption),
+              (choice:CompartmentRecord) =>
+                {
+                  debug("Defining default choice of select box as {}", choice.id)
+                  this.own.compartment = choice.asInstanceOf[CompartmentRecord].id
+                },
+                ("xxx" -> "yyy"))
+          }
+          case _ => {
+            error("Only Models as parents of Species are implemented!")
+            S.error("Only Models as parents of Species are implemented!")
+          }
+        }
+
+        }
+        <lift:msg id={id}  errorClass="lift_error"/>
+      </span>
+  }
+}
 
 /**
  * Species boundaryCondition

@@ -35,7 +35,6 @@ class SpeciesRecord() extends Species with SBaseRecord[SpeciesRecord]  {
         <link type="text/css" rel="stylesheet" href="/css/sbml_present.css"></link>
       </head>
       {super.toXHtml}
-
     </div>
   }
 
@@ -43,22 +42,6 @@ class SpeciesRecord() extends Species with SBaseRecord[SpeciesRecord]  {
     trace("Calling SpeciesRecord.toForm( "+f+" )")
     <div class="species_toform">
       {super.toForm(f)}
-      <!-- outside can't be a field and so I will make it a form -->
-      {
-      val defaultOption:(Box[CompartmentRecord], String) = (Empty, "[no compartment")
-      val op = parent.openTheBox.
-        listOfCompartmentsRec
-      val defaultOp = parent.openTheBox.listOfCompartmentsRec.filter( _.id == compartment ).headOption
-      val opWithId = op.map(i => (i, i.id):(CompartmentRecord, String) )
-      val options = (List((null , "no compartment")) ::: opWithId.toList).toSeq
-      SHtml.selectObj(options, Box.option2Box(defaultOp),
-        (choice:CompartmentRecord ) => {
-          choice match {
-            case null => compartment = null
-            case c => compartment = c.id
-          }
-        })
-      }
     </div>
   }
 
@@ -66,6 +49,7 @@ class SpeciesRecord() extends Species with SBaseRecord[SpeciesRecord]  {
   object metaIdO extends MetaId(this, 100)
   object idO extends Id(this, 100)
   object nameO extends Name(this, 100)
+  object compartmentO extends SCompartment(this)
   object constantO extends SConstant(this)
   object notesO extends Notes(this, 1000)
   object initialAmount0 extends InitialAmount(this)
@@ -87,6 +71,6 @@ class SpeciesRecord() extends Species with SBaseRecord[SpeciesRecord]  {
 //TODO - DELETE IF NOT USED FOR ANYTHING
 object SpeciesRecord extends SpeciesRecord with RestMetaRecord[SpeciesRecord] {
   def apply() = new SpeciesRecord
-  override def fieldOrder = List(metaIdO, idO, nameO, initialAmount0, initialConcentration0, boundaryCondition0, constantO, notesO)
+  override def fieldOrder = List(metaIdO, idO, nameO, compartmentO, initialAmount0, initialConcentration0, boundaryCondition0, constantO, notesO)
   override def fields = fieldOrder
 }

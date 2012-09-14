@@ -24,6 +24,10 @@ object SBMLFromRecord extends LoggerWrapper {
     er match {
       case mr:SBMLModelRecord => createModelFrom(mr)
       case cr:CompartmentRecord => createCompartmentFrom(cr)
+      case sr:SpeciesRecord => createSpeciesFrom(sr)
+      case pr:ParameterRecord => createParameterFrom(pr)
+      case ct:ConstraintRecord => createConstraintFrom(ct)
+      case r:ReactionRecord => createReactionFrom(r)
       case _ => throw new NotImplementedException("ERROR: Method create" + er.sbmlType + "From(_) not implemented yet")
 
     }
