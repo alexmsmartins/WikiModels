@@ -134,7 +134,7 @@ class MathMLEdit extends DispatchSnippet {
     xhtml.bind("editor",
       "formula" -> SHtml.textarea(asciiFormula.is, {asciiFormula set _}, "class" -> "asciimath_input", "id" -> textAreaId),
       "check" -> SHtml.button("Check Formula", checkTextArea, "class" -> "left_aligned"),
-      "ajax_check" -> SHtml.ajaxButton("Ajax Check Formula", ajaxCheckTextArea),
+      //"ajax_check" -> SHtml.ajaxButton("Ajax Check Formula", ajaxCheckTextArea),
       "formulaViz" -> <div class="mathml_output" id="formula"  >{mathmlFormula.is}</div> )
   }
 

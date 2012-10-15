@@ -418,7 +418,7 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
           }
         }
       }
-      case x =>{
+      case x => {
         x.foreach(f => S.error(mainMsgId, "Error in " + f.field.uniqueFieldId + ": "+f.msg  ))
         selectedFunctionDefinition(Full(functionDefinition))
       }

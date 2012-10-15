@@ -176,7 +176,7 @@ class Boot extends LoggerWrapper{
           RewriteResponse(ParsePath( "modele"::"compartment_create"::Nil, "html", true, false),
             Map("modelMetaId" -> model), true )
         }
-        case RewriteRequest(ParsePath("model"::model::"compartment"::compartment::(Nil | "index"::(Nil|"index"::Nil)),"",_,_),_,_) => {
+        case RewriteRequest(ParsePath("model"::model::"compartment"::compartment::(Nil | "index"::Nil),"",_,_),_,_) => {
           trace("RewriteRequest from /model/"+model+"/compartment/"+compartment+" to /modele/compartment_view.html" )
           RewriteResponse(ParsePath( "modele"::"compartment_view"::Nil, "html", true, false),
             Map("modelMetaId" -> model, "compartmentMetaId" -> compartment), true )

@@ -927,7 +927,6 @@ with GetSetOwnerField[String,OwnerType]{
   override def toForm() = Full(
     <div id="some-div">
       <h2>Welcome to WikiModels MathML Editor.</h2>
-
         <div>
           <lift:MathMLEdit form="POST">
             <!-- FIXME recheck the possibility of adding this if there is a way to make it work on webkit
@@ -938,38 +937,35 @@ with GetSetOwnerField[String,OwnerType]{
               </head>-->
             <script type="text/x-mathjax-config">
               /* <![CDATA[ */
-                          $.log("MathJax is being configured.");
-                          MathJax.Hub.Config({
-              config: ["MMLorHTML.js"],
-    jax: ["input/TeX","input/MathML","output/HTML-CSS","output/NativeMML"],
-    extensions: ["tex2jax.js","mml2jax.js","MathMenu.js","MathZoom.js"],
-    TeX: {
-      extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"]
-    },
-    NativeMML: { showMathMenuMSIE: false },
-    menuSettings: { zoom: "Double-Click" },
-    errorSettings: { message: ["[Math Error]"] }
-    });
-
-                      /* ]]> */
-    </script>
-
-    <script type="text/javascript"
-            src="http://cdn.mathjax.org/mathjax/latest/MathJax.js">
-      /* <![CDATA[ */
+              $.log("MathJax is being configured.");
+              MathJax.Hub.Config({
+                config: ["MMLorHTML.js"],
+                jax: ["input/TeX","input/MathML","output/HTML-CSS","output/NativeMML"],
+                extensions: ["tex2jax.js","mml2jax.js","MathMenu.js","MathZoom.js"],
+                TeX: {
+                  extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"]
+                },
+                NativeMML: { showMathMenuMSIE: false },
+                menuSettings: { zoom: "Double-Click" },
+                errorSettings: { message: ["[Math Error]"] }
+              });
+            /* ]]> */
+            </script>
+            <script type="text/javascript"
+                    src="http://cdn.mathjax.org/mathjax/latest/MathJax.js">
+              /* <![CDATA[ */
               $(document).ready(function() {
-      displayResult();
-      //TODO replace this function call by Sarissa - http://dev.abiss.gr/sarissa/
-      $.log("MathJax is executing");
-      });
-              /* ]]> */
-    </script>
+              displayResult();
+              //TODO replace this function call by Sarissa - http://dev.abiss.gr/sarissa/
+              $.log("MathJax is executing");
+              });
+            /* ]]> */
+            </script>
 
       <link rel="stylesheet" type="text/css" href="/css/mathml_editor.css"/>
 
       <div class="lift:Msg?id=parsing_error;errorClass=error"></div>
       <a href="http://www1.chapman.edu/~jipsen/asciimath.html">To get help in ASCIIMathML syntax click here.</a>
-
 
       <div>
         <editor:formulaViz>
@@ -986,17 +982,18 @@ with GetSetOwnerField[String,OwnerType]{
         <br/>
         <br/>
         <br/>
-        <editor:check />
-        <editor:save />
       <script type="text/javascript">
         /* <![CDATA[ */
         function getTextArea(){
-        alert("Lets implment ajax check");
+          alert("Lets implment ajax check");
         }
         /* ]]> */
       </script>
-      <button onclick="getTextArea()" name="aaaa">Ajex check</button>
-    </lift:MathMLEdit>
+            <div class="lift:ValidateMathSnip.functionDefinition" >
+            </div>
+            <editor:check>
+            </editor:check>
+          </lift:MathMLEdit>
     </div>
   <br/>
   </div>
@@ -1004,7 +1001,7 @@ with GetSetOwnerField[String,OwnerType]{
   //Appears when rendering the form or the visualization
 
   override def toXHtml: NodeSeq = {
-    trace("Calling Notes.toXHtml")
+    trace("Calling Math.toXHtml")
     //TODO: this method is almost equal to with DisplayHTMLWithLabelInOneLine[String, T]. Refactor to use that instead if possible
     <div id={uniqueFieldId + "_holder"}>
       <span for={ uniqueFieldId.openTheBox }>
