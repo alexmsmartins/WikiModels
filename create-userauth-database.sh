@@ -4,7 +4,7 @@ export DERBY_HOME=$GLASSFISH_HOME/javadb
 export DERBY_PORT=1527
 export DB_HOME=$HOME/tmp
 export DB_HOST=0.0.0.0
-export SQL_SCRIPT=$PWD/userauth.sql
+export SQL_SCRIPT=$PWD/wm_setup/userauth.sql
 
 $GLASSFISH_HOME/bin/asadmin stop-database
 $GLASSFISH_HOME/bin/asadmin start-database --dbhost $DB_HOST --dbport $DERBY_PORT --dbhome $DB_HOME

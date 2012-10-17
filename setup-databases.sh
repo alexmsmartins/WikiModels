@@ -10,15 +10,13 @@ usage()
   echo "setup [-k|--fill-kb] [-h|--help]"
 }
 
-main() 
+start_databases() 
 {
-  #Prompt user for the sudo password at the beginning of the script so it does not have to be asked later 
-  sudo -v
   RETVAL=$?
   [ $RETVAL -ne 0 ] && exit $RETVAL
 
   #Create the Derby DB for JDBC authentication
-  sh ./create_userauth.sh
+  sh ./create-userauth-database.sh
   RETVAL=$?
   [ $RETVAL -eq 0 ] && echo "\nINFO: The userauth Realm database was configured!"
   [ $RETVAL -ne 0 ] && echo -e "\nFailure: the userauth Realm database was not configured!" && exit $RETVAL
@@ -28,15 +26,20 @@ main()
   sudo -n /etc/init.d/postgresql start 
   #FIXME the postgresql debian script returns 0 even in cases when it was unsuccessful. Find a workaround for that.
   RETVAL=$?
-  [ $RETVAL -eq 0 ] && mvn scala:run
-  [ $RETVAL -ne 0 ] && echo "\nFailure: the Postgres 9.1 Database System could not be started!"
-  return $RETVAL
+  if [ $RETVAL -eq 0 ]; then
+    cd ./wm_setup
+    mvn scala:run
+    cd -
+  else
+    echo "\nFailure: the Postgres 9.1 Database System could not be started!"
+    return $RETVAL
+  fi
 }
 
 fill_knowledgebase() 
 {
   #TODO: check if glassfish is available and start it otherwise
-  cd ../wm_rest_api
+  cd ./wm_rest_api
   echo $PWD
   mvn scala:run
   cd -
@@ -63,7 +66,9 @@ while [ "$1" != "" ]; do
 done
 
 echo "Authenticatioin database and knowledgebase are being configured"
-main
+#Prompt user for the sudo password at the beginning of the script so it does not have to be asked later 
+sudo -v
+start_databases
 RETVAL=$?
 echo $FILL_KB
 
