@@ -1,0 +1,42 @@
+
+.math_container{
+    margin: 0px;
+    padding: 0px;
+}
+
+.asciimath_input{
+    float: left;
+    /*display:inline;*/
+    width: 40%;
+	height: 10em;
+	margin: 0px;
+	padding: 0px;
+}
+.mathml_output{
+    float: right;
+    /*display:inline;*/
+    height: 10em;
+    width: 59%;
+	margin: 0px;
+	padding: 0px;
+}
+.left_aligned{
+    display:inline-block;
+    float: left;
+}
+
+.right_aligned{
+    display:inline-block;
+    float: right;
+}
+
+.monospaced {
+font-family: Monaco,
+             "Lucida Console",
+             Consolas,
+             "Andale Mono",
+             "Bitstream Vera Sans Mono",
+             "Lucida Sans Typewriter",
+             "DejaVu Sans Mono",
+             monospace;
+}

@@ -982,21 +982,17 @@ with GetSetOwnerField[String,OwnerType]{
         <br/>
         <br/>
         <br/>
-      <script type="text/javascript">
-        /* <![CDATA[ */
-        function getTextArea(){
-          alert("Lets implment ajax check");
-        }
-        /* ]]> */
-      </script>
-            <div class="lift:ValidateMathSnip.functionDefinition" >
-            </div>
-            <editor:check>
-            </editor:check>
-          </lift:MathMLEdit>
+        <script type="text/javascript">
+          /* <![CDATA[ */
+          function getTextArea(){
+            alert("Lets implment ajax check");
+          }
+          /* ]]> */
+        </script>
+      </lift:MathMLEdit>
     </div>
-  <br/>
-  </div>
+      <br/>
+    </div>
   )
   //Appears when rendering the form or the visualization
 

@@ -42,7 +42,7 @@
     <module>wm_rest_api</module>
     <module>wm_web_client</module>
     <module>wm_auth_realm</module>
-    <!--<module>wm_web_mathml</module>-->
+    <module>wm_web_mathml</module>
       <!--<module>framework</module>-->
   </modules>
 

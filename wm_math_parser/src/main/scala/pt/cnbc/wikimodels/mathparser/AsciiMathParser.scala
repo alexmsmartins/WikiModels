@@ -8,6 +8,9 @@ class AsciiMathParser extends RegexParsers with PackratParsers with AsciiMathPar
 
   type MME = MathMLElem
 
+  //General expression with any possibility
+  lazy val AsciiMathExpr :PackratParser[MME]= LambdaExpr | GenExpr
+
   //check http://rwiki.sciviews.org/doku.php?id=wiki:asciimathml#standard_functions to handle certain cases
   lazy val LambdaExpr :PackratParser[MME]= "("~repsep(ident,",")~")" ~ "=" ~> GenExpr
 
