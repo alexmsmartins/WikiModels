@@ -7,7 +7,7 @@ import alexmsmartins.log.LoggerWrapper
 import pt.cnbc.wikimodels.client.record._
 import net.liftweb.util.FieldError
 import net.liftweb.util.ControlHelpers._
-import xml.{Text, XML, NodeSeq}
+import xml.{Elem, Text, XML, NodeSeq}
 import pt.cnbc.wikimodels.dataModel._
 import pt.cnbc.wikimodels.dataModel.ValidSpatialDimensions
 import pt.cnbc.wikimodels.dataModel.ValidSpatialDimensions._
@@ -15,11 +15,13 @@ import tools.nsc.util.trace
 import pt.cnbc.wikimodels.mathml.elements.MathMLElem
 import tools.nsc.util.trace
 import tools.nsc.util.trace
+import pt.cnbc.wikimodels.sbmlVisitors.SBMLLooseValidator
+import pt.cnbc.wikimodels.sbmlVisitors.helpers.SBMLl2v4Checks
 
 //Javascript handling imports
-import _root_.net.liftweb.http.js.{JE,JsCmd,JsCmds}
+import net.liftweb.http.js.{JsExp, JE, JsCmd, JsCmds}
 import JsCmds._ // For implicifts
-import JE.{JsRaw,Str}
+import net.liftweb.http.js.JE.{JsVar, Call, JsRaw, Str}
 
 import scala.util.parsing.combinator.Parsers
 
@@ -63,15 +65,22 @@ with DisplayFormWithLabelInOneLine[String, T] with DisplayHTMLWithLabelInOneLine
 
 
   //override def toXHtml: NodeSeq = Text(this.value + "xxxxxxx")
+
 }
 
 class Id[T <: SBaseRecord[T]{var id:String}](own:T, maxLength: Int) extends StringField[T](own, maxLength)
 with DisplayFormWithLabelInOneLine[String, T] with DisplayHTMLWithLabelInOneLine[String, T]{
+
   var _data:Box[MyType] = Empty
 
-  override def validate:List[FieldError] = {
-      super.validate
-  }
+  def validateId(id:String) =
+    SBMLLooseValidator.checkMandatoryId(id)
+      .map(FieldError( this, _ ))
+
+  override def validations:List[ValidationFunction] =
+    validateId _ ::
+    valMinLen(1,"Field is empty") _ ::
+    super.validations
 
   override def theData_=(in:Box[MyType]) {
     trace("Calling Id.theData_=" + in)
@@ -891,6 +900,22 @@ class Value[OwnerType <: SBaseRecord[OwnerType]{var value:java.lang.Double}](rec
 
 class Math[OwnerType <: SBaseRecord[OwnerType]{var math:String}](rec:OwnerType) extends StringField(rec,2000)
 with GetSetOwnerField[String,OwnerType]{
+
+  object Default{
+    val mathmlFormula = <math xmlns="http://www.w3.org/1998/Math/MathML"/>
+    val editMessHtml = <p id="parse_success" >Please insert new formula</p>
+    val errorMess = "No error"
+    val errorHtml = <p id="parse_success" >To start working please edit the AsciiMathML formula below</p>
+    val asciiFormula = "2*x"
+  }
+
+  var asciiFormula: String  = Default.asciiFormula
+
+  var mathmlFormula:Elem = mathmlFormula
+  var mathmlFormulatosave:Elem = mathmlFormula
+
+
+
   override def name: String = "Math"
   var _data:Box[MyType] = Empty
 
@@ -924,19 +949,34 @@ with GetSetOwnerField[String,OwnerType]{
     _data
   }
 
-  override def toForm() = Full(
-    <div id="some-div">
-      <h2>Welcome to WikiModels MathML Editor.</h2>
+
+  override def toForm() = {
+    val textAreaId = "math_textarea"
+    val ajaxCheckTextArea = () => {
+      JsCrVar("textAreaId",textAreaId)&
+        Call("textAreaContentBy", JsVar("textAreaId"))
+      //TODO get formula from textarea
+
+      // validate the content to sse if its valid AsciiMathML
+
+      //if valid generate athML from formula
+      //         include MathML into the page
+      //         render success message
+      //if not valid render success message
+    }
+
+
+    Full(
+      <div id="some-div">
         <div>
-          <lift:MathMLEdit form="POST">
-            <!-- FIXME recheck the possibility of adding this if there is a way to make it work on webkit
+          <!-- FIXME recheck the possibility of adding this if there is a way to make it work on webkit
               FIXME this browser conversion is much faster than the one done on the server side -->
-            <!--    <head>
+          <!--    <head>
                   <script id="xslttransform" src="/js/xsltTransformer.js" type="text/javascript">
               </script>
               </head>-->
-            <script type="text/x-mathjax-config">
-              /* <![CDATA[ */
+          <script type="text/x-mathjax-config">
+            /* <![CDATA[ */
               $.log("MathJax is being configured.");
               MathJax.Hub.Config({
                 config: ["MMLorHTML.js"],
@@ -950,50 +990,46 @@ with GetSetOwnerField[String,OwnerType]{
                 errorSettings: { message: ["[Math Error]"] }
               });
             /* ]]> */
-            </script>
-            <script type="text/javascript"
-                    src="http://cdn.mathjax.org/mathjax/latest/MathJax.js">
-              /* <![CDATA[ */
+          </script>
+          <script type="text/javascript"
+                  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js">
+            /* <![CDATA[ */
               $(document).ready(function() {
               displayResult();
               //TODO replace this function call by Sarissa - http://dev.abiss.gr/sarissa/
               $.log("MathJax is executing");
               });
             /* ]]> */
-            </script>
+          </script>
 
-      <link rel="stylesheet" type="text/css" href="/css/mathml_editor.css"/>
+          <link rel="stylesheet" type="text/css" href="/css/mathml_editor.css"/>
 
-      <div class="lift:Msg?id=parsing_error;errorClass=error"></div>
-      <a href="http://www1.chapman.edu/~jipsen/asciimath.html">To get help in ASCIIMathML syntax click here.</a>
+          <div class="lift:Msg?id=parsing_error;errorClass=error"></div>
+          <a href="http://www1.chapman.edu/~jipsen/asciimath.html">To get help in ASCIIMathML syntax click here.</a>
 
-      <div>
-        <editor:formulaViz>
-          <span id="form_viz"></span>
-        </editor:formulaViz>
-          <editor:formula/>
+          <div>
+            <div class="mathml_output" id="formula"  >{mathmlFormula}</div>
+            {SHtml.textarea(asciiFormula, {asciiFormula = _}, "class" -> "asciimath_input", "id" -> textAreaId)}
+            <input type="button" id="valid_funct_def"> Check the formula</input>
+          </div>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
+        </div>
+        <br/>
       </div>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <script type="text/javascript">
-          /* <![CDATA[ */
-          function getTextArea(){
-            alert("Lets implment ajax check");
-          }
-          /* ]]> */
-        </script>
-      </lift:MathMLEdit>
-    </div>
-      <br/>
-    </div>
-  )
+    )
+
+
+
+  }
+
   //Appears when rendering the form or the visualization
 
   override def toXHtml: NodeSeq = {

@@ -112,10 +112,12 @@ class Boot extends LoggerWrapper{
         Menu(Loc("viewParameter", List("modele","parameter_view"), "View Parameter", Hidden, loggedIn)) ::
         Menu(Loc("deleteParameter", List("modele","parameter_delete"), "Delete Parameter", Hidden, loggedIn)) ::
         //entries for new brows/edit function definition
-        Menu(Loc("createFunctionDefinition", List("modele","function_definition_create"), "Create Function Definition", Hidden, loggedIn)) ::
+        //Menu(Loc("createFunctionDefinition", List("modele","function_definition_create"), "Create Function Definition", Hidden, loggedIn)) ::
         Menu(Loc("editFunctionDefinition", List("modele","function_definition_edit"), "Edit Function Definition", Hidden, loggedIn)) ::
         Menu(Loc("viewFunctionDefinition", List("modele","function_definition_view"), "View Function Definition", Hidden, loggedIn)) ::
         Menu(Loc("deleteFunctionDefinition", List("modele","function_definition_delete"), "Delete Function Definition", Hidden, loggedIn)) ::
+        //entries for new brows/edit function definition with a LiftScreen
+        Menu(Loc("createFunctioDefinitionScreen", List("modele","function_definition","create_screen"), "Create Function Definition", Hidden, loggedIn)) ::
         //entries for new brows/edit constraint
         Menu(Loc("createConstraint", List("modele","constraint_create"), "Create Constraint", Hidden, loggedIn)) ::
         Menu(Loc("editConstraint", List("modele","constraint_edit"), "Edit Constraint", Hidden, loggedIn)) ::
@@ -233,9 +235,9 @@ class Boot extends LoggerWrapper{
         //redirects for function definition
         case RewriteRequest(ParsePath("model"::model::"createfunctiondefinition"::(Nil|"index"::Nil),"",_,_),_,_) => {
           trace("RewriteRequest from /model/"
-            +model+"/createfunctionDefinition to /modele/function_definition_create.html" )
-          RewriteResponse(ParsePath( "modele"::"function_definition_create"::Nil, "html", true, false),
-            Map("modelMetaId" -> model), true )
+            +model+"/createfunctionDefinition to /modele/function_definition/create.html" )
+          RewriteResponse(ParsePath("modele"::"function_definition"::"create_screen"::Nil, "html",true,false),
+            Map("modelMetaId"-> model), true)
         }
         case RewriteRequest(ParsePath("model"::model::"functiondefinition"::functionDefinition::(Nil|"index"::Nil),"",_,_),_,_) => {
           trace("RewriteRequest from /model/"+model+"/functiondefinition/"+functionDefinition+" to /modele/functiondefinition_view.html" )

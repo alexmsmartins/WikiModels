@@ -14,6 +14,7 @@
   </scm>
 
   <properties>
+      <myproject.root></myproject.root>
     <!--
         prevents
         [WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
@@ -112,6 +113,23 @@
           <tagBase>https://svn.apache.org/repos/asf/maven/components/releases</tagBase>
         </configuration>
       </plugin>
+        <plugin>
+            <groupId>org.zeroturnaround</groupId>
+            <artifactId>jrebel-maven-plugin</artifactId>
+            <version>1.1.1</version>
+            <executions>
+                <execution>
+                    <id>generate-rebel-xml</id>
+                    <phase>process-resources</phase>
+                    <goals>
+                        <goal>generate</goal>
+                    </goals>
+                </execution>
+            </executions>
+            <configuration>
+                <relativePath>../../</relativePath>
+            </configuration>
+        </plugin>
     </plugins>
   </build>
 </project>
