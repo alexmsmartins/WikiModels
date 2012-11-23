@@ -72,7 +72,7 @@ class Boot extends LoggerWrapper{
              Menu(Loc("createM", List("models","create"), "Create Model", loggedIn)),
              //Menu(Loc("createEditM", List("models","createEdit","Create"), "[NEW]Create Model", loggedIn)),
              Menu(Loc("createEditMXX", List("models","createEdit"), "[NEW]Create Model", Hidden, loggedIn)),
-             Menu(ModelPageLoc),
+             Menu(Loc("createModel", List("modele","model_create"), "[NEwest]Create Model", loggedIn)),
              Menu(Loc("importM", List("models","import"), "[NEW]Import Model", loggedIn)),
              Menu(Loc("browseM", List("models","index"), "Browse Models", loggedIn)),
              Menu(Loc("browseMm", List("models","browse.html"), "Browse Model", Hidden, loggedIn)),
@@ -92,7 +92,7 @@ class Boot extends LoggerWrapper{
         Menu(Loc("administrator", List("administrator","index"), "Administrator", Hidden, loggedIn)) ::
         //entries for new brows/edit model
         Menu(Loc("listMModels", List("modele","indexe"), "List Models", Hidden, loggedIn)) ::
-        Menu(Loc("createModel", List("modele","model_create"), "Create Model", Hidden, loggedIn)) ::
+        //Menu(Loc("createModel", List("modele","model_create"), "Create Model", Hidden, loggedIn)) ::
         Menu(Loc("editModel", List("modele","model_edit"), "Edit Model", Hidden, loggedIn)) ::
         Menu(Loc("viewModel", List("modele","model_view"), "View Model", Hidden, loggedIn)) ::
         Menu(Loc("deleteModel", List("modele","model_delete"), "Delete Model", Hidden, loggedIn)) ::
@@ -118,6 +118,7 @@ class Boot extends LoggerWrapper{
         Menu(Loc("deleteFunctionDefinition", List("modele","function_definition_delete"), "Delete Function Definition", Hidden, loggedIn)) ::
         //entries for new brows/edit function definition with a LiftScreen
         Menu(Loc("createFunctioDefinitionScreen", List("modele","function_definition","create_screen"), "Create Function Definition", Hidden, loggedIn)) ::
+        Menu(Loc("editFunctioDefinitionScreen", List("modele","function_definition","edit_screen"), "Edit Function Definition", Hidden, loggedIn)) ::
         //entries for new brows/edit constraint
         Menu(Loc("createConstraint", List("modele","constraint_create"), "Create Constraint", Hidden, loggedIn)) ::
         Menu(Loc("editConstraint", List("modele","constraint_edit"), "Edit Constraint", Hidden, loggedIn)) ::
