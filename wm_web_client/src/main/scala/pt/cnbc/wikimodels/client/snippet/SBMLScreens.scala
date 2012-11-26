@@ -14,18 +14,25 @@ import Helpers._
 
 import scala.xml._
 import pt.cnbc.wikimodels.client.record.{SBMLModelRecord, FunctionDefinitionRecord}
+import alexmsmartins.log.LoggerWrapper
 
 /** TODO: Please document.
   * @author Alexandre Martins
   *         Date: 20/11/12
   *         Time: 5:01 PM */
-class CreateModelScreen extends LiftScreen {
+class CreateModelScreen extends LiftScreen with LoggerWrapper {
   object model extends ScreenVar(SBMLModelRecord.createRecord)
 
-  addFields(() => model.is)
+  addFields(() => model.is.idO)
+  addFields(() => model.is.nameO)
+  addFields(() => model.is.notesO)
+
 
   def finish() = {
-    S.notice("Model was created successfully!")
+    trace("CreateModelScreen.finish() started executing!")
+    model.is.createRestRec()
+    S.notice("Model " + model.is.metaid + "was created successfully!")
+    //S.notice("Model created!")
   }
 }
 

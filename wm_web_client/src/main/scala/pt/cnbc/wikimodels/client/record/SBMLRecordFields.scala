@@ -69,7 +69,8 @@ with DisplayFormWithLabelInOneLine[String, T] with DisplayHTMLWithLabelInOneLine
 }
 
 class Id[T <: SBaseRecord[T]{var id:String}](own:T, maxLength: Int) extends StringField[T](own, maxLength)
-with DisplayFormWithLabelInOneLine[String, T] with DisplayHTMLWithLabelInOneLine[String, T]{
+//with DisplayFormWithLabelInOneLine[String, T]
+with DisplayHTMLWithLabelInOneLine[String, T]{
 
   var _data:Box[MyType] = Empty
 
@@ -121,7 +122,8 @@ with DisplayFormWithLabelInOneLine[String, T] with DisplayHTMLWithLabelInOneLine
  *
  */
 class Name[T <: SBaseRecord[T]{var name:String}](own:T, maxLength: Int) extends StringField[T](own, maxLength)
-with DisplayFormWithLabelInOneLine[String, T] with DisplayHTMLWithLabelInOneLine[String, T]{
+//with DisplayFormWithLabelInOneLine[String, T]
+with DisplayHTMLWithLabelInOneLine[String, T]{
   var _data:Box[MyType] = Empty
 
   override def theData_=(in:Box[MyType]) {
@@ -216,7 +218,7 @@ with GetSetOwnerField[String, T]{
           <script type="text/javascript" src="/classpath/js/ckeditor/ckeditor.js"></script>
         </head>
 
-        <li><span><h3>Description of the model:</h3></span>
+        <li> <span><h3>Expand/Collapse</h3></span>
             <br />
           <ul>
             <li><span>
