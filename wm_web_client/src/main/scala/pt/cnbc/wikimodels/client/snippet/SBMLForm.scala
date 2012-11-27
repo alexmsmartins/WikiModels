@@ -182,9 +182,10 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
   }
 
   def dispatch: DispatchIt = {
+    //TODO delete unused dispatch functions and references to them
     //model dispatching
-    case "createModel" => createNewModel
-    case "editModel" => editSelectedModel
+    //case "createModel" => createNewModel
+    //case "editModel" => editSelectedModel
     case "visualizeModel" => visualizeSelectedModel
     case "deleteModel" => confirmAndDeleteSelectedModel
     //compartment dispatching
