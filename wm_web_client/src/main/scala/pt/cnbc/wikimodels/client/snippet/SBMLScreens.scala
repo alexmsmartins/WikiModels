@@ -38,6 +38,25 @@ package object screenUtil extends LoggerWrapper{
     mm.openTheBox
   }
 
+
+  def loadCompartmentFromPathParam:CompartmentRecord = {
+    var mm:Box[CompartmentRecord] = Empty
+    tryo(
+      CompartmentRecord.readRestRec(debug("The compartmentMetaId in session after calling /model/modemetaid/compartment/compartmentMetaId is: {}", S.param("compartmentMetaId").openTheBox))
+    ) match {
+      case Full(m) => {mm = m}
+      case Failure(msg,_,_) => {
+        S.error(msg)
+        S.redirectTo("/")
+      }
+      case _ => {
+        S.error("This should not have happened!")
+        error("This should not have happened!")
+        S.redirectTo("/")
+      }
+    }
+    mm.openTheBox
+  }
 }
 
 /** TODO: Please document.
@@ -106,23 +125,8 @@ class CreateCompartmentScreen extends LiftScreen with LoggerWrapper {
   *         Date: 27/11/12
   *         Time: 14:37 PM */
 class EditCompartmentScreen extends LiftScreen with LoggerWrapper {
-  var mm:Box[CompartmentRecord] = Empty
-  tryo(
-    CompartmentRecord.readRestRec(debug("The compartmentMetaId in session after calling /model/modemetaid is: {}", S.param("modelMetaId").openTheBox))
-  ) match {
-    case Full(m) => {mm = m}
-    case Failure(msg,_,_) => {
-      S.error(msg)
-      S.redirectTo("/")
-    }
-    case _ => {
-      S.error("This should not have happened!")
-      error("This should not have happened!")
-    }
-  }
-
-  object compartment extends ScreenVar(mm.openTheBox)
-
+  object compartment extends ScreenVar(screenUtil.loadCompartmentFromPathParam)
+  compartment.parent = Full(screenUtil.loadSBMLModelFromPathParam)
   addFields(() => compartment.is.idO)
   addFields(() => compartment.is.nameO)
   addFields(() => compartment.is.spatialDimensions0)

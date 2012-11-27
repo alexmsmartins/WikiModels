@@ -471,7 +471,8 @@ with GetSetOwnerField[String, T]{
 
 
 class SpatialDimensions[T <: SBaseRecord[T]{var spatialDimensions:Int}](own:T) extends EnumField(own, ValidSpatialDimensions)
-with DisplayFormWithLabelInOneLine[ValidSpatialDimensions, T] with DisplayHTMLWithLabelInOneLine[ValidSpatialDimensions, T] with LoggerWrapper{
+//with DisplayFormWithLabelInOneLine[ValidSpatialDimensions, T]
+with DisplayHTMLWithLabelInOneLine[ValidSpatialDimensions, T] with LoggerWrapper{
   import pt.cnbc.wikimodels.dataModel.Compartment._
   var _data:Box[MyType] = Empty
 
@@ -517,7 +518,8 @@ with DisplayFormWithLabelInOneLine[ValidSpatialDimensions, T] with DisplayHTMLWi
 }
 
 trait UIMandatoryBooleanField[OwnerType <: SBaseRecord[OwnerType]]  extends Field[Boolean, OwnerType] with MandatoryTypedField[Boolean] with BooleanTypedField
-with DisplayFormWithLabelInOneLine[Boolean, OwnerType] with DisplayHTMLWithLabelInOneLine[Boolean, OwnerType]
+//with DisplayFormWithLabelInOneLine[Boolean, OwnerType]
+with DisplayHTMLWithLabelInOneLine[Boolean, OwnerType]
 with LoggerWrapper{
   var _data:Box[MyType] = Empty
 
@@ -631,7 +633,7 @@ class COutside[ T <: SBaseRecord[T]{var outside:String}](own:T) extends Optional
     for (id <- uniqueFieldId; control <- super.toForm)
     yield
       <span id={id + "_holder"}>
-        <label for={ id }> <span class="sbml_field_label">{ displayHtml }</span></label>
+        <!-- <label for={ id }> <span class="sbml_field_label">{ displayHtml }</span></label>-->
         {
           val theParent = this.own.parent.openTheBox
 
@@ -716,7 +718,7 @@ with DisplayHTMLWithLabelInOneLine[String, T]{
     for (id <- uniqueFieldId; control <- super.toForm)
     yield
       <span id={id + "_holder"}>
-        <label for={ id }> <span class="sbml_field_label">{ displayHtml }</span></label>
+        <!-- <label for={ id }> <span class="sbml_field_label">{ displayHtml }</span></label> -->
         {
         val theParent = this.own.parent.openTheBox
 
@@ -794,7 +796,8 @@ class PConstant[OwnerType <: SBaseRecord[OwnerType]{var constant:Boolean}](rec:O
 }
 
 trait UIOptionalDoubleField[OwnerType <: SBaseRecord[OwnerType]] extends Field[Double,OwnerType] with OptionalTypedField[Double] with DoubleTypedField
-  with DisplayFormWithLabelInOneLine[Double, OwnerType] with DisplayHTMLWithLabelInOneLine[Double,OwnerType]
+//  with DisplayFormWithLabelInOneLine[Double, OwnerType]
+with DisplayHTMLWithLabelInOneLine[Double,OwnerType]
   with LoggerWrapper {
 
 
