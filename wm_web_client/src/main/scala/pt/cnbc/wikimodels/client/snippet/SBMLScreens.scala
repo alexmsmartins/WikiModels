@@ -15,6 +15,7 @@ import Helpers._
 import scala.xml._
 import pt.cnbc.wikimodels.client.record._
 import alexmsmartins.log.LoggerWrapper
+import pt.cnbc.wikimodels.sbmlVisitors.SBMLStrictValidator
 
 
 package object screenUtil extends LoggerWrapper{
@@ -74,7 +75,9 @@ class CreateModelScreen extends LiftScreen with LoggerWrapper {
   protected def finish() = {
     trace("CreateModelScreen.finish() started executing!")
     model.is.createRestRec()
-    S.notice("Model " + model.is.metaid + "was created successfully!")
+    S.notice("Model " + model.is.metaid + " was created successfully!")
+    for(warnings <- SBMLStrictValidator.visit(model))
+      S.warning(warnings)
   }
 }
 
@@ -94,7 +97,8 @@ class EditModelScreen extends LiftScreen with LoggerWrapper {
     trace("EditModelScreen.finish() started executing!")
     model.is.updateRestRec()
     S.notice("Model " + model.is.metaid + " was saved successfully!")
-    //S.notice("Model created!")
+    for(warnings <- SBMLStrictValidator.visit(model))
+      S.warning(warnings)
   }
 }
 
@@ -116,7 +120,10 @@ class CreateCompartmentScreen extends LiftScreen with LoggerWrapper {
   protected def finish() = {
     trace("CreateCompartmentScreen.finish() started executing!")
     compartment.is.createRestRec()
-    S.notice("Compartment " + compartment.is.metaid + "was created successfully!")
+    S.notice("Compartment " + compartment.is.metaid + " was created successfully!")
+    for(warnings <- SBMLStrictValidator.visit(compartment))
+      S.warning(warnings)
+
   }
 }
 
@@ -139,6 +146,8 @@ class EditCompartmentScreen extends LiftScreen with LoggerWrapper {
     trace("EditCompartmentScreen.finish() started executing!")
     compartment.is.updateRestRec()
     S.notice("Compartment " + compartment.is.metaid + " was saved successfully!")
+    for(warnings <- SBMLStrictValidator.visit(compartment))
+      S.warning(warnings)
   }
 }
 

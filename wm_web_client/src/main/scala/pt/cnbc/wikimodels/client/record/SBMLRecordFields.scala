@@ -470,7 +470,7 @@ with GetSetOwnerField[String, T]{
 }
 
 
-class SpatialDimensions[T <: SBaseRecord[T]{var spatialDimensions:Int}](own:T) extends EnumField(own, ValidSpatialDimensions)
+class SpatialDimensions[T <: SBaseRecord[T]{var spatialDimensions:Int}](own:T) extends OptionalEnumField(own, ValidSpatialDimensions)
 //with DisplayFormWithLabelInOneLine[ValidSpatialDimensions, T]
 with DisplayHTMLWithLabelInOneLine[ValidSpatialDimensions, T] with LoggerWrapper{
   import pt.cnbc.wikimodels.dataModel.Compartment._
@@ -495,6 +495,7 @@ with DisplayHTMLWithLabelInOneLine[ValidSpatialDimensions, T] with LoggerWrapper
     trace("Calling SpatialDimensions.theData")
     //if the owner has valid data that was obtained from the wikimodels Server
     debug("theData with spatialDimensions = "+ owner.spatialDimensions + " is being copied to the record Field.")
+    _data = Box.legacyNullTest(ValidSpatialDimensions(own.spatialDimensions))
       _data match {
         case Empty => {
 
