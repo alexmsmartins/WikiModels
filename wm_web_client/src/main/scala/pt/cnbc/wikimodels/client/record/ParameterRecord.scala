@@ -13,7 +13,7 @@ import net.liftweb.record._
  *  @author Alexandre Martins
  *  Date: 29-12-2011
  *  Time: 17:12 */
-class ParameterRecord() extends Parameter with SBaseRecord[ParameterRecord]  {
+class ParameterRecord() extends Parameter with SBaseRecord[ParameterRecord] {
 
   override def meta = ParameterRecord
 

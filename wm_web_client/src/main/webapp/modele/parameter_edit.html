@@ -5,18 +5,18 @@
 
 <html>
 <body>
-<lift:surround with="default" at="content">
-    <div id='content'>
+<div class="lift:surround?with=default;at=content">
+<div id='content'>
         <div class="lift:SBMLSnip:parameterMetaId">
             <h1>Parameter with metaId <span id="pMetaId"></span> . <input type="button"
                                                                       onclick="window.location.href=window.location.href+'/..'"
                                                                       name="view" value="View">View</input> </h1>
         </div>
-        <div class="lift:SBMLForm.editParameter?form=post">
+        <div class="lift:EditParameterScreen">
         </div>
         <p></p>
     </div>
     <!-- end of content -->
-</lift:surround>
+</div>
 </body>
 </html>

@@ -123,7 +123,7 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
     debug("""Parameter "functionDefinitioMetaId" « {} """, S.param("functionDefinitioMetaId").openTheBox)
 
     selectedFunctionDefinition {
-      FunctionDefinitionRecord.readRestRec(debug("The functionDefinitioMetaId in session after calling /model/modemetaid/functiondefinition/functionDefinitioMetaId is: {}", S.param("functionDefinitioMetaId").openTheBox))
+      FunctionDefinitionRecord.readRestRec(debug("The functionDefinitioMetaId in session after calling /model/modemetaid/functiondefinition/functionDefinitionMetaId is: {}", S.param("functionDefinitioMetaId").openTheBox))
     }
 
     //TODO this might be optimizable by turning the parent field into a lazy field and the interface buttons that need it into ajax buttons

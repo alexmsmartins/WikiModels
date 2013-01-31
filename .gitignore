@@ -1,4 +1,5 @@
 #ignore maven build directories in general
+trunk/
 target/
 project/boot/
 project/build/target/

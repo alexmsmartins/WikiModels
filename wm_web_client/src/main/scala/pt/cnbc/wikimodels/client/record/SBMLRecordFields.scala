@@ -11,12 +11,11 @@ import xml.{Elem, Text, XML, NodeSeq}
 import pt.cnbc.wikimodels.dataModel._
 import pt.cnbc.wikimodels.dataModel.ValidSpatialDimensions
 import pt.cnbc.wikimodels.dataModel.ValidSpatialDimensions._
-import tools.nsc.util.trace
-import pt.cnbc.wikimodels.mathml.elements.MathMLElem
-import tools.nsc.util.trace
-import tools.nsc.util.trace
 import pt.cnbc.wikimodels.sbmlVisitors.SBMLLooseValidator
-import pt.cnbc.wikimodels.sbmlVisitors.helpers.SBMLl2v4Checks
+import pt.cnbc.wikimodels.exceptions.ValidationDefaultCase._
+import xml.Text
+import net.liftweb.http.js.JsCmds.JsCrVar
+import net.liftweb.common.Full
 
 //Javascript handling imports
 import net.liftweb.http.js.{JsExp, JE, JsCmd, JsCmds}
@@ -26,7 +25,7 @@ import net.liftweb.http.js.JE.{JsVar, Call, JsRaw, Str}
 import scala.util.parsing.combinator.Parsers
 
 class MetaId[T <: SBaseRecord[T]](own:T, maxLength: Int) extends StringField[T](own, maxLength)
-with DisplayFormWithLabelInOneLine[String, T] with DisplayHTMLWithLabelInOneLine[String, T]{
+with DisplayHTMLWithLabelInOneLine[String, T]{
   var _data:Box[MyType] = Empty
 
   override def theData_=(in:Box[MyType]) {
@@ -52,6 +51,7 @@ with DisplayFormWithLabelInOneLine[String, T] with DisplayHTMLWithLabelInOneLine
           if (! this.optional_?) owner.metaid = defaultValue
         }
         case Full(x) => owner.metaid = x
+        case _ => Nil
       }
     }
     trace("MetaId.theData returns " + _data)
@@ -63,18 +63,15 @@ with DisplayFormWithLabelInOneLine[String, T] with DisplayHTMLWithLabelInOneLine
   //Appears when rendering the form or the visualization
   override def name: String = "Metaid"
 
-
   //override def toXHtml: NodeSeq = Text(this.value + "xxxxxxx")
-
 }
 
 class Id[T <: SBaseRecord[T]{var id:String}](own:T, maxLength: Int) extends StringField[T](own, maxLength)
-//with DisplayFormWithLabelInOneLine[String, T]
 with DisplayHTMLWithLabelInOneLine[String, T]{
 
   var _data:Box[MyType] = Empty
 
-  def validateId(id:String) =
+  def validateId(id:String):List[FieldError] =
     SBMLLooseValidator.checkMandatoryId(id)
       .map(FieldError( this, _ ))
 
@@ -106,12 +103,12 @@ with DisplayHTMLWithLabelInOneLine[String, T]{
           if (! this.optional_?) owner.id = defaultValue
         }
         case Full(x) => owner.id = x
+        case _ => Nil
       }
     }
     trace("Id.theData returns " + _data)
     _data
   }
-
 
   //Appears when rendering the form or the visualization
   override def name: String = "Id"
@@ -121,8 +118,7 @@ with DisplayHTMLWithLabelInOneLine[String, T]{
 /**
  *
  */
-class Name[T <: SBaseRecord[T]{var name:String}](own:T, maxLength: Int) extends StringField[T](own, maxLength)
-//with DisplayFormWithLabelInOneLine[String, T]
+class Name[T <: SBaseRecord[T]{var name:String}](own:T, maxLength: Int) extends OptionalStringField[T](own, maxLength)
 with DisplayHTMLWithLabelInOneLine[String, T]{
   var _data:Box[MyType] = Empty
 
@@ -149,13 +145,23 @@ with DisplayHTMLWithLabelInOneLine[String, T]{
           if (! this.optional_?) owner.name = defaultValue
         }
         case Full(x) => owner.name = x
+        case _ => Nil
       }
     }
     trace("Name.theData returns " + _data)
     _data
   }
 
+  def validateName(name:Option[String]):List[FieldError] =
+    if(!name.isEmpty){
+      SBMLLooseValidator.checkOptionalName(name.get)
+        .map(FieldError( this, _ ))
+    } else List[FieldError]()
 
+
+  override def validations:List[ValidationFunction] =
+    validateName _ ::
+      super.validations
 
   //Appears when rendering the form or the visualization
   override def name = "Name"
@@ -196,6 +202,7 @@ with GetSetOwnerField[String, T]{
           if (! this.optional_?) owner.notes = null
         }
         case Full(x) => owner.notes = x
+        case _ => Nil
       }
     }
     trace("Notes.theData returns " + _data)
@@ -400,6 +407,7 @@ with GetSetOwnerField[String, T]{
           if (! this.optional_?) owner.message = null
         }
         case Full(x) => owner.message = x
+        case _ => Nil
       }
     }
     trace("Message.theData returns " + _data)
@@ -470,8 +478,7 @@ with GetSetOwnerField[String, T]{
 }
 
 
-class SpatialDimensions[T <: SBaseRecord[T]{var spatialDimensions:Int}](own:T) extends OptionalEnumField(own, ValidSpatialDimensions)
-//with DisplayFormWithLabelInOneLine[ValidSpatialDimensions, T]
+class SpatialDimensions[T <: SBaseRecord[T]{var spatialDimensions:Int}](own:T) extends EnumField(own, ValidSpatialDimensions)
 with DisplayHTMLWithLabelInOneLine[ValidSpatialDimensions, T] with LoggerWrapper{
   import pt.cnbc.wikimodels.dataModel.Compartment._
   var _data:Box[MyType] = Empty
@@ -507,6 +514,7 @@ with DisplayHTMLWithLabelInOneLine[ValidSpatialDimensions, T] with LoggerWrapper
         case Full(x) => {
           owner.spatialDimensions = x.id
         }
+        case _ => Nil
       }
     trace("SpatialDimensions.theData returns " + _data)
     _data
@@ -519,7 +527,6 @@ with DisplayHTMLWithLabelInOneLine[ValidSpatialDimensions, T] with LoggerWrapper
 }
 
 trait UIMandatoryBooleanField[OwnerType <: SBaseRecord[OwnerType]]  extends Field[Boolean, OwnerType] with MandatoryTypedField[Boolean] with BooleanTypedField
-//with DisplayFormWithLabelInOneLine[Boolean, OwnerType]
 with DisplayHTMLWithLabelInOneLine[Boolean, OwnerType]
 with LoggerWrapper{
   var _data:Box[MyType] = Empty
@@ -541,8 +548,7 @@ with LoggerWrapper{
       }
       case _ =>{
         ownerField = true //lets give it a default even in case of error
-        S.error("Strange error when reading the field constant in ")
-      }  
+      }
     }
   }
 
@@ -560,6 +566,7 @@ with LoggerWrapper{
       case Full(x) => {
         ownerField = x
       }
+      case _ => Nil
     }
     trace("Constant.theData returns " + _data)
     _data
@@ -618,6 +625,7 @@ class COutside[ T <: SBaseRecord[T]{var outside:String}](own:T) extends Optional
           if (! this.optional_?) own.outside = defaultValue
         }
         case Full(x) => own.outside = x
+        case _ => Nil
       }
     }
     trace("Outside.theData returns " + _data)
@@ -630,7 +638,7 @@ class COutside[ T <: SBaseRecord[T]{var outside:String}](own:T) extends Optional
   //override def toXHtml: NodeSeq = Text(this.value)
 
   override def toForm:Box[NodeSeq] = {
-    trace("Calling DisplayFormWithLabelInOneLine.toForm")
+    trace("Calling COutside.toForm")
     for (id <- uniqueFieldId; control <- super.toForm)
     yield
       <span id={id + "_holder"}>
@@ -703,6 +711,7 @@ with DisplayHTMLWithLabelInOneLine[String, T]{
           if (! this.optional_?) own.compartment = defaultValue
         }
         case Full(x) => own.compartment = x
+        case _ => Nil
       }
     }
     trace("SCompartment.theData returns " + _data)
@@ -715,7 +724,7 @@ with DisplayHTMLWithLabelInOneLine[String, T]{
   //override def toXHtml: NodeSeq = Text(this.value)
 
   override def toForm:Box[NodeSeq] = {
-    trace("Calling DisplayFormWithLabelInOneLine.toForm")
+    trace("Calling SCompartment.toForm")
     for (id <- uniqueFieldId; control <- super.toForm)
     yield
       <span id={id + "_holder"}>
@@ -822,7 +831,6 @@ with DisplayHTMLWithLabelInOneLine[Double,OwnerType]
       }
       case _ =>{
         ownerField = null //lets give it a default even in case of error
-        S.error("Strange error when reading the field!")
       }
     }
   }
@@ -844,16 +852,17 @@ with DisplayHTMLWithLabelInOneLine[Double,OwnerType]
         case Full(x) => {
           ownerField = x.asInstanceOf[java.lang.Double]
         }
+        case _ => Nil
       }
     }
     trace("Constant.theData returns " + _data)
     _data
   }
 
-  override def setFromString(s: String): Box[Double] = s match {
-    case "" if optional_? => setBox(Empty)
-    case _ =>setBox(tryo(java.lang.Double.parseDouble(s)))
-  }
+//  override def setFromString(s: String): Box[Double] = s match {
+//    case "" if optional_? => setBox(Empty)
+//    case _ =>setBox(tryo(java.lang.Double.parseDouble(s)))
+//  }
 
 
   //Appears when rendering the form or the visualization
@@ -874,22 +883,32 @@ class Size[OwnerType <: SBaseRecord[OwnerType]{var size:java.lang.Double}](rec:O
  * Species initialAmount
  */
 class InitialAmount[OwnerType <: SBaseRecord[OwnerType]{var initialAmount:java.lang.Double}](rec:OwnerType)
-  extends UIOptionalDoubleField[OwnerType]  {
+  extends UIOptionalDoubleField[OwnerType] with AuxValidators  {
   def owner = rec
   override def ownerField_=(value:java.lang.Double) = owner.initialAmount = value
   override def ownerField:java.lang.Double = owner.initialAmount
   override def name: String = "InitialAmount"
+
+  override def validations:List[ValidationFunction] =
+      super.validations
 }
 
 /**
  * Species initialConcentration
  */
 class InitialConcentration[OwnerType <: SBaseRecord[OwnerType]{var initialConcentration:java.lang.Double}](rec:OwnerType)
-  extends UIOptionalDoubleField[OwnerType]  {
+  extends UIOptionalDoubleField[OwnerType] with AuxValidators{
   def owner = rec
   override def ownerField_=(value:java.lang.Double) = owner.initialConcentration = value
   override def ownerField:java.lang.Double = owner.initialConcentration
   override def name: String = "InitialConcentration"
+
+  def validateInitialConcentration(ic:String):List[FieldError] =
+    checkOptionalDoubleNumber(ic)
+      .map(FieldError( this, _ ))
+
+  override def validations:List[ValidationFunction] =
+    super.validations
 }
 
 /**
@@ -949,6 +968,7 @@ with GetSetOwnerField[String,OwnerType]{
           if (! this.optional_?) owner.math = null
         }
         case Full(x) => owner.math = x
+        case _ => Nil
       }
     }
     trace("Math.theData returns " + _data)
@@ -1065,29 +1085,6 @@ with GetSetOwnerField[String,OwnerType]{
 
 // Aux Record traits
 
-/**
- * Mix in to a field to change its form display to    for (id <- uniqueFieldId; control <- super.toXHtml) yield
-   be formatted with the label aside.
- *
- * E.g.
- *   <div id={ id + "_holder" }>
- *     <div><label for={ id }>{ displayName }</label></div>
- *     { control }
- *   </div>
- */
-trait DisplayFormWithLabelInOneLine[ThisType, OwnerType <: Record[OwnerType]] extends GetSetOwnerField[ThisType, OwnerType] {
-  override abstract def toForm:Box[NodeSeq] = {
-    trace("Calling DisplayFormWithLabelInOneLine.toForm")
-    for (id <- uniqueFieldId; control <- super.toForm)
-    yield
-      <span id={id + "_holder"}>
-        <label for={ id }> <span class="sbml_field_label">{ displayHtml }</span></label>
-        {control}
-          <lift:msg id={id}  errorClass="lift_error"/>
-      </span>
-  }
-}
-
 trait DisplayHTMLWithLabelInOneLine[ThisType, OwnerType <: Record[OwnerType]] extends GetSetOwnerField[ThisType, OwnerType] {
   override def toXHtml: NodeSeq = {
     trace("Calling DisplayHTMLWithLabelInOneLine.toXHtml")
@@ -1152,5 +1149,21 @@ with LoggerWrapper{
   }
 
   override def asString = displayName + "=" + theData.openTheBox
+}
+
+trait AuxValidators {
+  protected def checkDoubleNumber(s: String):List[String] =
+    try{
+      java.lang.Double.parseDouble(s); Nil
+    } catch {
+      case e:NumberFormatException => List("'"+s+"' does not represent a valid floating point number.")
+      case e => exceptionHandling(e)
+    }
+
+  protected def checkOptionalDoubleNumber(num:String):List[String] =
+    if (num == null)
+      Nil
+    else checkDoubleNumber(num)
+
 }
 
