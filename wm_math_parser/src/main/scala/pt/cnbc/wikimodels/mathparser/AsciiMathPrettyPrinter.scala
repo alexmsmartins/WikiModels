@@ -16,11 +16,13 @@ object AsciiMathPrettyPrinter{
     elem match{
       case x:Apply => handleApply(x)
       case Ci(x,"real",_) => x
+      case Ci(x,_,_) => x
       case Cn(content, "real", 10, definitionURL, encoding ) => content(0)
       case Cn(content, "integer", 10, definitionURL, encoding ) => content(0)
       case Cn(x::y, "e-notation",10, definitionURL, encoding ) => x+"e"+y
       case Operator(name, _, _, definitionURL, encoding) => name
       case CSymbol(content, definitionURL, encoding) => content
+      case x:Lambda => handleLambda(x)
       case default => throw new RuntimeException( "AsciiMathML conversion of " + default + " is not implemented")
     }
   }
@@ -48,6 +50,10 @@ object AsciiMathPrettyPrinter{
       case Apply(Exponentiation, params) =>  toAsciiMathML( params(0) ) + "^" + toAsciiMathML( params(1) )
       case Apply(o,params) => toAsciiMathML(o) + "(" + separateWith( params.map(toAsciiMathML(_)), ", " ) +")"
     }
+  }
+
+  protected def handleLambda(lambda:Lambda):String = {
+    "(" + separateWith(lambda.params.map(toAsciiMathML(_)),", ") + ") = " + toAsciiMathML(lambda.expr)
   }
 
   protected def separateWith(params:List[String], separator:String ):String = {
