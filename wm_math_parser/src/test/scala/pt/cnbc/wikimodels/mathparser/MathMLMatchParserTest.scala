@@ -84,5 +84,45 @@ class MathMLMatchParserTest {
     assertEquals((roundMathML \ "lambda").head.child.size , 3) //tests for the number of elements inside the <lambda> tag
     assertEquals((roundMathML \ "lambda" \ "apply" \ "apply" \ "ci").text, "temp_in_fahrenheit") //tests for 'temp_in_fahrenheit' in <ci>
   }
+
+  @Test
+  def roundtripLambdaWithPower = {
+    val mathml =  // taken from sbml l2v4r1 spec page 40
+      <math xmlns="http://www.w3.org/1998/Math/MathML">
+        <lambda>
+          <bvar><ci> x </ci></bvar>
+          <apply>
+            <power/>
+            <apply>
+              <divide/>
+              <apply>
+                <plus/>
+                <ci> x </ci>
+                <cn> 459.67 </cn>
+              </apply>
+              <cn> 1.8 </cn>
+            </apply>
+            <cn> 3 </cn>
+          </apply>
+        </lambda>
+      </math>
+    Console.println("Beginning with xml " + mathml)
+    val <math>{lambda}</math> = Utility.trim(mathml)
+    val p = MathMLMatchParser()
+    val mathMLaST = p.parse(lambda.asInstanceOf[Elem])
+    Console.println("AST generated from mathml is " + mathMLaST)
+    val asciiMath = AsciiMathPrettyPrinter.toAsciiMathML(mathMLaST)
+    Console.println("AsciiMath generated from AST is " + asciiMath)
+    val asciiParser = AsciiMathParser()
+    val roundAST = asciiParser.parseAll(asciiParser.LambdaExpr, asciiMath)
+    Console.println("AST generated from asciimath is " + roundAST.get)
+    val roundMathML = scala.xml.Utility.trim(MathMLPrettyPrinter.toXML(roundAST.get))
+    Console.println("MathML generated from roundtripped AST is " + roundMathML)
+    assertEquals((roundMathML \ "lambda" \ "bvar" \ "ci" ).head.text.trim, "x")
+    assertEquals((roundMathML \ "lambda").head.child.size , 2) //tests for the number of elements inside the <lambda> tag
+    assertEquals((roundMathML \ "lambda" \ "apply" \"apply" \"apply" \ "ci").text, "x") //tests for 'x' in <ci>
+    assertEquals((roundMathML \ "lambda" \ "apply" \ "cn").text, "3") //tests for '3' in <cn>
+  }
+
 }
 

@@ -5,7 +5,9 @@ import KnownOperators._
 import util.parsing.combinator.{RegexParsers, PackratParsers}
 
 class AsciiMathParser extends RegexParsers with PackratParsers with AsciiMathParserHandlers {
-
+  //Note the AsciiMath symbols for different operators have to be changed here and in AsciiMathPrettyPrinter
+  // I am doing this because the grammar would be very hard to read (and change) if, for example, we wrote
+  // '''toAsciiMathML(Addition)''' instead of ''' "+" '''
   type MME = MathMLElem
 
   //General expression with any possibility

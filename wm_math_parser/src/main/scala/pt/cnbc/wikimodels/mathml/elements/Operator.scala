@@ -31,6 +31,7 @@ object KnownOperators{
   var validOps = Map.empty[String, Operator]
   var validOpsList = List.empty[Operator]
 
+
   //------------ relational operators: ------------//
   case object Eq extends Operator("eq",2,PositiveInfiniteInt)
   case object Neq  extends Operator("neq",2,2)
@@ -103,6 +104,7 @@ object KnownOperators{
   validOpsList :::= List(And, Or , Xor, Not)
 
   validOps ++= validOpsList.map(op => (op.name, op))
+
 
   override def toString() = {
     validOps.map(op => {
