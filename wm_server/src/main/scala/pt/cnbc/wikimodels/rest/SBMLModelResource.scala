@@ -211,7 +211,7 @@ class SBMLModelResource extends RESTResource {
       resource
    }
 
-   @Path("{modelid}/functionDefinition/")
+   @Path("{modelid}/functiondefinition/")
    def functionDefinitionResource(@PathParam("modelid") sbmlModelResource:String) = {
       val resource:FunctionDefinitionResource = new FunctionDefinitionResource(sbmlModelResource)
       resource.security = this.security //ugly hack

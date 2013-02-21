@@ -75,6 +75,8 @@ with DisplayHTMLWithLabelInOneLine[String, T]{
     SBMLLooseValidator.checkMandatoryId(id)
       .map(FieldError( this, _ ))
 
+  override def helpAsHtml:Box[NodeSeq] = Full(<a href="http://stackoverflow.com/questions/1252749/how-to-show-images-links-on-div-hover" target="_blank">(?)</a>)
+
   override def validations:List[ValidationFunction] =
     validateId _ ::
     valMinLen(1,"Field is empty") _ ::
@@ -366,7 +368,10 @@ with GetSetOwnerField[String, T]{
                   //FIXME replace this hack by something more general
                   case _ => XML.loadString( "<root>"+content+"</root>" ).child
                 }
-              }}
+              }
+              case Failure(msg, exception, chain) => S.error(msg)
+              case ParamFailure(msg, exception, chain, param) => S.error(msg + ". This occured in " + param)
+            }
             }</span>
         </span>
           <lift:msg id={uniqueFieldId.openTheBox}  errorClass="lift_error"/>
@@ -467,9 +472,10 @@ with GetSetOwnerField[String, T]{
               XML.loadString( content )
             } catch{
               //FIXME replace this hack by something more general
-              case _ => XML.loadString( "<root>"+content+"</root>" ).child
+          case _ => XML.loadString( "<root>"+content+"</root>" ).child
             }
-          }}
+          }
+        }
           }</span>
       </span>
         <lift:msg id={uniqueFieldId.openTheBox}  errorClass="lift_error"/>
@@ -923,8 +929,14 @@ class Value[OwnerType <: SBaseRecord[OwnerType]{var value:java.lang.Double}](rec
 }
 
 
-class Math[OwnerType <: SBaseRecord[OwnerType]{var math:String}](rec:OwnerType) extends StringField(rec,2000)
+class Math[OwnerType <: SBaseRecord[OwnerType]{var math:String}](rec:OwnerType) extends TextareaField(rec,2000)
 with GetSetOwnerField[String,OwnerType]{
+
+  override def validations:List[ValidationFunction] =
+    super.validations
+
+  override def setFilter:List[ValueType => ValueType] =
+    super.setFilter
 
   object Default{
     val mathmlFormula = <math xmlns="http://www.w3.org/1998/Math/MathML"/>
@@ -976,6 +988,7 @@ with GetSetOwnerField[String,OwnerType]{
   }
 
 
+/*
   override def toForm() = {
     val textAreaId = "math_textarea"
     val ajaxCheckTextArea = () => {
@@ -1055,6 +1068,7 @@ with GetSetOwnerField[String,OwnerType]{
 
 
   }
+*/
 
   //Appears when rendering the form or the visualization
 
@@ -1074,7 +1088,10 @@ with GetSetOwnerField[String,OwnerType]{
               //FIXME replace this hack by something more general
               case _ => XML.loadString( "<root>"+content+"</root>" ).child
             }
-          }}
+          }
+          case Failure(msg, exception, chain) => S.error(msg)
+          case ParamFailure(msg, exception, chain, param) => S.error(msg + ". This occured in " + param)
+        }
           }</span>
       </span>
         <lift:msg id={uniqueFieldId.openTheBox}  errorClass="lift_error"/>

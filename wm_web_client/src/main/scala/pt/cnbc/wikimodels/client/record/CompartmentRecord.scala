@@ -36,14 +36,6 @@ class CompartmentRecord() extends Compartment with SBaseRecord[CompartmentRecord
         <link type="text/css" rel="stylesheet" href="/css/sbml_present.css"></link>
       </head>
       {super.toXHtml}
-      <!-- outsude field -->
-      <div id={"outside_holder"}>
-        <span for="outside">
-          <span class="sbml_field_label">Outside</span>
-          <span class="sbml_field_content">  {Box.legacyNullTest(this.outside)  openOr "-- not defined --" }</span>
-        </span>
-        <lift:msg id="outside"  errorClass="lift_error"/>
-      </div>
     </div>
   }
   

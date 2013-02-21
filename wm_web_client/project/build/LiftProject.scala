@@ -3,7 +3,7 @@
 import sbt._
 
 class LiftProject(info: ProjectInfo) extends DefaultWebProject(info) {
-    val mavenLocal = "Local Maven Repository" at "file://"+Path.userHome+"/.m2/repository/"
+    val mavenLocal = "Local Maven Repository" at "file://"+(Path.userHome / ".m2"/"repository").absolutePath
     val bryanjswift = "Bryan J Swift Repository" at "http://repos.bryanjswift.com/maven2/"
     //val junitInterface = "com.novocode" % "junit-interface" % "0.4.0" % "test"
 

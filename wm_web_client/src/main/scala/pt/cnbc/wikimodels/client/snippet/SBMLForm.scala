@@ -20,6 +20,9 @@ import pt.cnbc.wikimodels.client.record._
 
 import alexmsmartins.log.LoggerWrapper
 import pt.cnbc.wikimodels.controller.SMsg
+import pt.cnbc.wikimodels.sbmlVisitors.SBMLStrictValidator
+import pt.cnbc.wikimodels.dataModel.SBMLModel
+import visitor.SBMLFromRecord
 
 /**
  * This snippet contains the forms and html to handle all the actions a user can perform on a SBMLModel
@@ -677,7 +680,12 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
     debug("VISUALIZE SELECTED MODEL")
     loadSBMLModelFromPathParam
     debug("Loaded selectedModel = " + selectedModel.openTheBox.toXML )
-    selectedModel.map(_.toXHtml) openOr {S.error(mainMsgId,"Model not found"); redirectTo("/models/")}
+      selectedModel.map(mr =>{
+        val m:SBMLModel = SBMLFromRecord.createModelFrom(mr)
+        SBMLStrictValidator.visit(m).map(err => S.notice(err))
+        mr.toXHtml
+      }
+    ) openOr {S.error(mainMsgId,"Model not found"); redirectTo("/models/")}
   }
 
   def visualizeSelectedCompartment(ns:NodeSeq):NodeSeq = {

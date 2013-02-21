@@ -16,9 +16,16 @@ import scala.xml._
 import pt.cnbc.wikimodels.client.record._
 import alexmsmartins.log.LoggerWrapper
 import pt.cnbc.wikimodels.sbmlVisitors.SBMLStrictValidator
+import pt.cnbc.wikimodels.dataModel.SBMLModel
+import visitor.SBMLFromRecord
 
 
 package object screenUtil extends LoggerWrapper{
+  def genWarnsForSBMLModel() {
+    val mr = screenUtil.loadSBMLModelFromPathParam
+    val m: SBMLModel = SBMLFromRecord.createModelFrom(mr)
+    SBMLStrictValidator.visit(m).map(err => S.warning(err))
+  }
 
   def loadSBMLModelFromPathParam:SBMLModelRecord = {
     var mm:Box[SBMLModelRecord] = Empty
@@ -132,7 +139,7 @@ class CreateModelScreen extends LiftScreen with LoggerWrapper {
   protected def finish() = {
     trace("CreateModelScreen.finish() started executing!")
     model.is.createRestRec()
-    S.notice("Model " + model.is.metaid + " was created successfully!")
+    S.notice("Model " + model.metaid + " was created successfully!")
     for(warnings <- SBMLStrictValidator.visit(model))
       S.warning(warnings)
   }
@@ -178,6 +185,7 @@ class CreateCompartmentScreen extends LiftScreen with LoggerWrapper {
     S.notice("Compartment " + compartment.is.metaid + " was created successfully!")
     for(warnings <- SBMLStrictValidator.visit(compartment))
       S.warning(warnings)
+    screenUtil.genWarnsForSBMLModel()
   }
 }
 
@@ -202,7 +210,9 @@ class EditCompartmentScreen extends LiftScreen with LoggerWrapper {
     S.notice("Compartment " + compartment.is.metaid + " was saved successfully!")
     for(warnings <- SBMLStrictValidator.visit(compartment))
       S.warning(warnings)
+    screenUtil.genWarnsForSBMLModel()
   }
+
 }
 
 
@@ -228,6 +238,7 @@ class CreateSpeciesScreen extends LiftScreen with LoggerWrapper {
     S.notice("Species " + species.is.metaid + " was created successfully!")
     for(warnings <- SBMLStrictValidator.visit(species))
       S.warning(warnings)
+    screenUtil.genWarnsForSBMLModel()
   }
 }
 
@@ -253,6 +264,7 @@ class EditSpeciesScreen extends LiftScreen with LoggerWrapper {
     S.notice("Species " + species.is.metaid + " was saved successfully!")
     for(warnings <- SBMLStrictValidator.visit(species))
       S.warning(warnings)
+    screenUtil.genWarnsForSBMLModel()
   }
 }
 
@@ -277,6 +289,7 @@ class CreateParameterScreen extends LiftScreen with LoggerWrapper {
     S.notice("Parameter " + parameter.is.metaid + " was created successfully!")
     for(warnings <- SBMLStrictValidator.visit(parameter))
       S.warning(warnings)
+    S.redirectTo( parameter.relativeURL )
   }
 }
 
@@ -331,9 +344,8 @@ class CreateFunctionDefinitionScreen extends LiftScreen with LoggerWrapper{
   *         Date: 20/11/12
   *         Time: 4:45 PM */
 class EditFunctionDefinitionScreen extends LiftScreen with LoggerWrapper{
-  object function extends ScreenVar(
-    FunctionDefinitionRecord.readRestRec(S.param("functionDefinitionMetaId").openTheBox).openTheBox
-  )
+  object function extends ScreenVar(screenUtil.loadFunctionDefinitionFromPathParam)
+  function.parent = Full(screenUtil.loadSBMLModelFromPathParam)
 
   //override def screenTop =  <b>A single screen with some input validation</b>
   addFields(() => function.is.idO)
