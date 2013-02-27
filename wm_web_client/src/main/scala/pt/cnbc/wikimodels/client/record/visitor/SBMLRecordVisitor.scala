@@ -4,9 +4,11 @@ import scala.collection.JavaConversions._
 
 import pt.cnbc.wikimodels.client.record._
 import pt.cnbc.wikimodels.dataModel._
-import net.liftweb.common.Full
+import net.liftweb.common.{Box, Full}
+import net.liftweb.common.Box._
 import alexmsmartins.log.LoggerWrapper
 import pt.cnbc.wikimodels.exceptions.NotImplementedException
+import visitor.SBMLFromRecord.createKineticLawFrom
 
 /*
 * Copyright (c) 2011. Alexandre Martins. All rights reserved.
@@ -35,10 +37,10 @@ object SBMLFromRecord extends LoggerWrapper {
 
   implicit def createModelFrom(mr:SBMLModelRecord):SBMLModel = {
     val m = new SBMLModel()
-    m.metaid = mr.metaid
-    m.id = mr.id
-    m.name = mr.name
-    m.notes = mr.notes
+    m.metaid = mr.metaIdO.get
+    m.id = mr.idO.get
+    m.name = mr.nameO.get.getOrElse(null)
+    m.notes = mr.notesO.get.getOrElse(null)
     m.listOfCompartments = Set.empty ++ mr.listOfCompartmentsRec.map(createCompartmentFrom(_))
     m.listOfSpecies = Set.empty ++ mr.listOfSpeciesRec.map(createSpeciesFrom(_))
     m.listOfParameters = Set.empty ++ mr.listOfParametersRec.map(createParameterFrom(_))
@@ -51,76 +53,75 @@ object SBMLFromRecord extends LoggerWrapper {
 
   implicit def createCompartmentFrom(cr: CompartmentRecord):Compartment = {
     val c = new Compartment()
-    c.metaid = cr.metaid
-    c.id = cr.id
-    c.name = cr.name
-    c.notes = cr.notes
-    c.compartmentType = cr.compartmentType
-    c.spatialDimensions = cr.spatialDimensions
-    c.size = cr.size
-    c.units = cr.units
-    c.outside = cr.outside
-    c.constant = cr.constant
+    c.metaid = cr.metaIdO.get
+    c.id = cr.idO.get
+    c.name = cr.nameO.get.getOrElse(null)
+    c.notes = cr.notesO.get.getOrElse(null)
+    //c.compartmentType = cr.compartmentType
+    c.spatialDimensions = cr.spatialDimensions0.get.id
+    c.size = cr.sizeO.get.getOrElse(null).asInstanceOf[java.lang.Double]
+    //c.units = cr.units
+    c.outside = cr.outsideO.get.getOrElse(null)
+    c.constant = cr.constantO.get
     c
   }
 
   implicit def createSpeciesFrom(sr:SpeciesRecord):Species = {
     val s = new Species()
-    s.metaid = sr.metaid
-    s.id = sr.id
-    s.name = sr.name
-    s.notes = sr.notes
-    s.compartment= sr.compartment
-    s.initialAmount = sr.initialAmount
-    s.initialConcentration = sr.initialConcentration
-    s.substanceUnits = sr.substanceUnits
-    s.hasOnlySubstanceUnits = sr.hasOnlySubstanceUnits
-    s.boundaryCondition = sr.boundaryCondition
-    s.constant = sr.constant
+    s.metaid = sr.metaIdO.get
+    s.id = sr.idO.get
+    s.name = sr.nameO.get.getOrElse(null)
+    s.notes = sr.notesO.get.getOrElse(null)
+    s.compartment= sr.compartmentO.get
+    s.initialAmount = sr.initialAmountO.get.getOrElse(null).asInstanceOf[java.lang.Double]
+    s.initialConcentration = sr.initialConcentrationO.get.getOrElse(null).asInstanceOf[java.lang.Double]
+    //s.substanceUnits = sr.substanceUnits
+    //s.hasOnlySubstanceUnits = sr.hasOnlySubstanceUnits
+    s.boundaryCondition = sr.boundaryConditionO.get
+    s.constant = sr.constantO.get
     s
   }
 
   implicit def createParameterFrom(pr:ParameterRecord):Parameter = {
     val p = new Parameter
-    p.metaid = pr.metaid
-    p.id = pr.id
-    p.name = pr.name
-    p.notes = pr.notes
-    p.value = pr.value
-    p.units = pr.units
-    p.constant = pr.constant
+    p.metaid = pr.metaIdO.get
+    p.id = pr.idO.get
+    p.name = pr.nameO.get.getOrElse(null)
+    p.notes = pr.notesO.get.getOrElse(null)
+    p.value = pr.valueO.get.getOrElse(null).asInstanceOf[java.lang.Double]
+    //p.units = pr.units
+    p.constant = pr.constantO.get
     p
   }
 
   implicit def createFunctionDefinitionFrom(fdr:FunctionDefinitionRecord):FunctionDefinition = {
     val fd = new FunctionDefinition
-    fd.metaid = fdr.metaid
-    fd.id = fdr.id
-    fd.name = fdr.name
-    fd.notes = fdr.notes
-    fd.math = fdr.math
+    fd.metaid = fdr.metaIdO.get
+    fd.id = fdr.idO.get
+    fd.name = fdr.nameO.get.getOrElse(null)
+    fd.notes = fdr.notesO.get.getOrElse(null)
+    fd.math = fdr.mathO.get
     fd
   }
 
   implicit def createConstraintFrom(ctr: ConstraintRecord):Constraint = {
     val ct = new Constraint
-    ct.metaid = ctr.metaid
-    ct.id = ctr.id
-    ct.name = ctr.name
-    ct.notes = ctr.notes
-    ct.math = ctr.math
-    ct.message = ctr.message
+    ct.metaid = ctr.metaIdO.get
+    ct.id = ctr.idO.get
+    ct.name = ctr.nameO.get.getOrElse(null)
+    ct.notes = ctr.notesO.get.getOrElse(null)
+    ct.message = ctr.mathO.get
     ct
   }
 
   implicit def createReactionFrom(rr: ReactionRecord):Reaction = {
-    val r = new ReactionRecord()
-    r.metaid = rr.metaid
-    r.id = rr.id
-    r.name = rr.name
-    r.notes = rr.notes
-    r.reversible = rr.reversible
-    r.fast = rr.fast
+    val r = new Reaction()
+    r.metaid = rr.metaIdO.get
+    r.id = rr.idO.get
+    r.name = rr.nameO.get.getOrElse(null)
+    r.notes = rr.notesO.get.getOrElse(null)
+    //r.reversible = rr.reversible
+    //r.fast = rr.fast
 
     /* TODO complete the conversion from species to speciesReference
     if(r.listOfReactants != null){
@@ -168,9 +169,9 @@ object SBMLFromRecord extends LoggerWrapper {
 
   implicit def createKineticLawFrom(klr:KineticLawRecord):KineticLaw = {
     val kl = new KineticLaw
-    kl.metaid = klr.metaid
-    kl.notes = klr.notes
-    kl.math = klr.math
+    kl.metaid = klr.metaIdO.get
+    kl.notes = klr.notesO.get.getOrElse(null)
+    kl.math = klr.mathO.get
     kl.listOfParameters = Set.empty ++ klr.listOfParametersRec.map(createParameterFrom(_))
     kl
   }
@@ -194,10 +195,10 @@ object RecordFromSBML extends LoggerWrapper {
 
   implicit def createModelRecordFrom(m:SBMLModel):SBMLModelRecord = {
     val mr = new SBMLModelRecord()
-    mr.metaid = m.metaid
-    mr.id = m.id
-    mr.name = m.name
-    mr.notes = m.notes
+    mr.metaIdO.set(m.metaid)
+    mr.idO.set(m.id)
+    mr.nameO.setBox(Box.legacyNullTest(m.name))
+    mr.notesO.setBox(Box.legacyNullTest(m.notes))
 
     //TODO to simplify this code try to replace the initialization if listOf in wm_libjsbml from null to Set.empty or Nil
     if(m.listOfCompartments != null){
@@ -279,76 +280,77 @@ object RecordFromSBML extends LoggerWrapper {
 
   implicit def createCompartmentRecordFrom(c: Compartment):CompartmentRecord = {
     val cr = new CompartmentRecord()
-    cr.metaid = c.metaid
-    cr.id = c.id
-    cr.name = c.name
-    cr.notes = c.notes
-    cr.compartmentType = c.compartmentType
-    cr.spatialDimensions = c.spatialDimensions
-    cr.size = c.size
-    cr.units = c.units
-    cr.outside = c.outside
-    cr.constant = c.constant
+    cr.metaIdO.set(c.metaid)
+    cr.idO.set(c.id)
+    cr.nameO.setBox(Box.legacyNullTest(c.name))
+    cr.notesO.setBox(Box.legacyNullTest(c.notes))
+    //cr.compartmentType = c.compartmentType
+    cr.spatialDimensions0.set(
+      ValidSpatialDimensions(c.spatialDimensions))
+    cr.sizeO.setBox(Box.legacyNullTest(c.size))
+    //cr.units = c.units
+    cr.outsideO.setBox(Box.legacyNullTest( c.outside))
+    cr.constantO.set(c.constant)
     cr
   }
 
   implicit def createSpeciesRecordFrom(s: Species):SpeciesRecord = {
     val sr = new SpeciesRecord()
-    sr.metaid = s.metaid
-    sr.id = s.id
-    sr.name = s.name
-    sr.notes = s.notes
-    sr.compartment= s.compartment
-    sr.initialAmount = s.initialAmount
-    sr.initialConcentration = s.initialConcentration
-    sr.substanceUnits = s.substanceUnits
-    sr.hasOnlySubstanceUnits = s.hasOnlySubstanceUnits
-    sr.boundaryCondition = s.boundaryCondition
-    sr.constant = s.constant
+    sr.metaIdO.set(s.metaid)
+    sr.idO.set(s.id)
+    sr.nameO.setBox(Box.legacyNullTest(s.name))
+    sr.notesO.setBox(Box.legacyNullTest(s.notes))
+    sr.compartmentO.set(s.compartment)
+    sr.initialAmountO.setBox(Box.legacyNullTest(s.initialAmount))
+    sr.initialConcentrationO.setBox(Box.legacyNullTest(s.initialConcentration))
+    //sr.substanceUnits = s.substanceUnits
+    //sr.hasOnlySubstanceUnits = s.hasOnlySubstanceUnits
+    sr.boundaryConditionO.setBox(Box.legacyNullTest(s.boundaryCondition))
+    sr.constantO.set(s.constant)
     sr
   }
 
   implicit def createParameterRecordFrom(p: Parameter):ParameterRecord = {
     val pr = new ParameterRecord()
-    pr.metaid = p.metaid
-    pr.id = p.id
-    pr.name = p.name
-    pr.notes = p.notes
-    pr.value = p.value
-    pr.units = p.units
-    pr.constant = p.constant
+    pr.metaIdO.set(p.metaid)
+    pr.idO.set(p.id)
+    pr.nameO.setBox(Box.legacyNullTest(p.name))
+    pr.notesO.setBox(Box.legacyNullTest(p.notes))
+    pr.valueO.setBox(Box.legacyNullTest(p.value))
+    //pr.units = p.units
+    pr.constantO.set(p.constant)
     pr
   }
 
   implicit def createFunctionDefinitionRecordFrom(fd: FunctionDefinition):FunctionDefinitionRecord = {
     val fdr = new FunctionDefinitionRecord()
-    fdr.metaid = fd.metaid
-    fdr.id = fd.id
-    fdr.name = fd.name
-    fdr.notes = fd.notes
-    fdr.math = fdr.math
+    fdr.metaIdO.set(fd.metaid)
+    fdr.idO.set(fd.id)
+    fdr.nameO.setBox(Box.legacyNullTest(fd.name))
+    fdr.notesO.setBox(Box.legacyNullTest(fd.notes))
+    fdr.mathO.set(fd.math)
     fdr
   }
 
   implicit def createConstraintRecordFrom(ct: Constraint):ConstraintRecord = {
     val ctr = new ConstraintRecord()
-    ctr.metaid = ct.metaid
-    ctr.id = ct.id
-    ctr.name = ct.name
-    ctr.notes = ct.notes
-    ctr.math = ct.math
-    ctr.message = ct.message
+    ctr.metaIdO.set(ct.metaid)
+    ctr.idO.set(ct.id)
+    ctr.nameO.setBox(Box.legacyNullTest(ct.name))
+    ctr.notesO.setBox(Box.legacyNullTest(ct.notes))
+    ctr.mathO.set(ct.math)
+    //TODO - ctr.message = ct.message
     ctr
   }
 
   implicit def createReactionRecordFrom(r: Reaction):ReactionRecord = {
     val rr = new ReactionRecord()
-    rr.metaid = r.metaid
-    rr.id = r.id
-    rr.name = r.name
-    rr.notes = r.notes
-    rr.reversible = r.reversible
-    rr.fast = r.fast
+    rr.metaIdO.set(r.metaid)
+    rr.idO.set(r.id)
+    rr.nameO.setBox(Box.legacyNullTest(r.name))
+    rr.notesO.setBox(Box.legacyNullTest(r.notes))
+    //rr.reversible = r.reversible
+    //rr.fast = r.fast
 
     /* TODO complete the conversion from species to speciesReference
     if(r.listOfReactants != null){
@@ -397,8 +399,8 @@ object RecordFromSBML extends LoggerWrapper {
 
   implicit def createKineticLawRecordFrom(kl:KineticLaw) = {
     val klr = new KineticLawRecord()
-    klr.metaid = kl.metaid
-    klr.notes = kl.notes
+    klr.metaIdO.set(kl.metaid)
+    klr.notesO.setBox(Box.legacyNullTest(kl.notes))
     klr.math = kl.math
 
     if(kl.listOfParameters != null){

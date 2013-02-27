@@ -14,11 +14,12 @@ import xml.NodeSeq
  *  @author alex
  *  Date: 29-12-2011
  *  Time: 17:11 */
-class FunctionDefinitionRecord() extends FunctionDefinition with SBaseRecord[FunctionDefinitionRecord]  {
+case class FunctionDefinitionRecord() extends SBaseRecord[FunctionDefinitionRecord]  {
+  override val sbmlType = "FunctionDefinition"
 
   override def meta = FunctionDefinitionRecord
 
-  override protected def relativeURLasList = "model" :: S.param("modelMetaId").openTheBox :: "functiondefinition" :: metaid :: Nil
+  override protected def relativeURLasList = "model" :: S.param("modelMetaId").openTheBox :: "functiondefinition" :: this.metaIdO.get :: Nil
   override protected def relativeCreationURLasList = "model" :: S.param("modelMetaId").openTheBox :: "functiondefinition" :: Nil
 
 
@@ -44,7 +45,6 @@ class FunctionDefinitionRecord() extends FunctionDefinition with SBaseRecord[Fun
   }
 
   //  ### will contain fields which can be listed with allFields. ###
-  object metaIdO extends MetaId(this, 100)
   object idO extends Id(this, 100)
   object nameO extends Name(this, 100)
   object notesO extends Notes(this, 1000)
@@ -64,7 +64,6 @@ class FunctionDefinitionRecord() extends FunctionDefinition with SBaseRecord[Fun
 
 //TODO - DELETE IF NOT USED FOR ANYTHING
 object FunctionDefinitionRecord extends FunctionDefinitionRecord with RestMetaRecord[FunctionDefinitionRecord] {
-  def apply() = new FunctionDefinitionRecord
   override def fieldOrder = List(metaIdO, idO, nameO, /*sizeO,*/ notesO)
   override def fields = fieldOrder
 }

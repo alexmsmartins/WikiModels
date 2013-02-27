@@ -52,9 +52,9 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
     }
     debug("Loaded model into session: {}", selectedModel.get.openTheBox.toXML )
     debug("Loaded model into session with metaid {}, id {} and name {}",
-      selectedModel.get.openTheBox.metaid,
-      selectedModel.get.openTheBox.id,
-      selectedModel.get.openTheBox.name)
+      selectedModel.get.openTheBox.metaIdO.get,
+      selectedModel.get.openTheBox.idO.get,
+      selectedModel.get.openTheBox.nameO.get)
     selectedModel.is
   }
 
@@ -73,9 +73,9 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
     selectedCompartment.get.openTheBox.parent = selectedModel.get
     debug("Loaded compartment into session: {}", selectedCompartment.get.openTheBox.toXML )
     debug("Loaded model into session with metaid {}, id {} and name {}",
-      selectedCompartment.get.openTheBox.metaid,
-      selectedCompartment.get.openTheBox.id,
-      selectedCompartment.get.openTheBox.name)
+      selectedCompartment.get.openTheBox.metaIdO.get,
+      selectedCompartment.get.openTheBox.idO.get,
+      selectedCompartment.get.openTheBox.nameO.get)
     selectedCompartment.is
   }
 
@@ -94,9 +94,9 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
     selectedSpecies.get.openTheBox.parent = selectedModel.get
     debug("Loaded species into session: {}", selectedSpecies.get.openTheBox.toXML )
     debug("Loaded model into session with metaid {}, id {} and name {}",
-      selectedSpecies.get.openTheBox.metaid,
-      selectedSpecies.get.openTheBox.id,
-      selectedSpecies.get.openTheBox.name)
+      selectedSpecies.get.openTheBox.metaIdO.get,
+      selectedSpecies.get.openTheBox.idO.get,
+      selectedSpecies.get.openTheBox.idO.get)
     selectedSpecies.is
   }
 
@@ -115,9 +115,9 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
     selectedParameter.get.openTheBox.parent = selectedModel.get
     debug("Loaded parameter into session: {}", selectedParameter.get.openTheBox.toXML )
     debug("Loaded model into session with metaid {}, id {} and name {}",
-      selectedParameter.get.openTheBox.metaid,
-      selectedParameter.get.openTheBox.id,
-      selectedParameter.get.openTheBox.name)
+      selectedParameter.get.openTheBox.metaIdO.get,
+      selectedParameter.get.openTheBox.idO.get,
+      selectedParameter.get.openTheBox.idO.get)
     selectedParameter.is
   }
 
@@ -136,9 +136,9 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
     selectedFunctionDefinition.get.openTheBox.parent = selectedModel.get
     debug("Loaded function definition into session: {}", selectedFunctionDefinition.get.openTheBox.toXML )
     debug("Loaded model into session with metaid {}, id {} and name {}",
-      selectedFunctionDefinition.get.openTheBox.metaid,
-      selectedFunctionDefinition.get.openTheBox.id,
-      selectedFunctionDefinition.get.openTheBox.name)
+      selectedFunctionDefinition.get.openTheBox.metaIdO.get,
+      selectedFunctionDefinition.get.openTheBox.idO.get,
+      selectedFunctionDefinition.get.openTheBox.idO.get)
     selectedFunctionDefinition.is
   }
 
@@ -157,9 +157,9 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
     selectedConstraint.get.openTheBox.parent = selectedModel.get
     debug("Loaded constraint into session: {}", selectedConstraint.get.openTheBox.toXML )
     debug("Loaded model into session with metaid {}, id {} and name {}",
-      selectedConstraint.get.openTheBox.metaid,
-      selectedConstraint.get.openTheBox.id,
-      selectedConstraint.get.openTheBox.name)
+      selectedConstraint.get.openTheBox.metaIdO.get,
+      selectedConstraint.get.openTheBox.idO.get,
+      selectedConstraint.get.openTheBox.idO.get)
     selectedConstraint.is
   }
 
@@ -178,9 +178,9 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
     selectedReaction.get.openTheBox.parent = selectedModel.get
     debug("Loaded reaction into session: {}", selectedReaction.get.openTheBox.toXML )
     debug("Loaded model into session with metaid {}, id {} and name {}",
-      selectedReaction.get.openTheBox.metaid,
-      selectedReaction.get.openTheBox.id,
-      selectedReaction.get.openTheBox.name)
+      selectedReaction.get.openTheBox.metaIdO.get,
+      selectedReaction.get.openTheBox.idO.get,
+      selectedReaction.get.openTheBox.idO.get)
     selectedReaction.is
   }
 
@@ -227,12 +227,12 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
   //### Create state ###
 
   def saveNewModel(model:SBMLModelRecord):Unit = {
-    info("SAVE NEW MODEL with xml {}", model.toXML())
+    info("SAVE NEW MODEL with xml {}", model.toXML)
     //metaid is never presented and, by default, we give it the same value as id
-    model.metaIdO.set(model.id)
+    model.metaIdO.set(model.idO.get)
     model.validate match {
       case Nil => { //no validation errors
-        model.metaid = model.id
+        model.metaIdO.set(model.idO.get)
         model.createRestRec() match {
           case Full(x) => {
             redirectTo(model.relativeURL) //TODO: handle failure in the server (maybe this should be general)
@@ -271,10 +271,10 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
   Unit = {
     info("SAVE NEW COMPARTMENT with xml {}", compartment.toXML)
     //metaid is never presented and, by default, we give it the same value as id
-    compartment.metaIdO.set(compartment.id)
+    compartment.metaIdO.set(compartment.idO.get)
     compartment.validate match {
       case Nil => { //no validation errors
-        compartment.metaid = compartment.id
+        compartment.metaIdO.set(compartment.idO.get)
         compartment.createRestRec() match {
           case Full(x) => {
             redirectTo(compartment.relativeURL) //TODO: handle failure in the server (maybe this should be general)
@@ -314,10 +314,10 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
   Unit = {
     info("SAVE NEW SPECIES with xml {}", species.toXML)
     //metaid is never presented and, by default, we give it the same value as id
-    species.metaIdO.set(species.id)
+    species.metaIdO.set(species.idO.get)
     species.validate match {
       case Nil => { //no validation errors
-        species.metaid = species.id
+        species.metaIdO.set(species.idO.get)
         species.createRestRec() match {
           case Full(x) => {
             redirectTo(species.relativeURL) //TODO: handle failure in the server (maybe this should be general)
@@ -357,10 +357,10 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
   Unit = {
     info("SAVE NEW Parameter with xml {}", parameter.toXML)
     //metaid is never presented and, by default, we give it the same value as id
-    parameter.metaIdO.set(parameter.id)
+    parameter.metaIdO.set(parameter.idO.get)
     parameter.validate match {
       case Nil => { //no validation errors
-        parameter.metaid = parameter.id
+        parameter.metaIdO.set( parameter.idO.get)
         parameter.createRestRec() match {
           case Full(x) => {
             redirectTo(parameter.relativeURL) //TODO: handle failure in the server (maybe this should be general)
@@ -400,10 +400,10 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
   Unit = {
     info("SAVE NEW FUNCTION DEFINITION with xml {}", functionDefinition.toXML)
     //metaid is never presented and, by default, we give it the same value as id
-    functionDefinition.metaIdO.set(functionDefinition.id)
+    functionDefinition.metaIdO.set(functionDefinition.idO.get)
     functionDefinition.validate match {
       case Nil => { //no validation errors
-        functionDefinition.metaid = functionDefinition.id
+        functionDefinition.metaIdO.set(functionDefinition.idO.get)
         functionDefinition.createRestRec() match {
           case Full(x) => {
             redirectTo(functionDefinition.relativeURL) //TODO: handle failure in the server (maybe this should be general)
@@ -443,10 +443,10 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
   Unit = {
     info("SAVE NEW Constraint with xml {}", constraint.toXML)
     //metaid is never presented and, by default, we give it the same value as id
-    constraint.metaIdO.set(constraint.id)
+    constraint.metaIdO.set(constraint.idO.get)
     constraint.validate match {
       case Nil => { //no validation errors
-        constraint.metaid = constraint.id
+        constraint.metaIdO.set( constraint.idO.get)
         constraint.createRestRec() match {
           case Full(x) => {
             redirectTo(constraint.relativeURL) //TODO: handle failure in the server (maybe this should be general)
@@ -486,10 +486,10 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
   Unit = {
     info("SAVE NEW REACTION with xml {}", reaction.toXML)
     //metaid is never presented and, by default, we give it the same value as id
-    reaction.metaIdO.set(reaction.id)
+    reaction.metaIdO.set(reaction.idO.get)
     reaction.validate match {
       case Nil => { //no validation errors
-        reaction.metaid = reaction.id
+        reaction.metaIdO.set(reaction.idO.get)
         reaction.createRestRec() match {
           case Full(x) => {
             redirectTo(reaction.relativeURL) //TODO: handle failure in the server (maybe this should be general)
@@ -549,7 +549,7 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
 
   def saveSelectedCompartment(compartment:CompartmentRecord):Unit = {
     debug("SAVE SELECTED COMPARTMENT")
-    debug("This compartment has an outside with value " + compartment.outside)
+    debug("This compartment has an outside with value " + compartment.outsideO.get)
     compartment.validate match {
       case Nil => compartment.updateRestRec(); redirectTo(compartment.relativeURL) //TODO: handle the possibility that the server does not accept the change (maybe this should be general)
       case x =>{
@@ -736,10 +736,10 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
   def confirmAndDeleteSelectedModel(ns:NodeSeq):NodeSeq = {
     debug("CONFIRM DELETE SELECTED MODEL")
     val model = new SBMLModelRecord
-    model.metaid = S.param("modelMetaId").get
+    model.metaIdO(S.param("modelMetaId").get)
     def deleteModel():NodeSeq = {
         model.deleteRestRec() match {
-          case full:Full[_] => S.notice(mainMsgId, "Model "+ model.metaid +" deleted")
+          case full:Full[_] => S.notice(mainMsgId, "Model "+ model.metaIdO.get +" deleted")
           case fail:Failure => S.error(mainMsgId, fail.msg)
           case Empty => S.error(mainMsgId, "THIS IS A BUG")
         }
@@ -749,7 +749,7 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
     // when the delete button is pressed, call the "deleteUser"
     // function (which is a closure and bound the "user" object
     // in the current content)
-    bind("xmp", ns, "modelname " -> (model.id),
+    bind("xmp", ns, "modelname " -> (model.idO.get),
     "delete" -> submit("Delete", deleteModel ))
 
     // if the was no ID or the user couldn't be found,
@@ -759,10 +759,10 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
   def confirmAndDeleteSelectedCompartment(ns:NodeSeq):NodeSeq = {
     debug("CONFIRM DELETE SELECTED COMPARTMENT")
     val compartment = new CompartmentRecord
-    compartment.metaid = S.param("compartmentMetaId").get
+    compartment.metaIdO.set(S.param("compartmentMetaId").get)
     def deleteCompartment():NodeSeq = {
       compartment.deleteRestRec() match {
-        case full:Full[_] => S.notice(mainMsgId, "Compartment "+ compartment.metaid +" deleted")
+        case full:Full[_] => S.notice(mainMsgId, "Compartment "+ compartment.metaIdO.get +" deleted")
         case fail:Failure => S.error(mainMsgId, fail.msg)
         case Empty => S.error(mainMsgId, "THIS IS A BUG")
       }
@@ -772,7 +772,7 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
     // when the delete button is pressed, call the "deleteUser"
     // function (which is a closure and bound the "user" object
     // in the current content)
-    bind("xmp", ns, "compartmentname" -> (compartment.id),
+    bind("xmp", ns, "compartmentname" -> (compartment.idO.get),
       "delete" -> submit("Delete", deleteCompartment ))
 
     // if the was no ID or the user couldn't be found,
@@ -782,10 +782,10 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
   def confirmAndDeleteSelectedSpecies(ns:NodeSeq):NodeSeq = {
     debug("CONFIRM DELETE SELECTED SPECIES")
     val species = new SpeciesRecord
-    species.metaid = S.param("speciesMetaId").get
+    species.metaIdO.set( S.param("speciesMetaId").get)
     def deleteSpecies():NodeSeq = {
       species.deleteRestRec() match {
-        case full:Full[_] => S.notice(mainMsgId, "Species "+ species.metaid +" deleted")
+        case full:Full[_] => S.notice(mainMsgId, "Species "+ species.metaIdO.get +" deleted")
         case fail:Failure => S.error(mainMsgId, fail.msg)
         case Empty => S.error(mainMsgId, "THIS IS A BUG")
       }
@@ -795,7 +795,7 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
     // when the delete button is pressed, call the "deleteUser"
     // function (which is a closure and bound the "user" object
     // in the current content)
-    bind("xmp", ns, "speciesname" -> (species.id),
+    bind("xmp", ns, "speciesname" -> (species.idO.get),
       "delete" -> submit("Delete", deleteSpecies ))
 
     // if the was no ID or the user couldn't be found,
@@ -805,10 +805,10 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
   def confirmAndDeleteSelectedParameter(ns:NodeSeq):NodeSeq = {
     debug("CONFIRM DELETE SELECTED Parameter")
     val parameter = new ParameterRecord
-    parameter.metaid = S.param("parameterMetaId").get
+    parameter.metaIdO.set(S.param("parameterMetaId").get)
     def deleteParameter():NodeSeq = {
       parameter.deleteRestRec() match {
-        case full:Full[_] => S.notice(mainMsgId, "Parameter "+ parameter.metaid +" deleted")
+        case full:Full[_] => S.notice(mainMsgId, "Parameter "+ parameter.metaIdO.get +" deleted")
         case fail:Failure => S.error(mainMsgId, fail.msg)
         case Empty => S.error(mainMsgId, "THIS IS A BUG")
       }
@@ -818,7 +818,7 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
     // when the delete button is pressed, call the "deleteUser"
     // function (which is a closure and bound the "user" object
     // in the current content)
-    bind("xmp", ns, "parametername" -> (parameter.id),
+    bind("xmp", ns, "parametername" -> (parameter.idO.get),
       "delete" -> submit("Delete", deleteParameter ))
 
     // if the was no ID or the user couldn't be found,
@@ -828,10 +828,10 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
   def confirmAndDeleteSelectedFunctionDefinition(ns:NodeSeq):NodeSeq = {
     debug("CONFIRM DELETE SELECTED FunctionDefinition")
     val functionDefinition = new FunctionDefinitionRecord
-    functionDefinition.metaid = S.param("functionDefinitionMetaId").get
+    functionDefinition.metaIdO.set(S.param("functionDefinitionMetaId").get)
     def deleteFunctionDefinition():NodeSeq = {
       functionDefinition.deleteRestRec() match {
-        case full:Full[_] => S.notice(mainMsgId, "FunctionDefinition "+ functionDefinition.metaid +" deleted")
+        case full:Full[_] => S.notice(mainMsgId, "FunctionDefinition "+ functionDefinition.metaIdO.get +" deleted")
         case fail:Failure => S.error(mainMsgId, fail.msg)
         case Empty => S.error(mainMsgId, "THIS IS A BUG")
       }
@@ -841,7 +841,7 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
     // when the delete button is pressed, call the "deleteUser"
     // function (which is a closure and bound the "user" object
     // in the current content)
-    bind("xmp", ns, "functiondefinitionname" -> (functionDefinition.id),
+    bind("xmp", ns, "functiondefinitionname" -> (functionDefinition.idO.get),
       "delete" -> submit("Delete", deleteFunctionDefinition ))
 
     // if the was no ID or the user couldn't be found,
@@ -851,10 +851,10 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
   def confirmAndDeleteSelectedConstraint(ns:NodeSeq):NodeSeq = {
     debug("CONFIRM DELETE SELECTED Constraint")
     val constraint = new ConstraintRecord
-    constraint.metaid = S.param("constraintMetaId").get
+    constraint.metaIdO.set(S.param("constraintMetaId").get)
     def deleteConstraint():NodeSeq = {
       constraint.deleteRestRec() match {
-        case full:Full[_] => S.notice(mainMsgId, "Constraint "+ constraint.metaid +" deleted")
+        case full:Full[_] => S.notice(mainMsgId, "Constraint "+ constraint.metaIdO.get +" deleted")
         case fail:Failure => S.error(mainMsgId, fail.msg)
         case Empty => S.error(mainMsgId, "THIS IS A BUG")
       }
@@ -864,7 +864,7 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
     // when the delete button is pressed, call the "deleteUser"
     // function (which is a closure and bound the "user" object
     // in the current content)
-    bind("xmp", ns, "constraintname" -> (constraint.id),
+    bind("xmp", ns, "constraintname" -> (constraint.idO.get),
       "delete" -> submit("Delete", deleteConstraint ))
 
     // if the was no ID or the user couldn't be found,
@@ -874,10 +874,10 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
   def confirmAndDeleteSelectedReaction(ns:NodeSeq):NodeSeq = {
     debug("CONFIRM DELETE SELECTED Reaction")
     val reaction = new ReactionRecord
-    reaction.metaid = S.param("reactionMetaId").get
+    reaction.metaIdO.set(S.param("reactionMetaId").get)
     def deleteReaction():NodeSeq = {
       reaction.deleteRestRec() match {
-        case full:Full[_] => S.notice(mainMsgId, "Reaction "+ reaction.metaid +" deleted")
+        case full:Full[_] => S.notice(mainMsgId, "Reaction "+ reaction.metaIdO.get +" deleted")
         case fail:Failure => S.error(mainMsgId, fail.msg)
         case Empty => S.error(mainMsgId, "THIS IS A BUG")
       }
@@ -887,7 +887,7 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
     // when the delete button is pressed, call the "deleteUser"
     // function (which is a closure and bound the "user" object
     // in the current content)
-    bind("xmp", ns, "reactionname" -> (reaction.id),
+    bind("xmp", ns, "reactionname" -> (reaction.idO.get),
       "delete" -> submit("Delete", deleteReaction ))
 
     // if the was no ID or the user couldn't be found,

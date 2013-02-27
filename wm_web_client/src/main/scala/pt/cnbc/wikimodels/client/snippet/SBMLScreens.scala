@@ -19,12 +19,14 @@ import pt.cnbc.wikimodels.sbmlVisitors.SBMLStrictValidator
 import pt.cnbc.wikimodels.dataModel.SBMLModel
 import visitor.SBMLFromRecord
 
+//implicits
+import pt.cnbc.wikimodels.client.record.visitor.SBMLFromRecord._
+
 
 package object screenUtil extends LoggerWrapper{
   def genWarnsForSBMLModel() {
     val mr = screenUtil.loadSBMLModelFromPathParam
-    val m: SBMLModel = SBMLFromRecord.createModelFrom(mr)
-    SBMLStrictValidator.visit(m).map(err => S.warning(err))
+    SBMLStrictValidator.visitModel(mr).map(err => S.warning(err))
   }
 
   def loadSBMLModelFromPathParam:SBMLModelRecord = {
@@ -131,16 +133,16 @@ package object screenUtil extends LoggerWrapper{
 class CreateModelScreen extends LiftScreen with LoggerWrapper {
   object model extends ScreenVar(SBMLModelRecord.createRecord)
 
-  addFields(() => model.is.idO)
-  addFields(() => model.is.nameO)
-  addFields(() => model.is.notesO)
+  addFields(() => model.get.idO)
+  addFields(() => model.get.nameO)
+  addFields(() => model.get.notesO)
 
 
   protected def finish() = {
     trace("CreateModelScreen.finish() started executing!")
-    model.is.createRestRec()
-    S.notice("Model " + model.metaid + " was created successfully!")
-    for(warnings <- SBMLStrictValidator.visit(model))
+    model.get.createRestRec()
+    S.notice("Model " + model.metaIdO.get + " was created successfully!")
+    for(warnings <- SBMLStrictValidator.visitModel(model.get))
       S.warning(warnings)
   }
 }
@@ -151,15 +153,15 @@ class CreateModelScreen extends LiftScreen with LoggerWrapper {
   *         Time: 5:01 PM */
 class EditModelScreen extends LiftScreen with LoggerWrapper {
   object model extends ScreenVar(screenUtil.loadSBMLModelFromPathParam)
-  addFields(() => model.is.idO)
-  addFields(() => model.is.nameO)
-  addFields(() => model.is.notesO)
+  addFields(() => model.get.idO)
+  addFields(() => model.get.nameO)
+  addFields(() => model.get.notesO)
 
   protected def finish() {
     trace("EditModelScreen.finish() started executing!")
-    model.is.updateRestRec()
-    S.notice("Model " + model.is.metaid + " was saved successfully!")
-    for(warnings <- SBMLStrictValidator.visit(model))
+    model.get.updateRestRec()
+    S.notice("Model " + model.get.metaIdO.get + " was saved successfully!")
+    for(warnings <- SBMLStrictValidator.visitModel(model.get))
       S.warning(warnings)
   }
 }
@@ -171,19 +173,19 @@ class EditModelScreen extends LiftScreen with LoggerWrapper {
 class CreateCompartmentScreen extends LiftScreen with LoggerWrapper {
   object compartment extends ScreenVar(CompartmentRecord.createRecord)
   compartment.parent = Full(screenUtil.loadSBMLModelFromPathParam)
-  addFields(() => compartment.is.idO)
-  addFields(() => compartment.is.nameO)
-  addFields(() => compartment.is.spatialDimensions0)
-  addFields(() => compartment.is.constantO)
-  addFields(() => compartment.is.sizeO )
-  addFields(() => compartment.is.outsideO)
-  addFields(() => compartment.is.notesO)
+  addFields(() => compartment.get.idO)
+  addFields(() => compartment.get.nameO)
+  addFields(() => compartment.get.spatialDimensions0)
+  addFields(() => compartment.get.constantO)
+  addFields(() => compartment.get.sizeO )
+  addFields(() => compartment.get.outsideO)
+  addFields(() => compartment.get.notesO)
 
   protected def finish() = {
     trace("CreateCompartmentScreen.finish() started executing!")
-    compartment.is.createRestRec()
-    S.notice("Compartment " + compartment.is.metaid + " was created successfully!")
-    for(warnings <- SBMLStrictValidator.visit(compartment))
+    compartment.get.createRestRec()
+    S.notice("Compartment " + compartment.get.metaIdO.get + " was created successfully!")
+    for(warnings <- SBMLStrictValidator.visitCompartment(compartment.get))
       S.warning(warnings)
     screenUtil.genWarnsForSBMLModel()
   }
@@ -196,19 +198,19 @@ class CreateCompartmentScreen extends LiftScreen with LoggerWrapper {
 class EditCompartmentScreen extends LiftScreen with LoggerWrapper {
   object compartment extends ScreenVar(screenUtil.loadCompartmentFromPathParam)
   compartment.parent = Full(screenUtil.loadSBMLModelFromPathParam)
-  addFields(() => compartment.is.idO)
-  addFields(() => compartment.is.nameO)
-  addFields(() => compartment.is.spatialDimensions0)
-  addFields(() => compartment.is.constantO)
-  addFields(() => compartment.is.sizeO )
-  addFields(() => compartment.is.outsideO)
-  addFields(() => compartment.is.notesO)
+  addFields(() => compartment.get.idO)
+  addFields(() => compartment.get.nameO)
+  addFields(() => compartment.get.spatialDimensions0)
+  addFields(() => compartment.get.constantO)
+  addFields(() => compartment.get.sizeO )
+  addFields(() => compartment.get.outsideO)
+  addFields(() => compartment.get.notesO)
 
   protected def finish() {
     trace("EditCompartmentScreen.finish() started executing!")
-    compartment.is.updateRestRec()
-    S.notice("Compartment " + compartment.is.metaid + " was saved successfully!")
-    for(warnings <- SBMLStrictValidator.visit(compartment))
+    compartment.get.updateRestRec()
+    S.notice("Compartment " + compartment.get.metaIdO.get + " was saved successfully!")
+    for(warnings <- SBMLStrictValidator.visitCompartment(compartment.get))
       S.warning(warnings)
     screenUtil.genWarnsForSBMLModel()
   }
@@ -223,20 +225,20 @@ class EditCompartmentScreen extends LiftScreen with LoggerWrapper {
 class CreateSpeciesScreen extends LiftScreen with LoggerWrapper {
   object species extends ScreenVar(SpeciesRecord.createRecord)
   species.parent = Full(screenUtil.loadSBMLModelFromPathParam)
-  addFields(() => species.is.idO)
-  addFields(() => species.is.nameO)
-  addFields(() => species.is.compartmentO)
-  addFields(() => species.is.constantO)
-  addFields(() => species.is.initialAmount0 )
-  addFields(() => species.is.initialConcentration0)
-  addFields(() => species.is.boundaryCondition0)
-  addFields(() => species.is.notesO)
+  addFields(() => species.get.idO)
+  addFields(() => species.get.nameO)
+  addFields(() => species.get.compartmentO)
+  addFields(() => species.get.constantO)
+  addFields(() => species.get.initialAmountO )
+  addFields(() => species.get.initialConcentrationO)
+  addFields(() => species.get.boundaryConditionO)
+  addFields(() => species.get.notesO)
 
   protected def finish() = {
     trace("CreateSpeciesScreen.finish() started executing!")
-    species.is.createRestRec()
-    S.notice("Species " + species.is.metaid + " was created successfully!")
-    for(warnings <- SBMLStrictValidator.visit(species))
+    species.get.createRestRec()
+    S.notice("Species " + species.get.metaIdO.get + " was created successfully!")
+    for(warnings <- SBMLStrictValidator.visitSpecies(species.get))
       S.warning(warnings)
     screenUtil.genWarnsForSBMLModel()
   }
@@ -249,20 +251,20 @@ class CreateSpeciesScreen extends LiftScreen with LoggerWrapper {
 class EditSpeciesScreen extends LiftScreen with LoggerWrapper {
   object species extends ScreenVar(screenUtil.loadSpeciesFromPathParam)
   species.parent = Full(screenUtil.loadSBMLModelFromPathParam)
-  addFields(() => species.is.idO)
-  addFields(() => species.is.nameO)
-  addFields(() => species.is.compartmentO)
-  addFields(() => species.is.constantO)
-  addFields(() => species.is.initialAmount0 )
-  addFields(() => species.is.initialConcentration0)
-  addFields(() => species.is.boundaryCondition0)
-  addFields(() => species.is.notesO)
+  addFields(() => species.get.idO)
+  addFields(() => species.get.nameO)
+  addFields(() => species.get.compartmentO)
+  addFields(() => species.get.constantO)
+  addFields(() => species.get.initialAmountO )
+  addFields(() => species.get.initialConcentrationO)
+  addFields(() => species.get.boundaryConditionO)
+  addFields(() => species.get.notesO)
 
   protected def finish() {
     trace("EditSpeciesScreen.finish() started executing!")
-    species.is.updateRestRec()
-    S.notice("Species " + species.is.metaid + " was saved successfully!")
-    for(warnings <- SBMLStrictValidator.visit(species))
+    species.get.updateRestRec()
+    S.notice("Species " + species.get.metaIdO.get + " was saved successfully!")
+    for(warnings <- SBMLStrictValidator.visitSpecies(species.get))
       S.warning(warnings)
     screenUtil.genWarnsForSBMLModel()
   }
@@ -277,17 +279,17 @@ class EditSpeciesScreen extends LiftScreen with LoggerWrapper {
 class CreateParameterScreen extends LiftScreen with LoggerWrapper {
   object parameter extends ScreenVar(ParameterRecord.createRecord)
   parameter.parent = Full(screenUtil.loadSBMLModelFromPathParam)
-  addFields(() => parameter.is.idO)
-  addFields(() => parameter.is.nameO)
-  addFields(() => parameter.is.valueO)
-  addFields(() => parameter.is.constantO)
-  addFields(() => parameter.is.notesO)
+  addFields(() => parameter.get.idO)
+  addFields(() => parameter.get.nameO)
+  addFields(() => parameter.get.valueO)
+  addFields(() => parameter.get.constantO)
+  addFields(() => parameter.get.notesO)
 
   protected def finish() = {
     trace("CreateParameterScreen.finish() started executing!")
-    parameter.is.createRestRec()
-    S.notice("Parameter " + parameter.is.metaid + " was created successfully!")
-    for(warnings <- SBMLStrictValidator.visit(parameter))
+    parameter.get.createRestRec()
+    S.notice("Parameter " + parameter.get.metaIdO.get + " was created successfully!")
+    for(warnings <- SBMLStrictValidator.visitParameter(parameter.get))
       S.warning(warnings)
     S.redirectTo( parameter.relativeURL )
   }
@@ -300,17 +302,17 @@ class CreateParameterScreen extends LiftScreen with LoggerWrapper {
 class EditParameterScreen extends LiftScreen with LoggerWrapper {
   object parameter extends ScreenVar(screenUtil.loadParameterFromPathParam)
   parameter.parent = Full(screenUtil.loadSBMLModelFromPathParam)
-  addFields(() => parameter.is.idO)
-  addFields(() => parameter.is.nameO)
-  addFields(() => parameter.is.valueO)
-  addFields(() => parameter.is.constantO)
-  addFields(() => parameter.is.notesO)
+  addFields(() => parameter.get.idO)
+  addFields(() => parameter.get.nameO)
+  addFields(() => parameter.get.valueO)
+  addFields(() => parameter.get.constantO)
+  addFields(() => parameter.get.notesO)
 
   protected def finish() {
     trace("EditParameterScreen.finish() started executing!")
-    parameter.is.updateRestRec()
-    S.notice("Parameter " + parameter.is.metaid + " was saved successfully!")
-    for(warnings <- SBMLStrictValidator.visit(parameter))
+    parameter.get.updateRestRec()
+    S.notice("Parameter " + parameter.get.metaIdO.get + " was saved successfully!")
+    for(warnings <- SBMLStrictValidator.visitParameter(parameter.get))
       S.warning(warnings)
   }
 }
@@ -325,16 +327,16 @@ class CreateFunctionDefinitionScreen extends LiftScreen with LoggerWrapper{
   function.parent = Full(screenUtil.loadSBMLModelFromPathParam)
 
   //override def screenTop =  <b>A single screen with some input validation</b>
-  addFields(() => function.is.idO)
-  addFields(() => function.is.nameO)
-  addFields(() => function.is.mathO)
-  addFields(() => function.is.notesO)
+  addFields(() => function.get.idO)
+  addFields(() => function.get.nameO)
+  addFields(() => function.get.mathO)
+  addFields(() => function.get.notesO)
 
   def finish() = {
     trace("CreateFunctionDefinitionScreen.finish() started executing!")
-    function.is.createRestRec()
-    S.notice("Function definition " + function.is.metaid + " was created successfully!")
-    for(warnings <- SBMLStrictValidator.visit(function))
+    function.get.createRestRec()
+    S.notice("Function definition " + function.get.metaIdO.get + " was created successfully!")
+    for(warnings <- SBMLStrictValidator.visitFunctionDefinition(function.get))
       S.warning(warnings)
   }
 }
@@ -348,16 +350,16 @@ class EditFunctionDefinitionScreen extends LiftScreen with LoggerWrapper{
   function.parent = Full(screenUtil.loadSBMLModelFromPathParam)
 
   //override def screenTop =  <b>A single screen with some input validation</b>
-  addFields(() => function.is.idO)
-  addFields(() => function.is.nameO)
-  addFields(() => function.is.mathO)
-  addFields(() => function.is.notesO)
+  addFields(() => function.get.idO)
+  addFields(() => function.get.nameO)
+  addFields(() => function.get.mathO)
+  addFields(() => function.get.notesO)
 
   protected def finish() {
     trace("EditParameterScreen.finish() started executing!")
-    function.is.updateRestRec()
-    S.notice("Function definition " + function.is.metaid + " was saved successfully!")
-    for(warnings <- SBMLStrictValidator.visit(function))
+    function.get.updateRestRec()
+    S.notice("Function definition " + function.get.metaIdO.get + " was saved successfully!")
+    for(warnings <- SBMLStrictValidator.visitFunctionDefinition(function.get))
       S.warning(warnings)
   }
 }
@@ -372,15 +374,15 @@ class CreateReactionScreen extends LiftScreen with LoggerWrapper{
   reaction.parent = Full(screenUtil.loadSBMLModelFromPathParam)
 
   //override def screenTop =  <b>A single screen with some input validation</b>
-  addFields(() => reaction.is.idO)
-  addFields(() => reaction.is.nameO)
-  addFields(() => reaction.is.notesO)
+  addFields(() => reaction.get.idO)
+  addFields(() => reaction.get.nameO)
+  addFields(() => reaction.get.notesO)
 
   def finish() = {
     trace("CreateReactionScreen.finish() started executing!")
-    reaction.is.createRestRec()
-    S.notice("Reaction " + reaction.is.metaid + " was created successfully!")
-    for(warnings <- SBMLStrictValidator.visit(reaction))
+    reaction.get.createRestRec()
+    S.notice("Reaction " + reaction.get.metaIdO.get + " was created successfully!")
+    for(warnings <- SBMLStrictValidator.visitReaction(reaction.get))
       S.warning(warnings)
   }
 }
@@ -395,15 +397,15 @@ class EditReactionScreen extends LiftScreen with LoggerWrapper{
   )
 
   //override def screenTop =  <b>A single screen with some input validation</b>
-  addFields(() => reaction.is.idO)
-  addFields(() => reaction.is.nameO)
-  addFields(() => reaction.is.notesO)
+  addFields(() => reaction.get.idO)
+  addFields(() => reaction.get.nameO)
+  addFields(() => reaction.get.notesO)
 
   protected def finish() {
     trace("EditReactionScreen.finish() started executing!")
-    reaction.is.updateRestRec()
-    S.notice("Reaction " + reaction.is.metaid + " was saved successfully!")
-    for(warnings <- SBMLStrictValidator.visit(reaction))
+    reaction.get.updateRestRec()
+    S.notice("Reaction " + reaction.get.metaIdO.get + " was saved successfully!")
+    for(warnings <- SBMLStrictValidator.visitReaction(reaction.get))
       S.warning(warnings)
   }
 }

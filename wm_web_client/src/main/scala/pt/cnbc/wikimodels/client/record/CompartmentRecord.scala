@@ -17,11 +17,13 @@ import alexmsmartins.log.LoggerWrapper
  * Date: 29-11-2011
  * Time: 22:35
  */
-class CompartmentRecord() extends Compartment with SBaseRecord[CompartmentRecord] with LoggerWrapper {
+case class CompartmentRecord() extends SBaseRecord[CompartmentRecord] with LoggerWrapper {
+
+  override val sbmlType = "Compartment"
 
   override def meta = CompartmentRecord
 
-  override protected def relativeURLasList = "model" :: S.param("modelMetaId").openTheBox :: "compartment" :: metaid :: Nil
+  override protected def relativeURLasList = "model" :: S.param("modelMetaId").openTheBox :: "compartment" :: this.metaIdO.get :: Nil
   override protected def relativeCreationURLasList = "model" :: S.param("modelMetaId").openTheBox :: "compartment" :: Nil
 
 
@@ -47,7 +49,6 @@ class CompartmentRecord() extends Compartment with SBaseRecord[CompartmentRecord
   }
   
   //  ### will contain fields which can be listed with allFields. ###
-  object metaIdO extends MetaId(this, 100)
   object idO extends Id(this, 100)
   object nameO extends Name(this, 100)
   object spatialDimensions0 extends SpatialDimensions(this)
@@ -70,7 +71,6 @@ class CompartmentRecord() extends Compartment with SBaseRecord[CompartmentRecord
 
 //TODO - DELETE IF NOT USED FOR ANYTHING
 object CompartmentRecord extends CompartmentRecord with RestMetaRecord[CompartmentRecord] {
-  def apply() = new CompartmentRecord
   override def fieldOrder = List(metaIdO, idO, nameO, spatialDimensions0, constantO, sizeO, outsideO, notesO)
   override def fields = fieldOrder
 }

@@ -14,7 +14,8 @@ import scala.xml._
  *  @author Alexandre Martins
  *  Date: 29-12-2011
  *  Time: 17:13 */
-class ReactionRecord() extends Reaction with SBaseRecord[ReactionRecord]  {
+case class ReactionRecord() extends SBaseRecord[ReactionRecord]  {
+  override val sbmlType = "Reaction"
 
   //listOf definitions for record
   //TODO - find a better solution to this. Parents' listOfXXX definitions is a big problem
@@ -27,7 +28,7 @@ class ReactionRecord() extends Reaction with SBaseRecord[ReactionRecord]  {
 
   override def meta = ReactionRecord
 
-  override protected def relativeURLasList = "model" :: S.param("modelMetaId").openTheBox :: "reaction" :: metaid :: Nil
+  override protected def relativeURLasList = "model" :: S.param("modelMetaId").openTheBox :: "reaction" :: this.metaIdO.get :: Nil
   override protected def relativeCreationURLasList = "model" :: S.param("modelMetaId").openTheBox :: "reaction" :: Nil
 
 
@@ -37,8 +38,8 @@ class ReactionRecord() extends Reaction with SBaseRecord[ReactionRecord]  {
 
   override def toXHtml = {
       {super.toXHtml}
-      <h3 id={"accord_r_"+this.metaid+"_react_"} class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top changeline">
-        <a href={"#accord_r_"+this.metaid+"_react_"}>
+      <h3 id={"accord_r_"+this.metaIdO.get+"_react_"} class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top changeline">
+        <a href={"#accord_r_"+this.metaIdO.get+"_react_"}>
           {this.listOfReactantsRec.size} Reactants
           <form style='display:inline;' >{SHtml.button(
             Text("Add Reactant"),
@@ -53,9 +54,9 @@ class ReactionRecord() extends Reaction with SBaseRecord[ReactionRecord]  {
         <div class="toggle_container">
           <div id="accordion_r_react" class="block">{
             this.listOfReactantsRec.map(i => {
-              <h3 id={"accord_r_"+this.metaid+"_react_"+i.metaid} class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
-                <a href={"#accord_r_"+this.metaid+"_react_"+i.metaid }>
-                  {i.id}
+              <h3 id={"accord_r_"+this.metaIdO.get+"_react_"+i.metaIdO.get} class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
+                <a href={"#accord_r_"+this.metaIdO.get+"_react_"+i.metaIdO.get }>
+                  {i.idO.get}
                   <form style='display:inline;' >{SHtml.button(Text("Edit"),
                     () => {
                       debug("Button to edit compartment, pressed.")
@@ -82,8 +83,8 @@ class ReactionRecord() extends Reaction with SBaseRecord[ReactionRecord]  {
           </div>
         </div>
 
-        <h3 id={"accord_r_"+this.metaid+"_prod"} class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top changeline">
-          <a href={"#accord_r_"+this.metaid+"_prod"}>
+        <h3 id={"accord_r_"+this.metaIdO.get+"_prod"} class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top changeline">
+          <a href={"#accord_r_"+this.metaIdO.get+"_prod"}>
             {this.listOfProductsRec.size} Products
             <form style='display:inline;' >{SHtml.button(
               Text("Add Product"),
@@ -98,9 +99,9 @@ class ReactionRecord() extends Reaction with SBaseRecord[ReactionRecord]  {
         <div class="toggle_container">
           <div id="accordion_r_react" class="block">{
             this.listOfProductsRec.map(i => {
-              <h3 id={"accord_r_"+this.metaid+"_prod_"+i.metaid} class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
-                <a href={"#accord_r_"+this.metaid+"_prod_"+i.metaid }>
-                  {i.id}
+              <h3 id={"accord_r_"+this.metaIdO.get+"_prod_"+i.metaIdO.get} class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
+                <a href={"#accord_r_"+this.metaIdO.get+"_prod_"+i.metaIdO.get }>
+                  {i.idO.get}
                   <form style='display:inline;' >{SHtml.button(Text("Edit"),
                     () => {
                       debug("Button to edit product, pressed.")
@@ -127,8 +128,8 @@ class ReactionRecord() extends Reaction with SBaseRecord[ReactionRecord]  {
           </div>
         </div>
 
-        <h3 id={"accord_r_"+this.metaid+"_modif"} class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top changeline">
-          <a href={"#accord_r_"+this.metaid+"_modif"}>
+        <h3 id={"accord_r_"+this.metaIdO.get+"_modif"} class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top changeline">
+          <a href={"#accord_r_"+this.metaIdO.get+"_modif"}>
             {this.listOfModifiersRec.size} Modifiers
             <form style='display:inline;' >{SHtml.button(
               Text("Add Modifier"),
@@ -143,9 +144,9 @@ class ReactionRecord() extends Reaction with SBaseRecord[ReactionRecord]  {
         <div class="toggle_container">
           <div id="accordion_r_react" class="block">{
             this.listOfModifiersRec.map(i => {
-              <h3 id={"accord_r_"+this.metaid+"_modif_"+i.metaid} class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
-                <a href={"#accord_r_"+this.metaid+"_modif_"+i.metaid }>
-                  {i.id}
+              <h3 id={"accord_r_"+this.metaIdO.get+"_modif_"+i.metaIdO.get} class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
+                <a href={"#accord_r_"+this.metaIdO.get+"_modif_"+i.metaIdO.get }>
+                  {i.idO.get}
                   <form style='display:inline;' >{SHtml.button(Text("Edit"),
                     () => {
                       debug("Button to edit modifier, pressed.")
@@ -176,7 +177,6 @@ class ReactionRecord() extends Reaction with SBaseRecord[ReactionRecord]  {
   }
 
   //  ### will contain fields which can be listed with allFields. ###
-  object metaIdO extends MetaId(this, 100)
   object idO extends Id(this, 100)
   object nameO extends Name(this, 100)
   object notesO extends Notes(this, 1000)
@@ -192,7 +192,6 @@ class ReactionRecord() extends Reaction with SBaseRecord[ReactionRecord]  {
 
 //TODO - DELETE IF NOT USED FOR ANYTHING
 object ReactionRecord extends ReactionRecord with RestMetaRecord[ReactionRecord] {
-  def apply() = new ReactionRecord
   override def fieldOrder = List(metaIdO, idO, nameO, /*sizeO,*/ notesO)
   override def fields = fieldOrder
 }

@@ -13,11 +13,12 @@ import net.liftweb.common.{Empty, Box}
  *  @author Alexandre Martins
  *  Date: 29-12-2011
  *  Time: 17:07 */
-class ConstraintRecord() extends Constraint with SBaseRecord[ConstraintRecord]  {
+case class ConstraintRecord() extends SBaseRecord[ConstraintRecord]  {
+  override val sbmlType = "Constraint"
 
   override def meta = ConstraintRecord
 
-  override protected def relativeURLasList = "model" :: S.param("modelMetaId").openTheBox :: "constraint" :: metaid :: Nil
+  override protected def relativeURLasList = "model" :: S.param("modelMetaId").openTheBox :: "constraint" :: this.metaIdO.get :: Nil
   override protected def relativeCreationURLasList = "model" :: S.param("modelMetaId").openTheBox :: "constraint" :: Nil
 
 
@@ -35,7 +36,6 @@ class ConstraintRecord() extends Constraint with SBaseRecord[ConstraintRecord]  
   }
 
   //  ### will contain fields which can be listed with allFields. ###
-  object metaIdO extends MetaId(this, 100)
   object idO extends Id(this, 100)
   object nameO extends Name(this, 100)
   object notesO extends Notes(this, 1000)
@@ -58,7 +58,6 @@ class ConstraintRecord() extends Constraint with SBaseRecord[ConstraintRecord]  
 
 //TODO - DELETE IF NOT USED FOR ANYTHING
 object ConstraintRecord extends ConstraintRecord with RestMetaRecord[ConstraintRecord] {
-  def apply() = new ConstraintRecord
   override def fieldOrder = List(metaIdO, idO, nameO, /*sizeO,*/ notesO)
   override def fields = fieldOrder
 }
