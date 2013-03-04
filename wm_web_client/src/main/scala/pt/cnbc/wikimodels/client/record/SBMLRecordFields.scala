@@ -59,7 +59,7 @@ with DisplayHTMLWithLabelInOneLine[String, T]{
  *
  */
 class Name[T <: SBaseRecord[T]](own:T, maxLength: Int) extends OptionalStringField[T](own, maxLength)
-with DisplayHTMLWithLabelInOneLine[String, T]{
+with DisplayHTMLWithLabelInOneLine[String, T] with OptionalEmptyStringHandler[String]{
 
   def validateName(name:Option[String]):List[FieldError] =
     if(!name.isEmpty){
@@ -80,7 +80,7 @@ with DisplayHTMLWithLabelInOneLine[String, T]{
 }
 
 class Notes[T <: SBaseRecord[T]](own:T, size:Int) extends OptionalTextareaField[T](own, size)
-with GetSetOwnerField[String, T]{
+with LoggerWrapper{
 
   override def toForm() = Full(
     <div>
@@ -251,7 +251,7 @@ with GetSetOwnerField[String, T]{
 }
 
 class Message[T <: SBaseRecord[T]](own:T, size:Int) extends OptionalTextareaField[T](own, size)
-with GetSetOwnerField[String, T]{
+with LoggerWrapper{
 
   override def toForm() = Full(
     <div>
@@ -422,7 +422,7 @@ with DisplayHTMLWithLabelInOneLine[String, SpeciesRecord]{
         val theParent = this.own.parent.openTheBox
 
         theParent match {
-          case model:SBMLModel => {
+          case model:SBMLModelRecord => {
             val op =
               theParent.asInstanceOf[SBMLModelRecord].listOfCompartmentsRec
             val opWithId = op.map(i => (i, i.idO.is):(CompartmentRecord, String) )
@@ -487,28 +487,21 @@ with LoggerWrapper{
   override def name: String = "Constant"
 }
 
-trait UIOptionalDoubleField[OwnerType <: SBaseRecord[OwnerType]] extends Field[Double,OwnerType] with OptionalTypedField[Double] with DoubleTypedField
-//  with DisplayFormWithLabelInOneLine[Double, OwnerType]
-with DisplayHTMLWithLabelInOneLine[Double,OwnerType]
-  with LoggerWrapper {
-
-  //Appears when rendering the form or the visualization
-}
-
 /**
  * Compartment size
  */
-class Size(rec:CompartmentRecord)
-  extends OptionalDoubleField(rec){
+class Size(rec:CompartmentRecord) extends OptionalDoubleField(rec)
+with DisplayHTMLWithLabelInOneLine[Double,CompartmentRecord] with OptionalEmptyStringHandler[Double]{
   override def name: String = "Size"
 }
 
 /**
  * Species initialAmount
  */
-class InitialAmount(rec:SpeciesRecord)
-  extends OptionalDoubleField(rec) with DisplayHTMLWithLabelInOneLine[Double,SpeciesRecord]
-  with LoggerWrapper with AuxValidators  {
+class InitialAmount(rec:SpeciesRecord) extends OptionalDoubleField(rec)
+with OptionalEmptyStringHandler[Double]
+with DisplayHTMLWithLabelInOneLine[Double,SpeciesRecord]
+with LoggerWrapper with AuxValidators  {
   override def name: String = "InitialAmount"
 
   override def validations:List[ValidationFunction] =
@@ -519,7 +512,7 @@ class InitialAmount(rec:SpeciesRecord)
  * Species initialConcentration
  */
 class InitialConcentration[OwnerType <: SBaseRecord[OwnerType]](rec:OwnerType)
-  extends OptionalDoubleField[OwnerType](rec)
+  extends OptionalDoubleField[OwnerType](rec) with OptionalEmptyStringHandler[Double]
   with DisplayHTMLWithLabelInOneLine[Double,OwnerType]
   with LoggerWrapper with AuxValidators{
   override def name: String = "InitialConcentration"
@@ -536,7 +529,7 @@ class InitialConcentration[OwnerType <: SBaseRecord[OwnerType]](rec:OwnerType)
  * Parameter value
  */
 class Value[OwnerType <: SBaseRecord[OwnerType]](rec:OwnerType)
-  extends OptionalDoubleField[OwnerType](rec)
+  extends OptionalDoubleField[OwnerType](rec) with OptionalEmptyStringHandler[Double]
   with DisplayHTMLWithLabelInOneLine[Double,OwnerType]
   with LoggerWrapper {
   override def name: String = "Value"
@@ -544,7 +537,7 @@ class Value[OwnerType <: SBaseRecord[OwnerType]](rec:OwnerType)
 
 
 class Math[OwnerType <: SBaseRecord[OwnerType]](rec:OwnerType) extends TextareaField(rec,2000)
-with GetSetOwnerField[String,OwnerType]{
+with LoggerWrapper{
 
   override def validations:List[ValidationFunction] =
     super.validations
@@ -605,7 +598,8 @@ with DisplayHTMLWithLabelInOneLine[String, T]{
 
 // Aux Record traits
 
-trait DisplayHTMLWithLabelInOneLine[ThisType, OwnerType <: Record[OwnerType]] extends GetSetOwnerField[ThisType, OwnerType] {
+trait DisplayHTMLWithLabelInOneLine[ThisType, OwnerType <: Record[OwnerType]] extends TypedField[ThisType]
+with LoggerWrapper{
   override def toXHtml: NodeSeq = {
     trace("Calling DisplayHTMLWithLabelInOneLine.toXHtml")
     //TODO: BIG ERRORS HERE... JUST CHECK http://localhost:9999/model/f
@@ -620,15 +614,44 @@ trait DisplayHTMLWithLabelInOneLine[ThisType, OwnerType <: Record[OwnerType]] ex
 }
 
 /**
- * Convert the field to a String... usually of the form "displayName=value"
+ * trait that causes any optional field that does not get filled to be saved as an Empty object instead of issuing a error message
+ * @tparam MyType
  */
-trait GetSetOwnerField[ThisType, OwnerType <: Record[OwnerType]] extends OwnedField[OwnerType] with TypedField[ThisType]
-with LoggerWrapper{
-  //TODO delete this ASAP
+trait OptionalEmptyStringHandler[MyType] extends TypedField[MyType]{
   /**
-   * defines if a default value should be attributed to this field
+   * This changes the behavirour of OptionalDoubleField (and probably other non-string yper fields)
+   * @param s
+   * @return
    */
-  needsDefault = false
+  override abstract def setFromString(s: String): Box[MyType] = {
+    s.trim match {
+      case "" => {
+        super.setBox(Empty)
+      }
+      case _ => {
+        super.setFromString(s)
+      }
+    }
+  }
+
+  /**
+   * This changes the behavirour of OptionalStringField
+   * @param s
+   * @return
+   */
+  override abstract def setFromAny(s: Any): Box[MyType] = {
+    s match {
+      case "" if(optional_?) => {
+        super.setBox(Empty)
+      }
+      case Full("") if(optional_?) => {
+        super.setBox(Empty)
+      }
+      case _ => {
+        super.setFromAny(s)
+      }
+    }
+  }
 }
 
 trait AuxValidators {

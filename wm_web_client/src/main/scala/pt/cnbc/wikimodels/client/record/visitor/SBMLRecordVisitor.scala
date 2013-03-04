@@ -4,7 +4,7 @@ import scala.collection.JavaConversions._
 
 import pt.cnbc.wikimodels.client.record._
 import pt.cnbc.wikimodels.dataModel._
-import net.liftweb.common.{Box, Full}
+import net.liftweb.common.{Empty, Box, Full}
 import net.liftweb.common.Box._
 import alexmsmartins.log.LoggerWrapper
 import pt.cnbc.wikimodels.exceptions.NotImplementedException
@@ -287,7 +287,7 @@ object RecordFromSBML extends LoggerWrapper {
     //cr.compartmentType = c.compartmentType
     cr.spatialDimensions0.set(
       ValidSpatialDimensions(c.spatialDimensions))
-    cr.sizeO.setBox(Box.legacyNullTest(c.size))
+    cr.sizeO.setBox(jDoubleToBoxDouble(c.size))
     //cr.units = c.units
     cr.outsideO.setBox(Box.legacyNullTest( c.outside))
     cr.constantO.set(c.constant)
@@ -301,8 +301,8 @@ object RecordFromSBML extends LoggerWrapper {
     sr.nameO.setBox(Box.legacyNullTest(s.name))
     sr.notesO.setBox(Box.legacyNullTest(s.notes))
     sr.compartmentO.set(s.compartment)
-    sr.initialAmountO.setBox(Box.legacyNullTest(s.initialAmount))
-    sr.initialConcentrationO.setBox(Box.legacyNullTest(s.initialConcentration))
+    sr.initialAmountO.setBox(jDoubleToBoxDouble(s.initialAmount))
+    sr.initialConcentrationO.setBox(jDoubleToBoxDouble(s.initialConcentration))
     //sr.substanceUnits = s.substanceUnits
     //sr.hasOnlySubstanceUnits = s.hasOnlySubstanceUnits
     sr.boundaryConditionO.setBox(Box.legacyNullTest(s.boundaryCondition))
@@ -316,7 +316,7 @@ object RecordFromSBML extends LoggerWrapper {
     pr.idO.set(p.id)
     pr.nameO.setBox(Box.legacyNullTest(p.name))
     pr.notesO.setBox(Box.legacyNullTest(p.notes))
-    pr.valueO.setBox(Box.legacyNullTest(p.value))
+    pr.valueO.setBox(jDoubleToBoxDouble(p.value))
     //pr.units = p.units
     pr.constantO.set(p.constant)
     pr
@@ -407,7 +407,7 @@ object RecordFromSBML extends LoggerWrapper {
       debug("Loaded listOfParameters has size " + kl.listOfParameters.size)
       klr.listOfParametersRec = kl.listOfParameters.map(createParameterRecordFrom(_)).toList
         .map(i => {
-        i.parent = Full(klr) //to build complete URLs
+          i.parent = Full(klr) //to build complete URLs
         i
       }
       )
@@ -418,4 +418,12 @@ object RecordFromSBML extends LoggerWrapper {
   }
 
   //TODO WRITE VISITING FUNCTIONS for the remaining SBML entities
+
+  protected def jDoubleToBoxDouble(i:java.lang.Double):Box[Double] = {
+    trace("RecordFromSBML.jDoubleToBoxDouble( " + i + " )")
+    i match {
+      case null => Empty
+      case x => Full(x)
+    }
+  }
 }

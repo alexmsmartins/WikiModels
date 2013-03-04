@@ -36,7 +36,7 @@ package object screenUtil extends LoggerWrapper{
     ) match {
       case Full(m) => {mm = m}
       case Failure(msg,_,_) => {
-        S.error(msg)
+        S.error(Text(msg))
         S.redirectTo("/")
       }
       case _ => {
@@ -208,6 +208,7 @@ class EditCompartmentScreen extends LiftScreen with LoggerWrapper {
 
   protected def finish() {
     trace("EditCompartmentScreen.finish() started executing!")
+    debug("Compartment from screen is " + compartment.get.toXML)
     compartment.get.updateRestRec()
     S.notice("Compartment " + compartment.get.metaIdO.get + " was saved successfully!")
     for(warnings <- SBMLStrictValidator.visitCompartment(compartment.get))
