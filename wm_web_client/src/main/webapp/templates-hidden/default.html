@@ -100,5 +100,23 @@
             </div>
             <p>Webpage developed by <a href="index">WikiModels</a> webmasters.<br/> © Copyright 2009</p>
         </div>
+            <!-- The two following script tags render any asciimathml if surrounded by a ` character -->
+            <script type="text/x-mathjax-config">
+                /* <![CDATA[ */
+                MathJax.Hub.Config({
+                config: ["MMLorHTML.js"],
+                jax: ["input/MathML","input/AsciiMath","output/HTML-CSS","output/NativeMML"],
+                extensions: ["asciimath2jax.js","MathMenu.js","MathZoom.js"],
+                asciimath2jax: {
+                delimiters: [['`','`']]
+                },
+                NativeMML: { showMathMenuMSIE: false },
+                menuSettings: { zoom: "Double-Click" },
+                errorSettings: { message: ["[Math Error]"] }
+                });
+
+                /* ]]> */
+            </script>
+            <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
     </body>
 </html>

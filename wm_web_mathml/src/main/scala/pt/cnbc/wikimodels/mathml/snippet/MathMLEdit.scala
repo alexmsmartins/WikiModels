@@ -8,7 +8,7 @@ package pt.cnbc.wikimodels.mathml.snippet
 //--Standard imports --
 
 import _root_.net.liftweb.http._
-import _root_.scala.xml.{NodeSeq, Elem}
+import xml.{Text, NodeSeq, Elem}
 import _root_.net.liftweb.util.Helpers._
 import _root_.net.liftweb.util.BindPlus._
 
@@ -79,10 +79,11 @@ class MathMLEdit extends DispatchSnippet {
           //save
           mathmlFormulaToSave.set( contentMathML)
           //add necessary parameters for javascript binding
-          mathmlFormula.set(
+/*          mathmlFormula.set(
             XMLHandler.addAttributes(
               presentationMathML,
-              "mode" -> "display") )
+              "mode" -> "display") )*/
+          mathmlFormula.set(<div>{Text("`"+ AsciiMathPrettyPrinter.toAsciiMathML(result.get) +"`")}</div>)
         }
         case parser.Failure(_,_) => {
           Console.println("Error parsing " + asciiFormula.is + "\n" + result)
@@ -92,7 +93,7 @@ class MathMLEdit extends DispatchSnippet {
               .replace("string matching regex `\\z'", "End of expression").replace("\n\n","\n")
           }
           S.error("parsing_error",
-            <span id="parse_failed"> <p  class="error"> Error parsing AsciiMathML.<div class="monospaced">
+            <span id="parse_failed"> <p class="error"> Error parsing AsciiMathML.<div class="monospaced">
               {
               HTMLHandler.string2html {
                 errorBeautifier {

@@ -15,7 +15,7 @@ class FooProject(info: ProjectInfo) extends DefaultWebProject(info) {
    val servlet = "javax.servlet" % "servlet-api" % "2.5" % "provided"
    val junit = "junit" % "junit" % "4.8.1" % "test"    
 
-    val mavenLocal = "Local Maven Repository" at "file://"+(Path.userHome / ".m2" / "repository").absolutePathw
+    val mavenLocal = "Local Maven Repository" at "file://"+(Path.userHome / ".m2" / "repository").absolutePath
     val bryanjswift = "Bryan J Swift Repository" at "http://repos.bryanjswift.com/maven2/"
     val junitInterface = "com.novocode" % "junit-interface" % "0.4.0" % "test"
 
