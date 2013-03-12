@@ -9,13 +9,13 @@ import javax.xml.XMLConstants
 import javax.xml.validation.{Schema, SchemaFactory}
 import pt.cnbc.wikimodels.mathml.elements._
 import scala.xml._
+import alexmsmartins.log.LoggerWrapper
 
 /** TODO: Please document.
  *  @author Alexandre Martins
  *  Date: 18/01/12
  *  Time: 22:31 */
-class
-MathMLMatchParser extends MathMLMatchParserHandlers{
+class MathMLMatchParser extends MathMLMatchParserHandlers{
   type MME = MathMLElem
 
   def convertStringToMathML(xmlStr:String, s:Schema):Elem = {
@@ -32,6 +32,11 @@ MathMLMatchParser extends MathMLMatchParserHandlers{
     e
   }
 
+  /**
+   *
+   * @param xmlStr
+   * @return
+   */
   def convertStringToXML(xmlStr:String):Elem = {
     // A schema can be loaded in like ...
     val sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI)
@@ -43,7 +48,7 @@ MathMLMatchParser extends MathMLMatchParserHandlers{
   def parse(mathml:Elem):MME = {
     mathml match{
       case <apply>{ns @ _*}</apply> => handleApply(ns.head.asInstanceOf[Elem], ns.tail)
-      case ci if (ci.label == "ci") => Ci(ci.child.head.toString ,(ci \ "@type") text,(ci \ "@definitionURL") text)
+      case ci if (ci.label == "ci") => handleCi(ci)
       case cn if (
         cn.label == "cn" &&
         cn \ "@type" == "real" &&
@@ -60,8 +65,12 @@ MathMLMatchParser extends MathMLMatchParserHandlers{
           ! java.lang.Double.parseDouble(cn.child.head.toString).toString.isEmpty &&
           ! java.lang.Integer.parseInt(cn.child(2).toString).toString.isEmpty
         )  => Cn(cn.child(0).toString::cn.child(2).toString::Nil ,"e-notation",10,(cn \ "@definitionURL") text)
+      case cn if cn.label == "cn" =>
+        Cn(cn.child.head.toString()::Nil ,"real",10,(cn \ "@definitionURL") text)
       case cs if (cs.label == "csymbol" ) => CSymbol(cs.child.toString, cs \ "@definitionURL" text, cs \ "@encoding" text)
-      case default => throw new RuntimeException( "XML conversion of " + default + " is not implemented")
+      case lambda if (lambda.label == "lambda") => handleLambda(lambda.child.view(0, lambda.child.size - 1), lambda.child.last.asInstanceOf[Elem])
+
+      case default => throw new RuntimeException( "XML conversion of <" + default.label + "> is not implemented")
     }
   }
 }
@@ -70,7 +79,11 @@ object MathMLMatchParser{
   def apply() = new MathMLMatchParser
 }
 
-trait MathMLMatchParserHandlers {
+trait MathMLMatchParserHandlers extends LoggerWrapper{
+
+  def handleCi(ci:Elem):Ci = {
+    Ci(ci.child.head.toString ,(ci \ "@type") text,(ci \ "@definitionURL") text)
+  }
   def handleApply(operator:Elem, params:NodeSeq):Apply = {
     operator match {
       case op if( op.label == "csymbol") => new Apply(
@@ -81,6 +94,14 @@ trait MathMLMatchParserHandlers {
       )
       case default => throw new RuntimeException( "Apply element " + default.toString + " has a strange format!")
     }
+  }
+
+  def handleLambda(bvar:NodeSeq, expr:Elem):Lambda = {
+    Console.println("Called handleLambda() with bvar " + bvar + " and expr " + expr)
+    val bvars:List[Ci] = bvar.
+      map(b => handleCi( b.child.head.asInstanceOf[Elem])).toList
+    val finalExpr = parse(expr)
+    Lambda(bvars, finalExpr)
   }
   def parse(mathml:Elem):MathMLElem
 }

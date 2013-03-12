@@ -16,11 +16,12 @@ import net.liftweb.record._
  *  Date: 29-12-2011
  *  Time: 16:49
  *  To change this template use File | Settings | File Templates. */
-class SpeciesRecord() extends Species with SBaseRecord[SpeciesRecord]  {
+case class SpeciesRecord() extends SBaseRecord[SpeciesRecord]  {
+  override val sbmlType = "Species"
 
   override def meta = SpeciesRecord
 
-  override protected def relativeURLasList = "model" :: S.param("modelMetaId").openTheBox :: "species" :: metaid :: Nil
+  override protected def relativeURLasList = "model" :: S.param("modelMetaId").openTheBox :: "species" :: this.metaIdO.get :: Nil
   override protected def relativeCreationURLasList = "model" :: S.param("modelMetaId").openTheBox :: "species" :: Nil
 
 
@@ -46,15 +47,14 @@ class SpeciesRecord() extends Species with SBaseRecord[SpeciesRecord]  {
   }
 
   //  ### will contain fields which can be listed with allFields. ###
-  object metaIdO extends MetaId(this, 100)
   object idO extends Id(this, 100)
   object nameO extends Name(this, 100)
   object compartmentO extends SCompartment(this)
   object constantO extends SConstant(this)
   object notesO extends Notes(this, 1000)
-  object initialAmount0 extends InitialAmount(this)
-  object initialConcentration0 extends InitialConcentration(this)
-  object boundaryCondition0 extends BoundaryCondition(this)
+  object initialAmountO extends InitialAmount(this)
+  object initialConcentrationO extends InitialConcentration(this)
+  object boundaryConditionO extends BoundaryCondition(this)
   //  ### can be created directly from a Request containing params with names that match the fields on a Record ( see fromReq ). ###
 
   var _parent:Box[SBMLModelRecord] = Empty
@@ -70,7 +70,6 @@ class SpeciesRecord() extends Species with SBaseRecord[SpeciesRecord]  {
 
 //TODO - DELETE IF NOT USED FOR ANYTHING
 object SpeciesRecord extends SpeciesRecord with RestMetaRecord[SpeciesRecord] {
-  def apply() = new SpeciesRecord
-  override def fieldOrder = List(metaIdO, idO, nameO, compartmentO, initialAmount0, initialConcentration0, boundaryCondition0, constantO, notesO)
+  override def fieldOrder = List(metaIdO, idO, nameO, compartmentO, initialAmountO, initialConcentrationO, boundaryConditionO, constantO, notesO)
   override def fields = fieldOrder
 }

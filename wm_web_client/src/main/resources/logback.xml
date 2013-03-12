@@ -10,7 +10,7 @@
           <Pattern>%d{HH:mm:ss.SSS} %-5level %logger{36} - %msg%n</Pattern>
       </encoder>
   </appender>
-  <root level="debug">
+  <root level="trace">
     <appender-ref ref="STDOUT" />
   </root>
 </configuration>

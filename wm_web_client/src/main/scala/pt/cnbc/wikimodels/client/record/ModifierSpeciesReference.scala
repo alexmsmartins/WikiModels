@@ -16,12 +16,13 @@ import net.liftweb.common.{Full, Empty, Box}
  *  Date: 29-12-2011
  *  Time: 16:49
  *  To change this template use File | Settings | File Templates. */
-class ModifierSpeciesReferenceRecord() extends ModifierSpeciesReference with SBaseRecord[ModifierSpeciesReferenceRecord]  {
+case class ModifierSpeciesReferenceRecord() extends SBaseRecord[ModifierSpeciesReferenceRecord]  {
+  override val sbmlType = "ModifierSpeciesReference"
 
   var referenceType:String = "reactant" // "product" "modifier"
   override def meta = ModifierSpeciesReferenceRecord
 
-  override protected def relativeURLasList = "model" :: S.param("modelMetaId").openTheBox :: "reaction" :: S.param("reactionMetaId").openTheBox :: referenceType :: metaid :: Nil
+  override protected def relativeURLasList = "model" :: S.param("modelMetaId").openTheBox :: "reaction" :: S.param("reactionMetaId").openTheBox :: referenceType :: this.metaIdO.get :: Nil
   override protected def relativeCreationURLasList = "model" :: S.param("modelMetaId").openTheBox :: "species" :: Nil
 
 
@@ -49,14 +50,16 @@ class ModifierSpeciesReferenceRecord() extends ModifierSpeciesReference with SBa
       val defaultOption:(Box[SpeciesRecord], String) = (Empty, "[no spcies")
       val op = parent.openTheBox.
         listOfSpeciesRec
-      val defaultOp = parent.openTheBox.listOfSpeciesRec.filter( _.id == species ).headOption
-      val opWithId = op.map(i => (i, i.id):(SpeciesRecord, String) )
+      val defaultOp = parent.openTheBox.listOfSpeciesRec.filter( _.idO.get == speciesO.get ).headOption
+      val opWithId = op.map(i => (i, i.idO.get):(SpeciesRecord, String) )
       val options = (List((null , "no species")) ::: opWithId.toList).toSeq
       SHtml.selectObj(options, Box.option2Box(defaultOp),
         (choice:SpeciesRecord ) => {
           choice match {
-            case null => species = null
-            case c => species = c.id
+            case null => speciesO.setBox(Empty)
+            case c => speciesO.setBox(
+              Full(c.idO.get)
+            )
           }
         })
       }
@@ -64,10 +67,10 @@ class ModifierSpeciesReferenceRecord() extends ModifierSpeciesReference with SBa
   }
 
   //  ### will contain fields which can be listed with allFields. ###
-  object metaIdO extends MetaId(this, 100)
   object idO extends Id(this, 100)
   object nameO extends Name(this, 100)
   object notesO extends Notes(this, 1000)
+  object speciesO extends SRSpecies(this, 100)
 
   //  ### can be created directly from a Request containing params with names that match the fields on a Record ( see fromReq ). ###
 
@@ -84,7 +87,6 @@ class ModifierSpeciesReferenceRecord() extends ModifierSpeciesReference with SBa
 
 //TODO - DELETE IF NOT USED FOR ANYTHING
 object ModifierSpeciesReferenceRecord extends ModifierSpeciesReferenceRecord with RestMetaRecord[ModifierSpeciesReferenceRecord] {
-  def apply() = new ModifierSpeciesReferenceRecord
   override def fieldOrder = List(metaIdO, idO, nameO, notesO)
   override def fields = fieldOrder
 }

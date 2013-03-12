@@ -10,18 +10,20 @@ import net.liftweb.common.Full._
 import net.liftweb.http.{SHtml, S}
 import net.liftweb.record._
 import net.liftweb.common.{Full, Empty, Box}
+import pt.cnbc.wikimodels.exceptions.NotImplementedException
 
 /** TODO: Please document.
  *  @author Alexandre Martins
  *  Date: 29-12-2011
  *  Time: 16:49
  *  To change this template use File | Settings | File Templates. */
-class SpeciesReferenceRecord() extends SpeciesReference with SBaseRecord[SpeciesReferenceRecord]  {
+case class SpeciesReferenceRecord() extends SBaseRecord[SpeciesReferenceRecord]  {
+  override val sbmlType = "SpeciesReference"
 
   var referenceType:String = "reactant" // "product" "modifier"
   override def meta = SpeciesReferenceRecord
 
-  override protected def relativeURLasList = "model" :: S.param("modelMetaId").openTheBox :: "reaction" :: S.param("reactionMetaId").openTheBox :: referenceType :: metaid :: Nil
+  override protected def relativeURLasList = "model" :: S.param("modelMetaId").openTheBox :: "reaction" :: S.param("reactionMetaId").openTheBox :: referenceType :: this.metaIdO.get :: Nil
   override protected def relativeCreationURLasList = "model" :: S.param("modelMetaId").openTheBox :: "species" :: Nil
 
 
@@ -49,22 +51,23 @@ class SpeciesReferenceRecord() extends SpeciesReference with SBaseRecord[Species
       val defaultOption:(Box[SpeciesRecord], String) = (Empty, "[no spcies")
       val op = parent.openTheBox.
         listOfSpeciesRec
-      val defaultOp = parent.openTheBox.listOfSpeciesRec.filter( _.id == species ).headOption
-      val opWithId = op.map(i => (i, i.id):(SpeciesRecord, String) )
+      val defaultOp = parent.openTheBox.listOfSpeciesRec.filter( _.idO.is == species ).headOption
+      val opWithId = op.map(i => (i, i.idO.is):(SpeciesRecord, String) )
       val options = (List((null , "no species")) ::: opWithId.toList).toSeq
       SHtml.selectObj(options, Box.option2Box(defaultOp),
         (choice:SpeciesRecord ) => {
           choice match {
             case null => species = null
-            case c => species = c.id
+            case c => species = c.idO.is
           }
         })
       }
     </div>
   }
 
+  var species:String = throw new NotImplementedException(""" 'species' should be deleted from code!""")
+
   //  ### will contain fields which can be listed with allFields. ###
-  object metaIdO extends MetaId(this, 100)
   object idO extends Id(this, 100)
   object nameO extends Name(this, 100)
   object notesO extends Notes(this, 1000)
@@ -84,7 +87,6 @@ class SpeciesReferenceRecord() extends SpeciesReference with SBaseRecord[Species
 
 //TODO - DELETE IF NOT USED FOR ANYTHING
 object SpeciesReferenceRecord extends SpeciesReferenceRecord with RestMetaRecord[SpeciesReferenceRecord] {
-  def apply() = new SpeciesReferenceRecord
   override def fieldOrder = List(metaIdO, idO, nameO, notesO)
   override def fields = fieldOrder
 }

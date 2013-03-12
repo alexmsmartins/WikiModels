@@ -87,5 +87,34 @@
       </div>
       
     </div>
+    <tail>
+        <script type="text/x-mathjax-config">
+            /* <![CDATA[ */
+            $.log("MathJax is being configured.");
+            MathJax.Hub.Config({
+            config: ["MMLorHTML.js"],
+            jax: ["input/MathML","input/AsciiMath","output/HTML-CSS","output/NativeMML"],
+            extensions: ["asciimath2jax.js","MathMenu.js","MathZoom.js"],
+            asciimath2jax: {
+            delimiters: [['`','`']]
+            },
+            NativeMML: { showMathMenuMSIE: false },
+            menuSettings: { zoom: "Double-Click" },
+            errorSettings: { message: ["[Math Error]"] }
+            });
+
+            /* ]]> */
+        </script>
+        <script type="text/javascript"
+                src="http://cdn.mathjax.org/mathjax/latest/MathJax.js">
+            /* <![CDATA[ */
+            $(document).ready(function() {
+            displayResult();
+            //TODO replace this function call by Sarissa - http://dev.abiss.gr/sarissa/
+            $.log("MathJax is executing");
+            });
+            /* ]]> */
+        </script>
+    </tail>
   </body>
 </html>

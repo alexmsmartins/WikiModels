@@ -9,6 +9,7 @@ import pt.cnbc.wikimodels.dataModel._
 import net.liftweb.util.BindHelpers._
 import net.liftweb.http.{S, SHtml}
 import alexmsmartins.log.LoggerWrapper
+import pt.cnbc.wikimodels.client.record.visitor.{SBMLFromRecord => R2B, RecordFromSBML => B2R}
 
 //Javascript handling imports
 import _root_.net.liftweb.http.js.{JE,JsCmd,JsCmds}
@@ -17,8 +18,8 @@ import JE.{JsRaw,Str}
 
 import pt.cnbc.wikimodels.client.snippet.CommentSnip
 import net.liftweb.common.Box
-import pt.cnbc.wikimodels.sbmlVisitors.SBML2BeanConverter
-import visitor.{SBMLFromRecord, RecordFromSBML}
+import pt.cnbc.wikimodels.sbmlVisitors.{Bean2SBMLConverter => B2S, SBML2BeanConverter => S2B}
+import pt.cnbc.wikimodels.client.snippet.CommentSnip
 
 
 /*
@@ -26,10 +27,15 @@ import visitor.{SBMLFromRecord, RecordFromSBML}
 */
 
 
-trait SBaseRecord[MyType <: SBaseRecord[MyType]] extends Element with RestRecord[MyType] with CommentSnip {
+trait SBaseRecord[MyType <: SBaseRecord[MyType]] extends RestRecord[MyType] with CommentSnip {
   self : MyType =>
   import pt.cnbc.wikimodels.snippet.User
-  
+
+  val sbmlType = "SBase"
+
+  //FIXME remove this if it stops being necessary
+  object metaIdO extends MetaId(this, 100)
+
   /**
    * informs if the fields of this record have information or not
    */
@@ -47,16 +53,19 @@ trait SBaseRecord[MyType <: SBaseRecord[MyType]] extends Element with RestRecord
    * CRUD operation for creating a REST [record]Record
    */
   override def createRestRec():Box[MyType] = {
-    val url = connection.postRequest(relativeCreationURL, this.toXML)
+    val url = connection.postRequest(
+      relativeCreationURL,
+      B2S.visit(
+        R2B.createSBMLElementFrom(this)))
     connection.getStatusCode match {
       case 201 => {
         saved_? = true
         //the server may modify the metaid to avoid clashes
-        this.metaid = url.toString.split("/").last
+        this.metaIdO.set(url.toString.split("/").last)
         Full(this)//create went ok
       }
-      case 404 => ParamFailure("Error creating " + this.sbmlType + " with metaid " + this.metaid + ".", this)
-      case status => handleStatusCodes(status, "creating " + sbmlType + " with " + this.metaid)
+      case 404 => ParamFailure("Error creating " + this.sbmlType + " with metaid " + this.metaIdO.get + ".", this)
+      case status => handleStatusCodes(status, "creating " + sbmlType + " with " + this.metaIdO.get)
     }
   }
 
@@ -64,7 +73,7 @@ trait SBaseRecord[MyType <: SBaseRecord[MyType]] extends Element with RestRecord
    * CRUD operation for reading a REST Record
    */
   override def readRestRec(_metaid:String):Box[MyType] = {
-    this.metaid = _metaid
+    this.metaIdO.set(_metaid)
     val content = User.restfulConnection.getRequest(relativeURL)
     User.restfulConnection.getStatusCode match {
       case 200 =>{
@@ -72,15 +81,15 @@ trait SBaseRecord[MyType <: SBaseRecord[MyType]] extends Element with RestRecord
         //FIXME this should be replaced by a call to a XML to SBMLElement converter
         val loadedRecord:Box[MyType] =
           Full(
-            RecordFromSBML.createRecordFrom(
-              SBML2BeanConverter.visit( content )
+            B2R.createRecordFrom(
+               S2B.visit(content)
             ).asInstanceOf[MyType]
           )//read went ok
         debug("Read of " + loadedRecord + "aaa" )
         loadedRecord
       }
-      case 404 => ParamFailure("Error reading " + this.metaid + ". This element does not exist.", this)
-      case status => handleStatusCodes(status, "reading " + sbmlType + " with " + this.metaid)
+      case 404 => ParamFailure("Error reading " + this.metaIdO.get + ". This element does not exist.", this)
+      case status => handleStatusCodes(status, "reading " + sbmlType + " with " + this.metaIdO.get)
     }
   }
 
@@ -88,14 +97,14 @@ trait SBaseRecord[MyType <: SBaseRecord[MyType]] extends Element with RestRecord
    * CRUD operation for updating a REST Record
    */
   override def updateRestRec():Box[MyType] = {
-    debug("SBaseRecord.pdateRestRec()")
+    debug("SBaseRecord.updateRestRec()")
     debug("RestRec to update is\n==============================\n" + this.toXML + "\n==============================\n")
     //FIXME SBMLFromRecord.createSBMLElementFrom(this).asInstanceOf[MyType].toXML IS VERY HACKISH CODE.
-    User.restfulConnection.putRequest(relativeURL, (SBMLFromRecord.createSBMLElementFrom(this)).toXML)
+    User.restfulConnection.putRequest(relativeURL, (R2B.createSBMLElementFrom(this)).toXML)
     User.restfulConnection.getStatusCode match {
       case 200 => saved_? = true;Full(this)//update went ok
-      case 404 => ParamFailure("Error updateing " + this.metaid + ". This element does not exist.", this)
-      case status => handleStatusCodes(status, "updataing " + sbmlType + " with " + this.metaid)
+      case 404 => ParamFailure("Error updateing " + this.metaIdO.get + ". This element does not exist.", this)
+      case status => handleStatusCodes(status, "updataing " + sbmlType + " with " + this.metaIdO.get)
     }
   }
 
@@ -106,16 +115,21 @@ trait SBaseRecord[MyType <: SBaseRecord[MyType]] extends Element with RestRecord
     User.restfulConnection.deleteRequest(relativeURL)
     User.restfulConnection.getStatusCode match {
       case 204 => saved_? = false;Full(this)//delete went ok
-      case 404 => ParamFailure("Error de[record]leting " + this.metaid + ". This element does not exist.", this)
-      case status => handleStatusCodes(status, "deleting "+ sbmlType + " with " + this.metaid)
+      case 404 => ParamFailure("Error de[record]leting " + this.metaIdO.get + ". This element does not exist.", this)
+      case status => handleStatusCodes(status, "deleting "+ sbmlType + " with " + this.metaIdO.get)
     }
   }
 
   def comments:NodeSeq = {
-    disqusFromMetaId(this.metaid)
+    disqusFromMetaId(this.metaIdO.get)
   }
 
   var parent:Box[SBaseRecord[_]]
+
+  def toXML =
+    B2S.visit(
+      R2B.createSBMLElementFrom(this)
+    )
 }
 
 /**
@@ -124,7 +138,7 @@ trait SBaseRecord[MyType <: SBaseRecord[MyType]] extends Element with RestRecord
  * Date: 03-07-2011
  * Time: 17:37
  */
-class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with LoggerWrapper {
+case class SBMLModelRecord() extends SBaseRecord[SBMLModelRecord] with LoggerWrapper {
   type MyType = SBMLModelRecord
 
 
@@ -147,7 +161,7 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
 
   override def meta = SBMLModelRecord
 
-  override protected def relativeURLasList = "model" :: metaid :: Nil
+  override protected def relativeURLasList = "model" :: metaIdO.get :: Nil
   override protected def relativeCreationURLasList = "model" :: Nil
 
   //  ### can be validated with validate ###
@@ -188,9 +202,9 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
           <div class="toggle_container">
             <div id="accordion_c" class="block">{
               this.listOfCompartmentsRec.map(i => {
-              <h3 id={"accord_c_"+i.metaid} class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
-                <a href={"#accord_c_"+i.metaid}>
-                  {i.id}
+              <h3 id={"accord_c_"+i.metaIdO.get} class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
+                <a href={"#accord_c_"+i.metaIdO.get}>
+                  {i.idO.get}
                   <form style='display:inline;' >{SHtml.button(Text("Edit"),
                     () => {
                       debug("Button to edit compartment, pressed.")
@@ -233,9 +247,9 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
           <div  class="toggle_container">
             <div id="accordion_s" class="block">{
               this.listOfSpeciesRec.map(i => {
-                <h3 id={"accord_s_"+i.metaid} class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
-                  <a href={"#accord_s_"+i.metaid}>
-                    {i.id}
+                <h3 id={"accord_s_"+i.metaIdO.get} class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
+                  <a href={"#accord_s_"+i.metaIdO.get}>
+                    {i.idO.get}
                     <form style='display:inline;' >{SHtml.button(Text("Edit"),
                       () => {
                         debug("Button to edit species, pressed.")
@@ -278,9 +292,9 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
           <div  class="toggle_container">
             <div id="accordion_p" class="block">{
               this.listOfParametersRec.map(i => {
-                <h3 id={"accord_p_"+i.metaid} class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
-                  <a href={"#accord_p_"+i.metaid}>
-                    {i.id}
+                <h3 id={"accord_p_"+i.metaIdO.get} class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
+                  <a href={"#accord_p_"+i.metaIdO.get}>
+                    {i.idO.get}
                     <form style='display:inline;' >{SHtml.button(Text("Edit"),
                       () => {
                         debug("Button to edit parameter, pressed.")
@@ -323,9 +337,9 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
           <div  class="toggle_container">
             <div id="accordion_fd" class="block">{
               this.listOfFunctionDefinitionsRec.map(i => {
-                <h3 id={"accord_fd_"+i.metaid} class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
-                  <a href={"#accord_fd_"+i.metaid}>
-                    {i.id}
+                <h3 id={"accord_fd_"+i.metaIdO.get} class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
+                  <a href={"#accord_fd_"+i.metaIdO.get}>
+                    {i.idO.get}
                     <form style='display:inline;' >{SHtml.button(Text("Edit"),
                       () => {
                         debug("Button to edit function definition, pressed.")
@@ -368,9 +382,9 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
           <div  class="toggle_container">
             <div id="accordion_ct" class="block">{
               this.listOfConstraintsRec.map(i => {
-                <h3 id={"accord_ct_"+i.metaid} class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
-                  <a href={"#accord_ct_"+i.metaid}>
-                    {i.id}
+                <h3 id={"accord_ct_"+i.metaIdO.get} class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
+                  <a href={"#accord_ct_"+i.metaIdO.get}>
+                    {i.idO.get}
                     <form style='display:inline;' >{SHtml.button(Text("Edit"),
                       () => {
                         debug("Button to edit constraints, pressed.")
@@ -413,9 +427,9 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
           <div class="toggle_container">
             <div id="accordion_r" class="block">{
               this.listOfReactionsRec.map(i => {
-                <h3 id={"accord_r_"+i.metaid} class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
-                  <a href={"#accord_r_"+i.metaid}>
-                    {i.id}
+                <h3 id={"accord_r_"+i.metaIdO.get} class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top">
+                  <a href={"#accord_r_"+i.metaIdO.get}>
+                    {i.idO.get}
                     <form style='display:inline;' >{SHtml.button(Text("Edit"),
                       () => {
                         debug("Button to edit reaction, pressed.")
@@ -465,7 +479,6 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
   }
 
   //  ### will contain fields which can be listed with allFields. ###
-  object metaIdO extends MetaId(this, 100) 
   object idO extends Id(this, 100)
   object nameO extends Name(this, 100)
   object notesO extends Notes(this, 1000)
@@ -478,7 +491,6 @@ class SBMLModelRecord() extends SBMLModel with SBaseRecord[SBMLModelRecord] with
 
 //TODO - DELETE IF NOT USED FOR ANYTHING
 object SBMLModelRecord extends SBMLModelRecord with RestMetaRecord[SBMLModelRecord] {
-  def apply() = new SBMLModelRecord
   override def fieldOrder = List(metaIdO, idO, nameO, notesO)
   override def fields = fieldOrder
 }

@@ -7,101 +7,48 @@ import alexmsmartins.log.LoggerWrapper
 import pt.cnbc.wikimodels.client.record._
 import net.liftweb.util.FieldError
 import net.liftweb.util.ControlHelpers._
-import xml.{Text, XML, NodeSeq}
+import xml.{Elem, Text, XML, NodeSeq}
 import pt.cnbc.wikimodels.dataModel._
 import pt.cnbc.wikimodels.dataModel.ValidSpatialDimensions
 import pt.cnbc.wikimodels.dataModel.ValidSpatialDimensions._
-import tools.nsc.util.trace
-import pt.cnbc.wikimodels.mathml.elements.MathMLElem
-import tools.nsc.util.trace
-import tools.nsc.util.trace
+import pt.cnbc.wikimodels.sbmlVisitors.SBMLLooseValidator
+import pt.cnbc.wikimodels.exceptions.ValidationDefaultCase._
+import xml.Text
+import net.liftweb.http.js.JsCmds.JsCrVar
+import net.liftweb.common.Full
+import pt.cnbc.wikimodels.exceptions.BadFormatException
 
 //Javascript handling imports
-import _root_.net.liftweb.http.js.{JE,JsCmd,JsCmds}
+import net.liftweb.http.js.{JsExp, JE, JsCmd, JsCmds}
 import JsCmds._ // For implicifts
-import JE.{JsRaw,Str}
+import net.liftweb.http.js.JE.{JsVar, Call, JsRaw, Str}
 
 import scala.util.parsing.combinator.Parsers
 
 class MetaId[T <: SBaseRecord[T]](own:T, maxLength: Int) extends StringField[T](own, maxLength)
-with DisplayFormWithLabelInOneLine[String, T] with DisplayHTMLWithLabelInOneLine[String, T]{
-  var _data:Box[MyType] = Empty
-
-  override def theData_=(in:Box[MyType]) {
-    trace("Calling MetaId.theData_=" + in)
-    _data = in
-    _data match{
-      //if a valid value is set then update the owner class
-      case Full(x) => owner.metaid = x
-      case _ => owner.metaid = null //just to make sure the owner does not have valid values when errors occur
-    }
-  }
-
-  override def theData:Box[MyType] = {
-    trace("Calling MetaId.theData")
-    //if the owner has valid data that was obtained from the wikimodels Server
-    if(owner.metaid != null) {
-      debug("theData with metaid = "+ owner.metaid + " is being copied to the record Field.")
-      _data = Full(owner.metaid)
-    } else {
-      _data match {
-        case Empty => {
-          _data = defaultValueBox
-          if (! this.optional_?) owner.metaid = defaultValue
-        }
-        case Full(x) => owner.metaid = x
-      }
-    }
-    trace("MetaId.theData returns " + _data)
-    _data
-  }
+with DisplayHTMLWithLabelInOneLine[String, T]{
 
   //the MetaId will be generated from concatenating the ids of any parent entities with '_' in between.
   override def toForm() = Empty
   //Appears when rendering the form or the visualization
   override def name: String = "Metaid"
 
-
   //override def toXHtml: NodeSeq = Text(this.value + "xxxxxxx")
 }
 
-class Id[T <: SBaseRecord[T]{var id:String}](own:T, maxLength: Int) extends StringField[T](own, maxLength)
-with DisplayFormWithLabelInOneLine[String, T] with DisplayHTMLWithLabelInOneLine[String, T]{
-  var _data:Box[MyType] = Empty
+class Id[T <: SBaseRecord[T]](own:T, maxLength: Int) extends StringField[T](own, maxLength)
+with DisplayHTMLWithLabelInOneLine[String, T]{
 
-  override def validate:List[FieldError] = {
-      super.validate
-  }
+  def validateId(id:String):List[FieldError] =
+    SBMLLooseValidator.checkMandatoryId(id)
+      .map(FieldError( this, _ ))
 
-  override def theData_=(in:Box[MyType]) {
-    trace("Calling Id.theData_=" + in)
-    _data = in
-    _data match{
-      //if a valid value is set then update the owner class
-      case Full(x) => owner.id = x
-      case _ => owner.id = null //just to make sure the owner does not have valid values when errors occur
-    }
-  }
+  override def helpAsHtml:Box[NodeSeq] = Full(<a href="http://stackoverflow.com/questions/1252749/how-to-show-images-links-on-div-hover" target="_blank">(?)</a>)
 
-  override def theData:Box[MyType] = {
-    trace("Calling Id.theData")
-    //if the owner has valid data that was obtained from the wikimodels Server
-    if(owner.id != null) {
-      debug("theData with aid = "+ owner.id + " is being copied to the record Field.")
-      _data = Full(owner.id)
-    } else {
-      _data match {
-        case Empty => {
-          _data = defaultValueBox
-          if (! this.optional_?) owner.id = defaultValue
-        }
-        case Full(x) => owner.id = x
-      }
-    }
-    trace("Id.theData returns " + _data)
-    _data
-  }
-
+  override def validations:List[ValidationFunction] =
+    validateId _ ::
+    valMinLen(1,"Field is empty") _ ::
+    super.validations
 
   //Appears when rendering the form or the visualization
   override def name: String = "Id"
@@ -111,40 +58,19 @@ with DisplayFormWithLabelInOneLine[String, T] with DisplayHTMLWithLabelInOneLine
 /**
  *
  */
-class Name[T <: SBaseRecord[T]{var name:String}](own:T, maxLength: Int) extends StringField[T](own, maxLength)
-with DisplayFormWithLabelInOneLine[String, T] with DisplayHTMLWithLabelInOneLine[String, T]{
-  var _data:Box[MyType] = Empty
+class Name[T <: SBaseRecord[T]](own:T, maxLength: Int) extends OptionalStringField[T](own, maxLength)
+with DisplayHTMLWithLabelInOneLine[String, T] with OptionalEmptyStringHandler[String]{
 
-  override def theData_=(in:Box[MyType]) {
-    trace("Calling Name.theData_=" + in)
-    _data = in
-    _data match{
-      //if a valid value is set then update the owner class
-      case Full(x) => owner.name = x
-      case _ => owner.name = null //just to make sure the owner does not have valid values when errors occur
-    }
-  }
-
-  override def theData:Box[MyType] = {
-    trace("Calling Name.theData")
-    //if the owner has valid data that was obtained from the wikimodels Server
-    if(owner.name != null) {
-      debug("theData with name = "+ owner.name + " is being copied to the record Field.")
-      _data = Full(owner.name)
-    } else {
-      _data match {
-        case Empty => {
-          _data = defaultValueBox
-          if (! this.optional_?) owner.name = defaultValue
-        }
-        case Full(x) => owner.name = x
-      }
-    }
-    trace("Name.theData returns " + _data)
-    _data
-  }
+  def validateName(name:Option[String]):List[FieldError] =
+    if(!name.isEmpty){
+      SBMLLooseValidator.checkOptionalName(name.get)
+        .map(FieldError( this, _ ))
+    } else List[FieldError]()
 
 
+  override def validations:List[ValidationFunction] =
+    validateName _ ::
+      super.validations
 
   //Appears when rendering the form or the visualization
   override def name = "Name"
@@ -153,43 +79,8 @@ with DisplayFormWithLabelInOneLine[String, T] with DisplayHTMLWithLabelInOneLine
   //override def toXHtml: NodeSeq = Text(this.value)
 }
 
-class Notes[T <: SBaseRecord[T]{var notes:String}](own:T, size:Int) extends OptionalTextareaField[T](own, size)
-with GetSetOwnerField[String, T]{
-  var _data:Box[MyType] = Empty
-
-  override def theData_=(in:Box[MyType]) {
-    trace("Calling Notes.theData_=" + in)
-    _data = in
-    _data match{
-      //if a valid value is set then update the owner class
-      //TODO put the entities conversion in their own class
-      case Full(x) => owner.notes = x
-        .replace("&nbsp;", " &#160;")
-        .replace("&igrave;", "&#236;")
-        .replace("&egrave;", "&#232;")
-        .replace("&Egrave;", "&#200;")
-      case _ => owner.notes = null //just to make sure the owner does not have valid values when errors occur
-    }
-  }
-
-  override def theData:Box[MyType] = {
-    trace("Calling Notes.theData")
-    //if the owner has valid data that was obtained from the wikimodels Server
-    if(owner.notes != null) {
-      debug("theData with notes = "+ owner.notes + " is being copied to the record Field.")
-      _data = Full(owner.notes)
-    } else {
-      _data match {
-        case Empty => {
-          _data = Empty
-          if (! this.optional_?) owner.notes = null
-        }
-        case Full(x) => owner.notes = x
-      }
-    }
-    trace("Notes.theData returns " + _data)
-    _data
-  }
+class Notes[T <: SBaseRecord[T]](own:T, size:Int) extends OptionalTextareaField[T](own, size)
+with LoggerWrapper{
 
   override def toForm() = Full(
     <div>
@@ -207,7 +98,7 @@ with GetSetOwnerField[String, T]{
           <script type="text/javascript" src="/classpath/js/ckeditor/ckeditor.js"></script>
         </head>
 
-        <li><span><h3>Description of the model:</h3></span>
+        <li> <span><h3>Expand/Collapse</h3></span>
             <br />
           <ul>
             <li><span>
@@ -348,7 +239,10 @@ with GetSetOwnerField[String, T]{
                   //FIXME replace this hack by something more general
                   case _ => XML.loadString( "<root>"+content+"</root>" ).child
                 }
-              }}
+              }
+              case Failure(msg, exception, chain) => S.error(msg)
+              case ParamFailure(msg, exception, chain, param) => S.error(msg + ". This occured in " + param)
+            }
             }</span>
         </span>
           <lift:msg id={uniqueFieldId.openTheBox}  errorClass="lift_error"/>
@@ -356,44 +250,8 @@ with GetSetOwnerField[String, T]{
   }
 }
 
-class Message[T <: SBaseRecord[T]{var message:String}](own:T, size:Int) extends OptionalTextareaField[T](own, size)
-with GetSetOwnerField[String, T]{
-  //TODO REFACTOR Record field Message to share more code with Notes field
-  var _data:Box[MyType] = Empty
-
-  override def theData_=(in:Box[MyType]) {
-    trace("Calling Message.theData_=" + in)
-    _data = in
-    _data match{
-      //if a valid value ieditor1s set then update the owner class
-      //TODO put the entities conversion in their own class
-      case Full(x) => owner.message = x
-        .replace("&nbsp;", " &#160;")
-        .replace("&igrave;", "&#236;")
-        .replace("&egrave;", "&#232;")
-        .replace("&Egrave;", "&#200;")
-      case _ => owner.message = null //just to make sure the owner does not have valid values when errors occur
-    }
-  }
-
-  override def theData:Box[MyType] = {
-    trace("Calling Message.theData")
-    //if the owner has valid data that was obtained from the wikimodels Server
-    if(owner.message != null) {
-      debug("theData with message = "+ owner.message + " is being copied to the record Field.")
-      _data = Full(owner.message)
-    } else {
-      _data match {
-        case Empty => {
-          _data = Empty
-          if (! this.optional_?) owner.message = null
-        }
-        case Full(x) => owner.message = x
-      }
-    }
-    trace("Message.theData returns " + _data)
-    _data
-  }
+class Message[T <: SBaseRecord[T]](own:T, size:Int) extends OptionalTextareaField[T](own, size)
+with LoggerWrapper{
 
   override def toForm() = Full(
     <div>
@@ -443,14 +301,21 @@ with GetSetOwnerField[String, T]{
         <span class="sbml_field_content">
           {this.valueBox match{
           case Empty => Text("-- no description available -- ")
-          case Full(content) =>{
-            try{
-              XML.loadString( content )
-            } catch{
-              //FIXME replace this hack by something more general
-              case _ => XML.loadString( "<root>"+content+"</root>" ).child
+          case Full(content) =>
+            try {
+              XML.loadString(content)
+            } catch {
+              case _ =>
+                //FIXME replace this hack by something more general
+                try {
+                  XML.loadString("<root>" + content + "</root>").child
+                } catch {
+                  case _ => throw new BadFormatException("Strange error for field message!!")
+                }
             }
-          }}
+          case Failure(msg, exception, chain) => S.error(msg)
+          case ParamFailure(msg, exception, chain, param) => S.error(msg + ". This occured in " + param)
+        }
           }</span>
       </span>
         <lift:msg id={uniqueFieldId.openTheBox}  errorClass="lift_error"/>
@@ -459,113 +324,23 @@ with GetSetOwnerField[String, T]{
 }
 
 
-class SpatialDimensions[T <: SBaseRecord[T]{var spatialDimensions:Int}](own:T) extends EnumField(own, ValidSpatialDimensions)
-with DisplayFormWithLabelInOneLine[ValidSpatialDimensions, T] with DisplayHTMLWithLabelInOneLine[ValidSpatialDimensions, T] with LoggerWrapper{
+class SpatialDimensions[T <: SBaseRecord[T]](own:T) extends EnumField(own, ValidSpatialDimensions)
+with DisplayHTMLWithLabelInOneLine[ValidSpatialDimensions, T] with LoggerWrapper{
   import pt.cnbc.wikimodels.dataModel.Compartment._
-  var _data:Box[MyType] = Empty
-
-  override def theData_=(in:Box[MyType]) {
-    trace("Calling SpatialDimensions.theData_=" + in)
-    _data = in
-    in match{
-      //if a valid value is set then update the owner class
-      case Full(y) =>{
-        owner.spatialDimensions = y.id
-      }
-      case Empty => {
-        owner.spatialDimensions = Compartment.defaultSpatialDimensions.id
-      }
-      case _ => owner.spatialDimensions = 10000 //1000 is an unressonbable value that will stand out
-    }
-  }
-
-  override def theData:Box[MyType] = {
-    trace("Calling SpatialDimensions.theData")
-    //if the owner has valid data that was obtained from the wikimodels Server
-    debug("theData with spatialDimensions = "+ owner.spatialDimensions + " is being copied to the record Field.")
-      _data match {
-        case Empty => {
-
-          if (! this.optional_?){
-            _data = Full(defaultSpatialDimensions)
-            owner.spatialDimensions = Compartment.defaultSpatialDimensions.id
-          }
-        }
-        case Full(x) => {
-          owner.spatialDimensions = x.id
-        }
-      }
-    trace("SpatialDimensions.theData returns " + _data)
-    _data
-  }
-
 
   //Appears when rendering the form or the visualization
   override def name: String = "Spatial dimensions"
   //override def toXHtml: NodeSeq = Text(this.value)
 }
 
-trait UIMandatoryBooleanField[OwnerType <: SBaseRecord[OwnerType]]  extends Field[Boolean, OwnerType] with MandatoryTypedField[Boolean] with BooleanTypedField
-with DisplayFormWithLabelInOneLine[Boolean, OwnerType] with DisplayHTMLWithLabelInOneLine[Boolean, OwnerType]
-with LoggerWrapper{
-  var _data:Box[MyType] = Empty
-
-  def ownerField_=(value:Boolean)
-  def ownerField:Boolean
-  def defaultFieldValue:Boolean
-
-  override def theData_=(in:Box[MyType]) {
-    trace("Calling Constant.theData_=" + in)
-    _data = in
-    in match{
-      //if a valid value is set then update the owner class
-      case Full(y) =>{
-        ownerField = y
-      }
-      case Empty => {
-        ownerField = defaultFieldValue
-      }
-      case _ =>{
-        ownerField = true //lets give it a default even in case of error
-        S.error("Strange error when reading the field constant in ")
-      }  
-    }
-  }
-
-  override def theData:Box[MyType] = {
-    trace("Calling Constant.theData")
-    //if the owner has valid data that was obtained from the wikimodels Server
-    debug("theData with " + name.toLowerCase +" "+ ownerField + " is being copied to the record Field.")
-    _data match {
-      case Empty => {
-        if (! this.optional_?){
-          _data = Full(defaultFieldValue)
-          ownerField = defaultFieldValue
-        }
-      }
-      case Full(x) => {
-        ownerField = x
-      }
-    }
-    trace("Constant.theData returns " + _data)
-    _data
-  }
-
-  //Appears when rendering the form or the visualization
-  override def name: String = "Constant"
-  //override def toXHtml: NodeSeq = Text(this.value)
-}
 
 /**
  * Compartment constant
  */
-class CConstant[OwnerType <: SBaseRecord[OwnerType]{var constant:Boolean}](rec:OwnerType) extends UIMandatoryBooleanField[OwnerType]{
-  def owner = rec
-  override def ownerField_=(value:Boolean) = owner.constant = value
-  override def ownerField:Boolean = owner.constant
-  override def defaultFieldValue = Compartment.defaultConstant
-
-  def defaultValue = Compartment.defaultConstant
+class CConstant[OwnerType <: SBaseRecord[OwnerType]](rec:OwnerType) extends BooleanField[OwnerType](rec)
+with DisplayHTMLWithLabelInOneLine[Boolean, OwnerType]
+with LoggerWrapper{
+  override def defaultValue = Compartment.defaultConstant
 
   override def name: String = "Constant"
 }
@@ -573,72 +348,43 @@ class CConstant[OwnerType <: SBaseRecord[OwnerType]{var constant:Boolean}](rec:O
 /**
  * Compartment.outside
  */
-class COutside[ T <: SBaseRecord[T]{var outside:String}](own:T) extends OptionalStringField[T](own, 100)
- with DisplayHTMLWithLabelInOneLine[String, T]{
-  var _data:Box[MyType] = Empty
+class COutside(own:CompartmentRecord) extends OptionalStringField(own, 100)
+ with DisplayHTMLWithLabelInOneLine[String, CompartmentRecord]{
 
   override def validate:List[FieldError] = {
     super.validate
   }
-
-  override def theData_=(in:Box[MyType]) {
-    trace("Calling Outside.theData_=" + in)
-    _data = in
-    _data match{
-      //if a valid value is set then update the owner class
-      case Full(x) => owner.outside = x
-      case _ => owner.outside = null //just to make sure the owner does not have valid values when errors occur
-    }
-  }
-
-  override def theData:Box[MyType] = {
-    trace("Calling Outside.theData")
-    //if the owner has valid data that was obtained from the wikimodels Server
-    if(own.outside != null) {
-      debug("theData with outside = "+ own.outside + " is being copied to the record Field.")
-      _data = Full(own.outside)
-    } else {
-      _data match {
-        case Empty => {
-          _data = defaultValueBox
-          if (! this.optional_?) own.outside = defaultValue
-        }
-        case Full(x) => own.outside = x
-      }
-    }
-    trace("Outside.theData returns " + _data)
-    _data
-  }
-
 
   //Appears when rendering the form or the visualization
   override def name: String = "Outside"
   //override def toXHtml: NodeSeq = Text(this.value)
 
   override def toForm:Box[NodeSeq] = {
-    trace("Calling DisplayFormWithLabelInOneLine.toForm")
+    trace("Calling COutside.toForm")
     for (id <- uniqueFieldId; control <- super.toForm)
     yield
       <span id={id + "_holder"}>
-        <label for={ id }> <span class="sbml_field_label">{ displayHtml }</span></label>
+        <!-- <label for={ id }> <span class="sbml_field_label">{ displayHtml }</span></label>-->
         {
           val theParent = this.own.parent.openTheBox
 
           theParent match {
-            case model:SBMLModel => {
+            case model:SBMLModelRecord => {
               val op =
                 theParent.asInstanceOf[SBMLModelRecord].listOfCompartmentsRec
-                .filter(_.metaid != this.own.metaid)
-                .filter(_.spatialDimensions != 0)
-            val opWithId = op.map(i => (Full(i), i.id):(Box[CompartmentRecord], String) )
+                .filter(_.metaIdO.get != this.own.metaIdO.get)
+                .filter(_.spatialDimensions0.is != 0)
+            val opWithId = op.map(i => (Full(i), i.idO.is):(Box[CompartmentRecord], String) )
             val options = (List((Empty , "no compartment")) ::: opWithId.toList).toSeq
             SHtml.selectObj(options,
               Full(Box.option2Box(
-                theParent.asInstanceOf[SBMLModelRecord].listOfCompartmentsRec.filter( _.id == this.own.outside ).headOption)),
+                theParent.asInstanceOf[SBMLModelRecord].listOfCompartmentsRec.filter( _.idO.is == this.own.outsideO.is ).headOption)),
               (choice:Box[CompartmentRecord]) =>
                 choice match {
-                  case Empty => this.own.outside = null
-                  case Full(c) => this.own.outside = c.id
+                  case Empty => null
+                  case Full(c) => c.idO.is
+                  case Failure(msg, exception, chain) => S.error(msg)
+                  case ParamFailure(msg, exception, chain, param) => S.error(msg + ". This occured in " + param)
                 },
               ("xxx" -> "yyy"))
             }
@@ -655,76 +401,42 @@ class COutside[ T <: SBaseRecord[T]{var outside:String}](own:T) extends Optional
 /**
  * Species.compartment
  */
-class SCompartment[ T <: SBaseRecord[T]{var compartment:String}](own:T) extends StringField[T](own, 100)
-with DisplayHTMLWithLabelInOneLine[String, T]{
-  var _data:Box[MyType] = Empty
+class SCompartment[ T <: SpeciesRecord](own:SpeciesRecord) extends StringField(own, 100)
+with DisplayHTMLWithLabelInOneLine[String, SpeciesRecord]{
 
   override def validate:List[FieldError] = {
     super.validate
   }
-
-  override def theData_=(in:Box[MyType]) {
-    trace("Calling SCompartment.theData_=" + in)
-    _data = in
-    _data match{
-      //if a valid value is set then update the owner class
-      case Full(x) => owner.compartment = x
-      case _ => {
-        S.error("No compartment was defined for this species ");
-        owner.compartment = null //just to make sure the owner does not have valid values when errors occur
-      }
-    }
-  }
-
-  override def theData:Box[MyType] = {
-    trace("Calling SComaprtment.theData")
-    //if the owner has valid data that was obtained from the wikimodels Server
-    if(own.compartment != null) {
-      debug("theData with compartment = "+ own.compartment + " is being copied to the record Field.")
-      _data = Full(own.compartment)
-    } else {
-      _data match {
-        case Empty => {
-          _data = defaultValueBox
-          if (! this.optional_?) own.compartment = defaultValue
-        }
-        case Full(x) => own.compartment = x
-      }
-    }
-    trace("SCompartment.theData returns " + _data)
-    _data
-  }
-
 
   //Appears when rendering the form or the visualization
   override def name: String = "Compartment"
   //override def toXHtml: NodeSeq = Text(this.value)
 
   override def toForm:Box[NodeSeq] = {
-    trace("Calling DisplayFormWithLabelInOneLine.toForm")
+    trace("Calling SCompartment.toForm")
     for (id <- uniqueFieldId; control <- super.toForm)
     yield
       <span id={id + "_holder"}>
-        <label for={ id }> <span class="sbml_field_label">{ displayHtml }</span></label>
+        <!-- <label for={ id }> <span class="sbml_field_label">{ displayHtml }</span></label> -->
         {
         val theParent = this.own.parent.openTheBox
 
         theParent match {
-          case model:SBMLModel => {
+          case model:SBMLModelRecord => {
             val op =
               theParent.asInstanceOf[SBMLModelRecord].listOfCompartmentsRec
-            val opWithId = op.map(i => (i, i.id):(CompartmentRecord, String) )
+            val opWithId = op.map(i => (i, i.idO.is):(CompartmentRecord, String) )
             // FIXME - since this is a wiki, this might be made optional nonetheless - CHECK IT
             // val options = (List((Empty , "no compartment")) ::: opWithId.toList).toSeq
-            debug("Species.compartment value is {} before creating select box", this.own.compartment)
+            debug("Species.compartment value is {} before creating select box", this.own.compartmentO.is)
             SHtml.selectObj(
               opWithId,
               Box.option2Box(
-                op.filter( _.id == this.own.compartment ).headOption),
+                op.filter( _.idO.is == this.own.compartmentO.is ).headOption),
               (choice:CompartmentRecord) =>
                 {
-                  debug("Defining default choice of select box as {}", choice.id)
-                  this.own.compartment = choice.asInstanceOf[CompartmentRecord].id
+                  debug("Defining default choice of select box as {}", choice.idO.is)
+                  this.own.compartmentO.set( choice.idO.is)
                 },
                 ("xxx" -> "yyy"))
           }
@@ -743,13 +455,11 @@ with DisplayHTMLWithLabelInOneLine[String, T]{
 /**
  * Species boundaryCondition
  */
-class BoundaryCondition[OwnerType <: SBaseRecord[OwnerType]{var constant:Boolean}](rec:OwnerType) extends UIMandatoryBooleanField[OwnerType]{
-  def owner = rec
-  override def ownerField_=(value:Boolean) = owner.constant = value
-  override def ownerField:Boolean = owner.constant
-  override def defaultFieldValue = Species.defaultBoundaryCondition
+class BoundaryCondition[OwnerType <: SBaseRecord[OwnerType]](rec:OwnerType) extends BooleanField[OwnerType](rec)
+with DisplayHTMLWithLabelInOneLine[Boolean, OwnerType]
+with LoggerWrapper{
 
-  def defaultValue = Species.defaultBoundaryCondition
+  override def defaultValue = Species.defaultBoundaryCondition
 
   override def name: String = "BoundaryCondition"
 }
@@ -757,13 +467,11 @@ class BoundaryCondition[OwnerType <: SBaseRecord[OwnerType]{var constant:Boolean
 /**
  * Species constant
  */
-class SConstant[OwnerType <: SBaseRecord[OwnerType]{var constant:Boolean}](rec:OwnerType) extends UIMandatoryBooleanField[OwnerType]{
-  def owner = rec
-  override def ownerField_=(value:Boolean) = owner.constant = value
-  override def ownerField:Boolean = owner.constant
-  override def defaultFieldValue = Species.defaultConstant
+class SConstant(rec:SpeciesRecord) extends BooleanField(rec)
+with DisplayHTMLWithLabelInOneLine[Boolean, SpeciesRecord]
+with LoggerWrapper{
 
-  def defaultValue = Species.defaultConstant
+  override def defaultValue = Species.defaultConstant
 
   override def name: String = "Constant"
 }
@@ -771,229 +479,89 @@ class SConstant[OwnerType <: SBaseRecord[OwnerType]{var constant:Boolean}](rec:O
 /**
  * Parameter constant
  */
-class PConstant[OwnerType <: SBaseRecord[OwnerType]{var constant:Boolean}](rec:OwnerType) extends UIMandatoryBooleanField[OwnerType]{
-  def owner = rec
-  override def ownerField_=(value:Boolean) = owner.constant = value
-  override def ownerField:Boolean = owner.constant
-  override def defaultFieldValue = Parameter.defaultConstant
-
-  def defaultValue = Parameter.defaultConstant
+class PConstant(rec:ParameterRecord) extends BooleanField(rec)
+with DisplayHTMLWithLabelInOneLine[Boolean, ParameterRecord]
+with LoggerWrapper{
+  override def defaultValue = Parameter.defaultConstant
 
   override def name: String = "Constant"
-}
-
-trait UIOptionalDoubleField[OwnerType <: SBaseRecord[OwnerType]] extends Field[Double,OwnerType] with OptionalTypedField[Double] with DoubleTypedField
-  with DisplayFormWithLabelInOneLine[Double, OwnerType] with DisplayHTMLWithLabelInOneLine[Double,OwnerType]
-  with LoggerWrapper {
-
-
-  // * There is a strong reason to use both java.lang.Double and scala.Double here
-  // * Do not change this without knowing what to do with the client and server code when there is no size value
-  var _data:Box[MyType] = Empty
-
-  def ownerField_=(value:java.lang.Double)
-  def ownerField:java.lang.Double
-
-  override def theData_=(in:Box[MyType]) {
-    trace("Calling UIOptionalDoubleField.theData_=" + in)
-    _data = in
-    in match{
-      //if a valid value is set then update the owner class
-      case Full(y) =>{
-        ownerField = y.asInstanceOf[java.lang.Double]
-      }
-      case Empty => {
-        ownerField = null
-      }
-      case _ =>{
-        ownerField = null //lets give it a default even in case of error
-        S.error("Strange error when reading the field!")
-      }
-    }
-  }
-
-  override def theData:Box[MyType] = {
-    trace("Calling UIOptionalDoubleField.theData")
-    //if the owner has valid data that was obtained from the wikimodels Server
-    if(ownerField != null){
-      _data = Full(ownerField)
-    } else {
-      debug("theData with " + name.toLowerCase +" "+ ownerField + " is being copied to the record Field.")
-      _data match {
-        case Empty => {
-          if ( this.optional_?){
-            _data = Empty
-            ownerField = null
-          }
-        }
-        case Full(x) => {
-          ownerField = x.asInstanceOf[java.lang.Double]
-        }
-      }
-    }
-    trace("Constant.theData returns " + _data)
-    _data
-  }
-
-  override def setFromString(s: String): Box[Double] = s match {
-    case "" if optional_? => setBox(Empty)
-    case _ =>setBox(tryo(java.lang.Double.parseDouble(s)))
-  }
-
-
-  //Appears when rendering the form or the visualization
 }
 
 /**
  * Compartment size
  */
-class Size[OwnerType <: SBaseRecord[OwnerType]{var size:java.lang.Double}](rec:OwnerType)
-  extends UIOptionalDoubleField[OwnerType]  {
-  def owner = rec
-  override def ownerField_=(value:java.lang.Double) = owner.size = value
-  override def ownerField:java.lang.Double = owner.size
+class Size(rec:CompartmentRecord) extends OptionalDoubleField(rec)
+with DisplayHTMLWithLabelInOneLine[Double,CompartmentRecord] with OptionalEmptyStringHandler[Double]{
   override def name: String = "Size"
 }
 
 /**
  * Species initialAmount
  */
-class InitialAmount[OwnerType <: SBaseRecord[OwnerType]{var initialAmount:java.lang.Double}](rec:OwnerType)
-  extends UIOptionalDoubleField[OwnerType]  {
-  def owner = rec
-  override def ownerField_=(value:java.lang.Double) = owner.initialAmount = value
-  override def ownerField:java.lang.Double = owner.initialAmount
+class InitialAmount(rec:SpeciesRecord) extends OptionalDoubleField(rec)
+with OptionalEmptyStringHandler[Double]
+with DisplayHTMLWithLabelInOneLine[Double,SpeciesRecord]
+with LoggerWrapper with AuxValidators  {
   override def name: String = "InitialAmount"
+
+  override def validations:List[ValidationFunction] =
+      super.validations
 }
 
 /**
  * Species initialConcentration
  */
-class InitialConcentration[OwnerType <: SBaseRecord[OwnerType]{var initialConcentration:java.lang.Double}](rec:OwnerType)
-  extends UIOptionalDoubleField[OwnerType]  {
-  def owner = rec
-  override def ownerField_=(value:java.lang.Double) = owner.initialConcentration = value
-  override def ownerField:java.lang.Double = owner.initialConcentration
+class InitialConcentration[OwnerType <: SBaseRecord[OwnerType]](rec:OwnerType)
+  extends OptionalDoubleField[OwnerType](rec) with OptionalEmptyStringHandler[Double]
+  with DisplayHTMLWithLabelInOneLine[Double,OwnerType]
+  with LoggerWrapper with AuxValidators{
   override def name: String = "InitialConcentration"
+
+  def validateInitialConcentration(ic:String):List[FieldError] =
+    checkOptionalDoubleNumber(ic)
+      .map(FieldError( this, _ ))
+
+  override def validations:List[ValidationFunction] =
+    super.validations
 }
 
 /**
  * Parameter value
  */
-class Value[OwnerType <: SBaseRecord[OwnerType]{var value:java.lang.Double}](rec:OwnerType)
-  extends UIOptionalDoubleField[OwnerType]  {
-  def owner = rec
-  override def ownerField_=(value:java.lang.Double) = owner.value = value
-  override def ownerField:java.lang.Double = owner.value
+class Value[OwnerType <: SBaseRecord[OwnerType]](rec:OwnerType)
+  extends OptionalDoubleField[OwnerType](rec) with OptionalEmptyStringHandler[Double]
+  with DisplayHTMLWithLabelInOneLine[Double,OwnerType]
+  with LoggerWrapper {
   override def name: String = "Value"
 }
 
 
-class Math[OwnerType <: SBaseRecord[OwnerType]{var math:String}](rec:OwnerType) extends StringField(rec,2000)
-with GetSetOwnerField[String,OwnerType]{
+class Math[OwnerType <: SBaseRecord[OwnerType]](rec:OwnerType) extends TextareaField(rec,2000)
+with LoggerWrapper{
+
+  override def validations:List[ValidationFunction] =
+    super.validations
+
+  override def setFilter:List[ValueType => ValueType] =
+    super.setFilter
+
+  object Default{
+    val mathmlFormula = <math xmlns="http://www.w3.org/1998/Math/MathML"/>
+    val editMessHtml = <p id="parse_success" >Please insert new formula</p>
+    val errorMess = "No error"
+    val errorHtml = <p id="parse_success" >To start working please edit the AsciiMathML formula below</p>
+    val asciiFormula = "2*x"
+  }
+
+  var asciiFormula: String  = Default.asciiFormula
+
+  var mathmlFormula:Elem = mathmlFormula
+  var mathmlFormulatosave:Elem = mathmlFormula
+
+
+
   override def name: String = "Math"
-  var _data:Box[MyType] = Empty
 
-  override def theData_=(in:Box[MyType]) {
-    trace("Calling Math.theData_=" + in)
-    _data = in
-    _data match{
-      //if a valid value is set then update the owner class
-      //TODO put the entities conversion in their own class
-      case Full(x) => owner.math = x
-      case _ => owner.math = null //just to make sure the owner does not have valid values when errors occur
-    }
-  }
-
-  override def theData:Box[MyType] = {
-    trace("Calling Math.theData")
-    //if the owner has valid data that was obtained from the wikimodels Server
-    if(owner.math != null) {
-      debug("theData with math = "+ owner.math + " is being copied to the record Field.")
-      _data = Full(owner.math )
-    } else {
-      _data match {
-        case Empty => {
-          _data = Empty
-          if (! this.optional_?) owner.math = null
-        }
-        case Full(x) => owner.math = x
-      }
-    }
-    trace("Math.theData returns " + _data)
-    _data
-  }
-
-  override def toForm() = Full(
-    <div id="some-div">
-      <h2>Welcome to WikiModels MathML Editor.</h2>
-        <div>
-          <lift:MathMLEdit form="POST">
-            <!-- FIXME recheck the possibility of adding this if there is a way to make it work on webkit
-              FIXME this browser conversion is much faster than the one done on the server side -->
-            <!--    <head>
-                  <script id="xslttransform" src="/js/xsltTransformer.js" type="text/javascript">
-              </script>
-              </head>-->
-            <script type="text/x-mathjax-config">
-              /* <![CDATA[ */
-              $.log("MathJax is being configured.");
-              MathJax.Hub.Config({
-                config: ["MMLorHTML.js"],
-                jax: ["input/TeX","input/MathML","output/HTML-CSS","output/NativeMML"],
-                extensions: ["tex2jax.js","mml2jax.js","MathMenu.js","MathZoom.js"],
-                TeX: {
-                  extensions: ["AMSmath.js","AMSsymbols.js","noErrors.js","noUndefined.js"]
-                },
-                NativeMML: { showMathMenuMSIE: false },
-                menuSettings: { zoom: "Double-Click" },
-                errorSettings: { message: ["[Math Error]"] }
-              });
-            /* ]]> */
-            </script>
-            <script type="text/javascript"
-                    src="http://cdn.mathjax.org/mathjax/latest/MathJax.js">
-              /* <![CDATA[ */
-              $(document).ready(function() {
-              displayResult();
-              //TODO replace this function call by Sarissa - http://dev.abiss.gr/sarissa/
-              $.log("MathJax is executing");
-              });
-            /* ]]> */
-            </script>
-
-      <link rel="stylesheet" type="text/css" href="/css/mathml_editor.css"/>
-
-      <div class="lift:Msg?id=parsing_error;errorClass=error"></div>
-      <a href="http://www1.chapman.edu/~jipsen/asciimath.html">To get help in ASCIIMathML syntax click here.</a>
-
-      <div>
-        <editor:formulaViz>
-          <span id="form_viz"></span>
-        </editor:formulaViz>
-          <editor:formula/>
-      </div>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <script type="text/javascript">
-          /* <![CDATA[ */
-          function getTextArea(){
-            alert("Lets implment ajax check");
-          }
-          /* ]]> */
-        </script>
-      </lift:MathMLEdit>
-    </div>
-      <br/>
-    </div>
-  )
   //Appears when rendering the form or the visualization
 
   override def toXHtml: NodeSeq = {
@@ -1012,7 +580,10 @@ with GetSetOwnerField[String,OwnerType]{
               //FIXME replace this hack by something more general
               case _ => XML.loadString( "<root>"+content+"</root>" ).child
             }
-          }}
+          }
+          case Failure(msg, exception, chain) => S.error(msg)
+          case ParamFailure(msg, exception, chain, param) => S.error(msg + ". This occured in " + param)
+        }
           }</span>
       </span>
         <lift:msg id={uniqueFieldId.openTheBox}  errorClass="lift_error"/>
@@ -1020,33 +591,15 @@ with GetSetOwnerField[String,OwnerType]{
   }
 }
 
+class SRSpecies[T <: SBaseRecord[T]](own:T, maxLength: Int) extends StringField[T](own, maxLength)
+with DisplayHTMLWithLabelInOneLine[String, T]{
+  override def name: String = "Math"
+}
 
 // Aux Record traits
 
-/**
- * Mix in to a field to change its form display to    for (id <- uniqueFieldId; control <- super.toXHtml) yield
-   be formatted with the label aside.
- *
- * E.g.
- *   <div id={ id + "_holder" }>
- *     <div><label for={ id }>{ displayName }</label></div>
- *     { control }
- *   </div>
- */
-trait DisplayFormWithLabelInOneLine[ThisType, OwnerType <: Record[OwnerType]] extends GetSetOwnerField[ThisType, OwnerType] {
-  override abstract def toForm:Box[NodeSeq] = {
-    trace("Calling DisplayFormWithLabelInOneLine.toForm")
-    for (id <- uniqueFieldId; control <- super.toForm)
-    yield
-      <span id={id + "_holder"}>
-        <label for={ id }> <span class="sbml_field_label">{ displayHtml }</span></label>
-        {control}
-          <lift:msg id={id}  errorClass="lift_error"/>
-      </span>
-  }
-}
-
-trait DisplayHTMLWithLabelInOneLine[ThisType, OwnerType <: Record[OwnerType]] extends GetSetOwnerField[ThisType, OwnerType] {
+trait DisplayHTMLWithLabelInOneLine[ThisType, OwnerType <: Record[OwnerType]] extends TypedField[ThisType]
+with LoggerWrapper{
   override def toXHtml: NodeSeq = {
     trace("Calling DisplayHTMLWithLabelInOneLine.toXHtml")
     //TODO: BIG ERRORS HERE... JUST CHECK http://localhost:9999/model/f
@@ -1061,54 +614,59 @@ trait DisplayHTMLWithLabelInOneLine[ThisType, OwnerType <: Record[OwnerType]] ex
 }
 
 /**
- * Convert the field to a String... usually of the form "displayName=value"
+ * trait that causes any optional field that does not get filled to be saved as an Empty object instead of issuing a error message
+ * @tparam MyType
  */
-trait GetSetOwnerField[ThisType, OwnerType <: Record[OwnerType]] extends OwnedField[OwnerType] with TypedField[ThisType]
-with LoggerWrapper{
-
+trait OptionalEmptyStringHandler[MyType] extends TypedField[MyType]{
   /**
-   * accessor for the data in this Field record
-   * The implementation should:
-   *  - attribute in to data
-   *  - attribute:
-   *   - to the owner field if Full
-   *   - attribute a default value if Empty
-   *   - a "strange" value if Failure (debugging becomes easier)
+   * This changes the behavirour of OptionalDoubleField (and probably other non-string yper fields)
+   * @param s
+   * @return
    */
-  private[record] def theData_=(in:Box[MyType]):Unit
-  private[record] def theData:Box[MyType]
-
-  /**
-   * defines if a default value should be attributed to this field
-   */
-  needsDefault = false
-
-  override def setBox(in: Box[MyType]): Box[MyType] = synchronized {
-    trace("Calling GetSetOnwerField.setBox(" + in + ")")
-    needsDefault = false
-    theData = in match {
-      case _ if !canWrite_?      => Failure(noValueErrorMessage)
-      case Full(_)               => set_!(in)
-      case _ if optional_?       => set_!(in)
-      case (f: Failure)          => set_!(f) // preserve failures set in
-      case _                     => Failure(notOptionalErrorMessage)
+  override abstract def setFromString(s: String): Box[MyType] = {
+    s.trim match {
+      case "" => {
+        super.setBox(Empty)
+      }
+      case _ => {
+        super.setFromString(s)
+      }
     }
-    dirty_?(true)
-    theData
   }
 
-  override def valueBox: Box[MyType] = synchronized {
-    trace("Calling GetSetOnwerField.valueBox")
-    if (needsDefault && !optional_?) { //FIXME - THIS CODE CAME FROM THE TypeField trait. Delete it
-      needsDefault = false
-      theData = defaultValueBox
+  /**
+   * This changes the behavirour of OptionalStringField
+   * @param s
+   * @return
+   */
+  override abstract def setFromAny(s: Any): Box[MyType] = {
+    s match {
+      case "" if(optional_?) => {
+        super.setBox(Empty)
+      }
+      case Full("") if(optional_?) => {
+        super.setBox(Empty)
+      }
+      case _ => {
+        super.setFromAny(s)
+      }
     }
-    trace("Data returned is {}",
-      if (canRead_?) theData
-      else theData.flatMap(debug("Data obscured by {}", obscure) )
-    )
   }
+}
 
-  override def asString = displayName + "=" + theData.openTheBox
+trait AuxValidators {
+  protected def checkDoubleNumber(s: String):List[String] =
+    try{
+      java.lang.Double.parseDouble(s); Nil
+    } catch {
+      case e:NumberFormatException => List("'"+s+"' does not represent a valid floating point number.")
+      case e => exceptionHandling(e)
+    }
+
+  protected def checkOptionalDoubleNumber(num:String):List[String] =
+    if (num == null)
+      Nil
+    else checkDoubleNumber(num)
+
 }
 

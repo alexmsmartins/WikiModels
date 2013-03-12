@@ -77,12 +77,12 @@
                     <lift:snippet type="msg" id="login_msg"></lift:snippet>
                 </div>
                 <div class="lift:msgs">
-                    <lift:error_msg>Error!  The details are:</lift:error_msg>
+                    <lift:error_msg>Error! The details are:</lift:error_msg>
                     <lift:error_class>error</lift:error_class>
-                    <lift:notice_msg>Note:</lift:notice_msg>
-                    <lift:notice_class>notice</lift:notice_class>
-                    <lift:warning_msg>Whoops, I had a problem:</lift:warning_msg>
-                    <lift:warning_class>warning</lift:warning_class>
+                    <lift:notice_msg>Notice that:</lift:notice_msg>
+                    <lift:notice_class>success</lift:notice_class>
+                    <lift:warning_msg>Warning:</lift:warning_msg>
+                    <lift:warning_class>notice</lift:warning_class><!-- This is a warning but I want to use the notice formatting -->
                 </div>                     <!-- TODO create a box for success messages here -->
                 <br/>
                 <br/>
@@ -100,5 +100,23 @@
             </div>
             <p>Webpage developed by <a href="index">WikiModels</a> webmasters.<br/> © Copyright 2009</p>
         </div>
+            <!-- The two following script tags render any asciimathml if surrounded by a ` character -->
+            <script type="text/x-mathjax-config">
+                /* <![CDATA[ */
+                MathJax.Hub.Config({
+                config: ["MMLorHTML.js"],
+                jax: ["input/MathML","input/AsciiMath","output/HTML-CSS","output/NativeMML"],
+                extensions: ["asciimath2jax.js","MathMenu.js","MathZoom.js"],
+                asciimath2jax: {
+                delimiters: [['`','`']]
+                },
+                NativeMML: { showMathMenuMSIE: false },
+                menuSettings: { zoom: "Double-Click" },
+                errorSettings: { message: ["[Math Error]"] }
+                });
+
+                /* ]]> */
+            </script>
+            <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
     </body>
 </html>

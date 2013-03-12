@@ -6,20 +6,21 @@ package pt.cnbc.wikimodels.client.record
 
 import pt.cnbc.wikimodels.dataModel._
 import net.liftweb.http.S
-import net.liftweb.record.{Notes, Name, Id, MetaId}
+import net.liftweb.record._
 import net.liftweb.common.{Empty, Box}
 
 /** TODO: Please document.
  *  @author Alexandre Martins
  *  Date: 16/01/12
  *  Time: 00:41 */
-class KineticLawRecord() extends KineticLaw with SBaseRecord[KineticLawRecord] {
+case class KineticLawRecord() extends SBaseRecord[KineticLawRecord] {
+  override val sbmlType = "KineticLaw"
 
   var listOfParametersRec:List[ParameterRecord] = Nil
 
   override def meta = KineticLawRecord
 
-  override protected def relativeURLasList = "model" :: S.param("modelMetaId").openTheBox :: "reaction" :: S.param("reactionMetaId").openTheBox :: "kineticlaw" :: metaid :: Nil
+  override protected def relativeURLasList = "model" :: S.param("modelMetaId").openTheBox :: "reaction" :: S.param("reactionMetaId").openTheBox :: "kineticlaw" :: this.metaIdO.get :: Nil
   override protected def relativeCreationURLasList = "model" :: S.param("modelMetaId").openTheBox :: "reaction" :: S.param("reactionMetaId").openTheBox :: "kineticlaw" :: Nil
 
 
@@ -37,8 +38,8 @@ class KineticLawRecord() extends KineticLaw with SBaseRecord[KineticLawRecord] {
   }
 
   //  ### will contain fields which can be listed with allFields. ###
-  object metaIdO extends MetaId(this, 100)
   object notesO extends Notes(this, 1000)
+  object mathO extends Math(this)
   //  ### can be created directly from a Request containing params with names that match the fields on a Record ( see fromReq ). ###
 
   var _parent:Box[ReactionRecord] = Empty
@@ -51,7 +52,6 @@ class KineticLawRecord() extends KineticLaw with SBaseRecord[KineticLawRecord] {
 
 //TODO - DELETE IF NOT USED FOR ANYTHING
 object KineticLawRecord extends KineticLawRecord with RestMetaRecord[KineticLawRecord] {
-  def apply() = new ReactionRecord
   override def fieldOrder = List(metaIdO, notesO)
   override def fields = fieldOrder
 }

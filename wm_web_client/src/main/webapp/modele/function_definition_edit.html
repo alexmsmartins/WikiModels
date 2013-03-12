@@ -5,18 +5,18 @@
 
 <html>
 <body>
-<lift:surround with="default" at="content">
-    <div id='content'>
-        <div class="lift:SBMLSnip:functionDefinitionMetaId">
+<div class="lift:surround?with=default;at=content">
+<div id='content'>
+    <div class="lift:SBMLSnip:functionDefinitionMetaId">
             <h1>Function Definition with metaId <span id="fdMetaId"></span> . <input type="button"
                                                                       onclick="window.location.href=window.location.href+'/..'"
                                                                       name="view" value="View">View</input> </h1>
         </div>
-        <div class="lift:SBMLForm.editFunctionDefinition?form=post">
+        <div class="lift:EditFunctionDefinitionScreen">
         </div>
         <p></p>
     </div>
     <!-- end of content -->
-</lift:surround>
+</div>
 </body>
 </html>

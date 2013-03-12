@@ -13,11 +13,12 @@ import net.liftweb.record._
  *  @author Alexandre Martins
  *  Date: 29-12-2011
  *  Time: 17:12 */
-class ParameterRecord() extends Parameter with SBaseRecord[ParameterRecord]  {
+case class ParameterRecord() extends SBaseRecord[ParameterRecord] {
+  override val sbmlType = "Parameter"
 
   override def meta = ParameterRecord
 
-  override protected def relativeURLasList = "model" :: S.param("modelMetaId").openTheBox :: "parameter" :: metaid :: Nil
+  override protected def relativeURLasList = "model" :: S.param("modelMetaId").openTheBox :: "parameter" :: this.metaIdO.get :: Nil
   override protected def relativeCreationURLasList = "model" :: S.param("modelMetaId").openTheBox :: "parameter" :: Nil
 
 
@@ -35,7 +36,6 @@ class ParameterRecord() extends Parameter with SBaseRecord[ParameterRecord]  {
   }
 
   //  ### will contain fields which can be listed with allFields. ###
-  object metaIdO extends MetaId(this, 100)
   object idO extends Id(this, 100)
   object nameO extends Name(this, 100)
   object valueO extends Value(this)
@@ -56,7 +56,6 @@ class ParameterRecord() extends Parameter with SBaseRecord[ParameterRecord]  {
 
 //TODO - DELETE IF NOT USED FOR ANYTHING
 object ParameterRecord extends ParameterRecord with RestMetaRecord[ParameterRecord] {
-  def apply() = new ParameterRecord
   override def fieldOrder = List(metaIdO, idO, nameO, valueO, constantO, notesO)
   override def fields = fieldOrder
 }

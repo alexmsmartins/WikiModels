@@ -5,18 +5,21 @@ import KnownOperators._
 import util.parsing.combinator.{RegexParsers, PackratParsers}
 
 class AsciiMathParser extends RegexParsers with PackratParsers with AsciiMathParserHandlers {
-
+  //Note the AsciiMath symbols for different operators have to be changed here and in AsciiMathPrettyPrinter
+  // I am doing this because the grammar would be very hard to read (and change) if, for example, we wrote
+  // '''toAsciiMathML(Addition)''' instead of ''' "+" '''
   type MME = MathMLElem
 
   //General expression with any possibility
   lazy val AsciiMathExpr :PackratParser[MME]= LambdaExpr | GenExpr
 
   //check http://rwiki.sciviews.org/doku.php?id=wiki:asciimathml#standard_functions to handle certain cases
-  lazy val LambdaExpr :PackratParser[MME]= "("~repsep(ident,",")~")" ~ "=" ~> GenExpr
+  lazy val LambdaExpr :PackratParser[MME]= "("~repsep(ident,",")~")"~"="~GenExpr^^{case "("~bvars~")"~"="~e =>
+                                                                new Lambda(bvars.map(new Ci(_) ) , e)}
 
-  lazy val GenExpr    :PackratParser[MME]= NumExpr | TruthValue
+  lazy val GenExpr    :Parser[MME]= NumExpr | TruthValue
 
-  lazy val NumExpr       :PackratParser[MME]= NumExpr~"+"~Term^^{ case e~"+"~t => new Apply(Addition, List(e, t))  } |
+  lazy val NumExpr    :PackratParser[MME]= NumExpr~"+"~Term^^{ case e~"+"~t => new Apply(Addition, List(e, t))  } |
                                            NumExpr~"-"~Term^^{ case e~"-"~t => new Apply(Subtraction, List(e, t)  ) } |
                                            Term
 

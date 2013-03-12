@@ -4,6 +4,8 @@ import net.liftweb.common._
 
 import net.liftweb.http._
 import S._
+import js._
+import js.JE._ //for implicit conversions
 
 import net.liftweb.util._
 import Helpers._
