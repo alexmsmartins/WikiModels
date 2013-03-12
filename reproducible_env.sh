@@ -2,7 +2,7 @@
 # This file is supposed to create the entire working environment for WikiModels from scratch
 # This includes removing the
 
-DOWNLOAD_DIR=tmp_downloads
+DOWNLOAD_DIR=reproducible_env_downloads
 
 #The  shell  shall write a message to standard error when it tries to expand a variable that is not set and immediately
 # exit.
@@ -21,6 +21,7 @@ hash java 2>/dev/null || { echo >&2 "I require java but it's not installed.  Abo
 hash javac 2>/dev/null || { echo >&2 "I require javac but it's not installed.  Aborting."; exit 1; }
 hash ant 2>/dev/null || { echo >&2 "I require ant but it's not installed.  Aborting."; exit 1; }
 hash wget 2>/dev/null || { echo >&2 "I require wget but it's not installed.  Aborting."; exit 1; }
+hash md5sum 2>/dev/null || { echo >&2 "I require md5sum but it's not installed. Aborting."; exit 1; }
 
 ############# install glassfish #############
 #rm -rf ~/glassfish
@@ -33,7 +34,17 @@ fi
 if [ -f ./$DOWNLOAD_DIR/glassfish-installer-v2.1.1-b31g-linux.jar ]; then
     echo "Glassfis 2.1.1 was downloaded before"
 else
-    wget http://download.java.net/javaee5/v2.1.1_branch/promoted/Linux/glassfish-installer-v2.1.1-b31g-linux.jar ./$DOWNLOAD_DIR/glassfish-installer-v2.1.1-b31g-linux.jar
+    wget -P ./$DOWNLOAD_DIR http://download.java.net/javaee5/v2.1.1_branch/promoted/Linux/glassfish-installer-v2.1.1-b31g-linux.jar 
+fi
+
+md5sum -c ./reproducible_env_downloads/glassfish-installer-v2.1.1-b31g-linux.jar.md5
+ERR=$?
+echo "Error code: $ERR"
+if [ "$ERR" -eq 0 ]; then
+	echo "Glassfish 2.1.1 integrity checked!"
+else
+	echo >&2 "Glassfish 2.1.1 has an incorrect md5 hash. Aborting."
+	exit $ERR
 fi
 
 
