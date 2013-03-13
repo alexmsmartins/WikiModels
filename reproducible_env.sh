@@ -4,6 +4,7 @@
 
 DOWNLOAD_DIR=reproducible_env_downloads
 GLASSFISH_JAR=glassfish-installer-v2.1.1-b31g-linux.jar
+SCRIPT_DIR=${PWD}
 
 #The  shell  shall write a message to standard error when it tries to expand a variable that is not set and immediately
 # exit.
@@ -71,7 +72,9 @@ if [ -d ~/glassfish ]; then
 	echo "~/glassfish already exists. Aborting."
 	exit 1
 else
-	mv ./glassfish $HOME/	
+	mv ./glassfish $HOME/
+	rm $HOME/glassfish/setup.xml
+	cp ./setup.xml $HOME/glassfish/	
 fi
 # This command will unbundle GlassFish and create a new directory structure rooted under a directory named 'glassfish'.
 cd $HOME/glassfish
@@ -88,5 +91,6 @@ sudo apt-get -y install postgresql-9.1
 ############# create glassfish realm #############
 
 ############# setup databases #############
+cd $SCRIPT_DIR
 sh ./setup-databases.sh 
 
