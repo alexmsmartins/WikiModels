@@ -2,7 +2,7 @@
 
 ##### Constants
 filename=./setup.log
-
+SCRIPT_DIR=${PWD}
 ##### Functions
 usage() 
 {
@@ -27,7 +27,9 @@ start_databases()
   #FIXME the postgresql debian script returns 0 even in cases when it was unsuccessful. Find a workaround for that.
   RETVAL=$?
   if [ $RETVAL -eq 0 ]; then
-    cd ./wm_setup
+    cd $SCRIPT_DIR/wm_library
+    mvn install
+    cd $SCRIPT_DIR/wm_setup
     mvn scala:run
     cd -
   else
