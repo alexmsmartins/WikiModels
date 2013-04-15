@@ -1,8 +1,11 @@
 #!/bin/sh
+#######################
+# reproducible_env.sh #
+#######################
 # This file is supposed to create the entire development environment for WikiModels from scratch
 # This includes removing the
 
-DOWNLOAD_DIR=reproducible_env_downloads
+DOWNLOAD_DIR=$PWD/reproducible_env_downloads
 GLASSFISH_JAR=glassfish-installer-v2.1.1-b31g-linux.jar
 SCRIPT_DIR=${PWD}
 
@@ -27,7 +30,6 @@ check_command_presence()
   hash $1 2>/dev/null || { echo >&2 "I require $1 but it's not installed.  Aborting."; exit 1; }
 }
 
-check_command_presence mvn
 check_command_presence java
 check_command_presence javac
 check_command_presence ant
@@ -40,19 +42,19 @@ sudo -v
 
 ############# install glassfish #############
 #rm -rf ~/glassfish
-if [ -d ./$DOWNLOAD_DIR ]; then
+if [ -d $DOWNLOAD_DIR ]; then
     echo "Download directory was created before"
 else
-    mkdir ./$DOWNLOAD_DIR
+    mkdir $DOWNLOAD_DIR
 fi
 
-if [ -f ./$DOWNLOAD_DIR/$GLASSFISH_JAR ]; then
+if [ -f $DOWNLOAD_DIR/$GLASSFISH_JAR ]; then
     echo "Glassfis 2.1.1 was downloaded before"
 else
-    wget -P ./$DOWNLOAD_DIR http://download.java.net/javaee5/v2.1.1_branch/promoted/Linux/$GLASSFISH_JAR 
+    wget -P $DOWNLOAD_DIR http://download.java.net/javaee5/v2.1.1_branch/promoted/Linux/$GLASSFISH_JAR 
 fi
 
-md5sum -c ./$DOWNLOAD_DIR/$GLASSFISH_JAR.md5
+md5sum -c $DOWNLOAD_DIR/$GLASSFISH_JAR.md5
 RETVAL=$?
 if [ "$RETVAL" -eq 0 ]; then
 	echo "Glassfish 2.1.1 integrity checked!"
@@ -66,31 +68,35 @@ fi
 
 #1) Download one of the bundles to disk, set JAVA_HOME to the JDK you have installed on your system.
 # Run:
-cd ./$DOWNLOAD_DIR
-java -Xmx256m -jar ./$GLASSFISH_JAR
+cd $DOWNLOAD_DIR
+java -Xmx256m -jar ./$GLASSFISH_JAR -console
 if [ -d ~/glassfish ]; then
-	echo "~/glassfish already exists. Aborting."
-	exit 1
-else
-	mv ./glassfish $HOME/
-	rm $HOME/glassfish/setup.xml
-	cp ./setup.xml $HOME/glassfish/	
+	echo "~/glassfish already exists."
+	rm -r $HOME/glassfish
 fi
+mv ./glassfish $HOME/
+rm $HOME/glassfish/setup.xml
+cp ./setup.xml $HOME/glassfish/	
 # This command will unbundle GlassFish and create a new directory structure rooted under a directory named 'glassfish'.
 cd $HOME/glassfish
 # If you are using a machine with an operating system that is a derivative of UNIX(tm), set the execute permission for the Ant binaries that are included with the GlassFish bundle.
 chmod -R +x lib/ant/bin
 lib/ant/bin/ant -f setup.xml 
 
+cd $SCRIPT_DIR
 ############# install postgres #############
 
 sudo apt-get -y install postgresql-9.1 
 
 ############# install maven #############
 
-############# create glassfish realm #############
+sudo apt-get -y install maven2
+check_command_presence mvn
+
+############# create authentication realm #############
+cd $SCRIPT_DIR
+sh $SCRIPT_DIR/create-userauth-realm.sh
 
 ############# setup databases #############
-cd $SCRIPT_DIR
-sh ./setup-databases.sh 
+sh $SCRIPT_DIR/setup-databases.sh 
 
