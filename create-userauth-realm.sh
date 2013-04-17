@@ -8,6 +8,11 @@ GLASSFISH_HOME=$HOME/glassfish
 PATH=$GLASSFISH_HOME/bin:$PATH
 SCRIPT_DIR=${PWD}
 ASADMIN_AUTH="--user=admin --passwordfile=$SCRIPT_DIR/passwordfile.txt"
+DERBY_HOME=$GLASSFISH_HOME/javadb
+DERBY_PORT=1527
+DB_HOME=$HOME/tmp
+DB_HOST=0.0.0.0
+
 
 echo "asadmin start-domain"
 asadmin start-domain
@@ -18,7 +23,7 @@ asadmin list-jdbc-connection-pools $ASADMIN_AUTH
 echo "asadmin create-jdbc-connection-pool"
 asadmin create-jdbc-connection-pool --datasourceclassname org.apache.derby.jdbc.ClientDataSource --restype javax.sql.DataSource $ASADMIN_AUTH \
 --property \
-ConnectionAttributes=\;create=true:\
+ConnectionAttributes=\;create\\=true:\
 DatabaseName=userauth:\
 LoginTimeout=0:\
 Password=APP:\
@@ -30,6 +35,9 @@ TraceFileAppend=false:\
 TraceLevel=-1:\
 User=APP \
 userauth
+
+echo "asadmin start-database"
+asadmin start-database --dbhost $DB_HOST --dbport $DERBY_PORT --dbhome $DB_HOME
 
 echo "asadmin ping-connection-pool"
 asadmin ping-connection-pool $ASADMIN_AUTH userauth
