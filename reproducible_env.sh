@@ -1,4 +1,7 @@
 #!/bin/sh
+#The  shell  shall write a message to standard error when it tries to expand a variable that is not set and immediately
+# exit.
+set -u
 #######################
 # reproducible_env.sh #
 #######################
@@ -9,9 +12,6 @@ DOWNLOAD_DIR=$PWD/reproducible_env_downloads
 GLASSFISH_JAR=glassfish-installer-v2.1.1-b31g-linux.jar
 SCRIPT_DIR=${PWD}
 
-#The  shell  shall write a message to standard error when it tries to expand a variable that is not set and immediately
-# exit.
-set -u
 echo "#check necessary environment variables"
 echo "JAVA_HOME="$JAVA_HOME
 echo "JDK_HOME="$JDK_HOME
@@ -97,6 +97,10 @@ check_command_presence mvn
 cd $SCRIPT_DIR
 sh $SCRIPT_DIR/create-userauth-realm.sh
 
+############# configure sdb and knowledgebase #############
+cd $SCRIPT_DIR
+sh $SCRIPT_DIR/install_config_kb.sh
+
 ############# setup databases #############
-sh $SCRIPT_DIR/setup-databases.sh 
+#sh $SCRIPT_DIR/setup-databases.sh 
 

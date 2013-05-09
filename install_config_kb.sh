@@ -7,12 +7,16 @@
 set -u
 
 DOWNLOAD_DIR=$PWD/reproducible_env_downloads
-SDB_HOME=$HOME/jena-sdb-1.3.5
+#exports to make these variables available to SDB scripts
+export SDBROOT=$HOME/jena-sdb-1.3.5
+export SDB_USER="YourDbUserName"
+export SDB_PASSWORD="YourDbPassword"
+export SDB_JDBC="$DOWNLOAD_DIR/postgresql-9.1-903.jdbc4.jar"
 SDB_TAR="jena-sdb-1.3.5-distribution.tar.gz"
-PATH=$SDB_HOME/bin:$PATH
-SDB_USER="root"
+PATH=$SDBROOT/bin:$PATH
 SCRIPT_DIR=${PWD}
 
+# install SDB in $HOME
 if [ -f $DOWNLOAD_DIR/$SDB_TAR ]; then
     echo "SDB 1.3.5 was downloaded before"
 else
@@ -26,7 +30,7 @@ fi
 wget -P $DOWNLOAD_DIR http://www.apache.org/dist/jena/binaries/$SDB_TAR.md5
 # TODO if the md5 key file changes, maybe the hashed file should be pulled again
 
-sh check_md5c $DOWNLOAD_DIR/$SDB_TAR.md5
+sh $SCRIPT_DIR/check_md5.sh $DOWNLOAD_DIR/$SDB_TAR
 
 RETVAL=$?
 
@@ -44,6 +48,24 @@ if [ -d $HOME/jena-sdb-1.3.5 ]; then
         rm -r $HOME/jena-sdb-1.3.5
 fi
 mv ./jena-sdb-1.3.5 $HOME
-PATh=$SDB_HOME:$PATH
+
+# download jdbc driver for postgres
+if [-f $SDB_JDBC ]; then
+	echo "Postgresql 9.1 JDBC driver was downloaded before"
+else
+	wget -P $DOWNLOAD_DIR http://jdbc.postgresql.org/download/postgresql-9.1-903.jdbc4.jar
+fi
+
+
+sdbconfig --sdb=$SCRIPT_DIR/wm_setup/sdb.ttl --create
+sdbtest --sdb=$SCRIPT_DIR/wm_setup/sdb.ttl $SDBROOT/testing/manifest-sdb.ttl
+
+
+
+
+
+
+
+
 
 
