@@ -56,16 +56,12 @@ else
 	wget -P $DOWNLOAD_DIR http://jdbc.postgresql.org/download/postgresql-9.1-903.jdbc4.jar
 fi
 
+# configure postgresql wmstore database
+
+#sudo adduser mykbuser
+sudo -u postgres createuser root    #from regular shell
+sudo -u postgres createdb -O root wmstore
+sudo -u postgres psql -d wmstore -U root
 
 sdbconfig --sdb=$SCRIPT_DIR/wm_setup/sdb.ttl --create
 sdbtest --sdb=$SCRIPT_DIR/wm_setup/sdb.ttl $SDBROOT/testing/manifest-sdb.ttl
-
-
-
-
-
-
-
-
-
-
