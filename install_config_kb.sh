@@ -16,6 +16,11 @@ SDB_TAR="jena-sdb-1.3.5-distribution.tar.gz"
 PATH=$SDBROOT/bin:$PATH
 SCRIPT_DIR=${PWD}
 
+# same info as in wm_setup/sdb.ttl
+PSQL_USER="root"
+PSQL_PASSWORD="root"
+PSQL_DB="wmstore"
+
 # install SDB in $HOME
 if [ -f $DOWNLOAD_DIR/$SDB_TAR ]; then
     echo "SDB 1.3.5 was downloaded before"
@@ -56,16 +61,13 @@ else
 	wget -P $DOWNLOAD_DIR http://jdbc.postgresql.org/download/postgresql-9.1-903.jdbc4.jar
 fi
 
+# configure postgresql wmstore database
+# TODO delete this line later
+sudo apt-get install postgresql-9.1
+#sudo adduser mykbuser
+sudo -u postgres createuser $PSQL_USER &&  #from regular shell
+sudo -u postgres createdb -O $PSQL_USER $PSQL_DB && 
+echo "Creating user root and database wmstore completed!"
 
 sdbconfig --sdb=$SCRIPT_DIR/wm_setup/sdb.ttl --create
 sdbtest --sdb=$SCRIPT_DIR/wm_setup/sdb.ttl $SDBROOT/testing/manifest-sdb.ttl
-
-
-
-
-
-
-
-
-
-
