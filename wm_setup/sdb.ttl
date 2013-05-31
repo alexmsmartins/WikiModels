@@ -13,7 +13,7 @@
 
 <#conn> rdf:type sdb:SDBConnection ;
     sdb:sdbType        "postgresql" ;
-    sdb:sdbHost        "localhost:5433" ;
+    sdb:sdbHost        "localhost:5432" ;
     sdb:sdbName        "wmstore" ;
     sdb:driver         "org.postgresql.Driver" ;
     sdb:sdbUser        "root";

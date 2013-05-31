@@ -101,6 +101,10 @@ sh $SCRIPT_DIR/create-userauth-realm.sh
 cd $SCRIPT_DIR
 sh $SCRIPT_DIR/install_config_kb.sh
 
-############# setup databases #############
-#sh $SCRIPT_DIR/setup-databases.sh 
+############ fetching and compiling needed modules
+sh $SCRIPT_DIR/build-project.sh
 
+############# setup databases #############
+sh $SCRIPT_DIR/setup-databases.sh 
+
+sh $SCRIPT_DIR/deploy_server.sh

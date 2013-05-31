@@ -7,7 +7,7 @@
 GLASSFISH_HOME=$HOME/glassfish
 PATH=$GLASSFISH_HOME/bin:$PATH
 SCRIPT_DIR=${PWD}
-ASADMIN_AUTH="--user=admin --passwordfile=$SCRIPT_DIR/passwordfile.txt"
+ASADMIN_AUTH="--user=admin --passwordfile=${SCRIPT_DIR}/passwordfile.txt"
 DERBY_HOME=$GLASSFISH_HOME/javadb
 DERBY_PORT=1527
 DB_HOME=$HOME/tmp
@@ -45,3 +45,18 @@ asadmin ping-connection-pool $ASADMIN_AUTH userauth
 # create jdbc resource to userauth database
 echo "asadmin create-jdbc-resource"
 asadmin create-jdbc-resource --connectionpoolid userauth $ASADMIN_AUTH jdbc/userauth
+
+echo "asadmin create-auth-realm"
+asadmin create-auth-realm --classname com.sun.enterprise.security.auth.realm.jdbc.JDBCRealm --echo=true ${ASADMIN_AUTH} \
+--property \
+jaas-context=jdbcRealm:\
+datasource-jndi=jdbc/userauth:\
+user-table=USERTABLE:\
+user-name-column=USERID:\
+password-column=PASSWORD:\
+group-table=GROUPTABLE:\
+group-name-column=GROUPID:\
+db-user=APP:\
+db-password=APP \
+userauth
+
