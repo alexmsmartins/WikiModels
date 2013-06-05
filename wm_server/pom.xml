@@ -196,6 +196,20 @@
                   <goal>run</goal>
                 </goals>
               </execution>
+                <execution>
+                    <id>generate-resources</id>
+                    <phase>generate-resources</phase>
+                    <configuration>
+                        <target>
+                            <!-- the maven lifecycle phases are at http://www.avajava.com/tutorials/lessons/what-are-the-phases-of-the-maven-default-lifecycle.html -->
+                            <echo message="Ant copy task is going to be executed${user.dir}" />
+                            <copy file="../wm_library/src/main/resources/sdb.ttl" tofile="./src/main/resources/sdb.ttl" />
+                        </target>
+                    </configuration>
+                    <goals>
+                        <goal>run</goal>
+                    </goals>
+                </execution>
               <execution>
                   <id>clean</id>
                   <phase>clean</phase>
@@ -204,6 +218,7 @@
                           <!-- Place any Ant task here. You can add anything you can add between <target> and </target> in a build.xml.-->
                           <echo message="Ant removal of sbml.owl is going to be executed" />
                           <delete file="./sbml.owl"/>
+                          <delete file="./src/main/resources/sdb.ttl" />
                       </target>
                   </configuration>
                   <goals>

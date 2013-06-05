@@ -37,7 +37,8 @@ object ManipulatorWrapper {
   //val sdbTtlLocationURL  = getClass.getResource("sdb.ttl")
   //val sdbTtlLocation = sdbTtlLocationURL.getPath
 
-  val sdbTtlLocation = "./sdb.ttl"
+  val sdbTtl = "sdb.ttl"
+  val sdbTtlLocation = ManipulatorWrapper.getClass.getClassLoader().getResource(sdbTtl).getPath
 
   def initializeDB = {
     /*Console.println(this.getClass.getResource("/sdb.ttl").getPath)
@@ -95,7 +96,7 @@ val store = SDBFactory.connectStore( StoreDesc.read(sdbModel) )*/
         Console.println("current directory is " + System.getProperty("user.dir"))
 
         //gets the content of the file from the wm_library jar
-        val myConfigFile = ManipulatorWrapper.getClass.getClassLoader().getResource("sdb.ttl")
+        //val myConfigFile = ManipulatorWrapper.getClass.getClassLoader().getResource(sdbTtl).getPath
         /*val myConfigFileStream = ManipulatorWrapper.getClass.getClassLoader().getResourceAsStream("sdb.ttl")
    val outputstream = new FileOutputStream("sdb.ttl")
    var array = Array[Byte]()
@@ -104,7 +105,7 @@ val store = SDBFactory.connectStore( StoreDesc.read(sdbModel) )*/
    //Console.println("current URL is " + myConfigFile)
 
    val store = SDBFactory.connectStore(System.getProperty("user.dir") + "/sdb.ttl")*/
-        val store = SDBFactory.connectStore(sdbTtlLocation)
+        val store = SDBFactory.connectStore(sdbTtlLocation )
         jenaModel = SDBFactory.connectDefaultModel(store)
         jenaModel
       } catch {
