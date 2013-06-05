@@ -47,4 +47,4 @@ echo "Use http://linuxpoison.blogspot.tw/2012/01/how-to-install-configure-postgr
 
 read -p "Press a key after completing the configuration" -n 1 
 
-sdbconfig -v --sdb=$SCRIPT_DIR/wm_setup/sdb.ttl --create
+sdbconfig -v --sdb=$SCRIPT_DIR/wm_library/src/main/resources/sdb.ttl --create

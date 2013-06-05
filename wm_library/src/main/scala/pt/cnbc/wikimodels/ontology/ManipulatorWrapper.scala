@@ -34,10 +34,10 @@ import java.io.{OutputStream, InputStream}
 object ManipulatorWrapper {
   protected var jenaModel:Model = null
 
-  val sdbStream = io.Source.fromInputStream(this.getClass.getResourceAsStream("sdb.ttl"))
+  //val sdbTtlLocationURL  = getClass.getResource("sdb.ttl")
+  //val sdbTtlLocation = sdbTtlLocationURL.getPath
 
-
-  val sdbTtlLocation = "/home/alex/develop/workspace/WikiModels/wm_setup/sdb.ttl"
+  val sdbTtlLocation = "./sdb.ttl"
 
   def initializeDB = {
     /*Console.println(this.getClass.getResource("/sdb.ttl").getPath)

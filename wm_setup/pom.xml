@@ -21,7 +21,27 @@
     <sourceDirectory>src/main/scala</sourceDirectory>
     <testSourceDirectory>src/test/scala</testSourceDirectory>
     <plugins>
-      <plugin>
+        <plugin>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <version>1.7</version>
+            <executions>
+                <execution>
+                    <!-- the maven lifecycle phases are at http://www.avajava.com/tutorials/lessons/what-are-the-phases-of-the-maven-default-lifecycle.html -->
+                    <phase>process-resources</phase>
+                    <configuration>
+                        <target>
+                            <!-- Place any Ant task here. You can add anything you can add between <target> and </target> in a build.xml.-->
+                            <echo message="Ant copy of sdb.ttl is going to be executed" />
+                            <copy file="../wm_library/src/main/resources/sdb.ttl" tofile="./sdb.ttl" />
+                        </target>
+                    </configuration>
+                    <goals>
+                        <goal>run</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+        <plugin>
         <groupId>org.scala-tools</groupId>
         <artifactId>maven-scala-plugin</artifactId>
           <version>${maven.scala.plugin}</version>

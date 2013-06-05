@@ -6,7 +6,6 @@ set -u
 # reproducible_env.sh #
 #######################
 # This file is supposed to create the entire development environment for WikiModels from scratch
-# This includes removing the
 
 DOWNLOAD_DIR=$PWD/reproducible_env_downloads
 GLASSFISH_JAR=glassfish-installer-v2.1.1-b31g-linux.jar

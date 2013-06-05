@@ -180,22 +180,17 @@
         <plugins>
           <plugin>
             <artifactId>maven-antrun-plugin</artifactId>
-            <version>1.3</version>
+            <version>1.7</version>
             <executions>
               <execution>
                 <id>generate-test-resources</id>
                 <phase>generate-test-resources</phase>
                 <configuration>
-                  <tasks>
-
-                    <!--
-                      Place any Ant task here. You can add anything
-                      you can add between <target> and </target> in a
-                      build.xml.
-                    -->
-                    <echo message="Ant copy task is going to be executed${user.dir}" />
-                    <copy file="../wm_setup/sbml.owl" tofile="./sbml.owl" />
-                  </tasks>
+                    <target>
+                        <!-- the maven lifecycle phases are at http://www.avajava.com/tutorials/lessons/what-are-the-phases-of-the-maven-default-lifecycle.html -->
+                        <echo message="Ant copy task is going to be executed${user.dir}" />
+                        <copy file="../wm_setup/sbml.owl" tofile="./sbml.owl" />
+                    </target>
                 </configuration>
                 <goals>
                   <goal>run</goal>
