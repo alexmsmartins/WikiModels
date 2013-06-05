@@ -108,3 +108,6 @@ sh $SCRIPT_DIR/build-project.sh
 sh $SCRIPT_DIR/setup-databases.sh 
 
 sh $SCRIPT_DIR/deploy_server.sh
+
+############# install sbt ##################
+sh $SCRIPT_DIR/install_sbt077.sh
