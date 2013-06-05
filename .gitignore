@@ -33,6 +33,7 @@ wm_rest_api/project/build/target/
 *.db
 *~
 
-#Ignore copies of files used for testing only
-wm_server/sbml.owl
+#Ignore copies of files for testing only
+wm_server/sbml.owl #used for testing of wm_server
+wm_setup/sdb.ttl #used during execution of wm_setup
 

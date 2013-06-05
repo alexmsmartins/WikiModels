@@ -26,6 +26,7 @@
             <version>1.7</version>
             <executions>
                 <execution>
+                    <id>process-resources</id>
                     <!-- the maven lifecycle phases are at http://www.avajava.com/tutorials/lessons/what-are-the-phases-of-the-maven-default-lifecycle.html -->
                     <phase>process-resources</phase>
                     <configuration>
@@ -33,6 +34,21 @@
                             <!-- Place any Ant task here. You can add anything you can add between <target> and </target> in a build.xml.-->
                             <echo message="Ant copy of sdb.ttl is going to be executed" />
                             <copy file="../wm_library/src/main/resources/sdb.ttl" tofile="./sdb.ttl" />
+                        </target>
+                    </configuration>
+                    <goals>
+                        <goal>run</goal>
+                    </goals>
+                </execution>
+                <execution>
+                    <id>clean</id>
+                    <!-- the maven lifecycle phases are at http://www.avajava.com/tutorials/lessons/what-are-the-phases-of-the-maven-default-lifecycle.html -->
+                    <phase>clean</phase>
+                    <configuration>
+                        <target>
+                            <!-- Place any Ant task here. You can add anything you can add between <target> and </target> in a build.xml.-->
+                            <echo message="Ant removal of sdb.ttl is going to be executed" />
+                            <delete file="./sdb.ttl"/>
                         </target>
                     </configuration>
                     <goals>
