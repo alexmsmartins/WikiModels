@@ -47,12 +47,31 @@ class SBMLDocHandlerTest extends LoggerWrapper{
     assertTrue(a == "model")
   }
 
+  //FIXME @Test
+  def extractModelTagFromSBMLFile:Unit = {
+    Console.println("File path is : " + getClass.getClassLoader.getResource(" sbml_as_root.xml").getPath)
+    val sbmlFile = io.Source.fromFile(getClass.getResource("sbml_as_root.xml").getPath).mkString
+    //val sbmlFile = io.Source.fromFile("sbml_as_root.xml", "UTF-8").mkString
+    val xml:scala.xml.Elem = SBMLDocHandler.extractModelTagfromSBML(sbmlFile).open_!
+    assertTrue(xml.label == "model")
+  }
+
+  //FIXME @Test
+  def extractModelTagFromSBMLFileWithHeader:Unit = {
+    Console.println("File path is : " + getClass.getClassLoader.getResource("sbml_as_root.xml").getPath)
+    val sbmlFile = io.Source.fromFile(getClass.getResource("sbml_as_root.xml").getPath).mkString
+    //val sbmlFile = io.Source.fromFile("sbml_as_root.xml", "UTF-8").mkString
+    val xml:scala.xml.Elem = SBMLDocHandler.extractModelTagfromSBML(sbmlFile).open_!
+    assertTrue(xml.label == "model")
+  }
+
+
   val sbmlFileContent2:String = xmlHeader + System.getProperty("line.separator") +
     <sbml xmlns="http://www.sbml.org/sbml/level2/version4" metaid="metaid_0000001" level="2" version="4">{modelTag}
     </sbml>
 
 
-    @Test
+  @Test
   def extractModelTagfromSBMLWithLine2 = {
     debug("[Test extractModelTagfromSBMLWithLine2]")
     val model = SBMLDocHandler.extractModelTagfromSBML(sbmlFileContent2)

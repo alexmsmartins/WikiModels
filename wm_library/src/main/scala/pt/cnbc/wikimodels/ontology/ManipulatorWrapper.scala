@@ -37,7 +37,7 @@ object ManipulatorWrapper {
   //val sdbTtlLocationURL  = getClass.getResource("sdb.ttl")
   //val sdbTtlLocation = sdbTtlLocationURL.getPath
 
-  val sdbTtl = "sdb.ttl"
+  val sdbTtl = "sdb.ttl"  //FIXME a property file should be able to change this. Implement it.
   val sdbTtlLocation = ManipulatorWrapper.getClass.getClassLoader().getResource(sdbTtl).getPath
 
   def initializeDB = {

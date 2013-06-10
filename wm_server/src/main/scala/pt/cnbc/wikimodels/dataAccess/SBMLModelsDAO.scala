@@ -280,7 +280,7 @@ class SBMLModelsDAO {
   def generateNewMetaIdFrom(sbmlentity: Element, model: Model): String = {
     if (sbmlentity.metaid == null || sbmlentity.metaid.trim == "") {
       if (sbmlentity.theId == null || sbmlentity.theId.trim == "") {
-        throw new BadFormatException("ids are mandatory")
+        generateNewMetaIdFromString("", model)
       } else {
         if(metaIdExists(sbmlentity.theId, model))
           generateNewMetaIdFromString(sbmlentity.theId, model)

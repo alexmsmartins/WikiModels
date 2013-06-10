@@ -1,7 +1,7 @@
 package pt.cnbc.wikimodels.util
 
 import net.liftweb.common.{Failure, Full, Empty, Box}
-import xml.{Node, XML, Elem}
+import xml._
 import scala.util.matching._
 import scala.None
 import javax.xml.soap.SOAPElementFactory
@@ -27,27 +27,28 @@ object SBMLDocHandler extends LoggerWrapper {
   /**
    * Extracts the <model/> tag along with its content  from a valid SBML file so that it can be handled by scala.xml.XML
    */
-  def extractModelTagfromSBML(xmlDoc:String):Box[Elem] = {
-    trace("Entering method extractModelTagfromSBML()")
+  def extractModelTagfromSBML(xmlDoc:String):Box[scala.xml.Elem] = {
+    trace("Entering method extractModelTagfromSBML() with parameter\n" + xmlDoc)
     try{
-      //the next expression matches <sbml> even if it has atributes. Scala 2.8.1 aND 2.9
+      //the next expression matches <sbml> even if it has atributes. Scala 2.8.1 and 2.9
       val removedHeader = removeXMLHeader( xmlDoc  ).trim
-      debug("SBMLHandler.extractModelTagfromSBML() after removing header ->" + removedHeader)
+      debug("SBMLHandler.extractModelTagfromSBML() after removing header -> " + removedHeader)
       val sbml:Elem = XML.loadString( removedHeader )
-      val sbml2 = xml.Utility.trim(sbml)
+      val sbml2:Elem = xml.Utility.trim(sbml).head.asInstanceOf[Elem]
       debug("XML.loadString return soemthing of type " + sbml.getClass )
       sbml2 match {
-        case <sbml>{y}</sbml> => {
-          Full(y.asInstanceOf[Elem])
+        case y if(y.label == "sbml") => {
+          debug("SBML root label was extracted and the content is " + (y \ "model").head.asInstanceOf[Elem])
+          Full((y \ "model").head.asInstanceOf[Elem])
         }
-        case y =>{
-          debug("Invalid sbml file: <sbml> is not the root tag. the xml is " + sbml)
-          Failure("Invalid sbml file: <sbml> is not the root tag.\n The content is " + sbml)
+        case y => {
+          debug("Invalid sbml file: <sbml> is not the root tag.\n The root tag is " + sbml.label)
+          Failure("Invalid sbml file: <sbml> is not the root tag.\n The root tag is " + sbml.label)
         }
       }
     } catch {
       case e =>{
-        debug("Exception extraction <model/> tag from {} with exception {}", xmlDoc, e)
+        debug("Exception extracting <model/> tag from {} with exception {}", xmlDoc, e.printStackTrace())
         new Failure("Badly formed xml document", Full(e), Empty)
       }
     }
