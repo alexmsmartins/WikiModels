@@ -29,7 +29,11 @@ import com.hp.hpl.jena.sdb.SDBFactory
 import com.hp.hpl.jena.shared.NotFoundException
 import com.hp.hpl.jena.vocabulary.VCARD
 
-import java.io.{OutputStream, InputStream}
+import java.io.{File, FileOutputStream, OutputStream, InputStream}
+import java.nio.file._
+import java.util
+import java.nio.file.WatchEvent.{Modifier, Kind}
+import java.net.URI
 
 object ManipulatorWrapper {
   protected var jenaModel:Model = null
@@ -38,7 +42,23 @@ object ManipulatorWrapper {
   //val sdbTtlLocation = sdbTtlLocationURL.getPath
 
   val sdbTtl = "sdb.ttl"  //FIXME a property file should be able to change this. Implement it.
-  val sdbTtlLocation = ManipulatorWrapper.getClass.getClassLoader().getResource(sdbTtl).getPath
+
+  //load sdb.ttl from the jar file
+  val sdbTtlStream: InputStream = ManipulatorWrapper.getClass.getClassLoader.getResourceAsStream(sdbTtl)
+  //save it in the disk
+  Files.copy(sdbTtlStream, Paths.get("./sdb_from_jar.ttl"),StandardCopyOption.REPLACE_EXISTING)
+
+
+  val x =
+    ManipulatorWrapper.
+    getClass.
+    getClassLoader.
+    getResource("sdb_from_jar.ttl")
+
+  val sdbTtlLocation: String = "/home/alex/develop/workspace/WikiModels/wm_server/sdb_from_jar.ttl"//x.getPath
+  Console.println("sdbTtlLocation = " + sdbTtlLocation)
+
+
 
   def initializeDB = {
     /*Console.println(this.getClass.getResource("/sdb.ttl").getPath)
@@ -65,10 +85,10 @@ val store = SDBFactory.connectStore( StoreDesc.read(sdbModel) )*/
 
 
     while (iter.hasNext) {
-      var stmt = iter.nextStatement // get next statement
-      var subject = stmt.getSubject // get the subject
-      var predicate = stmt.getPredicate // get the predicate
-      var objct = stmt.getObject // get the object
+      val stmt = iter.nextStatement // get next statement
+      val subject = stmt.getSubject // get the subject
+      val predicate = stmt.getPredicate // get the predicate
+      val objct = stmt.getObject // get the object
 
       Console.print(subject)
       modelContent += subject
@@ -98,10 +118,10 @@ val store = SDBFactory.connectStore( StoreDesc.read(sdbModel) )*/
         //gets the content of the file from the wm_library jar
         //val myConfigFile = ManipulatorWrapper.getClass.getClassLoader().getResource(sdbTtl).getPath
         /*val myConfigFileStream = ManipulatorWrapper.getClass.getClassLoader().getResourceAsStream("sdb.ttl")
-   val outputstream = new FileOutputStream("sdb.ttl")
+   val outputStream = new FileOutputStream("sdb.ttl")
    var array = Array[Byte]()
    val nBytes = myConfigFileStream.read
-   outputstream.write(array, 0, nBytes)
+   outputStream.write(array, 0, nBytes)
    //Console.println("current URL is " + myConfigFile)
 
    val store = SDBFactory.connectStore(System.getProperty("user.dir") + "/sdb.ttl")*/
