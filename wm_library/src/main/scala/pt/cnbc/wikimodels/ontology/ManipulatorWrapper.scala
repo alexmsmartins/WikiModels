@@ -50,12 +50,15 @@ object ManipulatorWrapper {
 
 
   val x =
-    ManipulatorWrapper.
+    this.
     getClass.
     getClassLoader.
-    getResource("sdb_from_jar.ttl")
+    getResource("sdb.ttl")
+    //Thread.currentThread().getContextClassLoader.getResource("sdb.ttl")
 
-  val sdbTtlLocation: String = "/home/alex/develop/workspace/WikiModels/wm_server/sdb_from_jar.ttl"//x.getPath
+  //val sdbTtlLocation: String = x.getPath
+  //val sdbTtlLocation: String = "/home/alex/develop/workspace/WikiModels/wm_server/sdb_from_jar.ttl"
+  val sdbTtlLocation: String =System.getProperty("user.dir") + "/sdb_from_jar.ttl"
   Console.println("sdbTtlLocation = " + sdbTtlLocation)
 
 
