@@ -11,7 +11,7 @@ import thewebsemantic.Bean2RDF
 import thewebsemantic.RDF2Bean
 import thewebsemantic.Sparql
 
-import scala.Collection
+//import scala.Collection
 //import scalaj.collection.Imports._
 import scala.collection.JavaConversions._
 

@@ -89,7 +89,7 @@ sudo apt-get -y install postgresql-9.1
 
 ############# install maven #############
 
-sudo apt-get -y install maven2
+sudo apt-get -y install maven
 check_command_presence mvn
 
 ############# create authentication realm #############

@@ -22,7 +22,7 @@
         <repository>
             <id>scala-tools.org</id>
             <name>Scala-Tools Maven2 Repository</name>
-            <url>http://scala-tools.org/repo-releases</url>
+            <url>https://oss.sonatype.org/content/groups/scala-tools</url>
         </repository>
         <repository>
             <id>maven2-repository.dev.java.net</id>
@@ -51,6 +51,11 @@
             <artifactId>scala-library</artifactId>
             <version>${scala.version}</version>
         </dependency>
+                     <dependency>
+    <groupId>org.scala-lang</groupId>
+    <artifactId>scala-reflect</artifactId>
+    <version>${scala.version}</version>
+</dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
@@ -168,7 +173,7 @@
         </dependency>
         <dependency>
             <groupId>net.liftweb</groupId>
-            <artifactId>lift-common_${scala.version}</artifactId>
+            <artifactId>lift-common_${scala.major.version}</artifactId>
             <version>${lift.version}</version>
         </dependency>
     </dependencies>
@@ -227,7 +232,7 @@
               </execution>
             </executions>
           </plugin>
-            <plugin>
+           <!-- <plugin>
                 <groupId>org.scala-tools</groupId>
                 <artifactId>maven-scala-plugin</artifactId>
                 <version>${maven.scala.plugin}</version>
@@ -241,6 +246,23 @@
                 </executions>
                 <configuration>
                     <scalaVersion>${scala.version}</scalaVersion>
+                </configuration>
+            </plugin>-->
+            <plugin>
+                <groupId>net.alchim31.maven</groupId>
+                <artifactId>scala-maven-plugin</artifactId>
+                <version>3.1.5</version>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <scalaVerion>${scala.version}</scalaVerion>
                 </configuration>
             </plugin>
             <plugin>

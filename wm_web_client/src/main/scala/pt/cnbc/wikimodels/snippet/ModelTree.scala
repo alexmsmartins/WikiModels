@@ -11,7 +11,7 @@ import scala.xml._
 import net.liftweb.http.js._
 import JE._
 import JsCmds._
-import net.liftweb.widgets.tree._
+import net.liftmodules.widgets.tree._
 
 class ModelTree {
 

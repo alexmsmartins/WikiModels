@@ -49,6 +49,10 @@ Unexpected Error.""" + e)
     var file: File = null
     //Get the current directory
     file = new File(System.getProperty("user.dir"))
+    Array.apply(true,false,true)
+        .filter(_ == true)
+        .map(!_)
+
     file.listFiles()
             .filter(i => i.isFile && !i.isHidden) //select non hidden files
             .map(i => i.getName) //get the names of files

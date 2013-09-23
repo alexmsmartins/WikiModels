@@ -47,7 +47,7 @@ object SBMLDocHandler extends LoggerWrapper {
         }
       }
     } catch {
-      case e =>{
+      case e:Throwable =>{
         debug("Exception extracting <model/> tag from {} with exception {}", xmlDoc, e.printStackTrace())
         new Failure("Badly formed xml document", Full(e), Empty)
       }

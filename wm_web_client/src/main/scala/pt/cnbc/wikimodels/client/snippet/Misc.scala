@@ -152,7 +152,7 @@ class Misc {
                   debug("Creating the model in the server succeded")
                   bind("ul", chooseTemplate("choose", "post", xhtml),
                     "file_name" -> theUpload.is.map(v => Text(v.fileName)),
-                    "mime_type" -> theUpload.is.map(v => Box.legacyNullTest(v.mimeType).map(Text).openOr(Text("No mime type supplied"))), // Text(v.mimeType)),
+                    "mime_type" -> theUpload.is.map(v => Box.legacyNullTest(v.mimeType).map(Text(_)).openOr(Text("No mime type supplied"))), // Text(v.mimeType)),
                     "length" -> theUpload.is.map(v => Text(v.file.length.toString)),
                     "md5" -> theUpload.is.map(v => Text(hexEncode(md5(v.file))))
                   );

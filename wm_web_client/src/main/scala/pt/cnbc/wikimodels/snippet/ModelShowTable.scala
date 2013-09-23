@@ -8,7 +8,7 @@
 package pt.cnbc.wikimodels.snippet
 
 import scala.xml.NodeSeq
-import net.liftweb.widgets.tablesorter.TableSorter
+import net.liftmodules.widgets.tablesorter.TableSorter
 
 class ModelShowTable {
     def render(xhtml: NodeSeq): NodeSeq = TableSorter("table-id")

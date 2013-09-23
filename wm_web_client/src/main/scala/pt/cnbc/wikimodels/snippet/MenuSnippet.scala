@@ -7,7 +7,7 @@
 package pt.cnbc.wikimodels.snippet
 
 import scala.xml.NodeSeq
-import net.liftweb.widgets.menu._
+import net.liftmodules.widgets.menu._
 
 import net.liftweb.http.SHtml
 import net.liftweb.http.js._

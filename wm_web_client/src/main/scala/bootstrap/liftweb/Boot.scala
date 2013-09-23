@@ -6,11 +6,11 @@ import _root_.net.liftweb.sitemap._
 import _root_.net.liftweb.sitemap.Loc._
 import Helpers._
 import net.liftweb.common._
-import _root_.net.liftweb.widgets.menu.MenuWidget
-import _root_.net.liftweb.widgets.tablesorter.TableSorter
-import _root_.net.liftweb.widgets.tree.TreeView
+import _root_.net.liftmodules.widgets.menu.MenuWidget
+import _root_.net.liftmodules.widgets.tablesorter.TableSorter
+import _root_.net.liftmodules.widgets.tree.TreeView
 
-import _root_.pt.cnbc.wikimodels.tabs.TabsView
+//import _root_.pt.cnbc.wikimodels.tabs.TabsView
 
 import _root_.pt.cnbc.wikimodels.snippet._
 import _root_.pt.cnbc.wikimodels.client.snippet._
@@ -355,6 +355,6 @@ class Boot extends LoggerWrapper{
     MenuWidget init;
     TreeView init;
     TableSorter init;
-    TabsView init;
+    //TabsView init;
 
 }

@@ -58,7 +58,10 @@ object ManipulatorWrapper {
 
   //val sdbTtlLocation: String = x.getPath
   //val sdbTtlLocation: String = "/home/alex/develop/workspace/WikiModels/wm_server/sdb_from_jar.ttl"
-  val sdbTtlLocation: String =System.getProperty("user.dir") + "/sdb_from_jar.ttl"
+
+  //solution taken from http://stackoverflow.com/questions/6326228/how-to-change-system-getpropertyuser-dir-to-project-workspace
+  val workDir = System.getProperty("user.dir")
+  val sdbTtlLocation: String = workDir + "/sdb_from_jar.ttl"
   Console.println("sdbTtlLocation = " + sdbTtlLocation)
 
 
@@ -116,7 +119,7 @@ val store = SDBFactory.connectStore( StoreDesc.read(sdbModel) )*/
     if (jenaModel != null && jenaModel.supportsTransactions == true) jenaModel
     else
       try {
-        Console.println("current directory is " + System.getProperty("user.dir"))
+        Console.println("current directory is " + workDir)
 
         //gets the content of the file from the wm_library jar
         //val myConfigFile = ManipulatorWrapper.getClass.getClassLoader().getResource(sdbTtl).getPath

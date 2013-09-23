@@ -29,8 +29,8 @@ import thewebsemantic.Bean2RDF
 import thewebsemantic.RDF2Bean
 import thewebsemantic.Sparql
 
-import scala.Collection
-import scala.collection.JavaConversions._
+//import scala.Collection
+//import scala.collection.JavaConversions._
 
 import pt.cnbc.wikimodels.dataModel.Compartment
 import pt.cnbc.wikimodels.dataModel.Element

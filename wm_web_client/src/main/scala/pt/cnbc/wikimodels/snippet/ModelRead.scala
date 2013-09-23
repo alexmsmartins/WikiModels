@@ -552,7 +552,7 @@ class ModelRead extends LoggerWrapper {
                          "parametersData" -> {
                             if(!(modelSBML \\ "model" \ "listOfParameters" \\ "parameter").isEmpty){
                                 for( paramData <- modelSBML \\ "model" \ "listOfParameters" \\ "parameter";
-                                    val paramDataId <- paramData \\ "@id") yield {
+                                     paramDataId <- paramData \\ "@id") yield {
                                     <ul><h8><!--<a onclick={"window.open('/model/"+model_metaid+"/parameter/"+(paramData \\ "@metaid")+"','Edit Model','width=800,height=500');"}>Edit</a>-->
                                             <a id="delete" href="">Delete</a>
                                             <a href={"/model/"+model_metaid+"/parameter/"+(paramData \\ "@metaid")}>Edit</a>
@@ -615,7 +615,7 @@ class ModelRead extends LoggerWrapper {
                          "extraParametersData" -> {
                             if(!(modelSBML \\ "model" \ "listOfReactions" \\ "reaction").isEmpty){
                                 for( extraParamData <- modelSBML \\ "model" \ "listOfReactions" \\ "reaction";
-                                    val extraParamDataId <- extraParamData \\ "@id") yield {
+                                     extraParamDataId <- extraParamData \\ "@id") yield {
                                     <li>{val extra = extraParamData \ "kineticLaw" \ "listOfParameters" \\ "parameter"
                                          if(!extra.isEmpty){
                                                 <span><h2>&nbsp;&nbsp;&nbsp;{extraParamData \\ "@name"}</h2></span>

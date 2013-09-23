@@ -17,7 +17,7 @@ import com.hp.hpl.jena.rdf.model.Model
 import thewebsemantic.Bean2RDF
 import thewebsemantic.RDF2Bean
 
-import scala.Collection
+//import scala.Collection
 
 import pt.cnbc.wikimodels.dataModel.Constraint
 import pt.cnbc.wikimodels.ontology.ManipulatorWrapper

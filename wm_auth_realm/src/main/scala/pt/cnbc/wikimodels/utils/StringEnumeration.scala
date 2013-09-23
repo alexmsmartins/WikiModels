@@ -11,7 +11,7 @@ import java.lang.String
 import java.util.Enumeration
 
 case class StringEnumeration(val list:List[String]) extends java.util.Enumeration[String]{
-    var it = list.elements
+    var it = list.iterator
 
     override def hasMoreElements:Boolean = {
         it.hasNext

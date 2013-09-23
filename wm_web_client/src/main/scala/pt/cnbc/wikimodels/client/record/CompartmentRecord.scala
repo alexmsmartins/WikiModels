@@ -59,11 +59,11 @@ case class CompartmentRecord() extends SBaseRecord[CompartmentRecord] with Logge
 
   //  ### can be created directly from a Request containing params with names that match the fields on a Record ( see fromReq ). ###
 
-  var _parent:Box[SBaseRecord[_]] = Empty
+  var _parent:Box[SBMLModelRecord] = Empty
   //TODO isn't there a better way to override a var than THIS?!??! Fucking asInstanceOf
-  override def parent:Box[SBaseRecord[_]] = _parent
+  override def parent:Box[SBMLModelRecord] = _parent
   override def parent_=(p:Box[SBaseRecord[_]] ) = {
-    _parent = p
+    _parent = p.asInstanceOf[Box[SBMLModelRecord]]
   }
 }
 

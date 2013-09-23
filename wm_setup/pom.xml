@@ -57,7 +57,7 @@
                 </execution>
             </executions>
         </plugin>
-        <plugin>
+        <!--<plugin>
         <groupId>org.scala-tools</groupId>
         <artifactId>maven-scala-plugin</artifactId>
           <version>${maven.scala.plugin}</version>
@@ -78,12 +78,36 @@
             <launcher>
               <id>setup</id>
               <mainClass>pt.cnbc.wikimodels.setup.Setup</mainClass>
-              <!-- args are optional -->
             </launcher>
-            <!-- you could define other launcher -->
           </launchers>
         </configuration>
-      </plugin>
+      </plugin>-->
+        <plugin>
+            <groupId>net.alchim31.maven</groupId>
+            <artifactId>scala-maven-plugin</artifactId>
+            <version>3.1.5</version>
+            <executions>
+                <execution>
+                    <phase>compile</phase>
+                    <goals>
+                        <goal>compile</goal>
+                        <goal>testCompile</goal>
+                    </goals>
+                </execution>
+            </executions>
+            <configuration>
+                <scalaVerion>${scala.version}</scalaVerion>
+                <launchers>
+                    <launcher>
+                    <id>setup</id>
+                     <mainClass>pt.cnbc.wikimodels.setup.Setup</mainClass>
+                      <!-- args are optional -->
+                    </launcher>
+                    <!-- you could define other launcher -->
+              </launchers>
+            </configuration>
+        </plugin>
+
       <plugin>
         <!-- NOTE: We don't need a groupId specification because the group is
              org.apache.maven.plugins ...which is assumed by default.

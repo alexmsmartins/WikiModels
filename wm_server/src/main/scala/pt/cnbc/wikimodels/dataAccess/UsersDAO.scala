@@ -14,7 +14,7 @@ import com.hp.hpl.jena.rdf.model.ModelFactory
 import pt.cnbc.wikimodels.dataModel.User
 import pt.cnbc.wikimodels.ontology.ManipulatorWrapper
 
-import scala.collection.mutable.LinkedList
+//import scala.collection.mutable.LinkedList
 
 import thewebsemantic.Bean2RDF
 import thewebsemantic.RDF2Bean

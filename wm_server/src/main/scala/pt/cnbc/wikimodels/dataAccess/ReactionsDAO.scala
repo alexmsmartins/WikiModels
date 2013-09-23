@@ -25,7 +25,7 @@ import thewebsemantic.Bean2RDF
 import thewebsemantic.RDF2Bean
 
 import scala.collection.JavaConversions._
-import scala.Collection
+//import scala.Collection
 
 import pt.cnbc.wikimodels.ontology.ManipulatorWrapper
 import pt.cnbc.wikimodels.dataModel._

@@ -227,7 +227,7 @@ with LoggerWrapper{
     trace("Calling Notes.toXHtml")
       //TODO: this method is almost equal to with DisplayHTMLWithLabelInOneLine[String, T]. Refactor to use that instead if possible
       <div id={uniqueFieldId + "_holder"}>
-        <span for={ uniqueFieldId.openTheBox }>
+        <span for={ uniqueFieldId.openOrThrowException("The call to openOrThrowException should never fail") }>
           <span class="sbml_field_label">{displayHtml}</span>
           <span class="sbml_field_content">
             {this.valueBox match{
@@ -237,7 +237,7 @@ with LoggerWrapper{
                   XML.loadString( content )
                 } catch{
                   //FIXME replace this hack by something more general
-                  case _ => XML.loadString( "<root>"+content+"</root>" ).child
+                  case _:Throwable => XML.loadString( "<root>"+content+"</root>" ).child
                 }
               }
               case Failure(msg, exception, chain) => S.error(msg)
@@ -245,7 +245,7 @@ with LoggerWrapper{
             }
             }</span>
         </span>
-          <lift:msg id={uniqueFieldId.openTheBox}  errorClass="lift_error"/>
+          <lift:msg id={uniqueFieldId.openOrThrowException("The call to openOrThrowException should never fail")}  errorClass="lift_error"/>
       </div>
   }
 }
@@ -296,7 +296,7 @@ with LoggerWrapper{
     trace("Calling Message.toXHtml")
     //TODO: this method is almost equal to with DisplayHTMLWithLabelInOneLine[String, T]. Refactor to use that instead if possible
     <div id={uniqueFieldId + "_holder"}>
-      <span for={ uniqueFieldId.openTheBox }>
+      <span for={ uniqueFieldId.openOrThrowException("The call to openOrThrowException should never fail") }>
         <span class="sbml_field_label">{displayHtml}</span>
         <span class="sbml_field_content">
           {this.valueBox match{
@@ -305,12 +305,12 @@ with LoggerWrapper{
             try {
               XML.loadString(content)
             } catch {
-              case _ =>
+              case _:Throwable =>
                 //FIXME replace this hack by something more general
                 try {
                   XML.loadString("<root>" + content + "</root>").child
                 } catch {
-                  case _ => throw new BadFormatException("Strange error for field message!!")
+                  case _:Throwable => throw new BadFormatException("Strange error for field message!!")
                 }
             }
           case Failure(msg, exception, chain) => S.error(msg)
@@ -318,7 +318,7 @@ with LoggerWrapper{
         }
           }</span>
       </span>
-        <lift:msg id={uniqueFieldId.openTheBox}  errorClass="lift_error"/>
+        <lift:msg id={uniqueFieldId.openOrThrowException("The call to openOrThrowException should never fail")}  errorClass="lift_error"/>
     </div>
   }
 }
@@ -366,7 +366,7 @@ class COutside(own:CompartmentRecord) extends OptionalStringField(own, 100)
       <span id={id + "_holder"}>
         <!-- <label for={ id }> <span class="sbml_field_label">{ displayHtml }</span></label>-->
         {
-          val theParent = this.own.parent.openTheBox
+          val theParent:SBaseRecord[SBMLModelRecord] = this.own.parent.openOrThrowException("The call to openOrThrowException should never fail")
 
           theParent match {
             case model:SBMLModelRecord => {
@@ -386,7 +386,7 @@ class COutside(own:CompartmentRecord) extends OptionalStringField(own, 100)
                   case Failure(msg, exception, chain) => S.error(msg)
                   case ParamFailure(msg, exception, chain, param) => S.error(msg + ". This occured in " + param)
                 },
-              ("xxx" -> "yyy"))
+              "xxx" -> "yyy")
             }
             case _ => S.error("Only Models as parents of Compartments are implemented!")
           }
@@ -419,24 +419,26 @@ with DisplayHTMLWithLabelInOneLine[String, SpeciesRecord]{
       <span id={id + "_holder"}>
         <!-- <label for={ id }> <span class="sbml_field_label">{ displayHtml }</span></label> -->
         {
-        val theParent = this.own.parent.openTheBox
+        val theParent:SBaseRecord[SBMLModelRecord] =
+          this.own.parent.openOrThrowException("The call to openOrThrowException should never fail")
+
 
         theParent match {
           case model:SBMLModelRecord => {
             val op =
-              theParent.asInstanceOf[SBMLModelRecord].listOfCompartmentsRec
-            val opWithId = op.map(i => (i, i.idO.is):(CompartmentRecord, String) )
+              model.listOfCompartmentsRec
+            val opWithId = op.map(i => (i, i.idO.get):(CompartmentRecord, String) )
             // FIXME - since this is a wiki, this might be made optional nonetheless - CHECK IT
             // val options = (List((Empty , "no compartment")) ::: opWithId.toList).toSeq
             debug("Species.compartment value is {} before creating select box", this.own.compartmentO.is)
             SHtml.selectObj(
               opWithId,
               Box.option2Box(
-                op.filter( _.idO.is == this.own.compartmentO.is ).headOption),
+                op.filter( _.idO.get == this.own.compartmentO.get ).headOption),
               (choice:CompartmentRecord) =>
                 {
                   debug("Defining default choice of select box as {}", choice.idO.is)
-                  this.own.compartmentO.set( choice.idO.is)
+                  this.own.compartmentO.set( choice.idO.get)
                 },
                 ("xxx" -> "yyy"))
           }
@@ -555,7 +557,7 @@ with LoggerWrapper{
 
   var asciiFormula: String  = Default.asciiFormula
 
-  var mathmlFormula:Elem = mathmlFormula
+  var mathmlFormula:Elem = Default.mathmlFormula
   var mathmlFormulatosave:Elem = mathmlFormula
 
 
@@ -568,7 +570,7 @@ with LoggerWrapper{
     trace("Calling Math.toXHtml")
     //TODO: this method is almost equal to with DisplayHTMLWithLabelInOneLine[String, T]. Refactor to use that instead if possible
     <div id={uniqueFieldId + "_holder"}>
-      <span for={ uniqueFieldId.openTheBox }>
+      <span for={ uniqueFieldId.openOrThrowException("The call to openOrThrowException should never fail") }>
         <span class="sbml_field_label">{displayHtml}</span>
         <span class="sbml_field_content">
           {this.valueBox match{
@@ -578,7 +580,7 @@ with LoggerWrapper{
               XML.loadString( content )
             } catch{
               //FIXME replace this hack by something more general
-              case _ => XML.loadString( "<root>"+content+"</root>" ).child
+              case _:Throwable => XML.loadString( "<root>"+content+"</root>" ).child
             }
           }
           case Failure(msg, exception, chain) => S.error(msg)
@@ -586,7 +588,7 @@ with LoggerWrapper{
         }
           }</span>
       </span>
-        <lift:msg id={uniqueFieldId.openTheBox}  errorClass="lift_error"/>
+        <lift:msg id={uniqueFieldId.openOrThrowException("The call to openOrThrowException should never fail")}  errorClass="lift_error"/>
     </div>
   }
 }
@@ -604,11 +606,11 @@ with LoggerWrapper{
     trace("Calling DisplayHTMLWithLabelInOneLine.toXHtml")
     //TODO: BIG ERRORS HERE... JUST CHECK http://localhost:9999/model/f
     <div id={uniqueFieldId + "_holder"}>
-      <span for={ uniqueFieldId.openTheBox }>
+      <span for={ uniqueFieldId.openOrThrowException("The call to openOrThrowException should never fail") }>
         <span class="sbml_field_label">{displayHtml}</span>
         <span class="sbml_field_content">  {this.valueBox openOr "-- not defined --" }</span>
       </span>
-        <lift:msg id={uniqueFieldId.openTheBox}  errorClass="lift_error"/>
+        <lift:msg id={uniqueFieldId.openOrThrowException("The call to openOrThrowException should never fail")}  errorClass="lift_error"/>
     </div>
   }
 }
@@ -660,7 +662,7 @@ trait AuxValidators {
       java.lang.Double.parseDouble(s); Nil
     } catch {
       case e:NumberFormatException => List("'"+s+"' does not represent a valid floating point number.")
-      case e => exceptionHandling(e)
+      case e:Throwable => exceptionHandling(e)
     }
 
   protected def checkOptionalDoubleNumber(num:String):List[String] =

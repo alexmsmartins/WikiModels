@@ -59,7 +59,7 @@ case class SpeciesRecord() extends SBaseRecord[SpeciesRecord]  {
 
   var _parent:Box[SBMLModelRecord] = Empty
   //TODO isn't there a better way to override a var than THIS?!??! Fucking asInstanceOf
-  override def parent:Box[SBMLModelRecord] = _parent.asInstanceOf[Box[SBMLModelRecord]]
+  override def parent:Box[SBMLModelRecord] = _parent
   override def parent_=(p:Box[SBaseRecord[_]] ):Unit = {
     _parent = p.asInstanceOf[Box[SBMLModelRecord]]
   }

@@ -28,7 +28,7 @@ import com.hp.hpl.jena.reasoner.ReasonerRegistry
 import thewebsemantic.Bean2RDF
 import thewebsemantic.RDF2Bean
 
-import scala.Collection
+//import scala.Collection
 
 import pt.cnbc.wikimodels.dataModel.ModifierSpeciesReference
 import pt.cnbc.wikimodels.dataModel.SpeciesReference

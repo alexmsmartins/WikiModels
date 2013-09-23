@@ -9,6 +9,7 @@ import net.liftweb.http.SHtml
 import net.liftweb.http.js.JsCmd
 import net.liftweb.http.js.JsCmds._
 import net.liftweb.http.js.JsCmds.JsHideId
+import net.liftweb.http.js.JsExp._
 import net.liftweb.http.js.Jx
 import net.liftweb.http.js.JE._
 import net.liftweb.http.js.jquery._
@@ -467,8 +468,10 @@ class CreateModel extends LoggerWrapper {
                                                                                     {SHtml.textarea("", v => {reactant.set_reactant_note(v)
                                                                                             },("id", "reactantNote"), ("rows","10"), ("cols", "120"), ("maxlength", "50000"))
                                                                                     }</li>)}<br />{reactant_hash.put(reactant_key, reactant)}</ul>
-                                                                    ).toJs) &
-                                                                (ElemById(reactant_ul) ~> (JsFunc("appendChild", Call("reactionNewReactant", ""))))})}
+                                                                    ).toJs) //& (ElemById(reactant_ul).~>(JsFunc("appendChild", Call("reactionNewReactant", ""))))
+                                                                } //end of anonymous function
+                                               )// end of ajaxButton
+                                               }
                                                </li>
                                                <br />
                                                <ul id={product_ul} style="list-style:none;"></ul>
@@ -500,8 +503,8 @@ class CreateModel extends LoggerWrapper {
                                                                                     {SHtml.textarea("", v => {product.set_product_note(v)
                                                                                             },("id", "productNote"), ("rows","10"), ("cols", "120"), ("maxlength", "50000"))}</li>)}
                                                                                                  <br />{product_hash.put(product_key, product)}</ul>
-                                                                    ).toJs) &
-                                                                (ElemById(product_ul) ~> (JsFunc("appendChild", Call("reactionNewProduct", ""))))})}
+                                                                    ).toJs) // & (ElemById(product_ul) ~> (JsFunc("appendChild", Call("reactionNewProduct", ""))))
+                                                                    })}
                                                </li>
                                                <br />
                                                <ul id={modifier_ul} style="list-style:none;"></ul>
@@ -533,8 +536,8 @@ class CreateModel extends LoggerWrapper {
                                                                                     {SHtml.textarea("", v => {modifier.set_modifier_note(v)
                                                                                             },("id", "productNote"), ("rows","10"), ("cols", "120"), ("maxlength", "50000"))}</li>)}
                                                                                                   <br />{modifier_hash.put(modifier_key, modifier)}</ul>
-                                                                    ).toJs) &
-                                                                (ElemById(modifier_ul) ~> (JsFunc("appendChild", Call("reactionNewModifier", ""))))})}
+                                                                    ).toJs) //& (ElemById(modifier_ul) ~> (JsFunc("appendChild", Call("reactionNewModifier", ""))))
+                                               })}
                                                </li>
                                                <br />
                                                <li>Kinetic Law: <i><span id="required_field">(Format: Content MathML [Mathematical Markup Language])</span></i><img src="../classpath/images/question.png" width="20px" height="20px" /><br />
@@ -561,16 +564,15 @@ class CreateModel extends LoggerWrapper {
                                                                                <li>Parameter Note:<br />
                                                                                     {SHtml.textarea("", n => kineticParameter.set_parameter_note(n),("id", "parameterNoteArea"), ("rows","10"), ("cols", "120"), ("maxlength", "50000"))}</li>)}
                                                                                                           <br />{parameter_hash.put(parameter_key, kineticParameter)}</ul>
-                                                                    ).toJs) &
-                                                                (ElemById(parameter_ul) ~> (JsFunc("appendChild", Call("reactionNewKineticParameter", ""))))})}
+                                                                    ).toJs) // & (ElemById(parameter_ul) ~> (JsFunc("appendChild", Call("reactionNewKineticParameter", ""))))
+                                               })}
                                                </li>
                                                <br />
                                                <li>Reaction Note:<br />
                                                     {SHtml.textarea("", n => reaction_note.add(n),("id", "reactionArea"), ("rows","10"), ("cols", "120"), ("maxlength", "50000"))}</li>
                                             )}
                                     </ul>
-                                    <hr /><br /><br />).toJs) &
-                            (ElemById("react") ~> JsFunc("appendChild", Call("reactionFunc", "")))
+                                    <hr /><br /><br />).toJs) //& (ElemById("react") ~> JsFunc("appendChild", Call("reactionFunc", "")))
                         }),
     
                      "buttonFunDef" -> SHtml.ajaxButton(Text("Add Function Definition"), () => {
@@ -592,8 +594,8 @@ class CreateModel extends LoggerWrapper {
                                                     }</li>)
                                         }</ul><hr /><br /><br />
                                     /*<div onclick={Call("deleteFunDef", "")}>aqui</div>*/
-                                ).toJs) &
-                            (ElemById("function_def") ~> JsFunc("appendChild", Call("funcDef", "")))}),
+                                ).toJs) //& (ElemById("function_def") ~> JsFunc("appendChild", Call("funcDef", "")))
+                     }),
                      "buttonCompartment" -> SHtml.ajaxButton(Text("Add Compartment"), () => {
                             JsCrVar("comp", Jx(<ul style="list-style:none;">
                                                {
@@ -612,8 +614,7 @@ class CreateModel extends LoggerWrapper {
                                            <li>Compartment Note:<br />
                                                 {SHtml.textarea("", n => compartment_note.add(n),("id", "compartmentNoteArea"), ("rows","10"), ("cols", "120"), ("maxlength", "50000"))}</li>)
                                     }
-                                               </ul> <hr /><br /><br />).toJs) &
-                            (ElemById("compart") ~> JsFunc("appendChild", Call("comp", "")))
+                                               </ul> <hr /><br /><br />).toJs) //& (ElemById("compart") ~> JsFunc("appendChild", Call("comp", "")))
                         }),
                      "buttonSpecies" -> SHtml.ajaxButton(Text("Add Species"), () => {
                             JsCrVar("spec", Jx(<ul style="list-style:none;">
@@ -635,8 +636,7 @@ class CreateModel extends LoggerWrapper {
                                            <li>Species Note:<br />
                                                 {SHtml.textarea("", n => species_note.add(n),("id", "speciesNotesArea"), ("rows","10"), ("cols", "120"), ("maxlength", "50000"))}</li>)
                                     }
-                                               </ul><hr /><br /><br />).toJs) &
-                            (ElemById("specie") ~> JsFunc("appendChild", Call("spec", "")))
+                                               </ul><hr /><br /><br />).toJs) //& (ElemById("specie") ~> JsFunc("appendChild", Call("spec", "")))
                         }),
                      "buttonParam" -> SHtml.ajaxButton(Text("Add Parameter"), () => {
                             JsCrVar("param", Jx(<ul style="list-style:none;">
@@ -653,8 +653,7 @@ class CreateModel extends LoggerWrapper {
                                            <li>Parameter Note:<br />
                                                 {SHtml.textarea("", n => parameter_note.add(n),("id", "parameterNoteArea"), ("rows","10"), ("cols", "120"), ("maxlength", "50000"))}</li>)
                                     }
-                                                </ul><hr /><br /><br />).toJs) &
-                            (ElemById("paramet") ~> JsFunc("appendChild", Call("param", "")))
+                                                </ul><hr /><br /><br />).toJs) // & (ElemById("paramet") ~> JsFunc("appendChild", Call("param", "")))
                         }),
                      /*<li>Parameter Name: <span id="required_field">*</span> &nbsp;{SHtml.ajaxText("", ref => { parameter_name.add(ref);
                                                DisplayMessage(msgParamName,
@@ -676,8 +675,7 @@ class CreateModel extends LoggerWrapper {
                                            <li>Constraint Note:<br />
                                                 {SHtml.textarea("", n => constraint_note.add(n),("id", "constraintNoteArea"), ("rows","10"), ("cols", "120"), ("maxlength", "50000"))}</li>)
                                     }
-                                                 </ul><hr /><br /><br />).toJs) &
-                            (ElemById("const") ~> JsFunc("appendChild", Call("constr", "")))
+                                                 </ul><hr /><br /><br />).toJs) // &                             (ElemById("const") ~> JsFunc("appendChild", Call("constr", "")))
                         }),
                      "save" -> SHtml.submit("Save Model", createNewModel,("id","buttonSave"),("onclick" -> {
                                 JsIf(JsEq(ValById("name_model"), ""), Alert("You must provide a name to the model!") & JsReturn(false)).toJsCmd

@@ -14,15 +14,9 @@ import visitor.SBMLFromRecord.createKineticLawFrom
 * Copyright (c) 2011. Alexandre Martins. All rights reserved.
 */
 
-/**
- * TODO: Please document.
- * @author Alexandre Martins
- * Date: 15-11-2011
- * Time: 22:51
- */
 object SBMLFromRecord extends LoggerWrapper {
 
-  def createSBMLElementFrom(er:SBaseRecord[_]):Element =  {
+  def createSBMLElementFrom[T <: SBaseRecord[T]](er:T):Element =  {
     er match {
       case mr:SBMLModelRecord => createModelFrom(mr)
       case cr:CompartmentRecord => createCompartmentFrom(cr)
@@ -30,7 +24,8 @@ object SBMLFromRecord extends LoggerWrapper {
       case pr:ParameterRecord => createParameterFrom(pr)
       case ct:ConstraintRecord => createConstraintFrom(ct)
       case r:ReactionRecord => createReactionFrom(r)
-      case _ => throw new NotImplementedException("ERROR: Method create" + er.sbmlType + "From(_) not implemented yet")
+      case fd:FunctionDefinitionRecord => createFunctionDefinitionFrom(fd)
+      case t => throw new NotImplementedException("ERROR: Method create" + er.sbmlType + "From(_) not implemented yet"); null
 
     }
   }

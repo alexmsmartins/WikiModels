@@ -13,11 +13,6 @@
 
   <repositories>
       <repository>
-          <id>scala-tools.org</id>
-          <name>Scala-Tools Maven2 Repository</name>
-          <url>http://scala-tools.org/repo-releases</url>
-      </repository>
-      <repository>
           <id>maven2-repository.dev.java.net</id>
           <name>Java.net Repository for Maven</name>
           <url>http://download.java.net/maven/2/</url>
@@ -34,11 +29,6 @@
           <name>Java.Net Maven1 Repository, hosts the javaee-api dependency</name>
           <url>http://download.java.net/maven/1</url>
           <layout>legacy</layout>
-      </repository>
-      <repository>
-        <id>scala-tools.org</id>
-        <name>Scala-Tools Maven2 Repository Snapshots</name>
-        <url>http://scala-tools.org/repo-snapshots</url>
       </repository>
   </repositories>
 
@@ -65,7 +55,7 @@
         <testSourceDirectory>src/test/scala</testSourceDirectory>
 
         <plugins>
-            <plugin>
+            <!--<plugin>
                 <groupId>org.scala-tools</groupId>
                 <artifactId>maven-scala-plugin</artifactId>
                 <version>${maven.scala.plugin}</version>
@@ -79,6 +69,23 @@
                 </executions>
                 <configuration>
                     <scalaVersion>${scala.version}</scalaVersion>
+                </configuration>
+            </plugin>-->
+            <plugin>
+                <groupId>net.alchim31.maven</groupId>
+                <artifactId>scala-maven-plugin</artifactId>
+                <version>3.1.5</version>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <scalaVerion>${scala.version}</scalaVerion>
                 </configuration>
             </plugin>
             <plugin>
@@ -95,7 +102,7 @@
                     <nosuffix>true</nosuffix>
                 </configuration>
             </plugin>
-            <plugin>
+            <!--<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-eclipse-plugin</artifactId>
                 <configuration>
@@ -114,7 +121,7 @@
                         <java.lang.String>ch.epfl.lamp.sdt.core.scalabuilder</java.lang.String>
                     </buildcommands>
                 </configuration>
-            </plugin>
+            </plugin>-->
         </plugins>
     </build>
 </project>
