@@ -50,7 +50,7 @@ class AsciiMathPrettyPrinterTest extends AsciiMathParser{
 
   @Test
   def scientificNotationTest {
-    //TODO add scientific notaiton options to the grammar
+    //TODO add scientific notation options to the grammar
     val expr = "1.03e-23"
     val result = parseAll(NumExpr, expr)
     assertTrue(parsingWasSuccessful(result))

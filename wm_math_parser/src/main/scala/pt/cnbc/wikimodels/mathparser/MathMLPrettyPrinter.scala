@@ -20,6 +20,7 @@ object MathMLPrettyPrinter extends AsciiMathParser{
     </math>
   }
 
+
   def toXMLMatch(elem:MathMLElem):scala.xml.Elem = {
       elem match{
         case Apply(op,params) => <apply>{(op :: params).map(toXMLMatch(_))}</apply>

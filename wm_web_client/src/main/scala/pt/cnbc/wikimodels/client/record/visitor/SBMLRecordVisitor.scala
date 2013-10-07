@@ -9,6 +9,9 @@ import net.liftweb.common.Box._
 import alexmsmartins.log.LoggerWrapper
 import pt.cnbc.wikimodels.exceptions.NotImplementedException
 import visitor.SBMLFromRecord.createKineticLawFrom
+import pt.cnbc.wikimodels.mathparser.{AsciiMathPrettyPrinter, MathMLMatchParser, MathMLPrettyPrinter, AsciiMathParser}
+import pt.cnbc.wikimodels.mathml.elements.MathMLElem
+import scala.xml.Utility
 
 /*
 * Copyright (c) 2011. Alexandre Martins. All rights reserved.
@@ -95,7 +98,10 @@ object SBMLFromRecord extends LoggerWrapper {
     fd.id = fdr.idO.get
     fd.name = fdr.nameO.get.getOrElse(null)
     fd.notes = fdr.notesO.get.getOrElse(null)
-    fd.math = fdr.mathO.get
+
+    val amp =  AsciiMathParser()
+    val ast:amp.ParseResult[amp.MME] = amp.parseAll( amp.LambdaExpr, fdr.mathO.get )
+    fd.math = MathMLPrettyPrinter.toXML(ast.get).toString()
     fd
   }
 
@@ -323,7 +329,18 @@ object RecordFromSBML extends LoggerWrapper {
     fdr.idO.set(fd.id)
     fdr.nameO.setBox(Box.legacyNullTest(fd.name))
     fdr.notesO.setBox(Box.legacyNullTest(fd.notes))
-    fdr.mathO.set(fd.math)
+
+    debug("fd.math is " + fd.math)
+
+
+    val <math>{xmlLambda}</math> = Utility.trim(scala.xml.XML.loadString(fd.math))
+
+    debug("Lambda is " + xmlLambda)
+
+    val p = MathMLMatchParser()
+    val mathMLaST = p.parse(xmlLambda.asInstanceOf[scala.xml.Elem])
+    val asciiLambda =  AsciiMathPrettyPrinter.toAsciiMathML(mathMLaST)
+    fdr.mathO.set(asciiLambda)
     fdr
   }
 

@@ -30,6 +30,11 @@
             <url>http://download.java.net/maven/2/</url>
             <layout>default</layout>
         </repository>
+        <repository>
+            <id>sonatype.org.snapshots</id>
+            <name>Sonatype scala-tools snapshots</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </repository>
     </repositories>
     
     <pluginRepositories>

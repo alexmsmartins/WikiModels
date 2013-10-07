@@ -29,11 +29,16 @@
 
     <repositories>
         <repository>
-            <id>scala-tools.releases</id>
-            <name>Scala-Tools Dependencies Repository for Releases</name>
-            <url>http://scala-tools.org/repo-releases</url>
+            <id>sonatype.org.releases</id>
+            <name>Sonatype scala-tools releases</name>
+            <url>https://oss.sonatype.org/content/repositories/releases</url>
         </repository>
         <repository>
+            <id>sonatype.org.snapshots</id>
+            <name>Sonatype scala-tools snapshots</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </repository>
+       <repository>
             <id>ibiblio.org</id>
             <name>ibiblio Mirror of http://repo1.maven.org/maven2/</name>
             <url>http://mirrors.ibiblio.org/pub/mirrors/maven2</url>
@@ -114,7 +119,7 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.6.4</version>
+            <version>1.7.5</version>
         </dependency>
     </dependencies>
 
