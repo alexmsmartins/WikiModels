@@ -21,8 +21,8 @@ case class SpeciesRecord() extends SBaseRecord[SpeciesRecord]  {
 
   override def meta = SpeciesRecord
 
-  override protected def relativeURLasList = "model" :: S.param("modelMetaId").openTheBox :: "species" :: this.metaIdO.get :: Nil
-  override protected def relativeCreationURLasList = "model" :: S.param("modelMetaId").openTheBox :: "species" :: Nil
+  override protected def relativeURLasList = "model" :: S.param("modelMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method") :: "species" :: this.metaIdO.get :: Nil
+  override protected def relativeCreationURLasList = "model" :: S.param("modelMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method") :: "species" :: Nil
 
 
   //  ### can be validated with validate ###

@@ -32,7 +32,7 @@ package object screenUtil extends LoggerWrapper{
   def loadSBMLModelFromPathParam:SBMLModelRecord = {
     var mm:Box[SBMLModelRecord] = Empty
     tryo(
-      SBMLModelRecord.readRestRec(debug("The modelMetaId in session after calling /model/modemetaid is: {}", S.param("modelMetaId").openTheBox))
+      SBMLModelRecord.readRestRec(debug("The modelMetaId in session after calling /model/modemetaid is: {}", S.param("modelMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method")))
     ) match {
       case Full(m) => {mm = m}
       case Failure(msg,_,_) => {
@@ -45,14 +45,14 @@ package object screenUtil extends LoggerWrapper{
         S.redirectTo("/")
       }
     }
-    mm.openTheBox
+    mm.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method")
   }
 
 
   def loadCompartmentFromPathParam:CompartmentRecord = {
     var mm:Box[CompartmentRecord] = Empty
     tryo(
-      CompartmentRecord.readRestRec(debug("The compartmentMetaId in session after calling /model/modemetaid/compartment/compartmentMetaId is: {}", S.param("compartmentMetaId").openTheBox))
+      CompartmentRecord.readRestRec(debug("The compartmentMetaId in session after calling /model/modemetaid/compartment/compartmentMetaId is: {}", S.param("compartmentMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method")))
     ) match {
       case Full(m) => {mm = m}
       case Failure(msg,_,_) => {
@@ -65,13 +65,13 @@ package object screenUtil extends LoggerWrapper{
         S.redirectTo("/")
       }
     }
-    mm.openTheBox
+    mm.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method")
   }
 
   def loadSpeciesFromPathParam:SpeciesRecord = {
     var mm:Box[SpeciesRecord] = Empty
     tryo(
-      SpeciesRecord.readRestRec(debug("The speciesMetaId in session after calling /model/modemetaid/species/speciesMetaId is: {}", S.param("speciesMetaId").openTheBox))
+      SpeciesRecord.readRestRec(debug("The speciesMetaId in session after calling /model/modemetaid/species/speciesMetaId is: {}", S.param("speciesMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method")))
     ) match {
       case Full(m) => {mm = m}
       case Failure(msg,_,_) => {
@@ -84,13 +84,13 @@ package object screenUtil extends LoggerWrapper{
         S.redirectTo("/")
       }
     }
-    mm.openTheBox
+    mm.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method")
   }
 
   def loadParameterFromPathParam:ParameterRecord = {
     var mm:Box[ParameterRecord] = Empty
     tryo(
-      ParameterRecord.readRestRec(debug("The parameterMetaId in session after calling /model/modemetaid/parameter/speciesMetaId is: {}", S.param("parameterMetaId").openTheBox))
+      ParameterRecord.readRestRec(debug("The parameterMetaId in session after calling /model/modemetaid/parameter/speciesMetaId is: {}", S.param("parameterMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method")))
     ) match {
       case Full(m) => {mm = m}
       case Failure(msg,_,_) => {
@@ -103,13 +103,13 @@ package object screenUtil extends LoggerWrapper{
         S.redirectTo("/")
       }
     }
-    mm.openTheBox
+    mm.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method")
   }
 
   def loadFunctionDefinitionFromPathParam:FunctionDefinitionRecord = {
     var mm:Box[FunctionDefinitionRecord] = Empty
     tryo(
-      FunctionDefinitionRecord.readRestRec(debug("The functionDefinitionMetaId in session after calling /model/modemetaid/functionDefinition/functionDMetaId is: {}", S.param("functionDefinitionMetaId").openTheBox))
+      FunctionDefinitionRecord.readRestRec(debug("The functionDefinitionMetaId in session after calling /model/modemetaid/functionDefinition/functionDMetaId is: {}", S.param("functionDefinitionMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method")))
     ) match {
       case Full(m) => {mm = m}
       case Failure(msg,_,_) => {
@@ -122,7 +122,7 @@ package object screenUtil extends LoggerWrapper{
         S.redirectTo("/")
       }
     }
-    mm.openTheBox
+    mm.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method")
   }
 }
 
@@ -394,7 +394,7 @@ class CreateReactionScreen extends LiftScreen with LoggerWrapper{
   *         Time: 4:45 PM */
 class EditReactionScreen extends LiftScreen with LoggerWrapper{
   object reaction extends ScreenVar(
-    ReactionRecord.readRestRec(S.param("reactionMetaId").openTheBox).openTheBox
+    ReactionRecord.readRestRec(S.param("reactionMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method")).openOrThrowException("TODO: replacement for usage of deprecated openTheBox method")
   )
 
   //override def screenTop =  <b>A single screen with some input validation</b>

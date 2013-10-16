@@ -52,7 +52,7 @@ class SBMLDocHandlerTest extends LoggerWrapper{
     Console.println("File path is : " + getClass.getClassLoader.getResource(" sbml_as_root.xml").getPath)
     val sbmlFile = io.Source.fromFile(getClass.getResource("sbml_as_root.xml").getPath).mkString
     //val sbmlFile = io.Source.fromFile("sbml_as_root.xml", "UTF-8").mkString
-    val xml:scala.xml.Elem = SBMLDocHandler.extractModelTagfromSBML(sbmlFile).open_!
+    val xml:scala.xml.Elem = SBMLDocHandler.extractModelTagfromSBML(sbmlFile).openOrThrowException("Failed extracting model tag from sbml file!")
     assertTrue(xml.label == "model")
   }
 
@@ -61,7 +61,7 @@ class SBMLDocHandlerTest extends LoggerWrapper{
     Console.println("File path is : " + getClass.getClassLoader.getResource("sbml_as_root.xml").getPath)
     val sbmlFile = io.Source.fromFile(getClass.getResource("sbml_as_root.xml").getPath).mkString
     //val sbmlFile = io.Source.fromFile("sbml_as_root.xml", "UTF-8").mkString
-    val xml:scala.xml.Elem = SBMLDocHandler.extractModelTagfromSBML(sbmlFile).open_!
+    val xml:scala.xml.Elem = SBMLDocHandler.extractModelTagfromSBML(sbmlFile).openOrThrowException("Failed extracting model tag from sbml file with header!")
     assertTrue(xml.label == "model")
   }
 

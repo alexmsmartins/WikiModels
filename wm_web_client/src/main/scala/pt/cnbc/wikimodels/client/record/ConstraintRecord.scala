@@ -18,8 +18,8 @@ case class ConstraintRecord() extends SBaseRecord[ConstraintRecord]  {
 
   override def meta = ConstraintRecord
 
-  override protected def relativeURLasList = "model" :: S.param("modelMetaId").openTheBox :: "constraint" :: this.metaIdO.get :: Nil
-  override protected def relativeCreationURLasList = "model" :: S.param("modelMetaId").openTheBox :: "constraint" :: Nil
+  override protected def relativeURLasList = "model" :: S.param("modelMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method") :: "constraint" :: this.metaIdO.get :: Nil
+  override protected def relativeCreationURLasList = "model" :: S.param("modelMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method") :: "constraint" :: Nil
 
 
   //  ### can be validated with validate ###

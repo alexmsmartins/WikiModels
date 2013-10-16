@@ -84,7 +84,7 @@ lib/ant/bin/ant -f setup.xml
 
 cd $SCRIPT_DIR
 ############# install postgres #############
-
+# TODO this command does not work in debian because the package cannnot be found
 sudo apt-get -y install postgresql-9.1 
 
 ############# install maven #############
@@ -109,4 +109,5 @@ sh $SCRIPT_DIR/setup-databases.sh
 sh $SCRIPT_DIR/deploy_server.sh
 
 ############# install sbt ##################
+
 sh $SCRIPT_DIR/install_sbt077.sh

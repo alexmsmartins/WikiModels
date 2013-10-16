@@ -27,7 +27,7 @@ package object sitemapTweaks {
    * Created by IntelliJ IDEA. User: alex Date: 11-08-2011 Time: 21:19 To change this template use File | Settings | File Templates.
    */
   object ModelPageLoc extends Loc[CreateEditPageState] {
-    var state:CreateEditPageState = defaultValue.open_!
+    var state:CreateEditPageState = defaultValue.openOrThrowException("Failed creating edit page state")
     def name: String = "CreateEDitWithState"
 
     def link = new Link[CreateEditPageState]("models" :: "createEdit" :: "Create" :: Nil)

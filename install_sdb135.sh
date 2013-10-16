@@ -15,14 +15,15 @@ SCRIPT_DIR=${PWD}
 if [ -f $DOWNLOAD_DIR/$SDB_TAR ]; then
     echo "SDB 1.3.5 was downloaded before"
 else
-    wget -P $DOWNLOAD_DIR http://www.apache.org/dist/jena/binaries/$SDB_TAR
+    wget -P $DOWNLOAD_DIR https://archive.apache.org/dist/jena/binaries/$SDB_TAR
 fi
 
 if [ -f $DOWNLOAD_DIR/$SDB_TAR.md5 ]; then
     rm $DOWNLOAD_DIR/$SDB_TAR.md5
 fi
 # always pull md5 file again to check if there were changes to it. 
-wget -P $DOWNLOAD_DIR http://www.apache.org/dist/jena/binaries/$SDB_TAR.md5
+wget -P $DOWNLOAD_DIR https://archive.apache.org/dist/jena/binaries/$SDB_TAR.md5
+
 # TODO if the md5 key file changes, maybe the hashed file should be pulled again
 
 sh $SCRIPT_DIR/check_md5.sh $DOWNLOAD_DIR/$SDB_TAR

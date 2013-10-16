@@ -23,8 +23,8 @@ case class CompartmentRecord() extends SBaseRecord[CompartmentRecord] with Logge
 
   override def meta = CompartmentRecord
 
-  override protected def relativeURLasList = "model" :: S.param("modelMetaId").openTheBox :: "compartment" :: this.metaIdO.get :: Nil
-  override protected def relativeCreationURLasList = "model" :: S.param("modelMetaId").openTheBox :: "compartment" :: Nil
+  override protected def relativeURLasList = "model" :: S.param("modelMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method") :: "compartment" :: this.metaIdO.get :: Nil
+  override protected def relativeCreationURLasList = "model" :: S.param("modelMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method") :: "compartment" :: Nil
 
 
   //  ### can be validated with validate ###

@@ -28,8 +28,8 @@ case class ReactionRecord() extends SBaseRecord[ReactionRecord]  {
 
   override def meta = ReactionRecord
 
-  override protected def relativeURLasList = "model" :: S.param("modelMetaId").openTheBox :: "reaction" :: this.metaIdO.get :: Nil
-  override protected def relativeCreationURLasList = "model" :: S.param("modelMetaId").openTheBox :: "reaction" :: Nil
+  override protected def relativeURLasList = "model" :: S.param("modelMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method") :: "reaction" :: this.metaIdO.get :: Nil
+  override protected def relativeCreationURLasList = "model" :: S.param("modelMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method") :: "reaction" :: Nil
 
 
   //  ### can be validated with validate ###

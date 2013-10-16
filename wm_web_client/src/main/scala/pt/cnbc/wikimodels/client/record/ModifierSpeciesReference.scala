@@ -22,8 +22,8 @@ case class ModifierSpeciesReferenceRecord() extends SBaseRecord[ModifierSpeciesR
   var referenceType:String = "reactant" // "product" "modifier"
   override def meta = ModifierSpeciesReferenceRecord
 
-  override protected def relativeURLasList = "model" :: S.param("modelMetaId").openTheBox :: "reaction" :: S.param("reactionMetaId").openTheBox :: referenceType :: this.metaIdO.get :: Nil
-  override protected def relativeCreationURLasList = "model" :: S.param("modelMetaId").openTheBox :: "species" :: Nil
+  override protected def relativeURLasList = "model" :: S.param("modelMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method") :: "reaction" :: S.param("reactionMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method") :: referenceType :: this.metaIdO.get :: Nil
+  override protected def relativeCreationURLasList = "model" :: S.param("modelMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method") :: "species" :: Nil
 
 
   //  ### can be validated with validate ###
@@ -48,9 +48,9 @@ case class ModifierSpeciesReferenceRecord() extends SBaseRecord[ModifierSpeciesR
       <!-- outside can't be a field and so I will make it a form -->
       {
       val defaultOption:(Box[SpeciesRecord], String) = (Empty, "[no spcies")
-      val op = parent.openTheBox.
+      val op = parent.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method").
         listOfSpeciesRec
-      val defaultOp = parent.openTheBox.listOfSpeciesRec.filter( _.idO.get == speciesO.get ).headOption
+      val defaultOp = parent.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method").listOfSpeciesRec.filter( _.idO.get == speciesO.get ).headOption
       val opWithId = op.map(i => (i, i.idO.get):(SpeciesRecord, String) )
       val options = (List((null , "no species")) ::: opWithId.toList).toSeq
       SHtml.selectObj(options, Box.option2Box(defaultOp),

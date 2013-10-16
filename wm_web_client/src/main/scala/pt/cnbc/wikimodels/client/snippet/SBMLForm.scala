@@ -45,142 +45,142 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
 
   private def loadSBMLModelFromPathParam() = {
     trace("calling SBMLForm.loadSBMLModelFromPathParam")
-    debug("""Parameter "modelMetaId" « {} """, S.param("modelMetaId").openTheBox)
+    debug("""Parameter "modelMetaId" « {} """, S.param("modelMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method"))
 
     selectedModel {
-      SBMLModelRecord.readRestRec(debug("The modelMetaId in session after calling /model/modemetaid is: {}", S.param("modelMetaId").openTheBox))
+      SBMLModelRecord.readRestRec(debug("The modelMetaId in session after calling /model/modemetaid is: {}", S.param("modelMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method")))
     }
-    debug("Loaded model into session: {}", selectedModel.get.openTheBox.toXML )
+    debug("Loaded model into session: {}", selectedModel.get.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method").toXML )
     debug("Loaded model into session with metaid {}, id {} and name {}",
-      selectedModel.get.openTheBox.metaIdO.get,
-      selectedModel.get.openTheBox.idO.get,
-      selectedModel.get.openTheBox.nameO.get)
+      selectedModel.get.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method").metaIdO.get,
+      selectedModel.get.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method").idO.get,
+      selectedModel.get.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method").nameO.get)
     selectedModel.is
   }
 
   private def loadCompartmentFromPathParam() = {
     trace("Calling SBMLForm.loadCompartmentFromPathParam")
-    debug("""Parameter "compartmentMetaId" « {} """, S.param("compartmentMetaId").openTheBox)
+    debug("""Parameter "compartmentMetaId" « {} """, S.param("compartmentMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method"))
 
     selectedCompartment {
-      CompartmentRecord.readRestRec(debug("The compartmentMetaId in session after calling /model/modemetaid/compartment/compartmentMetaId is: {}", S.param("compartmentMetaId").openTheBox))
+      CompartmentRecord.readRestRec(debug("The compartmentMetaId in session after calling /model/modemetaid/compartment/compartmentMetaId is: {}", S.param("compartmentMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method")))
     }
 
     //TODO this might be optimizable by turning the parent field into a lazy field and the interface buttons that need it into ajax buttons
     selectedModel {
-      SBMLModelRecord.readRestRec(debug("The modelMetaId in session after calling /model/modemetaid is: {}", S.param("modelMetaId").openTheBox))
+      SBMLModelRecord.readRestRec(debug("The modelMetaId in session after calling /model/modemetaid is: {}", S.param("modelMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method")))
     }
-    selectedCompartment.get.openTheBox.parent = selectedModel.get
-    debug("Loaded compartment into session: {}", selectedCompartment.get.openTheBox.toXML )
+    selectedCompartment.get.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method").parent = selectedModel.get
+    debug("Loaded compartment into session: {}", selectedCompartment.get.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method").toXML )
     debug("Loaded model into session with metaid {}, id {} and name {}",
-      selectedCompartment.get.openTheBox.metaIdO.get,
-      selectedCompartment.get.openTheBox.idO.get,
-      selectedCompartment.get.openTheBox.nameO.get)
+      selectedCompartment.get.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method").metaIdO.get,
+      selectedCompartment.get.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method").idO.get,
+      selectedCompartment.get.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method").nameO.get)
     selectedCompartment.is
   }
 
   private def loadSpeciesFromPathParam() = {
     trace("Calling SBMLForm.loadSpeciesFromPathParam")
-    debug("""Parameter "speciesMetaId" « {} """, S.param("speciesMetaId").openTheBox)
+    debug("""Parameter "speciesMetaId" « {} """, S.param("speciesMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method"))
 
     selectedSpecies {
-      SpeciesRecord.readRestRec(debug("The speciesMetaId in session after calling /model/modemetaid/species/speciesMetaId is: {}", S.param("speciesMetaId").openTheBox))
+      SpeciesRecord.readRestRec(debug("The speciesMetaId in session after calling /model/modemetaid/species/speciesMetaId is: {}", S.param("speciesMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method")))
     }
 
     //TODO this might be optimizable by turning the parent field into a lazy field and the interface buttons that need it into ajax buttons
     selectedModel {
-      SBMLModelRecord.readRestRec(debug("The modelMetaId in session after calling /model/modemetaid is: {}", S.param("modelMetaId").openTheBox))
+      SBMLModelRecord.readRestRec(debug("The modelMetaId in session after calling /model/modemetaid is: {}", S.param("modelMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method")))
     }
-    selectedSpecies.get.openTheBox.parent = selectedModel.get
-    debug("Loaded species into session: {}", selectedSpecies.get.openTheBox.toXML )
+    selectedSpecies.get.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method").parent = selectedModel.get
+    debug("Loaded species into session: {}", selectedSpecies.get.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method").toXML )
     debug("Loaded model into session with metaid {}, id {} and name {}",
-      selectedSpecies.get.openTheBox.metaIdO.get,
-      selectedSpecies.get.openTheBox.idO.get,
-      selectedSpecies.get.openTheBox.idO.get)
+      selectedSpecies.get.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method").metaIdO.get,
+      selectedSpecies.get.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method").idO.get,
+      selectedSpecies.get.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method").idO.get)
     selectedSpecies.is
   }
 
   private def loadParameterFromPathParam() = {
     trace("Calling SBMLForm.loadBootParameterFromPathParam")
-    debug("""Parameter "parameterMetaId" « {} """, S.param("parameterMetaId").openTheBox)
+    debug("""Parameter "parameterMetaId" « {} """, S.param("parameterMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method"))
 
     selectedParameter {
-      ParameterRecord.readRestRec(debug("The parameterMetaId in session after calling /model/modemetaid/parameter/parameterMetaId is: {}", S.param("parameterMetaId").openTheBox))
+      ParameterRecord.readRestRec(debug("The parameterMetaId in session after calling /model/modemetaid/parameter/parameterMetaId is: {}", S.param("parameterMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method")))
     }
 
     //TODO this might be optimizable by turning the parent field into a lazy field and the interface buttons that need it into ajax buttons
     selectedModel {
-      SBMLModelRecord.readRestRec(debug("The modelMetaId in session after calling /model/modemetaid is: {}", S.param("modelMetaId").openTheBox))
+      SBMLModelRecord.readRestRec(debug("The modelMetaId in session after calling /model/modemetaid is: {}", S.param("modelMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method")))
     }
-    selectedParameter.get.openTheBox.parent = selectedModel.get
-    debug("Loaded parameter into session: {}", selectedParameter.get.openTheBox.toXML )
+    selectedParameter.get.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method").parent = selectedModel.get
+    debug("Loaded parameter into session: {}", selectedParameter.get.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method").toXML )
     debug("Loaded model into session with metaid {}, id {} and name {}",
-      selectedParameter.get.openTheBox.metaIdO.get,
-      selectedParameter.get.openTheBox.idO.get,
-      selectedParameter.get.openTheBox.idO.get)
+      selectedParameter.get.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method").metaIdO.get,
+      selectedParameter.get.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method").idO.get,
+      selectedParameter.get.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method").idO.get)
     selectedParameter.is
   }
 
   private def loadFunctionDefinitionFromPathParam() = {
     trace("Calling SBMLForm.loadFunctionDefinitionFromPathParam")
-    debug("""Parameter "functionDefinitioMetaId" « {} """, S.param("functionDefinitioMetaId").openTheBox)
+    debug("""Parameter "functionDefinitioMetaId" « {} """, S.param("functionDefinitioMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method"))
 
     selectedFunctionDefinition {
-      FunctionDefinitionRecord.readRestRec(debug("The functionDefinitioMetaId in session after calling /model/modemetaid/functiondefinition/functionDefinitionMetaId is: {}", S.param("functionDefinitioMetaId").openTheBox))
+      FunctionDefinitionRecord.readRestRec(debug("The functionDefinitioMetaId in session after calling /model/modemetaid/functiondefinition/functionDefinitionMetaId is: {}", S.param("functionDefinitioMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method")))
     }
 
     //TODO this might be optimizable by turning the parent field into a lazy field and the interface buttons that need it into ajax buttons
     selectedModel {
-      SBMLModelRecord.readRestRec(debug("The modelMetaId in session after calling /model/modemetaid is: {}", S.param("modelMetaId").openTheBox))
+      SBMLModelRecord.readRestRec(debug("The modelMetaId in session after calling /model/modemetaid is: {}", S.param("modelMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method")))
     }
-    selectedFunctionDefinition.get.openTheBox.parent = selectedModel.get
-    debug("Loaded function definition into session: {}", selectedFunctionDefinition.get.openTheBox.toXML )
+    selectedFunctionDefinition.get.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method").parent = selectedModel.get
+    debug("Loaded function definition into session: {}", selectedFunctionDefinition.get.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method").toXML )
     debug("Loaded model into session with metaid {}, id {} and name {}",
-      selectedFunctionDefinition.get.openTheBox.metaIdO.get,
-      selectedFunctionDefinition.get.openTheBox.idO.get,
-      selectedFunctionDefinition.get.openTheBox.idO.get)
+      selectedFunctionDefinition.get.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method").metaIdO.get,
+      selectedFunctionDefinition.get.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method").idO.get,
+      selectedFunctionDefinition.get.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method").idO.get)
     selectedFunctionDefinition.is
   }
 
   private def loadConstraintFromPathParam() = {
     trace("Calling SBMLForm.loadConstraintFromPathParam")
-    debug("""Parameter "constraintMetaId" « {} """, S.param("constraintMetaId").openTheBox)
+    debug("""Parameter "constraintMetaId" « {} """, S.param("constraintMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method"))
 
     selectedConstraint{
-      ConstraintRecord.readRestRec(debug("The constraintMetaId in session after calling /model/modemetaid/constraint/constraintMetaId is: {}", S.param("constraintMetaId").openTheBox))
+      ConstraintRecord.readRestRec(debug("The constraintMetaId in session after calling /model/modemetaid/constraint/constraintMetaId is: {}", S.param("constraintMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method")))
     }
 
     //TODO this might be optimizable by turning the parent field into a lazy field and the interface buttons that need it into ajax buttons
     selectedModel {
-      SBMLModelRecord.readRestRec(debug("The modelMetaId in session after calling /model/modemetaid is: {}", S.param("modelMetaId").openTheBox))
+      SBMLModelRecord.readRestRec(debug("The modelMetaId in session after calling /model/modemetaid is: {}", S.param("modelMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method")))
     }
-    selectedConstraint.get.openTheBox.parent = selectedModel.get
-    debug("Loaded constraint into session: {}", selectedConstraint.get.openTheBox.toXML )
+    selectedConstraint.get.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method").parent = selectedModel.get
+    debug("Loaded constraint into session: {}", selectedConstraint.get.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method").toXML )
     debug("Loaded model into session with metaid {}, id {} and name {}",
-      selectedConstraint.get.openTheBox.metaIdO.get,
-      selectedConstraint.get.openTheBox.idO.get,
-      selectedConstraint.get.openTheBox.idO.get)
+      selectedConstraint.get.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method").metaIdO.get,
+      selectedConstraint.get.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method").idO.get,
+      selectedConstraint.get.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method").idO.get)
     selectedConstraint.is
   }
 
   private def loadReactionFromPathParam() = {
     trace("Calling SBMLForm.loadReactionFromPathParam")
-    debug("""Parameter "reactionMetaId" « {} """, S.param("reactionMetaId").openTheBox)
+    debug("""Parameter "reactionMetaId" « {} """, S.param("reactionMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method"))
 
     selectedReaction {
-      ReactionRecord.readRestRec(debug("The reactionMetaId in session after calling /model/modemetaid/reaction/reactionMetaId is: {}", S.param("reactionMetaId").openTheBox))
+      ReactionRecord.readRestRec(debug("The reactionMetaId in session after calling /model/modemetaid/reaction/reactionMetaId is: {}", S.param("reactionMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method")))
     }
 
     //TODO this might be optimizable by turning the parent field into a lazy field and the interface buttons that need it into ajax buttons
     selectedModel {
-      SBMLModelRecord.readRestRec(debug("The modelMetaId in session after calling /model/modemetaid is: {}", S.param("modelMetaId").openTheBox))
+      SBMLModelRecord.readRestRec(debug("The modelMetaId in session after calling /model/modemetaid is: {}", S.param("modelMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method")))
     }
-    selectedReaction.get.openTheBox.parent = selectedModel.get
-    debug("Loaded reaction into session: {}", selectedReaction.get.openTheBox.toXML )
+    selectedReaction.get.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method").parent = selectedModel.get
+    debug("Loaded reaction into session: {}", selectedReaction.get.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method").toXML )
     debug("Loaded model into session with metaid {}, id {} and name {}",
-      selectedReaction.get.openTheBox.metaIdO.get,
-      selectedReaction.get.openTheBox.idO.get,
-      selectedReaction.get.openTheBox.idO.get)
+      selectedReaction.get.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method").metaIdO.get,
+      selectedReaction.get.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method").idO.get,
+      selectedReaction.get.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method").idO.get)
     selectedReaction.is
   }
 
@@ -679,7 +679,7 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
   def visualizeSelectedModel(ns:NodeSeq):NodeSeq = {
     debug("VISUALIZE SELECTED MODEL")
     loadSBMLModelFromPathParam
-    debug("Loaded selectedModel = " + selectedModel.openTheBox.toXML )
+    debug("Loaded selectedModel = " + selectedModel.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method").toXML )
       selectedModel.map(mr =>{
         val m:SBMLModel = SBMLFromRecord.createModelFrom(mr)
         SBMLStrictValidator.visit(m).map(err => S.notice(err))
@@ -691,42 +691,42 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
   def visualizeSelectedCompartment(ns:NodeSeq):NodeSeq = {
     debug("VISUALIZE SELECTED COMPARTMENT")
     loadCompartmentFromPathParam
-    debug("Loaded selectedCompartment = " + selectedCompartment.openTheBox.toXML )
+    debug("Loaded selectedCompartment = " + selectedCompartment.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method").toXML )
     selectedCompartment.map(_.toXHtml) openOr {S.error(mainMsgId,"Compartment not found"); redirectTo("/models/")}
   }
 
   def visualizeSelectedSpecies(ns:NodeSeq):NodeSeq = {
     debug("VISUALIZE SELECTED SPECIES")
     loadSpeciesFromPathParam()
-    debug("Loaded selectedSpecies= " + selectedSpecies.openTheBox.toXML )
+    debug("Loaded selectedSpecies= " + selectedSpecies.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method").toXML )
     selectedSpecies.map(_.toXHtml) openOr {S.error(mainMsgId,"Species not found"); redirectTo("/models/")}
   }
 
   def visualizeSelectedParameter(ns:NodeSeq):NodeSeq = {
     debug("VISUALIZE SELECTED Parameter")
     loadParameterFromPathParam()
-    debug("Loaded selectedParameter= " + selectedParameter.openTheBox.toXML )
+    debug("Loaded selectedParameter= " + selectedParameter.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method").toXML )
     selectedParameter.map(_.toXHtml) openOr {S.error(mainMsgId,"Parameter not found"); redirectTo("/models/")}
   }
 
   def visualizeSelectedFunctionDefinition(ns:NodeSeq):NodeSeq = {
     debug("VISUALIZE SELECTED Function Definition")
     loadFunctionDefinitionFromPathParam()
-    debug("Loaded selectedFunctionDefinition= " + selectedFunctionDefinition.openTheBox.toXML )
+    debug("Loaded selectedFunctionDefinition= " + selectedFunctionDefinition.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method").toXML )
     selectedFunctionDefinition.map(_.toXHtml) openOr {S.error(mainMsgId,"Function Definition not found"); redirectTo("/models/")}
   }
 
   def visualizeSelectedConstraint(ns:NodeSeq):NodeSeq = {
     debug("VISUALIZE SELECTED Constraint")
     loadConstraintFromPathParam()
-    debug("Loaded selectedConstraint= " + selectedConstraint.openTheBox.toXML )
+    debug("Loaded selectedConstraint= " + selectedConstraint.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method").toXML )
     selectedConstraint.map(_.toXHtml) openOr {S.error(mainMsgId,"Constraint not found"); redirectTo("/models/")}
   }
 
   def visualizeSelectedReaction(ns:NodeSeq):NodeSeq = {
     debug("VISUALIZE SELECTED Reaction")
     loadReactionFromPathParam()
-    debug("Loaded selectedReaction= " + selectedReaction.openTheBox.toXML )
+    debug("Loaded selectedReaction= " + selectedReaction.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method").toXML )
     selectedReaction.map(_.toXHtml) openOr {S.error(mainMsgId,"Reaction not found"); redirectTo("/models/")}
   }
 
@@ -766,7 +766,7 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
         case fail:Failure => S.error(mainMsgId, fail.msg)
         case Empty => S.error(mainMsgId, "THIS IS A BUG")
       }
-      redirectTo("/model/" + S.param("modelMetaId").openTheBox )
+      redirectTo("/model/" + S.param("modelMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method") )
     }
     // bind the incoming XHTML to a "delete" button.
     // when the delete button is pressed, call the "deleteUser"
@@ -789,7 +789,7 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
         case fail:Failure => S.error(mainMsgId, fail.msg)
         case Empty => S.error(mainMsgId, "THIS IS A BUG")
       }
-      redirectTo("/model/" + S.param("modelMetaId").openTheBox )
+      redirectTo("/model/" + S.param("modelMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method") )
     }
     // bind the incoming XHTML to a "delete" button.
     // when the delete button is pressed, call the "deleteUser"
@@ -812,7 +812,7 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
         case fail:Failure => S.error(mainMsgId, fail.msg)
         case Empty => S.error(mainMsgId, "THIS IS A BUG")
       }
-      redirectTo("/model/" + S.param("modelMetaId").openTheBox )
+      redirectTo("/model/" + S.param("modelMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method") )
     }
     // bind the incoming XHTML to a "delete" button.
     // when the delete button is pressed, call the "deleteUser"
@@ -835,7 +835,7 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
         case fail:Failure => S.error(mainMsgId, fail.msg)
         case Empty => S.error(mainMsgId, "THIS IS A BUG")
       }
-      redirectTo("/model/" + S.param("modelMetaId").openTheBox )
+      redirectTo("/model/" + S.param("modelMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method") )
     }
     // bind the incoming XHTML to a "delete" button.
     // when the delete button is pressed, call the "deleteUser"
@@ -858,7 +858,7 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
         case fail:Failure => S.error(mainMsgId, fail.msg)
         case Empty => S.error(mainMsgId, "THIS IS A BUG")
       }
-      redirectTo("/model/" + S.param("modelMetaId").openTheBox )
+      redirectTo("/model/" + S.param("modelMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method") )
     }
     // bind the incoming XHTML to a "delete" button.
     // when the delete button is pressed, call the "deleteUser"
@@ -881,7 +881,7 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
         case fail:Failure => S.error(mainMsgId, fail.msg)
         case Empty => S.error(mainMsgId, "THIS IS A BUG")
       }
-      redirectTo("/model/" + S.param("modelMetaId").openTheBox )
+      redirectTo("/model/" + S.param("modelMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method") )
     }
     // bind the incoming XHTML to a "delete" button.
     // when the delete button is pressed, call the "deleteUser"
@@ -901,7 +901,7 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
     S.setHeader("aaaHeader", "valHeader")
     S.set("set","set")
     S.setSessionAttribute("sessionAttribute", "valSessionAttribute")
-    S.getHeader("aaa").map(_.toInt).openOr("aaa")
+    S.getResponseHeader("aaa").map(_.toInt).openOr("aaa")
 
     var rv = SBMLForm.reqvar.is
     SBMLForm.reqvar(rv + 1)

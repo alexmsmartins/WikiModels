@@ -335,7 +335,7 @@ class Boot extends LoggerWrapper{
               */
       }
 
-      LiftRules.statelessDispatchTable.append{
+      LiftRules.statelessDispatch.append{
         case Req("model" :: modelMetaId :: "export" :: Nil, "", GetRequest) =>
           //() => Full(PlainTextResponse("test"))
           () => {

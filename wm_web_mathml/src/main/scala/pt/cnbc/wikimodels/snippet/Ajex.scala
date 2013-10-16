@@ -46,5 +46,5 @@ class Ajax{
     (1 to limit).map(n => current+""+n)
   }
 
-  def time = Text(timeNow.toString)
+  def time = Text(now.toString)
 }

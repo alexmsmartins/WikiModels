@@ -20,8 +20,8 @@ case class KineticLawRecord() extends SBaseRecord[KineticLawRecord] {
 
   override def meta = KineticLawRecord
 
-  override protected def relativeURLasList = "model" :: S.param("modelMetaId").openTheBox :: "reaction" :: S.param("reactionMetaId").openTheBox :: "kineticlaw" :: this.metaIdO.get :: Nil
-  override protected def relativeCreationURLasList = "model" :: S.param("modelMetaId").openTheBox :: "reaction" :: S.param("reactionMetaId").openTheBox :: "kineticlaw" :: Nil
+  override protected def relativeURLasList = "model" :: S.param("modelMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method") :: "reaction" :: S.param("reactionMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method") :: "kineticlaw" :: this.metaIdO.get :: Nil
+  override protected def relativeCreationURLasList = "model" :: S.param("modelMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method") :: "reaction" :: S.param("reactionMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method") :: "kineticlaw" :: Nil
 
 
   //  ### can be validated with validate ###

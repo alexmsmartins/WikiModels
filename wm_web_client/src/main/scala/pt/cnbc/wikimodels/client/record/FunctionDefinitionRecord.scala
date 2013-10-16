@@ -19,8 +19,8 @@ case class FunctionDefinitionRecord() extends SBaseRecord[FunctionDefinitionReco
 
   override def meta = FunctionDefinitionRecord
 
-  override protected def relativeURLasList = "model" :: S.param("modelMetaId").openTheBox :: "functiondefinition" :: this.metaIdO.get :: Nil
-  override protected def relativeCreationURLasList = "model" :: S.param("modelMetaId").openTheBox :: "functiondefinition" :: Nil
+  override protected def relativeURLasList = "model" :: S.param("modelMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method") :: "functiondefinition" :: this.metaIdO.get :: Nil
+  override protected def relativeCreationURLasList = "model" :: S.param("modelMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method") :: "functiondefinition" :: Nil
 
 
   //  ### can be validated with validate ###

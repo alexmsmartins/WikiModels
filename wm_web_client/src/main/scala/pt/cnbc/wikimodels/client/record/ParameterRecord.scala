@@ -18,8 +18,8 @@ case class ParameterRecord() extends SBaseRecord[ParameterRecord] {
 
   override def meta = ParameterRecord
 
-  override protected def relativeURLasList = "model" :: S.param("modelMetaId").openTheBox :: "parameter" :: this.metaIdO.get :: Nil
-  override protected def relativeCreationURLasList = "model" :: S.param("modelMetaId").openTheBox :: "parameter" :: Nil
+  override protected def relativeURLasList = "model" :: S.param("modelMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method") :: "parameter" :: this.metaIdO.get :: Nil
+  override protected def relativeCreationURLasList = "model" :: S.param("modelMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method") :: "parameter" :: Nil
 
 
   //  ### can be validated with validate ###
