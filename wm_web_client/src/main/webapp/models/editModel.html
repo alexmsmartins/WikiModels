@@ -1,4 +1,4 @@
-<lift:surround with="default" at="content">
+<div data-lift="surround?with=default;at=content">
     <head>
         <lift:EditModel.script />
         <script type="text/javascript">
@@ -16,7 +16,7 @@
         </script>
         <title>WikiModels Webpage - Edit</title>
     </head>
-    <div id="content">
+    <div>
         <lift:msgs />
         <br /><br />
         <lift:EditModel.editWhat>
@@ -30,4 +30,4 @@
             <span><h3><editModel:cancel /></h3></span><br />
         </lift:EditModel.edit>
     </div>
-</lift:surround>
+</div>

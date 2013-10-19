@@ -1,5 +1,4 @@
-<lift:surround with="default" at="content">
-    <div id="content">
+<div data-lift="surround?with=default;at=content">
         <h1>Edit User</h1>
         <hr />
         <lift:CreateUser.editUser form="post" name="createForm" id_msgs="messages" >
@@ -42,4 +41,3 @@
             <h3 style="text-align:right;"><updateUser:save /></h3>
         </lift:CreateUser.editUser>
     </div>
-</lift:surround>

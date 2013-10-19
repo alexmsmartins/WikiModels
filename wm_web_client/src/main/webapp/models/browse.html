@@ -1,4 +1,4 @@
-<lift:surround with="default" at="content">
+<div data-lift="surround?with=default;at=content">
     <head>
         
         <script type="text/javascript" src="/classpath/js/jquery.blockUI.js"></script>
@@ -49,7 +49,7 @@
             });
         </script>
     </head>
-    <div id="content">
+    <div>
     <lift:msgs />
         <lift:ModelRead.browseModel>
             <h1><b>Model name: </b><modelInformation:model_name /></h1>
@@ -258,4 +258,4 @@ Rendered:<br/>
 
         </lift:ModelRead.browseModel>
     </div>
-</lift:surround>
+</div>

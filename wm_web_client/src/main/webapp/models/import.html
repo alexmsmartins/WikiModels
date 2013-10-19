@@ -1,4 +1,4 @@
-<lift:surround with="default" at="content" xmlns:ul="http://www.w3.org/2001/XMLSchema">
+<div data-lift="surround?with=default;at=content">
   <head>
       <!-- JQuery and JQuery-UI -->
 
@@ -9,7 +9,7 @@
       <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/i18n/jquery-ui-i18n.js" type="text/javascript"></script>
 
   </head>
-  <div id="content">
+  <div>
       <lift:msgs />
 
 
@@ -49,5 +49,4 @@ Note that, if there isn't any metaid in the file or the metaid is already used i
       </choose:get>
     </lift:snippet>
   </div>
-
-</lift:surround>
+</div>
