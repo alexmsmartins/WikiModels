@@ -18,7 +18,6 @@ package pt.cnbc.wikimodels{
 package client {
 package snippet {
 
-import model._
 
 import _root_.net.liftweb._
 import http._
@@ -34,28 +33,29 @@ import net.liftweb.common.{Box,Full,Empty,Failure,ParamFailure}
 
 import _root_.java.util.Locale
 
-import _root_.pt.cnbc.wikimodels.snippet.{User => Usr}
 import _root_.pt.cnbc.wikimodels.util.SBMLDocHandler._
+import _root_.pt.cnbc.wikimodels.client.model.{User => Usr}
+
 import xml._
 
 class Misc {
   //TODO - check if this class has unused code
   //TODO - refactor the code in Misc to a file and class with a more explanatory name
 
-  private object selectedUser extends RequestVar[Box[User]](Empty)
+  private object selectedUser extends RequestVar[Box[Usr]](Empty)
 
   /**
    * Get the XHTML containing a list of users
    */
   def users: NodeSeq = {
-    User.find() match {
-      case Empty => User.create.firstName("Archer").lastName("Dog").email("archer@dogfood.com").password("mypassword").save
+    Usr.find() match {
+      case Empty => Usr.create.firstName("Archer").lastName("Dog").email("archer@dogfood.com").password("mypassword").save
       case _ =>
     }
     // the header
-    <tr>{User.htmlHeaders}<th>Edit</th><th>Delete</th></tr> ::
+    <tr>{Usr.htmlHeaders}<th>Edit</th><th>Delete</th></tr> ::
     // get and display each of the users
-    User.findAll(OrderBy(User.id, Ascending)).flatMap(u => <tr>{u.htmlLine}
+    Usr.findAll(OrderBy(Usr.id, Ascending)).flatMap(u => <tr>{u.htmlLine}
         <td>{link("/simple/edit", () => selectedUser(Full(u)), Text("Edit"))}</td>
         <td>{link("/simple/delete", () => selectedUser(Full(u)), Text("Delete"))}</td>
                                                            </tr>)
@@ -86,7 +86,7 @@ class Misc {
   }
 
   // called when the form is submitted
-  private def saveUser(user: User) = user.validate match {
+  private def saveUser(user: Usr) = user.validate match {
     // no validation errors, save the user, and go
     // back to the "list" page
     case Nil => user.save; redirectTo("/simple/index.html")
@@ -100,7 +100,7 @@ class Misc {
    * Add a user
    */
   def add(xhtml: Group): NodeSeq =
-  selectedUser.is.openOr(new User).toForm(Empty, saveUser _) ++ <tr>
+  selectedUser.is.openOr(new Usr).toForm(Empty, saveUser _) ++ <tr>
     <td><a href="/simple/index.html">Cancel</a></td>
     <td><input type="submit" value="Create"/></td>
                                                                 </tr>
@@ -146,8 +146,8 @@ class Misc {
           modelBox match {
             case Full(model) => {
               debug("Model XML tag was extracted")
-              Usr.restfulConnection.postRequest("/model/", model)
-              Usr.restfulConnection.getStatusCode match {
+              User.restfulConnection.postRequest("/model/", model)
+              User.restfulConnection.getStatusCode match {
                 case 201 => {
                   debug("Creating the model in the server succeded")
                   bind("ul", chooseTemplate("choose", "post", xhtml),
@@ -157,10 +157,10 @@ class Misc {
                     "md5" -> theUpload.is.map(v => Text(hexEncode(md5(v.file))))
                   );
                 }
-                case 500 => uploadDialogue(xhtml, Failure(Text("[STATUS" + Usr.restfulConnection.getStatusCode) + ": A server internal error occured in the WikiModels KnowledgeBase. Please report it to Alexandre Martins at alexmsmartins@gmail.com with the model that caused the error."))
+                case 500 => uploadDialogue(xhtml, Failure(Text("[STATUS" + User.restfulConnection.getStatusCode) + ": A server internal error occured in the WikiModels KnowledgeBase. Please report it to Alexandre Martins at alexmsmartins@gmail.com with the model that caused the error."))
                 case _ => {
-                  debug("Creating the model in the server failed with status code "+ Usr.restfulConnection.getStatusCode + ". Please report it to Alexandre Martins at alexmsmartins@gmail.com.")
-                  uploadDialogue(xhtml, Failure("Importing the model to the knowledgebase wasn't possible. The statuscode was " + Usr.restfulConnection.getStatusCode))
+                  debug("Creating the model in the server failed with status code "+ User.restfulConnection.getStatusCode + ". Please report it to Alexandre Martins at alexmsmartins@gmail.com.")
+                  uploadDialogue(xhtml, Failure("Importing the model to the knowledgebase wasn't possible. The statuscode was " + User.restfulConnection.getStatusCode))
                 }
               }
             }

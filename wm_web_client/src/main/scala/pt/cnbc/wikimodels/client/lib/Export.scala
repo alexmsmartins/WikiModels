@@ -12,8 +12,8 @@ import Helpers._
 import _root_.scala.xml._
 
 import _root_.pt.cnbc.wikimodels.rest.client.RestfulAccess
-import _root_.pt.cnbc.wikimodels.snippet.User
 import collection.immutable.List._
+import pt.cnbc.wikimodels.client.snippet.User
 
 /**
  * Created by IntelliJ IDEA.

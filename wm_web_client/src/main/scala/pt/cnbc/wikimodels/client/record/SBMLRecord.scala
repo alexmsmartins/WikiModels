@@ -29,7 +29,7 @@ import pt.cnbc.wikimodels.client.snippet.CommentSnip
 
 trait SBaseRecord[MyType <: SBaseRecord[MyType]] extends RestRecord[MyType] with CommentSnip {
   self : MyType =>
-  import pt.cnbc.wikimodels.snippet.User
+  import pt.cnbc.wikimodels.client.snippet.User
 
   val sbmlType = "SBase"
 

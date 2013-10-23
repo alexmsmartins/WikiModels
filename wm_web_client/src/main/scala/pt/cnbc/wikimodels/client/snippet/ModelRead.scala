@@ -3,7 +3,9 @@
  *
  */
 
-package pt.cnbc.wikimodels.snippet
+package pt.cnbc.wikimodels.client.snippet
+
+import java.util.LinkedList
 
 import net.liftweb.http._
 import net.liftweb.util._
@@ -20,7 +22,6 @@ import js.Jx
 import js.JE
 import js.JE._
 import net.liftweb.common._
-import java.util.LinkedList
 
 import pt.cnbc.wikimodels.rest.client.RestfulAccess
 import alexmsmartins.log.LoggerWrapper

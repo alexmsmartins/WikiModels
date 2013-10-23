@@ -8,9 +8,9 @@ import net.liftweb.record.FieldHelpers._
 import net.liftweb.http.{LiftRules, LiftResponse, Req, SHtml}
 import net.liftweb.http.js.{JsExp, JsObj}
 import net.liftweb.common._
-import pt.cnbc.wikimodels.snippet.User
 import net.liftweb.mapper.Mapper
 import alexmsmartins.log.LoggerWrapper
+import pt.cnbc.wikimodels.client.snippet.User
 
 
 //  because of WriteConcern

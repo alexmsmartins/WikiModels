@@ -14,9 +14,9 @@ package object sitemapTweaks {
   Link, LinkText, LocParam, Hidden
   }
   import net.liftweb.sitemap.Loc.If._
-  import pt.cnbc.wikimodels.snippet.User
   import pt.cnbc.wikimodels.client.snippet.SBMLForm._
   import net.liftweb.sitemap.Loc._
+  import pt.cnbc.wikimodels.client.snippet.User
 
   // verification if the user is logged
   val loggedIn = If(() => User.loggedIn_?, "You must be logged in.")

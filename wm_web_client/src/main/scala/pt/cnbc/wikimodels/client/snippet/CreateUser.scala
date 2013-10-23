@@ -1,5 +1,6 @@
-package pt.cnbc.wikimodels.snippet
+package pt.cnbc.wikimodels.client.snippet
 
+import java.util.LinkedList
 import net.liftweb.util.Helpers._
 import net.liftweb.sitemap.Loc.If
 import scala.xml.{ XML, Elem, Group, Node, NodeSeq, Null, Text, TopScope }
@@ -11,11 +12,8 @@ import net.liftweb.http.js.Jx
 import net.liftweb.http.js.JE._
 import net.liftweb.http.js.jquery._
 import net.liftweb.http.js.jquery.JqJsCmds._
-import java.util.TreeMap
-import java.util.LinkedList
-import java.util.Enumeration
 import net.liftweb.common._
-import pt.cnbc.wikimodels.model._
+import pt.cnbc.wikimodels.client.model._
 import alexmsmartins.log.LoggerWrapper
 
 /*import pt.cnbc.wikimodels.rest.client.BasicAuth

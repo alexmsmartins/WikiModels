@@ -8,7 +8,6 @@ import Helpers._
 import _root_.scala.xml._
 
 import _root_.pt.cnbc.wikimodels.rest.client.RestfulAccess
-import _root_.pt.cnbc.wikimodels.snippet.User
 
 /**
  * Created by IntelliJ IDEA.

@@ -5,7 +5,7 @@
 * also removes the session var
 */
 
-package pt.cnbc.wikimodels.snippet
+package pt.cnbc.wikimodels.client.snippet
 
 import net.liftweb.mapper._
 import net.liftweb.http._

@@ -10,9 +10,6 @@ import _root_.net.liftmodules.widgets.menu.MenuWidget
 import _root_.net.liftmodules.widgets.tablesorter.TableSorter
 import _root_.net.liftmodules.widgets.tree.TreeView
 
-//import _root_.pt.cnbc.wikimodels.tabs.TabsView
-
-import _root_.pt.cnbc.wikimodels.snippet._
 import _root_.pt.cnbc.wikimodels.client.snippet._
 import _root_.pt.cnbc.wikimodels.client.sitemapTweaks._
 import alexmsmartins.log.LoggerWrapper
@@ -37,11 +34,7 @@ class Boot extends LoggerWrapper{
       }
 
       // where to search snippet
-      LiftRules.addToPackages("pt.cnbc.wikimodels")
-      //Where to search for lift related files. This is the new location
       LiftRules.addToPackages("pt.cnbc.wikimodels.client")
-      //TODO - delete the reference to the next package before release
-      LiftRules.addToPackages("experiments")
 
       //TODO - solve java.lang.ClassCastException: net.liftweb.http.RewriteRequest cannot be cast to net.liftweb.http.Req before uncommenting the following line
       //LiftRules.docType.default.set((r:Req) => Full(DocType.html5))
@@ -83,10 +76,6 @@ class Boot extends LoggerWrapper{
         Menu(Loc("create_user", List("create_user"), "Create User", Hidden)) ::
         Menu(Loc("profile_user", List("profile_user"), "Profile User", Hidden, loggedIn)) ::
         Menu(Loc("edit_user", List("edit_user"), "Edit User", Hidden, loggedIn)) ::
-        Menu(Loc("new_comment", List("models","new_comment"), "New Comment", Hidden)) ::
-        Menu(Loc("new_model_comment", List("models","new_model_comment"), "New Model Comment", Hidden)) ::
-        Menu(Loc("view_comments", List("models","view_comments"), "View Comments", Hidden)) ::
-        Menu(Loc("view_all_comments", List("models","view_all_comments"), "View All Comments", Hidden)) ::
         Menu(Loc("help", List("help","index"), "Help"),
              Menu(Loc("helpMath", List("help","helpMath"), "Help Math", Hidden))) ::
         Menu(Loc("administrator", List("administrator","index"), "Administrator", Hidden, loggedIn)) ::

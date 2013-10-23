@@ -9,7 +9,6 @@ import scala.xml._
 
 
 import _root_.pt.cnbc.wikimodels.rest.client.RestfulAccess
-import _root_.pt.cnbc.wikimodels.snippet.User
 import xml.{Elem, NodeSeq, Text}
 import alexmsmartins.log.LoggerWrapper
 

@@ -5,7 +5,7 @@
  * and open the template in the editor.
  */
 
-package pt.cnbc.wikimodels.snippet
+package pt.cnbc.wikimodels.client.snippet
 
 import net.liftweb.util.Helpers._
 import net.liftweb.sitemap.Loc.If

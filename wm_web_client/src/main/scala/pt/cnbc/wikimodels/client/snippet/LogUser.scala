@@ -4,7 +4,7 @@
  * Class to submit the log of the user
  */
 
-package pt.cnbc.wikimodels.snippet
+package pt.cnbc.wikimodels.client.snippet
 
 import net.liftweb._
 import http._

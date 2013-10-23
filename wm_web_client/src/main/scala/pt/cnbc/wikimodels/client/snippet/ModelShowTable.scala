@@ -5,7 +5,7 @@
  * and open the template in the editor.
  */
 
-package pt.cnbc.wikimodels.snippet
+package pt.cnbc.wikimodels.client.snippet
 
 import scala.xml.NodeSeq
 import net.liftmodules.widgets.tablesorter.TableSorter
