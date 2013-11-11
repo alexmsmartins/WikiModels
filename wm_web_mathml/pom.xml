@@ -161,7 +161,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <scalaVerion>${scala.version}</scalaVerion>
+                    <scalaVersion>${scala.version}</scalaVersion>
                 </configuration>
             </plugin>
             <plugin>

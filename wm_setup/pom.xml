@@ -96,7 +96,7 @@
                 </execution>
             </executions>
             <configuration>
-                <scalaVerion>${scala.version}</scalaVerion>
+                <scalaVersion>${scala.version}</scalaVersion>
                 <launchers>
                     <launcher>
                     <id>setup</id>
@@ -191,15 +191,4 @@
       <version>0.1-SNAPSHOT</version>
     </dependency>
   </dependencies>
-  <reporting>
-    <plugins>
-      <plugin>
-        <groupId>org.scala-tools</groupId>
-        <artifactId>maven-scala-plugin</artifactId>
-        <configuration>
-          <scalaVersion>${scala.version}</scalaVersion>
-        </configuration>
-      </plugin>
-    </plugins>
-  </reporting>
 </project>

@@ -7,13 +7,17 @@ import alexmsmartins.log.LoggerWrapper
 import pt.cnbc.wikimodels.client.record._
 import net.liftweb.util.FieldError
 import net.liftweb.util.ControlHelpers._
-import xml.{Elem, Text, XML, NodeSeq}
-import pt.cnbc.wikimodels.dataModel._
-import pt.cnbc.wikimodels.dataModel.ValidSpatialDimensions
+import scala.xml._
+import _root_.pt.cnbc.wikimodels.dataModel._
+import _root_.pt.cnbc.wikimodels.dataModel.Compartment
+import _root_.pt.cnbc.wikimodels.dataModel.Compartment._
+import _root_.pt.cnbc.wikimodels.dataModel.Species
+import _root_.pt.cnbc.wikimodels.dataModel.Species._
+import _root_.pt.cnbc.wikimodels.dataModel.Parameter
+import _root_.pt.cnbc.wikimodels.dataModel.Parameter._
 import pt.cnbc.wikimodels.dataModel.ValidSpatialDimensions._
 import pt.cnbc.wikimodels.sbmlVisitors.SBMLLooseValidator
 import pt.cnbc.wikimodels.exceptions.ValidationDefaultCase._
-import xml.Text
 import net.liftweb.http.js.JsCmds.JsCrVar
 import net.liftweb.common.Full
 import pt.cnbc.wikimodels.exceptions.BadFormatException
@@ -340,7 +344,9 @@ with DisplayHTMLWithLabelInOneLine[ValidSpatialDimensions, T] with LoggerWrapper
 class CConstant[OwnerType <: SBaseRecord[OwnerType]](rec:OwnerType) extends BooleanField[OwnerType](rec)
 with DisplayHTMLWithLabelInOneLine[Boolean, OwnerType]
 with LoggerWrapper{
-  override def defaultValue = Compartment.defaultConstant
+  import pt.cnbc.wikimodels.dataModel.Compartment
+
+  override def defaultValue:Boolean = Compartment.defaultConstant
 
   override def name: String = "Constant"
 }

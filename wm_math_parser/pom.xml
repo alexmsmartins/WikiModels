@@ -18,7 +18,7 @@
           <url>http://download.java.net/maven/2/</url>
           <layout>default</layout>
       </repository>
-      <repository>
+      <!--<repository>
           <id>maven-repository.dev.java.net</id>
           <name>Java.net Maven 1 Repository (legacy)</name>
           <url>http://download.java.net/maven/1</url>
@@ -29,7 +29,7 @@
           <name>Java.Net Maven1 Repository, hosts the javaee-api dependency</name>
           <url>http://download.java.net/maven/1</url>
           <layout>legacy</layout>
-      </repository>
+      </repository>-->
   </repositories>
 
   <dependencies>
@@ -55,22 +55,6 @@
         <testSourceDirectory>src/test/scala</testSourceDirectory>
 
         <plugins>
-            <!--<plugin>
-                <groupId>org.scala-tools</groupId>
-                <artifactId>maven-scala-plugin</artifactId>
-                <version>${maven.scala.plugin}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compile</goal>
-                            <goal>testCompile</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <scalaVersion>${scala.version}</scalaVersion>
-                </configuration>
-            </plugin>-->
             <plugin>
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>scala-maven-plugin</artifactId>
@@ -85,12 +69,13 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <scalaVerion>${scala.version}</scalaVerion>
+                    <scalaVersion>${scala.version}</scalaVersion>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>net.sf.alchim</groupId>
                 <artifactId>yuicompressor-maven-plugin</artifactId>
+                <version>0.7.1</version>
                 <executions>
                     <execution>
                         <goals>
@@ -102,26 +87,6 @@
                     <nosuffix>true</nosuffix>
                 </configuration>
             </plugin>
-            <!--<plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-eclipse-plugin</artifactId>
-                <configuration>
-                    <downloadSources>true</downloadSources>
-                    <excludes>
-                        <exclude>org.scala-lang:scala-library</exclude>
-                    </excludes>
-                    <classpathContainers>
-                        <classpathContainer>ch.epfl.lamp.sdt.launching.SCALA_CONTAINER</classpathContainer>
-                    </classpathContainers>
-                    <projectnatures>
-                        <java.lang.String>ch.epfl.lamp.sdt.core.scalanature</java.lang.String>
-                        <java.lang.String>org.eclipse.jdt.core.javanature</java.lang.String>
-                    </projectnatures>
-                    <buildcommands>
-                        <java.lang.String>ch.epfl.lamp.sdt.core.scalabuilder</java.lang.String>
-                    </buildcommands>
-                </configuration>
-            </plugin>-->
         </plugins>
     </build>
 </project>

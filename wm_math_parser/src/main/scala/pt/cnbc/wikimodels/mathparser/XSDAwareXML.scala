@@ -16,6 +16,7 @@ import javax.xml.parsers.SAXParser
 import javax.xml.parsers.SAXParserFactory
 import javax.xml.validation.Schema
 import parsing.{FactoryAdapter, NoBindingFactoryAdapter}
+import alexmsmartins.log.LoggerWrapper
 
 /**
  * Created by IntelliJ IDEA.
@@ -24,7 +25,7 @@ import parsing.{FactoryAdapter, NoBindingFactoryAdapter}
  * Time: 22:05
  * Adapted from from http://sean8223.blogspot.com/2009/09/xsd-validation-in-scala.html
  */
-class XSDAwareXML(schema:Schema) extends XMLLoader[scala.xml.Elem]{
+class XSDAwareXML(schema:Schema) extends XMLLoader[scala.xml.Elem] with LoggerWrapper{
   override def adapter: FactoryAdapter = new SchemaAwareFactoryAdapter(schema)
 
   override def parser: SAXParser = try {
@@ -34,8 +35,8 @@ class XSDAwareXML(schema:Schema) extends XMLLoader[scala.xml.Elem]{
     f.newSAXParser()
   } catch {
     case e: Exception =>
-      Console.err.println("JAVA ERROR: Unable to instantiate parser")
-      Console.err.println("Localized message: " + e.getLocalizedMessage)
+      error("JAVA ERROR: Unable to instantiate parser")
+      error("Localized message: " + e.getLocalizedMessage)
       throw e
   }
 
@@ -44,6 +45,7 @@ class XSDAwareXML(schema:Schema) extends XMLLoader[scala.xml.Elem]{
    *
    */
   override def loadXML(source: InputSource, parse:SAXParser): Elem = {
+    debug("Starting method loadXML with"+ source.getCharacterStream)
     val newAdapter = adapter
     // create parser
 

@@ -102,6 +102,8 @@ object SBMLFromRecord extends LoggerWrapper {
     val amp =  AsciiMathParser()
     val ast:amp.ParseResult[amp.MME] = amp.parseAll( amp.LambdaExpr, fdr.mathO.get )
     fd.math = MathMLPrettyPrinter.toXML(ast.get).toString()
+    debug("fdr.math0.get = " + fdr.mathO.get)
+    debug("fd.math = " + fd.math)
     fd
   }
 

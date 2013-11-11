@@ -200,7 +200,9 @@ class AsciiMathPrettyPrinterTest extends AsciiMathParser{
     val xml = MathMLPrettyPrinter.toXML(result.get)
     println("the expression " + expr + " results in " + xml )
     assertEquals( (xml \ "apply" \ "sin").head.label, "sin" )
-    assertTrue((xml \ "apply" \ "ci" \ "@type" text) == "real")
+
+    //Attribute type cannot appear on SBML's subset of Mathml
+    assertFalse((xml \ "apply" \ "ci" \ "@type" text) == "real")
   }
 
 

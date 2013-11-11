@@ -16,7 +16,7 @@ import scala.xml._
 import pt.cnbc.wikimodels.client.record._
 import alexmsmartins.log.LoggerWrapper
 import pt.cnbc.wikimodels.sbmlVisitors.SBMLStrictValidator
-import pt.cnbc.wikimodels.dataModel.SBMLModel
+import pt.cnbc.wikimodels.dataModel._
 import visitor.SBMLFromRecord
 
 //implicits

@@ -7,7 +7,7 @@ import net.liftweb.http._
 import net.liftweb.sitemap.Loc.If
 
 import net.liftweb.util.Helpers._
-import pt.cnbc.wikimodels.snippet._
+import pt.cnbc.wikimodels.client.snippet._
 
 // Messages
 case class UserLogin(login: String, password: String)

@@ -16,8 +16,8 @@ object AsciiMathPrettyPrinter{
   def toAsciiMathML(elem:MathMLElem):String = {
     elem match{
       case x:Apply => handleApply(x)
-      case Ci(x,"real",_) => x
-      case Ci(x,_,_) => x
+      case Ci(x,_) => x
+      case Ci(x,_) => x
       case Cn(content, "real", 10, definitionURL, encoding ) => content(0)
       case Cn(content, "integer", 10, definitionURL, encoding ) => content(0)
       case Cn(x::y, "e-notation",10, definitionURL, encoding ) => x+"e"+y

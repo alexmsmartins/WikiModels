@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>pt.cnbc.wikimodels</groupId>
     <artifactId>wm_server</artifactId>
@@ -36,7 +37,7 @@
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </repository>
     </repositories>
-    
+
     <pluginRepositories>
         <pluginRepository>
             <id>scala-tools.org</id>
@@ -56,11 +57,11 @@
             <artifactId>scala-library</artifactId>
             <version>${scala.version}</version>
         </dependency>
-                     <dependency>
-    <groupId>org.scala-lang</groupId>
-    <artifactId>scala-reflect</artifactId>
-    <version>${scala.version}</version>
-</dependency>
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-reflect</artifactId>
+            <version>${scala.version}</version>
+        </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
@@ -73,13 +74,13 @@
             <version>6.1.26</version>
             <scope>test</scope>
         </dependency>
-    <!-- for LiftConsole -->
+        <!-- for LiftConsole -->
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-compiler</artifactId>
             <version>${scala.version}</version>
         </dependency>
-    <!-- HTTP RESTful library -->
+        <!-- HTTP RESTful library -->
         <dependency>
             <groupId>com.sun.jersey</groupId>
             <artifactId>jersey-core</artifactId>
@@ -136,17 +137,17 @@
             <artifactId>wm_library</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
-      <dependency>
-        <groupId>pt.cnbc.wikimodels</groupId>
-        <artifactId>wm_setup</artifactId>
-        <version>0.1-SNAPSHOT</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>pt.cnbc.wikimodels</groupId>
-        <artifactId>wm_libjsbml</artifactId>
-        <version>0.1-SNAPSHOT</version>
-      </dependency>
+        <dependency>
+            <groupId>pt.cnbc.wikimodels</groupId>
+            <artifactId>wm_setup</artifactId>
+            <version>0.1-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>pt.cnbc.wikimodels</groupId>
+            <artifactId>wm_libjsbml</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
         <!-- TODO - delete after transitioning this code to wm_library-->
         <dependency>
             <groupId>com.hp.hpl.jena</groupId>
@@ -186,73 +187,58 @@
     <build>
         <sourceDirectory>src/main/scala</sourceDirectory>
         <testSourceDirectory>src/test/scala</testSourceDirectory>
-      
+
         <plugins>
-          <plugin>
-            <artifactId>maven-antrun-plugin</artifactId>
-            <version>1.7</version>
-            <executions>
-              <execution>
-                <id>generate-test-resources</id>
-                <phase>generate-test-resources</phase>
-                <configuration>
-                    <target>
-                        <!-- the maven lifecycle phases are at http://www.avajava.com/tutorials/lessons/what-are-the-phases-of-the-maven-default-lifecycle.html -->
-                        <echo message="Ant copy task is going to be executed${user.dir}" />
-                        <copy file="../wm_setup/sbml.owl" tofile="./sbml.owl" />
-                    </target>
-                </configuration>
-                <goals>
-                  <goal>run</goal>
-                </goals>
-              </execution>
-                <execution>
-                    <id>generate-resources</id>
-                    <phase>generate-resources</phase>
-                    <configuration>
-                        <target>
-                            <!-- the maven lifecycle phases are at http://www.avajava.com/tutorials/lessons/what-are-the-phases-of-the-maven-default-lifecycle.html -->
-                            <echo message="Ant copy task is going to be executed${user.dir}" />
-                            <copy file="../wm_library/src/main/resources/sdb.ttl" tofile="./src/main/resources/sdb.ttl" />
-                        </target>
-                    </configuration>
-                    <goals>
-                        <goal>run</goal>
-                    </goals>
-                </execution>
-              <execution>
-                  <id>clean</id>
-                  <phase>clean</phase>
-                  <configuration>
-                      <target>
-                          <!-- Place any Ant task here. You can add anything you can add between <target> and </target> in a build.xml.-->
-                          <echo message="Ant removal of sbml.owl is going to be executed" />
-                          <delete file="./sbml.owl"/>
-                          <delete file="./src/main/resources/sdb.ttl" />
-                      </target>
-                  </configuration>
-                  <goals>
-                      <goal>run</goal>
-                  </goals>
-              </execution>
-            </executions>
-          </plugin>
-           <!-- <plugin>
-                <groupId>org.scala-tools</groupId>
-                <artifactId>maven-scala-plugin</artifactId>
-                <version>${maven.scala.plugin}</version>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.7</version>
                 <executions>
                     <execution>
+                        <id>generate-test-resources</id>
+                        <phase>generate-test-resources</phase>
+                        <configuration>
+                            <target>
+                                <!-- the maven lifecycle phases are at http://www.avajava.com/tutorials/lessons/what-are-the-phases-of-the-maven-default-lifecycle.html -->
+                                <echo message="Ant copy task is going to be executed${user.dir}"/>
+                                <copy file="../wm_setup/sbml.owl" tofile="./sbml.owl"/>
+                            </target>
+                        </configuration>
                         <goals>
-                            <goal>compile</goal>
-                            <goal>testCompile</goal>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>generate-resources</id>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <target>
+                                <!-- the maven lifecycle phases are at http://www.avajava.com/tutorials/lessons/what-are-the-phases-of-the-maven-default-lifecycle.html -->
+                                <echo message="Ant copy task is going to be executed${user.dir}"/>
+                                <copy file="../wm_library/src/main/resources/sdb.ttl"
+                                      tofile="./src/main/resources/sdb.ttl"/>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>clean</id>
+                        <phase>clean</phase>
+                        <configuration>
+                            <target>
+                                <!-- Place any Ant task here. You can add anything you can add between <target> and </target> in a build.xml.-->
+                                <echo message="Ant removal of sbml.owl is going to be executed"/>
+                                <delete file="./sbml.owl"/>
+                                <delete file="./src/main/resources/sdb.ttl"/>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <scalaVersion>${scala.version}</scalaVersion>
-                </configuration>
-            </plugin>-->
+            </plugin>
             <plugin>
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>scala-maven-plugin</artifactId>
@@ -267,12 +253,13 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <scalaVerion>${scala.version}</scalaVerion>
+                    <scalaVersion>${scala.version}</scalaVersion>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.mortbay.jetty</groupId>
                 <artifactId>maven-jetty-plugin</artifactId>
+                <version>6.1.26</version>
                 <configuration>
                     <contextPath>/</contextPath>
                     <scanIntervalSeconds>5</scanIntervalSeconds>
@@ -281,6 +268,7 @@
             <plugin>
                 <groupId>net.sf.alchim</groupId>
                 <artifactId>yuicompressor-maven-plugin</artifactId>
+                <version>0.7.1</version>
                 <executions>
                     <execution>
                         <goals>
@@ -290,26 +278,6 @@
                 </executions>
                 <configuration>
                     <nosuffix>true</nosuffix>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-eclipse-plugin</artifactId>
-                <configuration>
-                    <downloadSources>true</downloadSources>
-                    <excludes>
-                        <exclude>org.scala-lang:scala-library</exclude>
-                    </excludes>
-                    <classpathContainers>
-                        <classpathContainer>ch.epfl.lamp.sdt.launching.SCALA_CONTAINER</classpathContainer>
-                    </classpathContainers>
-                    <projectnatures>
-                        <java.lang.String>ch.epfl.lamp.sdt.core.scalanature</java.lang.String>
-                        <java.lang.String>org.eclipse.jdt.core.javanature</java.lang.String>
-                    </projectnatures>
-                    <buildcommands>
-                        <java.lang.String>ch.epfl.lamp.sdt.core.scalabuilder</java.lang.String>
-                    </buildcommands>
                 </configuration>
             </plugin>
             <!-- glassfish plugin -->
@@ -336,7 +304,8 @@
                         <jmsPort>7676</jmsPort>
                         <reuse>false</reuse>
                         <jvmOptions>
-                            <option>-Djava.security.auth.login.config=${project.build.testOutputDirectory}/login.conf</option>
+                            <option>-Djava.security.auth.login.config=${project.build.testOutputDirectory}/login.conf
+                            </option>
                         </jvmOptions>
                         <properties>
                             <property>
@@ -444,7 +413,7 @@
                 </configuration>
             </plugin>
 
-      
+
         </plugins>
     </build>
 </project>

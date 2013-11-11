@@ -20,6 +20,7 @@ class MathMLMatchParser extends MathMLMatchParserHandlers{
 
   def convertStringToMathML(xmlStr:String, s:Schema):Elem = {
     import pt.cnbc.wikimodels.mathparser.XSDAwareXML
+    debug("convertStringToMathML(" + xmlStr + ")")
     var e:Elem = null
     try{
       e = XSDAwareXML(s).loadString(xmlStr)
@@ -82,7 +83,7 @@ object MathMLMatchParser{
 trait MathMLMatchParserHandlers extends LoggerWrapper{
 
   def handleCi(ci:Elem):Ci = {
-    Ci(ci.child.head.toString ,(ci \ "@type") text,(ci \ "@definitionURL") text)
+    Ci(ci.child.head.toString ,(ci \ "@definitionURL") text)
   }
   def handleApply(operator:Elem, params:NodeSeq):Apply = {
     operator match {

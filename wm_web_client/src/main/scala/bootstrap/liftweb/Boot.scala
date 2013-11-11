@@ -4,6 +4,7 @@ import _root_.net.liftweb.util._
 import _root_.net.liftweb.http._
 import _root_.net.liftweb.sitemap._
 import _root_.net.liftweb.sitemap.Loc._
+import _root_.net.liftmodules.FoBo
 import Helpers._
 import net.liftweb.common._
 import _root_.net.liftmodules.widgets.menu.MenuWidget
@@ -21,6 +22,10 @@ import alexmsmartins.log.LoggerWrapper
 class Boot extends LoggerWrapper{
     def boot {
 
+      FoBo.InitParam.JQuery=FoBo.JQuery191
+      FoBo.InitParam.ToolKit=FoBo.Bootstrap231
+      FoBo.InitParam.ToolKit=FoBo.AngularJS106
+      FoBo.init()
 
       // set the character enconding to UTF-8
       LiftRules.early.append {

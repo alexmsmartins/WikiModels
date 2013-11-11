@@ -17,7 +17,7 @@ import net.liftweb.http.js.JsCmds.JsCrVar
 import net.liftweb.http.js.Jx
 import net.liftweb.http.js.JE._
 import net.liftweb.common._
-import pt.cnbc.wikimodels.model._
+import pt.cnbc.wikimodels.client.model._
 
 class ProfileUser {
 

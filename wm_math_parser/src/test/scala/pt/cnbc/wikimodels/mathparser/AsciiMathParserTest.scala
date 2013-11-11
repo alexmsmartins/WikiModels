@@ -49,7 +49,7 @@ class AsciiMathParserTest extends AsciiMathParser {
 
   @Test
   def scientificNotationTest {
-    //TODO add scientific notaiton options to the grammar
+    //TODO add scientific notation options to the grammar
     val expr = "1.03e-23"
     val result = parseAll(NumExpr, expr)
     assertTrue(parsingWasSuccessful(result))
@@ -207,7 +207,7 @@ class AsciiMathParserTest extends AsciiMathParser {
 
   @Test
   def lambda {
-    val expr = "(x,y) = x+y+2"
+    val expr = "(x,y)=x+y+2"
     val result = parseAll(LambdaExpr, expr)
     assertTrue(parsingWasSuccessful(result))
     println(result)
@@ -218,6 +218,16 @@ class AsciiMathParserTest extends AsciiMathParser {
     assertFalse(parsingWasSuccessful(result2))
     println(result2)
     println("Expression " + expr2 + " failed")
+  }
+
+  @Test
+  def lambdaWithSpaces{
+    val expr2 = """( x , y ) = x + y"""
+    val result2 = parseAll(LambdaExpr, expr2)
+    assertTrue(parsingWasSuccessful(result2))
+    println(result2)
+    val xml = MathMLPrettyPrinter.toXML(result2.get)
+    println("Expression " + expr2 + " in mathml: " + xml)
   }
 
   @Test
@@ -270,4 +280,6 @@ class AsciiMathParserTest extends AsciiMathParser {
     val xml = MathMLPrettyPrinter.toXML(result2.get)
     println("Expression " + expr2 + " in mathml: " + xml)
   }
+
+
 }

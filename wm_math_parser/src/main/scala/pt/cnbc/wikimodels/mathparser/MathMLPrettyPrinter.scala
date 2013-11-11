@@ -25,7 +25,7 @@ object MathMLPrettyPrinter extends AsciiMathParser{
       elem match{
         case Apply(op,params) => <apply>{(op :: params).map(toXMLMatch(_))}</apply>
         case Lambda(params, expr) => <lambda>{params.map(p => <bvar>{toXMLMatch(p)}</bvar>)}{toXMLMatch(expr)}</lambda>
-        case Ci(x,"real",_) => <ci type="real">{x}</ci>
+        case Ci(x,_) => <ci>{x}</ci>
         case Cn(content, "real", 10, definitionURL, encoding ) => <cn type="real" base="10">{content}</cn>
         case Cn(content, "integer", 10, definitionURL, encoding ) => <cn type="integer" base="10">{content}</cn>
         case Cn(x::y, "e-notation",10, definitionURL, encoding ) => <cn type="e-notation" base="10">{x}<sep/>{y}</cn>

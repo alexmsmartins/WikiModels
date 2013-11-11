@@ -15,7 +15,7 @@ class AsciiMathParser extends RegexParsers with PackratParsers with AsciiMathPar
 
   //check http://rwiki.sciviews.org/doku.php?id=wiki:asciimathml#standard_functions to handle certain cases
   lazy val LambdaExpr :PackratParser[MME]= "("~repsep(ident,",")~")"~"="~GenExpr^^{case "("~bvars~")"~"="~e =>
-                                                                new Lambda(bvars.map(new Ci(_) ) , e)}
+                                                          new Lambda(bvars.map(new Ci(_) ) , e)}
 
   lazy val GenExpr    :Parser[MME]= NumExpr | TruthValue
 
