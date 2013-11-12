@@ -9,5 +9,4 @@ package pt.cnbc.wikimodels.mathml.elements
 case class Cn(content:List[String], //certain elemeents will be separated by <sep/> tag
               mtype:String = "real",
               base:Int = 10,
-              definitionURL:String="",
               encoding:String="text") extends Token

@@ -9,4 +9,4 @@ package pt.cnbc.wikimodels.mathml.elements
  * In SBML's subset the type attribute is not a part of Ci elements
  */
 case class Ci(content:String,
-              definitionURL:String="") extends Token
+              definitionURL:Option[String]=None) extends Token

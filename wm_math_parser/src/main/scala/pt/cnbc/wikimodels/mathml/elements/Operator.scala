@@ -13,14 +13,15 @@ case object NegativeInfiniteInt extends InfInt(-1,true)
  * @author Alexandre Martins
  * Date: 10/Out/2010
  * Time: 22:17:34
+ * cvc-complex-type.3.2.2: Attribute 'definitionURL' is not allowed to appear in element 'divide'.
  */
-class Operator(val name:String, val minArgs:InfInt, val maxArgs:InfInt, val definitionURL:Option[String]=None, val encoding:String="real") extends Token(name)
+class Operator(val name:String, val minArgs:InfInt, val maxArgs:InfInt, val encoding:String="real") extends Token(name)
 
 object Operator{
-  def unapply(oscm: Operator):Option[(String, InfInt, InfInt, Option[String], String)] = Some((oscm.name, oscm.maxArgs, oscm.maxArgs, oscm.definitionURL, oscm.encoding))
+  def unapply(oscm: Operator):Option[(String, InfInt, InfInt, String)] = Some((oscm.name, oscm.maxArgs, oscm.maxArgs, oscm.encoding))
 
-  def apply(name:String, minArgs:InfInt, maxArgs:InfInt, definitionURL:Option[String]=None, encoding:String="real"):Operator = {
-    new Operator(name, minArgs, maxArgs, definitionURL, encoding)
+  def apply(name:String, minArgs:InfInt, maxArgs:InfInt, encoding:String="real"):Operator = {
+    new Operator(name, minArgs, maxArgs, encoding)
   }
 }
 

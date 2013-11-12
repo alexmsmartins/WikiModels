@@ -83,7 +83,7 @@ object MathMLMatchParser{
 trait MathMLMatchParserHandlers extends LoggerWrapper{
 
   def handleCi(ci:Elem):Ci = {
-    Ci(ci.child.head.toString ,(ci \ "@definitionURL") text)
+    Ci(ci.child.head.toString )
   }
   def handleApply(operator:Elem, params:NodeSeq):Apply = {
     operator match {

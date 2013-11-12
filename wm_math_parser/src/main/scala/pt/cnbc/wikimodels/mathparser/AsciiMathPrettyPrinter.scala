@@ -17,10 +17,9 @@ object AsciiMathPrettyPrinter{
     elem match{
       case x:Apply => handleApply(x)
       case Ci(x,_) => x
-      case Ci(x,_) => x
-      case Cn(content, "real", 10, definitionURL, encoding ) => content(0)
-      case Cn(content, "integer", 10, definitionURL, encoding ) => content(0)
-      case Cn(x::y, "e-notation",10, definitionURL, encoding ) => x+"e"+y
+      case Cn(content, "real", 10, encoding ) => content(0)
+      case Cn(content, "integer", 10, encoding ) => content(0)
+      case Cn(x::y, "e-notation",10, encoding ) => x+"e"+y
       case o:Operator => handleOperator(o)
       case CSymbol(content, definitionURL, encoding) => content
       case x:Lambda => handleLambda(x)
