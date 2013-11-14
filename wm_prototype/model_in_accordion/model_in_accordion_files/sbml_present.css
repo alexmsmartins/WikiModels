@@ -1,0 +1,21 @@
+/*
+    Document   : sbml_present
+    Created on : 28-Oct-2011, 01:47:23
+    Author     : Alexandre Martins
+    Description:
+        CSS to define SBML screens styles
+*/
+
+/*
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+
+.sbml_field_label{
+    font-weight: bolder;
+    color: darkblue;
+}
+
+.sbml_field_content{
+    background: lightyellow;        
+}
+

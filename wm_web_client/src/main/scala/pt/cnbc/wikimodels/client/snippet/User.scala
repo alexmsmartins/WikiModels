@@ -34,7 +34,7 @@ object User {
 
     def thePath(end: String): List[String] = List(end)
 
-    lazy val testLogginIn = If(loggedIn_? _, S.??("must.be.logged.in")) ;
+    lazy val testLogginIn = If(loggedIn_? _, S.?("must.be.logged.in")) ;
 
     def loggedIn_? : Boolean = currentUserName.isDefined
 
@@ -59,7 +59,7 @@ object User {
      * The menu item for logout (make this "Empty" to disable)
      */
     def logoutMenuLoc: Box[Menu] =
-    Full(Menu(Loc("Logout", logoutPath, S.??("logout"), Hidden,
+    Full(Menu(Loc("Logout", logoutPath, S.?("logout"), Hidden,
                   Template(() => wrapIt(logout)),
                   testLogginIn)))
 

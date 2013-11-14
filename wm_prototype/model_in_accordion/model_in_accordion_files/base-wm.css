@@ -1,0 +1,15 @@
+/* 
+    Document   : base-wm
+    Created on : 28-Feb-2011, 01:29:23
+    Author     : alex
+    Description:
+        General WikiModels twwaks for all the pages and not related to outside components
+*/
+
+/* 
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+
+.root {
+    display: block;
+}

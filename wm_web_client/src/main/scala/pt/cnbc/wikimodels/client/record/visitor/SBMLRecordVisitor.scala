@@ -18,6 +18,7 @@ import scala.xml.Utility
 */
 
 object SBMLFromRecord extends LoggerWrapper {
+  import scala.language.implicitConversions
 
   def createSBMLElementFrom[T <: SBaseRecord[T]](er:T):Element =  {
     er match {
@@ -28,8 +29,10 @@ object SBMLFromRecord extends LoggerWrapper {
       case ct:ConstraintRecord => createConstraintFrom(ct)
       case r:ReactionRecord => createReactionFrom(r)
       case fd:FunctionDefinitionRecord => createFunctionDefinitionFrom(fd)
+      case rt:ReactantRecord => createSpeciesReferenceFrom(rt)
+      case pd:ProductRecord => createSpeciesReferenceFrom(pd)
+      case mf:ModifierRecord => createModifierSpeciesReferenceFrom(mf)
       case t => throw new NotImplementedException("ERROR: Method create" + er.sbmlType + "From(_) not implemented yet"); null
-
     }
   }
 
@@ -117,58 +120,93 @@ object SBMLFromRecord extends LoggerWrapper {
     ct
   }
 
-  implicit def createReactionFrom(rr: ReactionRecord):Reaction = {
+  implicit def createReactionFrom(rr: ReactionRecord): Reaction = {
     val r = new Reaction()
     r.metaid = rr.metaIdO.get
     r.id = rr.idO.get
     r.name = rr.nameO.get.getOrElse(null)
     r.notes = rr.notesO.get.getOrElse(null)
-    //r.reversible = rr.reversible
-    //r.fast = rr.fast
+    //TODO r.reversible = rr.reversible
+    //todo r.fast = rr.fast
 
-    /* TODO complete the conversion from species to speciesReference
-    if(r.listOfReactants != null){
+
+    if (rr.listOfReactantsRec != null) {
       debug("Loaded listOfReactants has size " + r.listOfReactants.size)
-      rr.listOfReactantsRec = r.listOfReactants.map(createReactionRecordFrom(_)).toList
-        .map(i => {
-        i.parent = Full(rr) //to build complete URLs
-        i
-      }
-      )
+      r.listOfReactants = rr.listOfReactantsRec.map(createSpeciesReferenceFrom(_)).toList
       debug("Finished copying list")
       debug("listOfReactantsRec has size " + rr.listOfReactantsRec.size)
     }
 
 
-    var listOfProducts:java.util.Collection[SpeciesReference] = null
-    if(r.listOfProducts != null){
+    var listOfProducts: java.util.Collection[SpeciesReference] = null
+    if (rr.listOfProductsRec != null) {
       debug("Loaded listOfProducts has size " + r.listOfProducts.size)
-      rr.listOfProductsRec = r.listOfProducts.map(createReactionRecordFrom(_)).toList
-        .map(i => {
-        i.parent = Full(rr) //to build complete URLs
-        i
-      }
-      )
+      r.listOfProducts = rr.listOfProductsRec.map(createSpeciesReferenceFrom(_)).toList
       debug("Finished copying list")
       debug("listOfProductsRec has size " + rr.listOfProductsRec.size)
     }
 
-    var listOfModifiers:java.util.Collection[ModifierSpeciesReference] = null
-    if(r.listOfModifiers != null){
+    var listOfModifiers: java.util.Collection[ModifierSpeciesReference] = null
+    if (rr.listOfModifiersRec != null) {
       debug("Loaded listOfModifiers has size " + r.listOfModifiers.size)
-      rr.listOfModifiersRec = r.listOfModifiers.map(createReactionRecordFrom(_)).toList
-        .map(i => {
-        i.parent = Full(rr) //to build complete URLs
-        i
-      }
-      )
-      debug("Finished copying list")
+      r.listOfModifiers = rr.listOfModifiersRec.map(createModifierSpeciesReferenceFrom(_)).toList
+        debug("Finished copying list")
       debug("listOfModifiersRec has size " + rr.listOfModifiersRec.size)
-    }*/
-    if(rr.kineticLawRec != null)
+    }
+    if (rr.kineticLawRec != null)
       r.kineticLaw = createKineticLawFrom(rr.kineticLawRec)
     r
   }
+
+  implicit def createSpeciesReferenceFrom(rtr: ReactantRecord):SpeciesReference = {
+    val rt = new SpeciesReference
+    rt.metaid = rtr.metaIdO.get
+    rt.id = rtr.idO.get
+    rt.name = rtr.nameO.get.getOrElse(null)
+    rt.notes = rtr.notesO.get.getOrElse(null)
+    rt.stoichiometry = {
+      throw new RuntimeException("Add stoichiometry field into SpeciesReference")
+    }
+    rt.stoichiometryMath = {
+      throw new RuntimeException("Add stoichiometryMath field into SpeciesReference")
+    }
+    rt.species = {
+      throw new RuntimeException("Add species field into SpeciesReference")
+    }
+    rt
+  }
+
+  implicit def createSpeciesReferenceFrom(pdr: ProductRecord):SpeciesReference = {
+    val pd = new SpeciesReference
+    pd.metaid = pdr.metaIdO.get
+    pd.id = pdr.idO.get
+    pd.name = pdr.nameO.get.getOrElse(null)
+    pd.notes = pdr.notesO.get.getOrElse(null)
+    pd.stoichiometry = {
+      throw new RuntimeException("Add stoichiometry field into SpeciesReference")
+    }
+    pd.stoichiometryMath = {
+      throw new RuntimeException("Add stoichiometryMath field into SpeciesReference")
+    }
+    pd.species = {
+      throw new RuntimeException("Add species field into SpeciesReference")
+    }
+    pd
+  }
+
+  implicit def createModifierSpeciesReferenceFrom(mdr: ModifierRecord):ModifierSpeciesReference = {
+    val md = new ModifierSpeciesReference
+    md.metaid = mdr.metaIdO.get
+    md.id = mdr.idO.get
+    md.name = mdr.nameO.get.getOrElse(null)
+    md.notes = mdr.notesO.get.getOrElse(null)
+    md.species = {
+      throw new RuntimeException("Add species field into ModifierSpeciesReference")
+    }
+    md
+  }
+
+
 
   implicit def createKineticLawFrom(klr:KineticLawRecord):KineticLaw = {
     val kl = new KineticLaw

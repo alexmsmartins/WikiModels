@@ -124,6 +124,85 @@ package object screenUtil extends LoggerWrapper{
     }
     mm.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method")
   }
+
+  def loadReactionFromPathParam:ReactionRecord = {
+    var mm:Box[ReactionRecord] = Empty
+    tryo(
+      ReactionRecord.readRestRec(debug("The reactionMetaId in session after calling /model/modemetaid/reaction/reactionMetaId is: {}", S.param("reactionMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method")))
+    ) match {
+      case Full(m) => {mm = m}
+      case Failure(msg,_,_) => {
+        S.error(msg)
+        S.redirectTo("/")
+      }
+      case _ => {
+        S.error("This should not have happened!")
+        error("This should not have happened!")
+        S.redirectTo("/")
+      }
+    }
+    mm.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method")
+  }
+
+
+  def loadReactantFromPathParam:ReactantRecord = {
+    var mm:Box[ReactantRecord] = Empty
+    tryo(
+      ReactantRecord.readRestRec(debug("The reactantMetaId in session after calling /model/modemetaid/reaction/reactionmetaid/reactant/reactantMetaId is: {}", S.param("reactantMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method")))
+    ) match {
+      case Full(m) => {mm = m}
+      case Failure(msg,_,_) => {
+        S.error(msg)
+        S.redirectTo("/")
+      }
+      case _ => {
+        S.error("This should not have happened!")
+        error("This should not have happened!")
+        S.redirectTo("/")
+      }
+    }
+    mm.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method")
+  }
+
+  def loadProductFromPathParam:ProductRecord = {
+    var mm:Box[ProductRecord] = Empty
+    tryo(
+      ProductRecord.readRestRec(debug("The productMetaId in session after calling /model/modemetaid/reaction/reactionmetaid/product/productMetaId is: {}", S.param("productMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method")))
+    ) match {
+      case Full(m) => {mm = m}
+      case Failure(msg,_,_) => {
+        S.error(msg)
+        S.redirectTo("/")
+      }
+      case _ => {
+        S.error("This should not have happened!")
+        error("This should not have happened!")
+        S.redirectTo("/")
+      }
+    }
+    mm.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method")
+  }
+
+  def loadModifierFromPathParam:ModifierRecord = {
+    var mm:Box[ModifierRecord] = Empty
+    tryo(
+      ModifierRecord.readRestRec(debug("The modifierMetaId in session after calling /model/modemetaid/reaction/reactionmetaid/modifier/modifierMetaId is: {}", S.param("modifierMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method")))
+    ) match {
+      case Full(m) => {mm = m}
+      case Failure(msg,_,_) => {
+        S.error(msg)
+        S.redirectTo("/")
+      }
+      case _ => {
+        S.error("This should not have happened!")
+        error("This should not have happened!")
+        S.redirectTo("/")
+      }
+    }
+    mm.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method")
+  }
+
+
 }
 
 /** TODO: Please document.
@@ -410,4 +489,128 @@ class EditReactionScreen extends LiftScreen with LoggerWrapper{
       S.warning(warnings)
   }
 }
+
+/** TODO: Please document.
+  * @author Alexandre Martins
+  *         Date: 14/11/13
+  *         Time: 17.40 PM */
+class CreateReactantScreen extends LiftScreen with LoggerWrapper {
+  object reactant extends ScreenVar(ReactantRecord.createRecord)
+  reactant.parent = Full(screenUtil.loadReactionFromPathParam)
+  addFields(() => reactant.get.idO)
+  addFields(() => reactant.get.nameO)
+  addFields(() => reactant.get.notesO)
+
+  protected def finish() = {
+    trace("CreateReactantScreen.finish() started executing!")
+    reactant.get.createRestRec()
+    S.notice("Reactant " + reactant.get.metaIdO.get + " was created successfully!")
+    for(warnings <- SBMLStrictValidator.visitSpeciesReference(reactant.get))
+      S.warning(warnings)
+    screenUtil.genWarnsForSBMLModel()
+  }
+}
+
+/** TODO: Please document.
+  * @author Alexandre Martins
+  *         Date: 14/11/13
+  *         Time: 17.42 PM */
+class EditReactantScreen extends LiftScreen with LoggerWrapper {
+  object reactant extends ScreenVar(screenUtil.loadReactantFromPathParam)
+  reactant.parent = Full(screenUtil.loadReactionFromPathParam)
+  addFields(() => reactant.get.idO)
+  addFields(() => reactant.get.nameO)
+  addFields(() => reactant.get.notesO)
+
+  protected def finish() {
+    trace("EditReactantScreen.finish() started executing!")
+    debug("Reactant from screen is " + reactant.get.toXML)
+    reactant.get.updateRestRec()
+    S.notice("Reactant " + reactant.get.metaIdO.get + " was saved successfully!")
+    for(warnings <- SBMLStrictValidator.visitSpeciesReference(reactant.get))
+      S.warning(warnings)
+    screenUtil.genWarnsForSBMLModel()
+  }
+
+}
+
+class CreateProductScreen extends LiftScreen with LoggerWrapper {
+  object Product extends ScreenVar(ProductRecord.createRecord)
+  Product.parent = Full(screenUtil.loadReactionFromPathParam)
+  addFields(() => Product.get.idO)
+  addFields(() => Product.get.nameO)
+  addFields(() => Product.get.notesO)
+
+  protected def finish() = {
+    trace("CreateProductScreen.finish() started executing!")
+    Product.get.createRestRec()
+    S.notice("Product " + Product.get.metaIdO.get + " was created successfully!")
+    for(warnings <- SBMLStrictValidator.visitSpeciesReference(Product.get))
+      S.warning(warnings)
+    screenUtil.genWarnsForSBMLModel()
+  }
+}
+
+/** TODO: Please document.
+  * @author Alexandre Martins
+  *         Date: 27/11/12
+  *         Time: 14:37 PM */
+class EditProductScreen extends LiftScreen with LoggerWrapper {
+  object product extends ScreenVar(screenUtil.loadProductFromPathParam)
+  product.parent = Full(screenUtil.loadReactionFromPathParam)
+  addFields(() => product.get.idO)
+  addFields(() => product.get.nameO)
+  addFields(() => product.get.notesO)
+
+  protected def finish() {
+    trace("EditProductScreen.finish() started executing!")
+    debug("Product from screen is " + product.get.toXML)
+    product.get.updateRestRec()
+    S.notice("Product " + product.get.metaIdO.get + " was saved successfully!")
+    for(warnings <- SBMLStrictValidator.visitSpeciesReference(product.get))
+      S.warning(warnings)
+    screenUtil.genWarnsForSBMLModel()
+  }
+}
+
+class CreateModifierScreen extends LiftScreen with LoggerWrapper {
+  object modifier extends ScreenVar(ModifierRecord.createRecord)
+  modifier.parent = Full(screenUtil.loadReactionFromPathParam)
+  addFields(() => modifier.get.idO)
+  addFields(() => modifier.get.nameO)
+  addFields(() => modifier.get.notesO)
+
+  protected def finish() = {
+    trace("CreateModifierScreen.finish() started executing!")
+    modifier.get.createRestRec()
+    S.notice("Modifier " + modifier.get.metaIdO.get + " was created successfully!")
+    for(warnings <- SBMLStrictValidator.visitModifierSpeciesReference(modifier.get))
+      S.warning(warnings)
+    screenUtil.genWarnsForSBMLModel()
+  }
+}
+
+/** TODO: Please document.
+  * @author Alexandre Martins
+  *         Date: 27/11/12
+  *         Time: 14:37 PM */
+class EditModifierScreen extends LiftScreen with LoggerWrapper {
+  object modifier extends ScreenVar(screenUtil.loadModifierFromPathParam)
+  modifier.parent = Full(screenUtil.loadReactionFromPathParam)
+  addFields(() => modifier.get.idO)
+  addFields(() => modifier.get.nameO)
+  addFields(() => modifier.get.notesO)
+
+  protected def finish() {
+    trace("EditModifierScreen.finish() started executing!")
+    debug("Modifier from screen is " + modifier.get.toXML)
+    modifier.get.updateRestRec()
+    S.notice("Modifier " + modifier.get.metaIdO.get + " was saved successfully!")
+    for(warnings <- SBMLStrictValidator.visitModifierSpeciesReference(modifier.get))
+      S.warning(warnings)
+    screenUtil.genWarnsForSBMLModel()
+  }
+
+}
+
 

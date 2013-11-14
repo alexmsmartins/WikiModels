@@ -7,8 +7,6 @@ scalaVersion := "2.10.2"
 //xsbt-web-plugin configuration
 seq(webSettings: _*)
 
-
-
 //JRebel configuration
 seq(jrebelSettings: _*)
 

@@ -20,9 +20,9 @@ case class ReactionRecord() extends SBaseRecord[ReactionRecord]  {
   //listOf definitions for record
   //TODO - find a better solution to this. Parents' listOfXXX definitions is a big problem
   //TODO CHANGE SpeciesReference too a record version
-  var listOfReactantsRec:List[SpeciesReferenceRecord] = Nil
-  var listOfProductsRec:List[SpeciesReferenceRecord] = Nil
-  var listOfModifiersRec:List[ModifierSpeciesReferenceRecord] = Nil
+  var listOfReactantsRec:List[ReactantRecord] = Nil
+  var listOfProductsRec:List[ProductRecord] = Nil
+  var listOfModifiersRec:List[ModifierRecord] = Nil
   var kineticLawRec:KineticLawRecord = null //optional
 
 

@@ -694,7 +694,7 @@ class ModelRead extends LoggerWrapper {
 
     def newComment () = {
         val list = List[(String,String)]()
-        val novo = S.getHeaders(list)
+        val novo = S.getResponseHeaders(list)
         debug("Valor ="+novo.map(s => s))
     }
 
