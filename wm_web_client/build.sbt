@@ -4,7 +4,10 @@ version := "0.1"
 
 scalaVersion := "2.10.2"
 
+//xsbt-web-plugin configuration
 seq(webSettings: _*)
+
+
 
 //JRebel configuration
 seq(jrebelSettings: _*)
@@ -15,7 +18,7 @@ jrebel.webLinks <++= webappResources in Compile
 // If using JRebel with 0.1.0 of the sbt web plugin
 //jettyScanDirs := Nil
 // using 0.2.4+ of the sbt web plugin
-scanDirectories in Compile := Nil
+//scanDirectories in Compile := Nil
 
 //resolvers += "Java.net Maven2 Repository" at "http://download.java.net/maven/2/"
 

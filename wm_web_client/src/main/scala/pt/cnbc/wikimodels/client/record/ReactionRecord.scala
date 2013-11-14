@@ -37,6 +37,8 @@ case class ReactionRecord() extends SBaseRecord[ReactionRecord]  {
   //  ### can be presented as XHtml, Json, or as a Form. ###
 
   override def toXHtml = {
+    <div>
+
       {super.toXHtml}
       <h3 id={"accord_r_"+this.metaIdO.get+"_react_"} class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top changeline">
         <a href={"#accord_r_"+this.metaIdO.get+"_react_"}>
@@ -172,8 +174,14 @@ case class ReactionRecord() extends SBaseRecord[ReactionRecord]  {
             }
           </div>
         </div>
-      //{this.kineticLawRec.toXHtml}
-
+      {
+        //TODO - this if is temporary
+        if(this.kineticLawRec != null)
+          this.kineticLawRec
+            .toXHtml
+        else <div note="emptykineticlaw"/>
+      }
+    </div>
   }
 
   //  ### will contain fields which can be listed with allFields. ###
