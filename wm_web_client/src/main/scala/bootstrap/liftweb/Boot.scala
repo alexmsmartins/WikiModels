@@ -47,18 +47,6 @@ class Boot extends LoggerWrapper{
       LiftRules.htmlProperties.default.set((r: Req) =>
         new XHtmlInHtml5OutProperties(r.userAgent))
 
-      // TODO - i STILL WANT TO FIND OUT WHY THIS DOES NOT WKRK. Something to do wiht the response not returning statuscode 302 to the browser, perhaps
-      /*      LiftRules.statefulRewrite.prepend(NamedPF("CreateAndEditRewrite") {
-        case RewriteRequest(
-            ParsePath("models" :: "createEdit" :: state :: Nil, _, _,_), _, _) => {
-          debug("Rewriting path: models/createEdit/Create to createEdit.html")
-          val rewriteResp = RewriteResponse(
-            ParsePath("models/createEdit" :: Nil, "html", true, false) , Map("state" -> "Create") // Use webapp/models/creteEdit.html
-          )
-          debug("Response refers to URL " + rewriteResp.path + " with parameters " + rewriteResp.params.toList.map(x => "" + x.key + "=" + x.value + ", "))
-          rewriteResp
-        }
-      })*/
         // SiteMap
         val entries = Menu(Loc("Home", List("index"), "Home"),
                            Menu(Loc("overview", List("overview"), "Overview")),

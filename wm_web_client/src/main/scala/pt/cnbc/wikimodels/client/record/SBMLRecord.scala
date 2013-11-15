@@ -85,7 +85,7 @@ trait SBaseRecord[MyType <: SBaseRecord[MyType]] extends RestRecord[MyType] with
                S2B.visit(content)
             ).asInstanceOf[MyType]
           )//read went ok
-        debug("Read of " + loadedRecord + "aaa" )
+        debug("Read of " + loadedRecord )
         loadedRecord
       }
       case 404 => ParamFailure("Error reading " + this.metaIdO.get + ". This element does not exist.", this)
@@ -176,7 +176,6 @@ case class SBMLModelRecord() extends SBaseRecord[SBMLModelRecord] with LoggerWra
    * @return the form
    */
   //override def toForm(f: MyType => Unit): NodeSeq = meta.toForm(this) ++ (SHtml.hidden(() => f(this)))
-
     override def toXHtml = {
     <div>
       <head>
@@ -185,7 +184,6 @@ case class SBMLModelRecord() extends SBaseRecord[SBMLModelRecord] with LoggerWra
       {super.toXHtml}
       <div class="demo cupertino changeline">
         <div id="accordion1" class="accordion ui-accordion ui-widget ui-helper-reset ui-accordion-icons">
-
           <h3 id="accord_c" class="trigger ui-accordion-header ui-helper-reset ui-state-default ui-corner-top changeline">
             <a href="#accord_c">
               {this.listOfCompartmentsRec.size} Compartments
@@ -457,22 +455,27 @@ case class SBMLModelRecord() extends SBaseRecord[SBMLModelRecord] with LoggerWra
           </div>
 
         </div>
-        {Script(
+             <script src="/js/accordion.js" type="text/javascript"></script>
+        <!--{Script(
         JsRaw("""
           jQuery(document).ready(function(){
             //Hide (Collapse) the toggle containers on load
             $(".toggle_container").hide();
 
             //Switch the "Open" and "Close" state per click then slide up/down (depending on open/close state)
-            $("h3.trigger").click(function(){
+            $("h3.trigger").click(function(event){
+              if(event && event.isDefaultPrevented) {
+                return;
+              }
+              event &&  event.preventDefault();
               $(this).toggleClass("active").next().slideToggle("slow");
               return false; //Prevent the browser jump to the link anchor
             });
-            $("h3.trigger :button").click(function(e){
+            /*$("h3.trigger :button").click(function(e){
               e.stopPropagation();
-            });
+            });*/
           });
-        """))}
+              """))}-->
       </div><!-- End demo -->
       <div class="changeline">{this.comments}</div>
     </div>

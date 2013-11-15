@@ -45,7 +45,7 @@ class HomePage {
 
     def mainPage (xhtml : NodeSeq) : NodeSeq = User.currentUserName match {
         case Full(user) => {
-                <div id='content'>
+                <div id='contentXXX'>
                     <h1>Welcome to WikiModels Webpage</h1>
                     <hr />
                     <p>&nbsp;&nbsp;&nbsp;<b>{user}</b>, welcome to WikiModels! A web-based platform
@@ -60,7 +60,7 @@ class HomePage {
                 </div>
             }
         case _ => {
-                <div id='content'>
+                <div id='contentXXX'>
                     <h1>Welcome to WikiModels Webpage</h1>
                     <hr />
                     <p>&nbsp;&nbsp;&nbsp;<b>visitor</b>, welcome to WikiModels! A web-based platform

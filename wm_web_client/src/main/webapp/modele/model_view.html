@@ -8,32 +8,27 @@
 </head>
 <body>
 <div data-lift="surround?with=default;at=content">
-        <a style="position: relative;top: -50px" href="/models/">Go back to list of models.</a>
-        <!-- TODO change this to a vizualization of the element with the associated comments -->
-        <div data-lift="SBMLSnip.modelMetaId">
-            <h1>Model with metaId <span id="mMetaId"></span> . <input type="button"
-                                                                      onclick="window.location.href=window.location.href+'/edit'"
-                                                                      name="edit" value="Edit">Edit</input> <input
-                    type="button" onclick="window.location.href=window.location.href+'/delete'" name="delete"
-                    value="Delete">Delete</input> </h1>
-        </div>
-        <div data-lift="SBMLForm.visualizeModel">
-        </div>
-
-        <div data-lift="SBMLSnip.entireModelInXML">
-            <span id="xmlmodel"></span>
-        </div>
-        <br/>
-        <br/>
-
-        <div class="ui-widget">
-            <div data-lift="SBMLSnip.modelMetaIdToAttr">
-                <input id="tags" input:val=""/>
-            </div>
-            <!--end of lift:SBMLModelSnip:modelMetaIdToAttr-->
-        </div>
-        <!-- end of ui-widget -->
+    <a style="position: relative;top: -50px" href="/models/">Go back to list of models.</a>
+    <!-- TODO change this to a vizualization of the element with the associated comments -->
+    <div data-lift="SBMLSnip.modelMetaId">
+        <h1>Model with metaId <span id="mMetaId"></span> . <input type="button"
+                                                                  onclick="window.location.href=window.location.href+'/edit'"
+                                                                  name="edit" value="Edit">Edit</input> <input
+                type="button" onclick="window.location.href=window.location.href+'/delete'" name="delete"
+                value="Delete">Delete</input> </h1>
     </div>
-    <!-- end of content -->
+    <div data-lift="SBMLForm.visualizeModel">
+    </div>
+    <!--<div data-lift="SBMLSnip.entireModelInXML">
+        <span id="xmlmodel"></span>
+    </div>-->
+    <!--<div class="ui-widget">
+        <div data-lift="SBMLSnip.modelMetaIdToAttr">
+            <input id="tags" input:val=""/>
+        </div>-->
+        <!--end of lift:SBMLModelSnip:modelMetaIdToAttr-->
+    <!--</div>-->
+    <!-- end of ui-widget -->
+</div> <!-- end of content -->
 </body>
 </html>

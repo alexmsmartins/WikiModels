@@ -893,33 +893,6 @@ class SBMLForm extends DispatchSnippet with SMsg with LoggerWrapper {
     // if the was no ID or the user couldn't be found,
     // display an error and redirect
   }
-
-  var somevar: Int = 0
-
-  def createModele(ns: NodeSeq): NodeSeq = {
-    //TODO: delete this code when no longer necessary
-    S.setHeader("aaaHeader", "valHeader")
-    S.set("set","set")
-    S.setSessionAttribute("sessionAttribute", "valSessionAttribute")
-    S.getResponseHeader("aaa").map(_.toInt).openOr("aaa")
-
-    var rv = SBMLForm.reqvar.is
-    SBMLForm.reqvar(rv + 1)
-    var sv = SBMLForm.sessionvar.is
-    SBMLForm.sessionvar(sv + 1)
-    somevar = somevar + 1;
-    {
-      <h1>CreateModel</h1>
-      <p>Paragraph of trial snippet</p>
-      <p>object reqvar extends RequestVar(0)⁼= {SBMLForm.reqvar}
-      </p>
-      <p>object sessionvar extends SessionVar = {SBMLForm.sessionvar}
-      </p>
-      <p>var somevar =
-        {somevar}
-      </p>
-    }
-  }
 }
 object SBMLForm{
   object reqvar extends RequestVar[Int](0)

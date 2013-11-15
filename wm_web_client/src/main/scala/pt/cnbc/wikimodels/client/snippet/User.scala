@@ -24,7 +24,7 @@ object User {
 
     var restfulConnection:RestfulAccess = null
 
-    def screenWrap: Box[Node] = Full(<lift:surround with="default" at="content">
+    def screenWrap: Box[Node] = Full(<lift:surround with="default" at="contentYYY">
 			       <lift:bind /></lift:surround>)
 
     def logoutSuffix = "logout"
