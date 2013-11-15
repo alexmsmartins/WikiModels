@@ -16,6 +16,10 @@ jQuery(document).ready(function(){
     //Hide (Collapse) the toggle containers on load
     $(".toggle_container").hide();
 
+    $("h3.trigger :button").click(function(e){
+        e.stopPropagation();
+    });
+
     //Switch the "Open" and "Close" state per click then slide up/down (depending on open/close state)
     $("h3.trigger").click(accordionCLickHandler);
 });

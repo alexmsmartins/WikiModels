@@ -604,6 +604,65 @@ with DisplayHTMLWithLabelInOneLine[String, T]{
   override def name: String = "Math"
 }
 
+
+/**
+ * Species.compartment
+ */
+class RtSpecies[ T <: ReactantRecord](own:ReactantRecord) extends StringField(own, 100)
+with DisplayHTMLWithLabelInOneLine[String, ReactantRecord]{
+
+  override def validate:List[FieldError] = {
+    super.validate
+  }
+
+  //Appears when rendering the form or the visualization
+  override def name: String = "Species"
+  //override def toXHtml: NodeSeq = Text(this.value)
+
+  override def toForm:Box[NodeSeq] = {
+    trace("Calling RtSpecies.toForm")
+    for (id <- uniqueFieldId; control <- super.toForm)
+    yield
+      <span id={id + "_holder"}>
+        <!-- <label for={ id }> <span class="sbml_field_label">{ displayHtml }</span></label> -->
+        {
+        val theParent:SBaseRecord[SBMLModelRecord] =
+          this.own.parent.openOrThrowException("The call to openOrThrowException should never fail")
+            .parent.openOrThrowException("The call to openOrThrowException should never fail")
+
+
+        theParent match {
+          case model:SBMLModelRecord => {
+            val op =
+              model.listOfSpeciesRec
+            val opWithId = op.map(i => (i, i.idO.get):(SpeciesRecord, String) )
+            // FIXME - since this is a wiki, this might be made optional nonetheless - CHECK IT
+            // val options = (List((Empty , "no compartment")) ::: opWithId.toList).toSeq
+            debug("Reactant.species value is {} before creating select box", this.own.speciesO.is)
+            SHtml.selectObj(
+              opWithId,
+              Box.option2Box(
+                op.filter( _.idO.get == this.own.speciesO.get ).headOption),
+              (choice:SpeciesRecord) =>
+              {
+                debug("Defining default choice of select box as {}", choice.idO.is)
+                this.own.speciesO.set( choice.idO.get)
+              },
+              ("xxx" -> "yyy"))
+          }
+          case _ => {
+            error("Only Models as parents of Species are implemented!")
+            S.error("Only Models as parents of Species are implemented!")
+          }
+        }
+
+        }
+        <lift:msg id={id}  errorClass="lift_error"/>
+      </span>
+  }
+}
+
+
 // Aux Record traits
 
 trait DisplayHTMLWithLabelInOneLine[ThisType, OwnerType <: Record[OwnerType]] extends TypedField[ThisType]

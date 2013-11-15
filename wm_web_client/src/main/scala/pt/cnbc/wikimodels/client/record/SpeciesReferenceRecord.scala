@@ -129,7 +129,7 @@ case class ReactantRecord() extends SBaseRecord[ReactantRecord]  {
       <!-- outside can't be a field and so I will make it a form -->
       {
       val defaultOption:(Box[SpeciesRecord], String) = (Empty, "[no spcies")
-      val op = parent.openOrThrowException("Parent of ReactantRecord should be made available")
+      val op:List[SpeciesRecord] = parent.openOrThrowException("Parent of ReactantRecord should be made available")
         .parent.openOrThrowException("Parent of ReactionRecord should be made available")
         .listOfSpeciesRec
       val defaultOp = parent.openOrThrowException("Parent of ReactantRecord should be made available")
@@ -137,23 +137,21 @@ case class ReactantRecord() extends SBaseRecord[ReactantRecord]  {
         .listOfSpeciesRec.filter( _.idO.is == species ).headOption
       val opWithId = op.map(i => (i, i.idO.is):(SpeciesRecord, String) )
       val options = (List((null , "no species")) ::: opWithId.toList).toSeq
-      SHtml.selectObj(options, Box.option2Box(defaultOp),
+      SHtml.selectObj(options, Full(op.head),
         (choice:SpeciesRecord ) => {
-          choice match {
-            case null => species = null
-            case c => species = c.idO.is
-          }
+           this.speciesO.set( choice.idO.get)
         })
       }
     </div>
   }
 
-  var species:String = throw new NotImplementedException(""" 'species' should be deleted from code!""")
+  var species:String = "TODO no SPECIES"
 
   //  ### will contain fields which can be listed with allFields. ###
   object idO extends Id(this, 100)
   object nameO extends Name(this, 100)
   object notesO extends Notes(this, 1000)
+  object speciesO extends RtSpecies(this)
 
   //  ### can be created directly from a Request containing params with names that match the fields on a Record ( see fromReq ). ###
 
@@ -169,7 +167,7 @@ case class ReactantRecord() extends SBaseRecord[ReactantRecord]  {
 
 //TODO - DELETE IF NOT USED FOR ANYTHING
 object ReactantRecord extends ReactantRecord with RestMetaRecord[ReactantRecord] {
-  override def fieldOrder = List(metaIdO, idO, nameO, notesO)
+  override def fieldOrder = List(metaIdO, idO, nameO, notesO, speciesO)
   override def fields = fieldOrder
 }
 

@@ -148,7 +148,13 @@ package object screenUtil extends LoggerWrapper{
   def loadReactantFromPathParam:ReactantRecord = {
     var mm:Box[ReactantRecord] = Empty
     tryo(
-      ReactantRecord.readRestRec(debug("The reactantMetaId in session after calling /model/modemetaid/reaction/reactionmetaid/reactant/reactantMetaId is: {}", S.param("reactantMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method")))
+      {
+        val boxReactantRec = ReactantRecord.readRestRec(debug("The reactantMetaId in session after calling /model/modemetaid/reaction/reactionmetaid/reactant/reactantMetaId is: {}", S.param("reactantMetaId")
+          .openOrThrowException("TODO: replacement for usage of deprecated openTheBox method")))
+        val reactantRec = boxReactantRec.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method")
+        reactantRec.parent = Full(screenUtil.loadReactionFromPathParam)
+        Full(reactantRec)
+      }
     ) match {
       case Full(m) => {mm = m}
       case Failure(msg,_,_) => {
@@ -167,7 +173,13 @@ package object screenUtil extends LoggerWrapper{
   def loadProductFromPathParam:ProductRecord = {
     var mm:Box[ProductRecord] = Empty
     tryo(
-      ProductRecord.readRestRec(debug("The productMetaId in session after calling /model/modemetaid/reaction/reactionmetaid/product/productMetaId is: {}", S.param("productMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method")))
+    {
+      val boxProductRec = ProductRecord.readRestRec(debug("The productMetaId in session after calling /model/modemetaid/reaction/reactionmetaid/product/productMetaId is: {}", S.param("productMetaId")
+        .openOrThrowException("TODO: replacement for usage of deprecated openTheBox method")))
+      val productRec = boxProductRec.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method")
+      productRec.parent = Full(screenUtil.loadReactionFromPathParam)
+      Full(productRec)
+    }
     ) match {
       case Full(m) => {mm = m}
       case Failure(msg,_,_) => {
@@ -186,7 +198,13 @@ package object screenUtil extends LoggerWrapper{
   def loadModifierFromPathParam:ModifierRecord = {
     var mm:Box[ModifierRecord] = Empty
     tryo(
-      ModifierRecord.readRestRec(debug("The modifierMetaId in session after calling /model/modemetaid/reaction/reactionmetaid/modifier/modifierMetaId is: {}", S.param("modifierMetaId").openOrThrowException("TODO: replacement for usage of deprecated openTheBox method")))
+    {
+      val boxModifierRec = ModifierRecord.readRestRec(debug("The modifierMetaId in session after calling /model/modemetaid/reaction/reactionmetaid/modifier/modifierMetaId is: {}", S.param("modifierMetaId")
+        .openOrThrowException("TODO: replacement for usage of deprecated openTheBox method")))
+      val modifierRec = boxModifierRec.openOrThrowException("TODO: replacement for usage of deprecated openTheBox method")
+      modifierRec.parent = Full(screenUtil.loadReactionFromPathParam)
+      Full(modifierRec)
+    }
     ) match {
       case Full(m) => {mm = m}
       case Failure(msg,_,_) => {
