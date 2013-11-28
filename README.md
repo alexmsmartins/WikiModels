@@ -9,3 +9,5 @@
  - **wm_web_mathml** - MathML Editor to inc	lude in the Web Client's interface
 
  NOTE: Maven is the reference build system and the one that should be kept working at all times. SBT is only used to make some tasks easier.  
+
+ Build status of the project is [![Build Status](https://travis-ci.org/alexmsmartins/WikiModels.png?branch=master)](https://travis-ci.org/alexmsmartins/WikiModels)
