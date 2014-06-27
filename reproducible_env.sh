@@ -11,7 +11,7 @@ DOWNLOAD_DIR=$PWD/reproducible_env_downloads
 GLASSFISH_JAR=glassfish-installer-v2.1.1-b31g-linux.jar
 SCRIPT_DIR=${PWD}
 
-echo "#check necessary environment variables"
+echo "#checking necessary environment variables"
 echo "JAVA_HOME="$JAVA_HOME
 echo "JDK_HOME="$JDK_HOME
 echo "PWD="$PWD
@@ -19,9 +19,7 @@ echo "PWD="$PWD
 # #value  >0, then the shell shall immediately exit.
 set -e
 
-echo "Check necessary programs"
-
-echo "before declaring function"
+echo "Checking necessary programs"
 
 check_command_presence() 
 {
